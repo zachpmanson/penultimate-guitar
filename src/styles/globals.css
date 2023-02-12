@@ -13,3 +13,14 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* .tab {
+  font-size: 2vw;
+} */
+
+/* .tab {
+  container-type: inline-size;
+}
+.tab pre {
+  font-size: 1cqw;
+} */
