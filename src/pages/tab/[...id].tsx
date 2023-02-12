@@ -3,6 +3,7 @@ import TabSheet from "@/components/tabsheet";
 import useWindowDimensions from "@/hooks/windowdimensions";
 import { TabDto, TabLinks } from "@/models";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -43,6 +44,10 @@ export default function Tab() {
       <Head>
         <title>{`${name} - ${artist}`}</title>
       </Head>
+      <h1 className="m-auto w-fit">
+        <Link href="/">Penultimate Guitar</Link>
+      </h1>
+
       <SearchBox />
       <h1 className="text-center text-2xl">
         {name} - {artist}
