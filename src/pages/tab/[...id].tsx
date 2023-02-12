@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/loadingspinner";
 import SearchBox from "@/components/searchbox";
 import TabSheet from "@/components/tabsheet";
 import useWindowDimensions from "@/hooks/windowdimensions";
@@ -49,10 +50,16 @@ export default function Tab() {
       </h1>
 
       <SearchBox />
-      <h1 className="text-center text-2xl">
-        {name} - {artist}
-      </h1>
-      <TabSheet plainTab={plainTab}></TabSheet>
+      {!!name ? (
+        <>
+          <h1 className="text-center text-2xl">
+            {name} - {artist}
+          </h1>
+          <TabSheet plainTab={plainTab}></TabSheet>
+        </>
+      ) : (
+        <LoadingSpinner />
+      )}
     </>
   );
 }

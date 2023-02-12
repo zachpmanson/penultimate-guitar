@@ -24,3 +24,21 @@ body {
 .tab pre {
   font-size: 1cqw;
 } */
+
+.loading-spinner {
+  border: 0.5rem solid white; /* Light grey */
+  border-top: 0.5rem solid #ccc; /* Blue */
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

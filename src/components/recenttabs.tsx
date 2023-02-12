@@ -1,6 +1,4 @@
-import SearchBox from "@/components/searchbox";
 import { TabLinks } from "@/models";
-import Head from "next/head";
 import Link from "next/link";
 
 export default function RecentTabs() {
@@ -13,17 +11,14 @@ export default function RecentTabs() {
   );
 
   return (
-    <>
+    <div>
       {Object.keys(recents).map((taburl: string, i) => (
-        <div
-          key={i}
-          className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto"
-        >
-          <Link href={`/tab/${taburl}`}>
+        <Link key={i} href={`/tab/${taburl}`}>
+          <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto">
             {recents[taburl].name} - {recents[taburl].artist}
-          </Link>
-        </div>
+          </div>
+        </Link>
       ))}
-    </>
+    </div>
   );
 }
