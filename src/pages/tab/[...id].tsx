@@ -2,7 +2,6 @@ import Chord from "@/components/chord";
 import SearchBox from "@/components/searchbox";
 import { TabDto } from "@/models";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
@@ -59,32 +58,4 @@ export default function Tab() {
       {tab}
     </>
   );
-}
-
-async function getTab(URL: string): Promise<TabDto> {
-  let songData: TabDto = {
-    tab: "",
-    name: "",
-    artist: "",
-  };
-  await fetch(URL)
-    .then((response) => response.text())
-    .then((html) => {
-      // Convert the HTML string into a document object
-      const dom = new JSDOM(html);
-      // Get the image file
-      var jsStore = dom.window.document.querySelector(".js-store");
-      let dataContent = JSON.parse(
-        jsStore?.getAttribute("data-content") || "{}"
-      );
-      songData.tab =
-        dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content;
-      songData.name = dataContent?.store?.page?.data?.tab?.song_name;
-      songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
-    })
-    .catch((err) => {
-      // There was an error
-      console.warn("Something went wrong.", err);
-    });
-  return songData;
 }
