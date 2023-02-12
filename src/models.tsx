@@ -3,3 +3,10 @@ export type TabDto = {
   name: string;
   artist: string;
 };
+
+export type TabLinks = {
+  [link: string]: {
+    name: string;
+    artist: string;
+  };
+};

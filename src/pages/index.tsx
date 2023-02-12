@@ -1,5 +1,8 @@
+import RecentTabs from "@/components/recenttabs";
 import SearchBox from "@/components/searchbox";
+import { TabLinks } from "@/models";
 import Head from "next/head";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -13,6 +16,7 @@ export default function Home() {
       <main>
         <h1 className="m-auto w-fit">Penultimate Guitar</h1>
         <SearchBox />
+        <RecentTabs />
       </main>
     </>
   );
