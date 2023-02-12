@@ -15,7 +15,7 @@ export default function Tab() {
   const [name, setName] = useState("");
   const [artist, setArtist] = useState("");
 
-  const { height, width } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   useEffect(() => {
     if (typeof id !== "object") return;
 
@@ -40,32 +40,8 @@ export default function Tab() {
       ...plainTab.split("\n").map((l: string) => l.length)
     );
 
-    setTab(processTab(plainTab, maxLineLen));
+    setTab(processTab(plainTab, maxLineLen, width));
   }, [plainTab, width]);
-
-  const processTab = (tabString: string, maxLineLen: number) => {
-    let cleanString: string = tabString
-      .replace(/\[tab\]/g, "")
-      .replace(/\[\/tab\]/g, "");
-    console.log("cleanString", cleanString);
-    let tabHtml = (
-      <div
-        className="tab m-auto w-fit"
-        style={{ fontSize: Math.min(14, (1.5 * width) / maxLineLen) }}
-      >
-        <pre>
-          {reactStringReplace(
-            cleanString,
-            /\[ch\](.+?)\[\/ch\]/g,
-            (match, i) => (
-              <Chord chord={match} id={i} />
-            )
-          )}
-        </pre>
-      </div>
-    );
-    return tabHtml;
-  };
 
   return (
     <>
@@ -80,3 +56,23 @@ export default function Tab() {
     </>
   );
 }
+
+const processTab = (tabString: string, maxLineLen: number, width: number) => {
+  let cleanString: string = tabString
+    .replace(/\[tab\]/g, "")
+    .replace(/\[\/tab\]/g, "");
+  console.log("cleanString", cleanString);
+  let tabHtml = (
+    <div
+      className="tab m-auto w-fit"
+      style={{ fontSize: Math.min(14, (1.5 * width) / maxLineLen) }}
+    >
+      <pre>
+        {reactStringReplace(cleanString, /\[ch\](.+?)\[\/ch\]/g, (match, i) => (
+          <Chord chord={match} id={i} />
+        ))}
+      </pre>
+    </div>
+  );
+  return tabHtml;
+};
