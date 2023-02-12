@@ -10,14 +10,18 @@ type TabSheetProps = {
 export default function TabSheet({ plainTab }: TabSheetProps) {
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
-  const maxLineLen = Math.max(
-    ...plainTab.split("\n").map((l: string) => l.length)
-  );
-  const lineCutoff = Math.floor(width / 8);
+  // const maxLineLen = Math.max(
+  //   ...plainTab.split("\n").map((l: string) => l.length)
+  // );
 
   const insertChordTags = (line: string): string => {
     return line.replace(/\b([^ ]+?)\b/g, "[ch]$1[/ch]");
   };
+
+  const [lineCutoff, setLineCutoff] = useState(40);
+  useEffect(() => {
+    setLineCutoff(Math.floor(width / 8));
+  }, [width]);
 
   useEffect(() => {
     setFormattedTab(
@@ -67,23 +71,8 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
     );
   }, [lineCutoff, plainTab]);
 
-  const isMobile = width <= 768;
-
-  const fontSize = isMobile
-    ? Math.min(14, (3 * width) / maxLineLen)
-    : Math.min(14, (1.5 * width) / maxLineLen);
-
-  console.log(
-    "width:",
-    width,
-    "fontsize:",
-    Math.min(14, (1.5 * width) / maxLineLen)
-  );
-
-  // console.log(plainTab);
   return (
     <div className="tab m-auto w-fit text-xs">
-      {/* <div className="tab m-auto w-fit" style={{ fontSize: fontSize }}> */}
       <pre>
         {reactStringReplace(
           formattedTab,
