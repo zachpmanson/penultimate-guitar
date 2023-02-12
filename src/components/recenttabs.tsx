@@ -1,14 +1,13 @@
 import { TabLinks } from "@/models";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function RecentTabs() {
-  if (typeof window === "undefined") {
-    return <div></div>;
-  }
+  const [recents, setRecents] = useState<TabLinks>({});
 
-  const recents: TabLinks = JSON.parse(
-    localStorage?.getItem("recents") || "[]"
-  );
+  useEffect(() => {
+    setRecents(JSON.parse(localStorage?.getItem("recents") || "[]"));
+  }, []);
 
   return (
     <div>
