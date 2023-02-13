@@ -1,4 +1,4 @@
-// import { Tooltip } from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 
 type ChordProps = {
@@ -15,7 +15,7 @@ export default function Chord({ chord, id }: ChordProps) {
       >
         {chord}
       </span>
-      {/* <Tooltip anchorId={`${id}-tooltip`} /> */}
+      <Tooltip anchorId={`${id}-tooltip`} />
     </>
   );
 }
