@@ -16,11 +16,11 @@ npm run dev
 
 - [x] Remember recent tabs
 - [x] Search
-  - [] Filtering
-  - [] Pagination?
-- [] Server caching
-- [] Chord tooltips
+  - [ ] Filtering
+  - [ ] Pagination?
+- [ ] Server caching
+- [ ] Chord tooltips
 - [x] Bookmarking
 - [x] Size options
-- [] Transposing
-- [] Autoscrolling
+- [ ] Transposing
+- [ ] Autoscrolling
