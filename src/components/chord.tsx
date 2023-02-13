@@ -6,7 +6,7 @@ type ChordProps = {
   id: number;
 };
 export default function Chord({ chord, id }: ChordProps) {
-  console.log("chord",chord)
+  console.log("chord",chord, "id",id)
   return (
     <>
       <span
