@@ -1,0 +1,2509 @@
+{
+  "config": {
+    "releaseVer": "ug-web_app_0.07.55",
+    "abVariation": null,
+    "abVariation2": null,
+    "abVariation3": null,
+    "abTestAccountVariation": [],
+    "experiments": { "isPianoChordGroup": false },
+    "urlFacebook": "https://www.ultimate-guitar.com/user/auth/oauth?service=facebook",
+    "urlGoogle": "https://www.ultimate-guitar.com/user/auth/oauth?service=google",
+    "urlApple": "https://www.ultimate-guitar.com/user/auth/oauth?service=apple",
+    "main_server": "ultimate-guitar.com",
+    "ps_server": "plus.ultimate-guitar.com",
+    "static_server": "https://www.ultimate-guitar.com/static",
+    "statik_cache": "_ver1676267223",
+    "staticPrefix": "/static",
+    "time": 1676285087000,
+    "isGDPRAvailable": false,
+    "isCcpaAvailable": false,
+    "user": {
+      "id": 0,
+      "uuid": 0,
+      "unified_id": "1.1676285086.568060",
+      "session": {
+        "id": "1.1676285085.1676285087",
+        "expire_duration": 300,
+        "expire_duration_dispersion": [5000, 10000],
+        "enable_refresh": true
+      },
+      "username": "Unregistered",
+      "iq": "",
+      "contributorPower": false,
+      "segment": { "preview": null, "current": null }
+    },
+    "isOfficeUser": false,
+    "isOfficeRequest": false,
+    "isWebp": false,
+    "isBot": false,
+    "is_mobile": false,
+    "is_tablet": false,
+    "isThemeMobile": false,
+    "isIe": false,
+    "socketCluster": {
+      "serviceKey": "f0557aa8-2d06-43d9-9c16-f885bc710b97:main",
+      "channelPrefix": "f0557aa8-2d06-43d9-9c16-f885bc710b97:main#prod",
+      "hostname": "socketcluster.k8s.wsmgroup.ru",
+      "port": 443,
+      "channelName": "e2b911c3d39e5e206f13c6dab0ac7bcc"
+    },
+    "metricaId": 18746557,
+    "captcha_id": "6LfCo_8SAAAAALEMHnlK18j8IemlAdvmxwRnQe2v",
+    "stripeApiKey": "pk_live_4aZVHgEcj68d3uAgtisiXtZo",
+    "country": "AU",
+    "countryCode": "AU",
+    "browserName": "Curl",
+    "os": "",
+    "platform": 4,
+    "browser": "{\"browser\":{\"name\":\"Curl\",\"version\":\"7.64.1\"},\"device\":{\"type\":\"bot\"}}",
+    "urlUgProAppIcon": "https://www.ultimate-guitar.com/static/public/img/app_icons/icon_ug_pro_ver1676267223.png",
+    "withCritical": false,
+    "analytics": { "userTrackerId": "SA==" },
+    "braintree": {
+      "environment": "production",
+      "tokenizationKey": "production_8htvrhhr_67vpx3rpxt6m5z7c",
+      "paypalClientId": "ASwoeikdyflPIKFAC3U34ewfFVRE5-_p6qc1TTQG9g_sHNs3RP5Sq3pE_e7V2p0VTi-nJQuIA5ApP1XH",
+      "googlePayClientId": "BCR2DN6TZPEKBZBZ"
+    },
+    "vimeo": {
+      "baseImagePath": "https://cdn.ustatik.com/s3/ug.video.warm/preview/"
+    },
+    "hasStaticCache": 0,
+    "rtAnalytics": {
+      "trackUrl": "/components/ab/event",
+      "trackingEnabled": true,
+      "forceSendEvents": [
+        "Tab Favorite Add Click",
+        "Tab Rate Click",
+        "Tab View"
+      ],
+      "tabToolLogging": true,
+      "samplerHeartbeat": 5
+    },
+    "xtz": {
+      "isActive": true,
+      "hasAccess": true,
+      "canToggle": false,
+      "feedbackChannel": null
+    },
+    "jinba": {
+      "customTimings": [],
+      "appLabel": "search_page",
+      "appLabelExp": "null"
+    },
+    "metricaParams": {
+      "rights": 0,
+      "proRights": 0,
+      "coursesRights": 0,
+      "singRights": 0,
+      "u_id": "SA==",
+      "auth": "None",
+      "is_registered": 0,
+      "ab": []
+    }
+  },
+  "store": {
+    "page": {
+      "data": {
+        "search_query": "hotel",
+        "search_query_type": "tabs",
+        "results_count": 500,
+        "results": [
+          {
+            "artist_name": "Eagles",
+            "artist_id": 1509,
+            "artist_url": "/artist/eagles_1509",
+            "song_name": "Hotel California",
+            "marketing_type": "official",
+            "tab_id": 1910943,
+            "tab_url": "https://www.ultimate-guitar.com/pro/?app_utm_source=UltimateGuitar&amp;app_utm_medium=Search&amp;app_utm_campaign=UG+Search&amp;app_utm_content=Official+Version&amp;artist=Eagles&amp;song=hotel%20california&amp;tab_id=1910943",
+            "device": null,
+            "app_link": "//www.ultimate-guitar.com/send?ug_from=yozio_splash&amp;url=https://play.google.com/store/apps/details?id=com.ultimateguitar.tabs&amp;ug_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0&amp;referrer=utm_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0",
+            "highlight": { "song_name": [[0, 5]], "artist_name": [] },
+            "tracks": "Lead 6 (voice) (x2), Acoustic Guitar (steel) (x2), Overdriven Guitar, Distortion Guitar, Electric Bass (pick), Drums (x2), Electric Guitar (clean)",
+            "duration": "6:29"
+          },
+          {
+            "artist_name": "Eagles",
+            "artist_id": 1509,
+            "artist_url": "/artist/eagles_1509",
+            "song_name": "Hotel California",
+            "marketing_type": "TabPro",
+            "rating": 4.8131000000000003780087354243732988834381103515625,
+            "votes": 10170,
+            "tab_id": 1910943,
+            "tab_url": "https://www.ultimate-guitar.com/pro/?app_utm_source=UltimateGuitar&amp;app_utm_medium=Search&amp;app_utm_campaign=UG+Search&amp;artist=Eagles&amp;song=hotel%20california&amp;tab_id=1910943",
+            "device": null,
+            "app_link": "//www.ultimate-guitar.com/send?ug_from=yozio_splash&amp;url=https://play.google.com/store/apps/details?id=com.ultimateguitar.tabs&amp;ug_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0&amp;referrer=utm_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0",
+            "highlight": { "song_name": [[0, 5]], "artist_name": [] },
+            "tracks": "Lead 6 (voice) (x2), Acoustic Guitar (steel) (x2), Overdriven Guitar, Distortion Guitar, Electric Bass (pick), Drums (x2), Electric Guitar (clean)",
+            "duration": "6:29"
+          },
+          {
+            "id": 46190,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 1,
+            "votes": 26442,
+            "rating": 4.851259999999999905639924691058695316314697265625,
+            "date": "1046044800",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-46190"
+          },
+          {
+            "id": 1403188,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 1,
+            "votes": 80,
+            "rating": 4.6193299999999997140776031301356852054595947265625,
+            "date": "1373599408",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "To allow the chords to be played as open as possible, in the 1st position on a 12- string guitar.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": {
+                "name": "Hell Freezes Over",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-1403188"
+          },
+          {
+            "id": 520827,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 2,
+            "votes": 669,
+            "rating": 4.76396999999999959385377223952673375606536865234375,
+            "date": "1179792001",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-520827"
+          },
+          {
+            "id": 688698,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 3,
+            "votes": 5937,
+            "rating": 4.8619000000000003325340003357268869876861572265625,
+            "date": "1213228801",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "A",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-688698"
+          },
+          {
+            "id": 1092238,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 4,
+            "votes": 728,
+            "rating": 4.86784999999999978825826474349014461040496826171875,
+            "date": "1315674273",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-1092238"
+          },
+          {
+            "id": 1447299,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 5,
+            "votes": 410,
+            "rating": 4.84354999999999957793761495850048959255218505859375,
+            "date": "1386751232",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "In search for the best tabs for this song, it has been added new tabs.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-1447299"
+          },
+          {
+            "id": 1718252,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 6,
+            "votes": 242,
+            "rating": 4.81390999999999991132426657713949680328369140625,
+            "date": "1425737503",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "My version is different, because in this version, there is the whole song with fully correct chords and a capo is not used.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-1718252"
+          },
+          {
+            "id": 1917823,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 7,
+            "votes": 41,
+            "rating": 4.6455099999999998061639416846446692943572998046875,
+            "date": "1482648625",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-1917823"
+          },
+          {
+            "id": 3048934,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Chords",
+            "part": "",
+            "version": 8,
+            "votes": 20,
+            "rating": 4.53929999999999989057641869294457137584686279296875,
+            "date": "1585303335",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-chords-3048934"
+          },
+          {
+            "id": 347964,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "album",
+            "version": 1,
+            "votes": 105,
+            "rating": 4.67042000000000001591615728102624416351318359375,
+            "date": "1143590401",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-347964"
+          },
+          {
+            "id": 23671,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 1,
+            "votes": 647,
+            "rating": 3.957570000000000032258640203508548438549041748046875,
+            "date": "1013644800",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-23671"
+          },
+          {
+            "id": 23768,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 2,
+            "votes": 44,
+            "rating": 3.923519999999999896544977673329412937164306640625,
+            "date": "1013817600",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-23768"
+          },
+          {
+            "id": 1993569,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 3,
+            "votes": 167,
+            "rating": 4.6965000000000003410605131648480892181396484375,
+            "date": "1494503663",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1993569"
+          },
+          {
+            "id": 2304267,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 4,
+            "votes": 46,
+            "rating": 4.8245500000000003382183422218076884746551513671875,
+            "date": "1517488159",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "This tab is based on this video : https://www.youtube.com/watch?v=Zv4qBlU1bIk the video itself is a tutorial on how to play the song, i just tabbed it.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2304267"
+          },
+          {
+            "id": 2417169,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 5,
+            "votes": 0,
+            "rating": 0,
+            "date": "1530957322",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "Simplified notes to fit with capo on 7th fret.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2417169"
+          },
+          {
+            "id": 2729013,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 6,
+            "votes": 6,
+            "rating": 4.711529999999999773763192933984100818634033203125,
+            "date": "1560616457",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "This is the intro of Hotel California. For playing, you just have to put a capo on the 7th fret and restart when the tab end. If you want to correct, just send me a message.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2729013"
+          },
+          {
+            "id": 94065,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 1,
+            "votes": 117,
+            "rating": 4.37000999999999972800424075103364884853363037109375,
+            "date": "1068422400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-94065"
+          },
+          {
+            "id": 2323055,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 1,
+            "votes": 7,
+            "rating": 4.7403700000000004166622602497227489948272705078125,
+            "date": "1519206065",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": {
+                "name": "MTV Unplugged 1994",
+                "serie": null,
+                "venue": {
+                  "name": "Warner Bros. Studios, Stage 15",
+                  "area": {
+                    "name": "Burbank, California",
+                    "country": { "name_english": "United States" }
+                  }
+                },
+                "date_start": 767232000,
+                "date_end": 767232000,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2323055"
+          },
+          {
+            "id": 96835,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 2,
+            "votes": 928,
+            "rating": 4.76095000000000023732127374387346208095550537109375,
+            "date": "1070841600",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-96835"
+          },
+          {
+            "id": 2403497,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 3,
+            "votes": 7,
+            "rating": 4.84039999999999981383780323085375130176544189453125,
+            "date": "1529057941",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "Based on Yousician tab by Debjit Mandal.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2403497"
+          },
+          {
+            "id": 2519835,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 4,
+            "votes": 11,
+            "rating": 4.52888999999999963819163895095698535442352294921875,
+            "date": "1542602707",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "Made to be played by one guitar.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2519835"
+          },
+          {
+            "id": 2542893,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "solo",
+            "version": 5,
+            "votes": 13,
+            "rating": 4.83776999999999990365040503093041479587554931640625,
+            "date": "1544793818",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2542893"
+          },
+          {
+            "id": 14341,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 1,
+            "votes": 137,
+            "rating": 4.6957100000000000505906427861191332340240478515625,
+            "date": "1004486400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-14341"
+          },
+          {
+            "id": 1166196,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 1,
+            "votes": 9,
+            "rating": 4.86699999999999999289457264239899814128875732421875,
+            "date": "1341532801",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "This version is from the \"Eagles - Live\" album release in 1980. It's not the studio version or the \"Hell Freezes Over\" version.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": {
+                "name": "Eagles LIVE! album",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1166196"
+          },
+          {
+            "id": 14288,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 2,
+            "votes": 2532,
+            "rating": 4.70741999999999993775645634741522371768951416015625,
+            "date": "1004486400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-14288"
+          },
+          {
+            "id": 14289,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 3,
+            "votes": 38,
+            "rating": 4.400059999999999860165189602412283420562744140625,
+            "date": "1004486400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-14289"
+          },
+          {
+            "id": 28406,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 4,
+            "votes": 60,
+            "rating": 4.46675999999999984169107847264967858791351318359375,
+            "date": "1019606400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-28406"
+          },
+          {
+            "id": 92882,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 5,
+            "votes": 15,
+            "rating": 4.3002500000000001278976924368180334568023681640625,
+            "date": "1066953600",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-92882"
+          },
+          {
+            "id": 101548,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 6,
+            "votes": 353,
+            "rating": 4.82139999999999968594011079403571784496307373046875,
+            "date": "1074556800",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-101548"
+          },
+          {
+            "id": 103282,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 7,
+            "votes": 10,
+            "rating": 4.10799999999999965183405947755090892314910888671875,
+            "date": "1075766400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-103282"
+          },
+          {
+            "id": 114224,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 8,
+            "votes": 7,
+            "rating": 4.140399999999999636202119290828704833984375,
+            "date": "1082332800",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-114224"
+          },
+          {
+            "id": 139309,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 9,
+            "votes": 66,
+            "rating": 4.91889999999999982804865794605575501918792724609375,
+            "date": "1096502400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-139309"
+          },
+          {
+            "id": 151277,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 10,
+            "votes": 5,
+            "rating": 3.425499999999999989341858963598497211933135986328125,
+            "date": "1102896000",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-151277"
+          },
+          {
+            "id": 162980,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 11,
+            "votes": 53,
+            "rating": 4.63220999999999971663555697887204587459564208984375,
+            "date": "1107734400",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-162980"
+          },
+          {
+            "id": 1053182,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 12,
+            "votes": 5,
+            "rating": 4.55050000000000043343106881366111338138580322265625,
+            "date": "1305072001",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1053182"
+          },
+          {
+            "id": 1407859,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 13,
+            "votes": 4,
+            "rating": 4.486290000000000333102434524334967136383056640625,
+            "date": "1375142401",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1407859"
+          },
+          {
+            "id": 1980413,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 14,
+            "votes": 3,
+            "rating": 4.56735000000000024300561562995426356792449951171875,
+            "date": "1492159889",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "My Hotel California tab shows only Joe Walsh's part of the guitar harmony voicing on a line, I really only made this for my student who wanted to learn Walsh's part. Its more helpful and easier to read when there is only one part per staff. Maybe if it worked for her, it'll help someone else too.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1980413"
+          },
+          {
+            "id": 3633056,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 15,
+            "votes": 0,
+            "rating": 0,
+            "date": "1616911555",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Am",
+            "version_description": "Mississippi Fingerstyle version: simple acoustic mix with rhythm, melody and harmony in the tradition of Mississippi John Hurt.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-3633056"
+          },
+          {
+            "id": 67431,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 1,
+            "votes": 296,
+            "rating": 4.28901000000000021117330106790177524089813232421875,
+            "date": "1062028800",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": {
+                "name": "Unknow performance",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-67431"
+          },
+          {
+            "id": 2241893,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 1,
+            "votes": 32,
+            "rating": 4.6115399999999997504573912010528147220611572265625,
+            "date": "1511528321",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": {
+                "name": "MTV Unplugged, 1994",
+                "serie": { "name": "Hell Freezes Over", "type": "tour" },
+                "venue": {
+                  "name": "Warner Burbank Studios",
+                  "area": {
+                    "name": "San Diego, California",
+                    "country": { "name_english": "United States" }
+                  }
+                },
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2241893"
+          },
+          {
+            "id": 2278871,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 1,
+            "votes": 9,
+            "rating": 4.4503000000000003666400516522116959095001220703125,
+            "date": "1516007562",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "Bm",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2278871"
+          },
+          {
+            "id": 2396425,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "intro",
+            "version": 2,
+            "votes": 10,
+            "rating": 4.87722999999999995424104781704954802989959716796875,
+            "date": "1527741577",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "G",
+            "version_description": "It just the intro, maybe I'll put the solo later.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-2396425"
+          },
+          {
+            "id": 156418,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 1,
+            "votes": 214,
+            "rating": 4.72993000000000041183056964655406773090362548828125,
+            "date": "1105315200",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": {
+                "name": "Unknow performance",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-156418"
+          },
+          {
+            "id": 1875323,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Tabs",
+            "part": "",
+            "version": 2,
+            "votes": 53,
+            "rating": 4.5965299999999995606003722059540450572967529296875,
+            "date": "1474105723",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 0,
+            "tonality_name": "",
+            "version_description": "Very comfortable to play, beginners version.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 1,
+              "tonality_name": "",
+              "performance": {
+                "name": "Unknow performance",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-tabs-1875323"
+          },
+          {
+            "id": 2243275,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Pro",
+            "part": "solo",
+            "version": 1,
+            "votes": 503,
+            "rating": 4.77944000000000013272938303998671472072601318359375,
+            "date": "1511788874",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 1,
+            "tonality_name": "",
+            "version_description": "",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-guitar-pro-2243275"
+          },
+          {
+            "id": 2557077,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Pro",
+            "part": "solo",
+            "version": 2,
+            "votes": 31,
+            "rating": 4.33542999999999967286612445604987442493438720703125,
+            "date": "1546084164",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 2,
+            "tonality_name": "",
+            "version_description": "I just put the entire solo in one track.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-guitar-pro-2557077"
+          },
+          {
+            "id": 382996,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Pro",
+            "part": "",
+            "version": 1,
+            "votes": 152,
+            "rating": 4.699329999999999785131876706145703792572021484375,
+            "date": "1151625601",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 5,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-guitar-pro-382996"
+          },
+          {
+            "id": 1166197,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Pro",
+            "part": "",
+            "version": 1,
+            "votes": 88,
+            "rating": 4.7296800000000001062971932697109878063201904296875,
+            "date": "1341532801",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 1,
+            "tonality_name": "",
+            "version_description": "This version is from the \"Eagles - Live\" album release in 1980. It's not the studio version or the \"Hell Freezes Over\" version.",
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": {
+                "name": "Eagles LIVE! album",
+                "serie": null,
+                "venue": null,
+                "date_start": 0,
+                "date_end": 0,
+                "cancelled": 0,
+                "type": "concert",
+                "comment": "",
+                "video_urls": []
+              },
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-guitar-pro-1166197"
+          },
+          {
+            "id": 445673,
+            "song_id": 42998,
+            "song_name": "Hotel California",
+            "artist_id": 1509,
+            "artist_name": "Eagles",
+            "type": "Pro",
+            "part": "",
+            "version": 2,
+            "votes": 142,
+            "rating": 4.6579899999999998527755451505072414875030517578125,
+            "date": "1165795201",
+            "status": "approved",
+            "preset_id": 10137,
+            "tab_access_type": "public",
+            "tp_version": 6,
+            "tonality_name": "",
+            "version_description": null,
+            "verified": 0,
+            "recording": {
+              "is_acoustic": 0,
+              "tonality_name": "",
+              "performance": null,
+              "recording_artists": []
+            },
+            "artist_url": "https://www.ultimate-guitar.com/artist/eagles_1509",
+            "tab_url": "https://tabs.ultimate-guitar.com/tab/eagles/hotel-california-guitar-pro-445673"
+          }
+        ],
+        "pagination": { "total": 10, "current": 1 },
+        "spellcheck": "",
+        "not_found": false,
+        "order": [
+          {
+            "name": "Relevance",
+            "is_current": true,
+            "url": "/search.php?title=hotel&amp;page=1&amp;order=myweight"
+          },
+          {
+            "name": "ABC",
+            "is_current": false,
+            "url": "/search.php?title=hotel&amp;page=1&amp;order=title_srt"
+          },
+          {
+            "name": "High rated",
+            "is_current": false,
+            "url": "/search.php?title=hotel&amp;page=1&amp;rating%5B0%5D=4&amp;rating%5B1%5D=5&amp;order=myweight"
+          }
+        ],
+        "filters": {
+          "bands": [
+            {
+              "name": "Eagles",
+              "url": "/artist/eagles_1509",
+              "count": "91",
+              "search_url": "/search.php?title=Eagles+hotel"
+            },
+            {
+              "name": "Neutral Milk Hotel",
+              "url": "/artist/neutral_milk_hotel_2915",
+              "count": "192",
+              "search_url": "/search.php?title=Neutral+Milk+Hotel+hotel"
+            },
+            {
+              "name": "Elvis Presley",
+              "url": "/artist/elvis_presley_11125",
+              "count": "18",
+              "search_url": "/search.php?title=Elvis+Presley+hotel"
+            },
+            {
+              "name": "Leonard Cohen",
+              "url": "/artist/leonard_cohen_10063",
+              "count": "12",
+              "search_url": "/search.php?title=Leonard+Cohen+hotel"
+            },
+            {
+              "name": "Chris Isaak",
+              "url": "/artist/chris_isaak_10572",
+              "count": "10",
+              "search_url": "/search.php?title=Chris+Isaak+hotel"
+            },
+            {
+              "name": "Hotel Ugly",
+              "url": "/artist/hotel_ugly_831563",
+              "count": "6",
+              "search_url": "/search.php?title=Hotel+Ugly+hotel"
+            },
+            {
+              "name": "Arctic Monkeys",
+              "url": "/artist/arctic_monkeys_8976",
+              "count": "9",
+              "search_url": "/search.php?title=Arctic+Monkeys+hotel"
+            },
+            {
+              "name": "Tokio Hotel",
+              "url": "/artist/tokio_hotel_12207",
+              "count": "490",
+              "search_url": "/search.php?title=Tokio+Hotel+hotel"
+            },
+            {
+              "name": "The White Stripes",
+              "url": "/artist/the_white_stripes_2241",
+              "count": "18",
+              "search_url": "/search.php?title=The+White+Stripes+hotel"
+            },
+            {
+              "name": "Montell Fish",
+              "url": "/artist/montell_fish_157971",
+              "count": "6",
+              "search_url": "/search.php?title=Montell+Fish+hotel"
+            },
+            {
+              "name": "KraftKlub",
+              "url": "/artist/kraftklub_34642",
+              "count": "1",
+              "search_url": "/search.php?title=KraftKlub+hotel"
+            },
+            {
+              "name": "Gipsy Kings",
+              "url": "/artist/gipsy_kings_1343",
+              "count": "7",
+              "search_url": "/search.php?title=Gipsy+Kings+hotel"
+            },
+            {
+              "name": "Joshua Bassett",
+              "url": "/artist/joshua_bassett_458978",
+              "count": "1",
+              "search_url": "/search.php?title=Joshua+Bassett+hotel"
+            },
+            {
+              "name": "Kim Larsen",
+              "url": "/artist/kim_larsen_10721",
+              "count": "3",
+              "search_url": "/search.php?title=Kim+Larsen+hotel"
+            },
+            {
+              "name": "Local News Legend",
+              "url": "/artist/local_news_legend_164440",
+              "count": "1",
+              "search_url": "/search.php?title=Local+News+Legend+hotel"
+            },
+            {
+              "name": "John Mayer",
+              "url": "/artist/john_mayer_10857",
+              "count": "3",
+              "search_url": "/search.php?title=John+Mayer+hotel"
+            },
+            {
+              "name": "Sungha Jung",
+              "url": "/artist/sungha_jung_28399",
+              "count": "4",
+              "search_url": "/search.php?title=Sungha+Jung+hotel"
+            },
+            {
+              "name": "Rufus Wainwright",
+              "url": "/artist/rufus_wainwright_2427",
+              "count": "3",
+              "search_url": "/search.php?title=Rufus+Wainwright+hotel"
+            },
+            {
+              "name": "Fabrizio De Andr&eacute;",
+              "url": "/artist/10147",
+              "count": "3",
+              "search_url": "/search.php?title=Fabrizio+De+Andr%C3%A9+hotel"
+            },
+            {
+              "name": "The Hotelier",
+              "url": "/artist/the_hotelier_47699",
+              "count": "52",
+              "search_url": "/search.php?title=The+Hotelier+hotel"
+            }
+          ],
+          "types": [
+            {
+              "name": "All",
+              "url": "/search.php?title=hotel&amp;page=1&amp;view_state=advanced",
+              "count": []
+            },
+            {
+              "name": "Official Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=900",
+              "count": "23"
+            },
+            {
+              "name": "Chords",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=300",
+              "count": "740"
+            },
+            {
+              "name": "Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=200",
+              "count": "404"
+            },
+            {
+              "name": "Guitar Pro Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=500",
+              "count": "161"
+            },
+            {
+              "name": "Power Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=600",
+              "count": "27"
+            },
+            {
+              "name": "Bass Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=400",
+              "count": "109"
+            },
+            {
+              "name": "Drum Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=700",
+              "count": "4"
+            },
+            {
+              "name": "Video Tab",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=100",
+              "count": "8"
+            },
+            {
+              "name": "Ukulele Chords",
+              "url": "/search.php?title=hotel&amp;page=1&amp;type=800",
+              "count": "204"
+            }
+          ],
+          "current_filters": { "types": ["All"] }
+        }
+      },
+      "header_bidding": {
+        "page_type": "search_desktop",
+        "ad_units": [
+          {
+            "code": "ad_cs_2010324_728_90",
+            "dfpCode": "UG_ATF_728",
+            "sizes": [
+              [728, 90],
+              [970, 250]
+            ],
+            "placementId": "8549999",
+            "layoutPlacement": "top",
+            "mediaTypes": {
+              "banner": {
+                "sizes": [
+                  [728, 90],
+                  [970, 250]
+                ]
+              }
+            },
+            "appnexusPlacementId": 12097756,
+            "mediaType": "banner",
+            "bids": [
+              {
+                "bidder": "appnexus",
+                "params": {
+                  "placementId": 8549999,
+                  "keywords": { "is_refresh": "false", "subcat": "search" }
+                }
+              },
+              {
+                "bidder": "indexExchange",
+                "params": {
+                  "id": "2",
+                  "siteID": "179681",
+                  "size": [728, 90],
+                  "siteId": "179681"
+                }
+              },
+              {
+                "bidder": "openx",
+                "params": {
+                  "delDomain": "ultimate-guitar-d.openx.net",
+                  "unit": "538591653"
+                }
+              },
+              {
+                "bidder": "pubmatic",
+                "params": { "publisherId": "72623", "adSlot": "3131195" }
+              },
+              {
+                "bidder": "rubicon",
+                "params": {
+                  "accountId": "15178",
+                  "siteId": "93918",
+                  "zoneId": "441922"
+                }
+              },
+              {
+                "bidder": "yahoossp",
+                "params": {
+                  "dcn": "8a9694b8017070f8309df8c44da30024",
+                  "pos": "ultimate_guitar_us_728x90_atf"
+                }
+              }
+            ],
+            "customTargeting": {}
+          },
+          {
+            "code": "ad_cs_2010324_160_600",
+            "dfpCode": "UG_ATF_160",
+            "sizes": [[160, 600]],
+            "placementId": "8549999",
+            "layoutPlacement": "side",
+            "mediaTypes": { "banner": { "sizes": [[160, 600]] } },
+            "appnexusPlacementId": 12097756,
+            "mediaType": "banner",
+            "bids": [
+              {
+                "bidder": "appnexus",
+                "params": {
+                  "placementId": 8549999,
+                  "keywords": { "is_refresh": "false", "subcat": "search" }
+                }
+              },
+              {
+                "bidder": "indexExchange",
+                "params": {
+                  "id": "1",
+                  "siteID": "177325",
+                  "size": [160, 600],
+                  "siteId": "177325"
+                }
+              },
+              {
+                "bidder": "openx",
+                "params": {
+                  "delDomain": "ultimate-guitar-d.openx.net",
+                  "unit": "538591659"
+                }
+              },
+              {
+                "bidder": "pubmatic",
+                "params": { "publisherId": "72623", "adSlot": "3131193" }
+              },
+              {
+                "bidder": "rubicon",
+                "params": {
+                  "accountId": "15178",
+                  "siteId": "93918",
+                  "zoneId": "441922"
+                }
+              },
+              {
+                "bidder": "yahoossp",
+                "params": {
+                  "dcn": "8a9694b8017070f8309df8c44da30024",
+                  "pos": "ultimate_guitar_us_160x600_atf"
+                }
+              }
+            ],
+            "customTargeting": {}
+          },
+          {
+            "code": "ad_cs_4219367_300_250",
+            "dfpCode": "UG_BTFL_300",
+            "sizes": [[300, 250]],
+            "placementId": "8550000",
+            "layoutPlacement": "bottom",
+            "mediaTypes": { "banner": { "sizes": [[300, 250]] } },
+            "appnexusPlacementId": 12097785,
+            "mediaType": "banner",
+            "bids": [
+              {
+                "bidder": "appnexus",
+                "params": {
+                  "placementId": 8550000,
+                  "keywords": { "is_refresh": "false", "subcat": "search" }
+                }
+              },
+              {
+                "bidder": "indexExchange",
+                "params": {
+                  "id": "5",
+                  "siteID": "179684",
+                  "size": [300, 250],
+                  "siteId": "179684"
+                }
+              },
+              {
+                "bidder": "openx",
+                "params": {
+                  "delDomain": "ultimate-guitar-d.openx.net",
+                  "unit": "538591656"
+                }
+              },
+              {
+                "bidder": "pubmatic",
+                "params": { "publisherId": "72623", "adSlot": "3131213" }
+              },
+              {
+                "bidder": "rubicon",
+                "params": {
+                  "accountId": "15178",
+                  "siteId": "93918",
+                  "zoneId": "468410"
+                }
+              }
+            ],
+            "customTargeting": {}
+          },
+          {
+            "code": "ad_cs_2010322_300_250",
+            "dfpCode": "UG_BTFR_300",
+            "sizes": [[300, 250]],
+            "placementId": "8550001",
+            "layoutPlacement": "bottomRight",
+            "mediaTypes": { "banner": { "sizes": [[300, 250]] } },
+            "appnexusPlacementId": 12097784,
+            "mediaType": "banner",
+            "bids": [
+              {
+                "bidder": "appnexus",
+                "params": {
+                  "placementId": 8550001,
+                  "keywords": { "is_refresh": "false", "subcat": "search" }
+                }
+              },
+              {
+                "bidder": "indexExchange",
+                "params": {
+                  "id": "4",
+                  "siteID": "179683",
+                  "size": [300, 250],
+                  "siteId": "179683"
+                }
+              },
+              {
+                "bidder": "openx",
+                "params": {
+                  "delDomain": "ultimate-guitar-d.openx.net",
+                  "unit": "538591661"
+                }
+              },
+              {
+                "bidder": "pubmatic",
+                "params": {
+                  "publisherId": "72623",
+                  "adSlot": "3131198@300x250"
+                }
+              },
+              {
+                "bidder": "rubicon",
+                "params": {
+                  "accountId": "15178",
+                  "siteId": "93918",
+                  "zoneId": "468412"
+                }
+              }
+            ],
+            "customTargeting": {}
+          }
+        ]
+      },
+      "experiments": { "variations": [], "closed_experiments": { "2315": 2 } },
+      "template": {
+        "module": "search",
+        "controller": "search",
+        "action": "index",
+        "reactAction": ""
+      },
+      "documents": { "enabled": true }
+    },
+    "i18n": {
+      "language": "en",
+      "links": {
+        "default": "www.ultimate-guitar.com/search.php|search.php3?search_type=title&amp;value=hotel",
+        "pt": "www.ultimate-guitar.com/search.php|search.php3?search_type=title&amp;value=hotel"
+      }
+    },
+    "promo": {
+      "promoKey": "ugapp:topBannerShow:WinterSale2022",
+      "promoType": "Winter",
+      "endedKey": "_ug_promotionEnded_v4",
+      "emergency": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/d/dbf8a196d5b93b04354fc31acd21bd4cd9a16e02.webp",
+        "text": "WINTER SALE"
+      },
+      "exit": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/6/61d34ceca56a1fe6df4547a4a757761ff0731074.webp",
+        "title": "WINTER SALE",
+        "subtitle": "",
+        "notation": "ANNUAL MEMBERSHIP",
+        "buttonText": "GET SPECIAL OFFER",
+        "buttonColor": "brand"
+      },
+      "heroBanner": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/c/c782fe6f47c72433d1b7cc04f6dd0099daced273.webp",
+        "title": "",
+        "subtitle": "WINTER SALE",
+        "notation": "Annual Membership",
+        "buttonText": "GET SPECIAL OFFER",
+        "buttonColor": "brand"
+      },
+      "heroBlock": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/4/4cc00f16f3bceeb965b1fb7a000bfb3613b766e1.webp",
+        "title": "",
+        "subtitle": "",
+        "buttonText": "Try For Free",
+        "buttonColor": "brand"
+      },
+      "payment": {
+        "left": {
+          "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/b/b8d77073a9d6dd3c579f7ad1d44303772c5bb2ab.webp",
+          "text": "WINTER\nSALE"
+        },
+        "right": { "text": "Winter sale", "buttonColor": "brand" }
+      },
+      "permBanner": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/7/795fdec83a51a1055582242f500f0a3e73b53c0b.webp",
+        "bannerUrl": "",
+        "title": "",
+        "subtitle": "Pro Access",
+        "buttonText": "Try Now",
+        "buttonColor": "brand"
+      },
+      "stickyBanner": {
+        "imgUrl": "https://www.ultimate-guitar.com/static/storage/marketing/images/7/7cdc6f82b449028f04fc8bf18c020d4ffda2a1fb.webp",
+        "title": "",
+        "subtitle": "WINTER SALE",
+        "notation": "Get annual access to Ultimate Guitar",
+        "buttonText": "GET SPECIAL OFFER",
+        "buttonColor": "brand"
+      }
+    },
+    "user": {
+      "id": 0,
+      "pa_id": 0,
+      "avatarUrl": "https://www.ultimate-guitar.com/static/users/0/0/0/0.gif?d=d&amp;h=1676285080",
+      "username": "Unregistered",
+      "email": "",
+      "usergroupid": 0,
+      "contributor": {
+        "isContributor": false,
+        "isTabContributor": false,
+        "first_tab": 0
+      },
+      "iq": 0,
+      "tabsCount": 0,
+      "playlistCount": 0,
+      "messagesCount": 0,
+      "rights": [],
+      "hasExpiredCard": null,
+      "hasChargeError": null,
+      "hasActiveProPause": false,
+      "hasActiveEduPause": false,
+      "tab_try": null,
+      "content_access": [],
+      "joinDate": 0,
+      "user_status": ""
+    },
+    "notifications": {
+      "count_new": 0,
+      "data": [],
+      "giveaway_id": 0,
+      "texts": {
+        "markAll": "Mark all as read",
+        "settings": "Settings",
+        "thanksForVote": "Thanks for your vote"
+      }
+    },
+    "forms": [],
+    "theme": "dark",
+    "commentForm": { "is_new": 0 },
+    "isUgOffice": 0,
+    "ugSearch": { "type": "tabs", "value": "hotel" },
+    "sponsorsFooter": null,
+    "takeover": { "items": [], "debug_takeover_id": 0 },
+    "interstitial": false,
+    "customAlerts": []
+  },
+  "globalHelpers": [],
+  "helpers": {
+    "typeHelper": {
+      "short": {
+        "Official": "OFFICIAL",
+        "Chords": "CRD",
+        "Tabs": "TAB",
+        "Pro": "PRO",
+        "Power": "PWR",
+        "Bass Tabs": "BASS",
+        "Drum Tabs": "DRM",
+        "Video": "VID",
+        "Ukulele Chords": "UKE",
+        "Tab Pro": "TAB PRO",
+        "Chord Pro": "CRD PRO",
+        "Vocal": "VOCAL"
+      },
+      "filter": {
+        "Official": "official",
+        "Chords": "chords",
+        "Tabs": "tab",
+        "Pro": "guitar pro",
+        "Power": "power",
+        "Bass Tabs": "bass",
+        "Drum Tabs": "drums",
+        "Video": "video",
+        "Ukulele Chords": "ukulele",
+        "Tab Pro": "tab pro",
+        "Chord Pro": "chord pro",
+        "Vocal": "vocal"
+      },
+      "full": {
+        "Official": "official tab",
+        "Chords": "chords",
+        "Tabs": "tab",
+        "Pro": "guitar pro tab",
+        "Power": "power tab",
+        "Bass Tabs": "bass tab",
+        "Drum Tabs": "drum tab",
+        "Video": "video tab",
+        "Ukulele Chords": "ukulele chords",
+        "Tab Pro": "tab pro",
+        "Chord Pro": "chord pro",
+        "Vocal": "vocal tab"
+      }
+    }
+  },
+  "cmp": {
+    "setConsentUrl": "https://www.ultimate-guitar.com/user/security/consent"
+  },
+  "bidding": {
+    "analytics": {
+      "logUrl": "//track.ultimate-guitar.com/ug/",
+      "pageType": "search_desktop",
+      "region": "AU",
+      "device": "desktop",
+      "variation": "",
+      "hasHardRefresh": true
+    },
+    "refresh": {
+      "limit": 30,
+      "maxVisibleTime": 1000,
+      "delay": 30000,
+      "delayDeviation": 10000,
+      "enabled": true,
+      "hasHardRefresh": true,
+      "availableBidders": [
+        "appnexus",
+        "indexExchange",
+        "pubmatic",
+        "rubicon",
+        "sonobi",
+        "openx",
+        "adform",
+        "aol",
+        "brealtime",
+        "audienceNetwork",
+        "improvedigital",
+        "adkernelAdn",
+        "districtM",
+        "oftmedia",
+        "onefiftytwo",
+        "sortable",
+        "emx_digital",
+        "smartadserver",
+        "pulsepoint",
+        "amx",
+        "yahoossp",
+        "between",
+        "smaato"
+      ],
+      "ignoreChangePageVisibility": false
+    },
+    "minRefreshCpm": 0.040000000000000000832667268468867405317723751068115234375,
+    "cpmFloor": 0.1499999999999999944488848768742172978818416595458984375,
+    "timeout": 2000,
+    "refreshTimeout": 2000,
+    "dfpId": 74268401,
+    "units": [
+      {
+        "code": "ad_cs_2010324_728_90",
+        "dfpCode": "UG_ATF_728",
+        "sizes": [
+          [728, 90],
+          [970, 250]
+        ],
+        "placementId": "8549999",
+        "layoutPlacement": "top",
+        "mediaTypes": {
+          "banner": {
+            "sizes": [
+              [728, 90],
+              [970, 250]
+            ]
+          }
+        },
+        "appnexusPlacementId": 12097756,
+        "mediaType": "banner",
+        "bids": [
+          {
+            "bidder": "appnexus",
+            "params": {
+              "placementId": 8549999,
+              "keywords": { "is_refresh": "false", "subcat": "search" }
+            }
+          },
+          {
+            "bidder": "indexExchange",
+            "params": {
+              "id": "2",
+              "siteID": "179681",
+              "size": [728, 90],
+              "siteId": "179681"
+            }
+          },
+          {
+            "bidder": "openx",
+            "params": {
+              "delDomain": "ultimate-guitar-d.openx.net",
+              "unit": "538591653"
+            }
+          },
+          {
+            "bidder": "pubmatic",
+            "params": { "publisherId": "72623", "adSlot": "3131195" }
+          },
+          {
+            "bidder": "rubicon",
+            "params": {
+              "accountId": "15178",
+              "siteId": "93918",
+              "zoneId": "441922"
+            }
+          },
+          {
+            "bidder": "yahoossp",
+            "params": {
+              "dcn": "8a9694b8017070f8309df8c44da30024",
+              "pos": "ultimate_guitar_us_728x90_atf"
+            }
+          }
+        ],
+        "customTargeting": {}
+      },
+      {
+        "code": "ad_cs_2010324_160_600",
+        "dfpCode": "UG_ATF_160",
+        "sizes": [[160, 600]],
+        "placementId": "8549999",
+        "layoutPlacement": "side",
+        "mediaTypes": { "banner": { "sizes": [[160, 600]] } },
+        "appnexusPlacementId": 12097756,
+        "mediaType": "banner",
+        "bids": [
+          {
+            "bidder": "appnexus",
+            "params": {
+              "placementId": 8549999,
+              "keywords": { "is_refresh": "false", "subcat": "search" }
+            }
+          },
+          {
+            "bidder": "indexExchange",
+            "params": {
+              "id": "1",
+              "siteID": "177325",
+              "size": [160, 600],
+              "siteId": "177325"
+            }
+          },
+          {
+            "bidder": "openx",
+            "params": {
+              "delDomain": "ultimate-guitar-d.openx.net",
+              "unit": "538591659"
+            }
+          },
+          {
+            "bidder": "pubmatic",
+            "params": { "publisherId": "72623", "adSlot": "3131193" }
+          },
+          {
+            "bidder": "rubicon",
+            "params": {
+              "accountId": "15178",
+              "siteId": "93918",
+              "zoneId": "441922"
+            }
+          },
+          {
+            "bidder": "yahoossp",
+            "params": {
+              "dcn": "8a9694b8017070f8309df8c44da30024",
+              "pos": "ultimate_guitar_us_160x600_atf"
+            }
+          }
+        ],
+        "customTargeting": {}
+      },
+      {
+        "code": "ad_cs_4219367_300_250",
+        "dfpCode": "UG_BTFL_300",
+        "sizes": [[300, 250]],
+        "placementId": "8550000",
+        "layoutPlacement": "bottom",
+        "mediaTypes": { "banner": { "sizes": [[300, 250]] } },
+        "appnexusPlacementId": 12097785,
+        "mediaType": "banner",
+        "bids": [
+          {
+            "bidder": "appnexus",
+            "params": {
+              "placementId": 8550000,
+              "keywords": { "is_refresh": "false", "subcat": "search" }
+            }
+          },
+          {
+            "bidder": "indexExchange",
+            "params": {
+              "id": "5",
+              "siteID": "179684",
+              "size": [300, 250],
+              "siteId": "179684"
+            }
+          },
+          {
+            "bidder": "openx",
+            "params": {
+              "delDomain": "ultimate-guitar-d.openx.net",
+              "unit": "538591656"
+            }
+          },
+          {
+            "bidder": "pubmatic",
+            "params": { "publisherId": "72623", "adSlot": "3131213" }
+          },
+          {
+            "bidder": "rubicon",
+            "params": {
+              "accountId": "15178",
+              "siteId": "93918",
+              "zoneId": "468410"
+            }
+          }
+        ],
+        "customTargeting": {}
+      },
+      {
+        "code": "ad_cs_2010322_300_250",
+        "dfpCode": "UG_BTFR_300",
+        "sizes": [[300, 250]],
+        "placementId": "8550001",
+        "layoutPlacement": "bottomRight",
+        "mediaTypes": { "banner": { "sizes": [[300, 250]] } },
+        "appnexusPlacementId": 12097784,
+        "mediaType": "banner",
+        "bids": [
+          {
+            "bidder": "appnexus",
+            "params": {
+              "placementId": 8550001,
+              "keywords": { "is_refresh": "false", "subcat": "search" }
+            }
+          },
+          {
+            "bidder": "indexExchange",
+            "params": {
+              "id": "4",
+              "siteID": "179683",
+              "size": [300, 250],
+              "siteId": "179683"
+            }
+          },
+          {
+            "bidder": "openx",
+            "params": {
+              "delDomain": "ultimate-guitar-d.openx.net",
+              "unit": "538591661"
+            }
+          },
+          {
+            "bidder": "pubmatic",
+            "params": { "publisherId": "72623", "adSlot": "3131198@300x250" }
+          },
+          {
+            "bidder": "rubicon",
+            "params": {
+              "accountId": "15178",
+              "siteId": "93918",
+              "zoneId": "468412"
+            }
+          }
+        ],
+        "customTargeting": {}
+      }
+    ],
+    "priceGranularity": [
+      {
+        "precision": 2,
+        "min": 0,
+        "max": 1,
+        "increment": 0.01000000000000000020816681711721685132943093776702880859375
+      },
+      {
+        "precision": 2,
+        "min": 1,
+        "max": 2,
+        "increment": 0.0200000000000000004163336342344337026588618755340576171875
+      },
+      {
+        "precision": 2,
+        "min": 2,
+        "max": 5,
+        "increment": 0.05000000000000000277555756156289135105907917022705078125
+      },
+      {
+        "precision": 2,
+        "min": 5,
+        "max": 10,
+        "increment": 0.1000000000000000055511151231257827021181583404541015625
+      },
+      {
+        "precision": 2,
+        "min": 10,
+        "max": 20,
+        "increment": 0.200000000000000011102230246251565404236316680908203125
+      },
+      { "precision": 2, "min": 20, "max": 50, "increment": 0.5 }
+    ],
+    "dynamicLoad": true,
+    "disableAdx": false,
+    "apstagEnabled": true,
+    "isGDPRAvailable": false,
+    "tcfVersion": 2,
+    "isShowOnTap": false,
+    "primis20sec": false,
+    "showMePlayer": false,
+    "adsTargeting": null,
+    "prebidLibUrl": "https://www.ultimate-guitar.com/static/public/build/prebid_7_2_0/prebid_ver1676267223.js",
+    "isRegistered": 0,
+    "emailHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "slots": []
+  }
+}
