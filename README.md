@@ -14,8 +14,13 @@ npm run dev
 
 ## Todo
 
-- [x] Remeber recent tabs
-- [] Search
-- [] Local caching
+- [x] Remember recent tabs
+- [x] Search
+  - [] Filtering
+  - [] Pagination?
+- [] Server caching
 - [] Chord tooltips
-- [] Bookmarking
+- [x] Bookmarking
+- [x] Size options
+- [] Transposing
+- [] Autoscrolling
