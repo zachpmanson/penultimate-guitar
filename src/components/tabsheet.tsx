@@ -10,6 +10,8 @@ type TabSheetProps = {
 export default function TabSheet({ plainTab }: TabSheetProps) {
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
+  
+  console.log(plainTab);
   // const maxLineLen = Math.max(
   //   ...plainTab.split("\n").map((l: string) => l.length)
   // );
