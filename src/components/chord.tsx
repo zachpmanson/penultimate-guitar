@@ -6,12 +6,14 @@ type ChordProps = {
   id: number;
 };
 export default function Chord({ chord, id }: ChordProps) {
+  console.log("chord",chord)
   return (
     <>
       <span
         id={`${id}-tooltip`}
         className="text-blue-500"
         data-tooltip-content={`${chord} Chord tooltip here`}
+        clickable
       >
         {chord}
       </span>
