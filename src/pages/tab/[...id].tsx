@@ -48,7 +48,7 @@ export default function Tab() {
 
       {!!name ? (
         <>
-          <h1 className="text-center text-2xl">
+          <h1 className="text-center text-2xl my-4">
             {name} - {artist}
           </h1>
           <TabSheet plainTab={plainTab}></TabSheet>

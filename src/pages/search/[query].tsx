@@ -9,7 +9,7 @@ export default function Tab() {
   const router = useRouter();
   const { query } = router.query;
   const [results, setResults] = useState<SearchResult[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     let value: string;
     let search_type: string = "title";
@@ -20,7 +20,7 @@ export default function Tab() {
     } else {
       value = query;
     }
-
+    setIsLoading(true);
     fetch("/api/search", {
       method: "POST",
       headers: {
@@ -31,6 +31,7 @@ export default function Tab() {
       .then((res) => res.json())
       .then((res: SearchResult[]) => {
         setResults(res);
+        setIsLoading(false);
       });
   }, [query]);
 
@@ -39,11 +40,14 @@ export default function Tab() {
       <Head>
         <title>{`Search`}</title>
       </Head>
-      {!!results ? (
+      <h1 className="text-center text-2xl my-4">Search Results</h1>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : results.length > 0 ? (
         results.map((r, i) => <SearchLink key={i} {...r} />)
       ) : (
-        <LoadingSpinner />
-      )}{" "}
+        <p className="text-center">No results found</p>
+      )}
     </>
   );
 }
