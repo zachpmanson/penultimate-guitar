@@ -1,4 +1,4 @@
-import { TooltipWrapper } from 'react-tooltip';
+import { Tooltip, TooltipWrapper } from 'react-tooltip';
 import "react-tooltip/dist/react-tooltip.css";
 
 type ChordProps = {
