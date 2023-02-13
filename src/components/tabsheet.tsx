@@ -19,7 +19,7 @@ export default function TabSheet({ plainTab, fontSize }: TabSheetProps) {
 
   const [lineCutoff, setLineCutoff] = useState(40);
   useEffect(() => {
-    setLineCutoff(Math.floor(width / (fontSize * 0.67)));
+    setLineCutoff(Math.floor((width + 16) / (fontSize * 0.67)));
   }, [width, fontSize]);
 
   useEffect(() => {
