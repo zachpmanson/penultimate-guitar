@@ -29,7 +29,7 @@ export default function Tab() {
     })
       .then((res) => res.json())
       .then((res: TabDto) => {
-        setPlainTab(res.tab.replace(/\r/g,"\n"));
+        setPlainTab(res.tab);
         setName(res.name);
         setArtist(res.artist);
         const recents: TabLinks = JSON.parse(
