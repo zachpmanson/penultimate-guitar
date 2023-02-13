@@ -83,7 +83,7 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
             <Chord chord={match} id={i} />
           )
         )} */}
-        formattedTab
+        {formattedTab}
       </pre>
     </div>
   );
