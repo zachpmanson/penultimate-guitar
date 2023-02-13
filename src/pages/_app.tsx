@@ -7,7 +7,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <TooltipProvider>
       <Component {...pageProps} />
-      <Tooltip />
     </TooltipProvider>
   )
 }

@@ -9,13 +9,14 @@ export default function Chord({ chord, id }: ChordProps) {
   console.log("chord",chord, "id",id)
   return (
     <>
-      <TooltipWrapper content={`${chord} Chord tooltip here`}>
+      <TooltipWrapper tooltipId={`tooltip-${id}`} >
         <span
           className="text-blue-500"
           >
           {chord}
         </span>
       </TooltipWrapper>
+      <Tooltip id={`tooltip-${id}`} content={`${chord} Chord tooltip here`} />
     </>
   );
 }
