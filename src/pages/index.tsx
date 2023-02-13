@@ -1,10 +1,8 @@
 import RecentTabs from "@/components/recenttabs";
-import SearchBox from "@/components/searchbox";
-import { TabLinks } from "@/models";
 import Head from "next/head";
-import Link from "next/link";
+import type { NextPageWithLayout } from "./_app";
 
-export default function Home() {
+const Page: NextPageWithLayout = () => {
   return (
     <>
       <Head>
@@ -13,11 +11,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1 className="m-auto w-fit">Penultimate Guitar</h1>
-        <SearchBox />
-        <RecentTabs />
-      </main>
+      <RecentTabs />
     </>
   );
-}
+};
+
+export default Page;

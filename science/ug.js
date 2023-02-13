@@ -74,7 +74,42 @@ function getChords(URL) {
         });
     });
 }
-getChords("https://tabs.ultimate-guitar.com/tab/peach-pit/alrighty-aphrodite-chords-2083783");
+// getChords(
+//   "https://tabs.ultimate-guitar.com/tab/peach-pit/alrighty-aphrodite-chords-2083783"
+// );
+function getSearch(URL) {
+    return __awaiter(this, void 0, void 0, function () {
+        var results;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    results = "";
+                    return [4 /*yield*/, fetch(URL)
+                            .then(function (response) {
+                            // The API call was successful!
+                            return response.text();
+                        })
+                            .then(function (html) {
+                            // Convert the HTML string into a document object
+                            var dom = new jsdom.JSDOM(html);
+                            // Get the image file
+                            var jsStore = dom.window.document.querySelector(".js-store");
+                            console.log(jsStore);
+                            var dataContent = JSON.parse(jsStore.getAttribute("data-content").replace(/&quot;/g, '"'));
+                            results = dataContent["store"]["page"]["data"]["results"];
+                        })["catch"](function (err) {
+                            // There was an error
+                            console.warn("Something went wrong.", err);
+                        })];
+                case 1:
+                    _a.sent();
+                    console.log(results);
+                    return [2 /*return*/, results];
+            }
+        });
+    });
+}
+getSearch("https://www.ultimate-guitar.com/search.php?search_type=title&value=hotel");
 // readline.question("URL: ", (URL) => {
 //   getChords(URL);
 //   readline.close();

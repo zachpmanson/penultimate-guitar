@@ -29,7 +29,7 @@ export default function Tab() {
     })
       .then((res) => res.json())
       .then((res: TabDto) => {
-        setPlainTab(res.tab);
+        setPlainTab(res.taburl);
         setName(res.name);
         setArtist(res.artist);
         const recents: TabLinks = JSON.parse(
@@ -45,11 +45,7 @@ export default function Tab() {
       <Head>
         <title>{`${name} - ${artist}`}</title>
       </Head>
-      <h1 className="m-auto w-fit">
-        <Link href="/">Penultimate Guitar</Link>
-      </h1>
 
-      <SearchBox />
       {!!name ? (
         <>
           <h1 className="text-center text-2xl">

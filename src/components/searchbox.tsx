@@ -9,6 +9,8 @@ export default function SearchBox() {
     console.log(search);
     if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
       router.push(`/tab/${search.slice(37)}`);
+    } else {
+      router.push(`/search/${event.target.url.value}`);
     }
   };
   return (
@@ -43,7 +45,7 @@ export default function SearchBox() {
             id="default-search"
             name="url"
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Chords URL"
+            placeholder="Song name or Chords URL..."
             required
           />
           <button
