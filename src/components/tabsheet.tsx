@@ -74,8 +74,8 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
   }, [lineCutoff, plainTab]);
 
   return (
-    <div className="tab m-auto w-fit text-xs">
-      <pre className="max-w-[100vw] overflow-x-scroll whitespace-pre-wrap">
+    <div className="tab m-auto w-fit text-xs max-w-[100%]">
+      <pre className="max-w-[100%] overflow-x-scroll whitespace-pre-wrap">
         {reactStringReplace(
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
