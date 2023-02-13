@@ -7,7 +7,7 @@ export default function Document() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <body className="p-4">
-        <Main className="max-w-[100%]" />
+        <Main />
         <NextScript />
       </body>
     </Html>
