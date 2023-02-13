@@ -43,7 +43,7 @@ export default function Tab() {
   return (
     <>
       <Head>
-        <title>{`${name} - ${artist}`}</title>
+        <title>{name ? `${name} - ${artist}` : "Penultimate Guitar"}</title>
       </Head>
 
       {!!name ? (

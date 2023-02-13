@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import GlobalProvider from "@/contexts/Global";
 import "@/styles/globals.css";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -20,9 +21,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <TooltipProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <GlobalProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </GlobalProvider>
     </TooltipProvider>
   );
 }

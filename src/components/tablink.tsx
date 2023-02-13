@@ -1,19 +1,30 @@
+import { useGlobal } from "@/contexts/Global/context";
 import { TabDto } from "@/models";
 import Link from "next/link";
 
-type TabLinkProps = TabDto;
+type TabLinkProps = TabDto & {
+  pinned: boolean;
+};
 
-export default function TabLink({ taburl, name, artist }: TabLinkProps) {
+export default function TabLink(props: TabLinkProps) {
+  const { addPinnedTab, removePinnedTab } = useGlobal();
   return (
-    <div>
-      <Link href={`/tab/${taburl}`}>
-        <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto hover:shadow-md transition ease-in-out flex justify-between">
+    <div className="max-w-xl flex my-4 mx-auto justify-between gap-2">
+      <Link href={`/tab/${props.taburl}`} className="w-full">
+        <div className="border-grey-500 border-2 p-4 rounded-xl  hover:shadow-md transition ease-in-out flex justify-between">
           <div>
-            {name} - {artist}
+            {props.name} - {props.artist}
           </div>
-          <div>Pin</div>
         </div>
       </Link>
+      <button
+        onClick={() =>
+          props.pinned ? removePinnedTab(props) : addPinnedTab(props)
+        }
+        className="flex items-center px-4 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
+      >
+        {props.pinned ? "❌" : "📌"}
+      </button>
     </div>
   );
 }

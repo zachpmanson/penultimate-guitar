@@ -1,5 +1,4 @@
 import { TabLinks } from "@/models";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import TabLink from "./tablink";
 
@@ -17,9 +16,17 @@ export default function RecentTabs() {
       ) : (
         <p className="text-center">Recent tabs will show up here!</p>
       )}
-      {Object.keys(recents).map((taburl: string, i) => (
-        <TabLink taburl={taburl} key={i} {...recents[taburl]} />
-      ))}
+      {Object.keys(recents)
+        .reverse()
+        .slice(0, 10)
+        .map((taburl: string, i) => (
+          <TabLink
+            taburl={taburl}
+            key={i}
+            {...recents[taburl]}
+            pinned={false}
+          />
+        ))}
     </div>
   );
 }
