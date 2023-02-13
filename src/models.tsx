@@ -1,5 +1,6 @@
 export type TabDto = {
   taburl: string;
+  tab?: string;
   name: string;
   artist: string;
 };

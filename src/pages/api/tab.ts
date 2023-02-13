@@ -15,7 +15,7 @@ export default async function handler(
   if (req.method === "POST") {
     const url = `https://tabs.ultimate-guitar.com/tab/${req.body["id"]}`;
     const tab = await getTab(url);
-    res.status(200).json({ ...tab });
+    res.status(200).json({ ...tab, taburl: req.body["id"] });
   }
 }
 
@@ -33,7 +33,7 @@ async function getTab(URL: string): Promise<TabDto> {
       let dataContent = JSON.parse(
         jsStore?.getAttribute("data-content") || "{}"
       );
-      songData.taburl =
+      songData.tab =
         dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content;
       songData.name = dataContent?.store?.page?.data?.tab?.song_name;
       songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;

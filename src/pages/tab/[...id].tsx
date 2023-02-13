@@ -1,10 +1,8 @@
 import LoadingSpinner from "@/components/loadingspinner";
-import SearchBox from "@/components/searchbox";
 import TabSheet from "@/components/tabsheet";
-import useWindowDimensions from "@/hooks/windowdimensions";
+import { useGlobal } from "@/contexts/Global/context";
 import { TabDto, TabLinks } from "@/models";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,12 +10,12 @@ export default function Tab() {
   const router = useRouter();
   const { id } = router.query;
   const [plainTab, setPlainTab] = useState("initial");
-  const [name, setName] = useState("");
-  const [artist, setArtist] = useState("");
+  const [tabDetails, setTabDetails] = useState<TabDto>();
+
+  const { addPinnedTab, removePinnedTab, isPinned } = useGlobal();
 
   useEffect(() => {
     if (typeof id !== "object") return;
-
     const link: string = id.join("/");
 
     fetch("/api/tab", {
@@ -29,9 +27,8 @@ export default function Tab() {
     })
       .then((res) => res.json())
       .then((res: TabDto) => {
-        setPlainTab(res.taburl);
-        setName(res.name);
-        setArtist(res.artist);
+        setTabDetails(res);
+        setPlainTab(res.tab ?? "");
         const recents: TabLinks = JSON.parse(
           localStorage?.getItem("recents") || "{}"
         );
@@ -43,14 +40,30 @@ export default function Tab() {
   return (
     <>
       <Head>
-        <title>{name ? `${name} - ${artist}` : "Penultimate Guitar"}</title>
+        <title>
+          {tabDetails?.name
+            ? `${tabDetails?.name} - ${tabDetails?.artist}`
+            : "Penultimate Guitar"}
+        </title>
       </Head>
 
-      {!!name ? (
+      {!!tabDetails?.name ? (
         <>
           <h1 className="text-center text-2xl my-4">
-            {name} - {artist}
+            {tabDetails?.name} - {tabDetails?.artist}
           </h1>
+          <div className="flex justify-between w-fit m-auto">
+            <button
+              onClick={() =>
+                isPinned(tabDetails)
+                  ? removePinnedTab(tabDetails)
+                  : addPinnedTab(tabDetails)
+              }
+              className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
+            >
+              {isPinned(tabDetails) ? "❌" : "📌"}
+            </button>
+          </div>
           <TabSheet plainTab={plainTab}></TabSheet>
         </>
       ) : (

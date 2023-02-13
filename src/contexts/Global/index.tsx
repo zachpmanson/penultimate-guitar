@@ -42,13 +42,24 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     [pinnedTabs]
   );
 
+  const isPinned = useCallback(
+    (newTab: TabDto) => {
+      let existingIndex = pinnedTabs.findIndex(
+        (t) => t.taburl === newTab.taburl
+      );
+      return existingIndex !== -1;
+    },
+    [pinnedTabs]
+  );
+
   const value: GlobalContextProps = useMemo(
     () => ({
       addPinnedTab: addPinnedTab,
       removePinnedTab: removePinnedTab,
       pinnedTabs: pinnedTabs,
+      isPinned: isPinned,
     }),
-    [pinnedTabs, addPinnedTab, removePinnedTab]
+    [pinnedTabs, addPinnedTab, removePinnedTab, isPinned]
   );
 
   return (
