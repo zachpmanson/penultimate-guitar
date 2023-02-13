@@ -15,7 +15,7 @@ export default function Chord({ chord, id }: ChordProps) {
       >
         {chord}
       </span>
-      <Tooltip anchorId={`${id}-tooltip`} clickable>{`${chord} Chord tooltip here`}</Tooltip>
+      <Tooltip anchorId={`${id}-tooltip`} content="{`${chord} Chord tooltip here`}" clickable></Tooltip>
     </>
   );
 }
