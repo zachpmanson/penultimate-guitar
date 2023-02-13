@@ -25,6 +25,10 @@ body {
   font-size: 1rem;
 } */
 
+summary h1 {
+  display: inline;
+}
+
 .loading-spinner {
   border: 0.5rem solid white; /* Light grey */
   border-top: 0.5rem solid #ccc; /* Blue */

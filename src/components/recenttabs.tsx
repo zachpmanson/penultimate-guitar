@@ -12,21 +12,25 @@ export default function RecentTabs() {
   return (
     <div>
       {Object.keys(recents).length > 0 ? (
-        <h1 className="text-center text-2xl my-4">Recent Tabs</h1>
+        <details open>
+          <summary>
+            <h1 className="text-center text-2xl my-4">Recent Tabs</h1>
+          </summary>
+          {Object.keys(recents)
+            .reverse()
+            .slice(0, 10)
+            .map((taburl: string, i) => (
+              <TabLink
+                taburl={taburl}
+                key={i}
+                {...recents[taburl]}
+                pinned={false}
+              />
+            ))}
+        </details>
       ) : (
         <p className="text-center">Recent tabs will show up here!</p>
       )}
-      {Object.keys(recents)
-        .reverse()
-        .slice(0, 10)
-        .map((taburl: string, i) => (
-          <TabLink
-            taburl={taburl}
-            key={i}
-            {...recents[taburl]}
-            pinned={false}
-          />
-        ))}
     </div>
   );
 }

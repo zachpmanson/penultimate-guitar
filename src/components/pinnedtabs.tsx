@@ -8,11 +8,17 @@ export default function PinnedTabs() {
   return (
     <div>
       {Object.keys(pinnedTabs).length === 0 || (
-        <h1 className="text-center text-2xl my-4">Pinned Tabs</h1>
+        <>
+          <details open>
+            <summary>
+              <h1 className="text-center text-2xl my-4">Pinned Tabs</h1>
+            </summary>
+            {pinnedTabs.map((pinnedTab: TabDto, i) => (
+              <TabLink key={i} {...pinnedTab} pinned={true} />
+            ))}
+          </details>
+        </>
       )}
-      {pinnedTabs.map((pinnedTab: TabDto, i) => (
-        <TabLink key={i} {...pinnedTab} pinned={true} />
-      ))}
     </div>
   );
 }
