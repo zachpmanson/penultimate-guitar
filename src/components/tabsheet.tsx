@@ -76,13 +76,14 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
   return (
     <div className="tab m-auto w-fit text-xs">
       <pre>
-        {reactStringReplace(
+        {/* {reactStringReplace(
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
           (match, i) => (
             <Chord chord={match} id={i} />
           )
-        )}
+        )} */}
+        formattedTab
       </pre>
     </div>
   );
