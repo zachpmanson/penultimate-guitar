@@ -40,7 +40,7 @@ export default function Tab() {
         recents[link] = { name: res.name, artist: res.artist };
         localStorage.setItem("recents", JSON.stringify(recents));
       });
-  }, [hardcode,id]);
+  }, [id]);
 
   return (
     <>
