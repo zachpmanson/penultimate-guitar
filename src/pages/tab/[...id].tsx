@@ -11,9 +11,34 @@ import { useEffect, useState } from "react";
 export default function Tab() {
   const router = useRouter();
   const { id } = router.query;
-  const [plainTab, setPlainTab] = useState("");
+  const [plainTab, setPlainTab] = useState("initial");
   const [name, setName] = useState("");
   const [artist, setArtist] = useState("");
+
+  const hardcode = `B7   x-2-1-2-0-2
+
+  C/G  3-3-2-0-1-x
+  
+  D*   5-5-4-0-3-0 (Dadd4add9/A)
+  
+   
+  
+  [Intro]
+  
+   
+  
+  e|------------------------|---------------------------|--------------------------|
+  
+  B|------------------------|---------------------------|--------------------------|
+  
+  G|------------------------|-0-0---0-------------------|--------------------------|
+  
+  D|------2-2---2-1-1-1---1-|---------2-2-2---2-2-2---2-|-------------1-1-1-1------|
+  
+  A|------------------------|---------------------------|-2-2-2---2----------------|
+  
+  E|------------------------|---------------------------|--------------------------|
+  `
 
   useEffect(() => {
     if (typeof id !== "object") return;
@@ -29,7 +54,7 @@ export default function Tab() {
     })
       .then((res) => res.json())
       .then((res: TabDto) => {
-        setPlainTab(res.tab);
+        setPlainTab(hardcode);
         setName(res.name);
         setArtist(res.artist);
         const recents: TabLinks = JSON.parse(
