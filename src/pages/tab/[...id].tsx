@@ -11,6 +11,7 @@ export default function Tab() {
   const { id } = router.query;
   const [plainTab, setPlainTab] = useState("initial");
   const [tabDetails, setTabDetails] = useState<TabDto>();
+  const [fontSize, setFontSize] = useState(12);
 
   const { addPinnedTab, removePinnedTab, isPinned } = useGlobal();
 
@@ -52,7 +53,7 @@ export default function Tab() {
           <h1 className="text-center text-2xl my-4">
             {tabDetails?.name} - {tabDetails?.artist}
           </h1>
-          <div className="flex justify-between w-fit m-auto">
+          <div className="flex justify-between w-fit mx-auto my-4 gap-4">
             <button
               onClick={() =>
                 isPinned(tabDetails)
@@ -63,8 +64,23 @@ export default function Tab() {
             >
               {isPinned(tabDetails) ? "❌" : "📌"}
             </button>
+            <div className="flex">
+              <button
+                onClick={() => setFontSize(fontSize - 4)}
+                className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
+              >
+                ➖
+              </button>
+
+              <button
+                onClick={() => setFontSize(fontSize + 4)}
+                className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
+              >
+                ➕
+              </button>
+            </div>
           </div>
-          <TabSheet plainTab={plainTab}></TabSheet>
+          <TabSheet plainTab={plainTab} fontSize={fontSize}></TabSheet>
         </>
       ) : (
         <LoadingSpinner />

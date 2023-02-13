@@ -5,9 +5,11 @@ import reactStringReplace from "react-string-replace";
 
 type TabSheetProps = {
   plainTab: string;
+  fontSize: number;
 };
 
-export default function TabSheet({ plainTab }: TabSheetProps) {
+export default function TabSheet({ plainTab, fontSize }: TabSheetProps) {
+  console.log(plainTab);
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
 
@@ -17,8 +19,8 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
 
   const [lineCutoff, setLineCutoff] = useState(40);
   useEffect(() => {
-    setLineCutoff(Math.floor(width / 8));
-  }, [width]);
+    setLineCutoff(Math.floor(width / (fontSize * 0.67)));
+  }, [width, fontSize]);
 
   useEffect(() => {
     setFormattedTab(
@@ -71,13 +73,16 @@ export default function TabSheet({ plainTab }: TabSheetProps) {
   }, [lineCutoff, plainTab]);
 
   return (
-    <div className="tab m-auto w-fit text-xs max-w-[100%]">
-      <pre className="max-w-[100%] overflow-x-scroll whitespace-pre-wrap">
+    <div className="tab m-auto w-fit max-w-[100%]">
+      <pre
+        className="max-w-[100%] overflow-x-scroll whitespace-pre-wrap"
+        style={{ fontSize: `${fontSize}px` }}
+      >
         {reactStringReplace(
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
           (match, i) => (
-            <Chord chord={match} id={i} />
+            <Chord chord={match} id={i} key={i} />
           )
         )}
       </pre>
