@@ -12,11 +12,10 @@ export default function Chord({ chord, id }: ChordProps) {
       <span
         id={`${id}-tooltip`}
         className="text-blue-500"
-        data-tooltip-content={`${chord} Chord tooltip here`}
       >
         {chord}
       </span>
-      <Tooltip anchorId={`${id}-tooltip`} clickable></Tooltip>
+      <Tooltip anchorId={`${id}-tooltip`} clickable>{`${chord} Chord tooltip here`}</Tooltip>
     </>
   );
 }
