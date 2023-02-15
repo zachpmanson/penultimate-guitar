@@ -6,7 +6,6 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import type { ReactElement, ReactNode } from "react";
 import { TooltipProvider } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
