@@ -7,7 +7,7 @@ export type TabDto = {
       index: number;
     };
   };
-  contributors: { username: string }[];
+  contributors?: { username: string }[];
   taburl: string;
   tab?: string;
   name: string;
