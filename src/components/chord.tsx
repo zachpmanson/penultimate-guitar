@@ -13,9 +13,6 @@ export default function Chord({ chord, id }: ChordProps) {
   }, []);
   return (
     <>
-      <TooltipWrapper tooltipId={`tooltip-${id}`}>
-        <span className="text-blue-500">{chord}</span>
-      </TooltipWrapper>
       {isMounted && (
         <Tooltip
           id={`tooltip-${id}`}
@@ -23,6 +20,9 @@ export default function Chord({ chord, id }: ChordProps) {
           clickable
         />
       )}
+      <TooltipWrapper tooltipId={`tooltip-${id}`}>
+        <span className="text-blue-500">{chord}</span>
+      </TooltipWrapper>
     </>
   );
 }
