@@ -1,10 +1,12 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import TabSheet from "@/components/tabsheet";
+import ToolbarButton from "@/components/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
 import { TabDto, TabLinks } from "@/models";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import "react-tooltip/dist/react-tooltip.css";
 
 export default function Tab() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export default function Tab() {
   const [plainTab, setPlainTab] = useState("initial");
   const [tabDetails, setTabDetails] = useState<TabDto>();
   const [fontSize, setFontSize] = useState(12);
+  const [tranposition, setTranposition] = useState(0);
 
   const { addPinnedTab, removePinnedTab, isPinned } = useGlobal();
 
@@ -38,6 +41,10 @@ export default function Tab() {
       });
   }, [id]);
 
+  const formattedTransposition = () => {
+    return tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
+  };
+
   return (
     <>
       <Head>
@@ -52,34 +59,49 @@ export default function Tab() {
           <h1 className="text-center text-2xl my-4">
             {tabDetails?.name} - {tabDetails?.artist}
           </h1>
-          <div className="flex justify-between w-fit mx-auto my-4 gap-4">
-            <button
-              onClick={() =>
-                isPinned(tabDetails)
-                  ? removePinnedTab(tabDetails)
-                  : addPinnedTab(tabDetails)
-              }
-              className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
-            >
-              {isPinned(tabDetails) ? "❌" : "📌"}
-            </button>
-            <div className="flex">
-              <button
-                onClick={() => setFontSize(fontSize - 2)}
-                className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
-              >
-                ➖
-              </button>
+          <div className="flex justify-between w-fit mx-auto my-4 gap-8 font-mono text-sm">
+            <div className="flex flex-col text-center">
+              Pin
+              <ToolbarButton
+                fn={() =>
+                  isPinned(tabDetails)
+                    ? removePinnedTab(tabDetails)
+                    : addPinnedTab(tabDetails)
+                }
+                icon={isPinned(tabDetails) ? "❌" : "📌"}
+              />
+            </div>
 
-              <button
-                onClick={() => setFontSize(fontSize + 2)}
-                className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
-              >
-                ➕
-              </button>
+            <div className="flex flex-col text-center">
+              Font size
+              <div className="flex gap-1">
+                <ToolbarButton fn={() => setFontSize(fontSize - 2)} icon="➖" />
+                <ToolbarButton fn={() => setFontSize(fontSize + 2)} icon="➕" />
+              </div>
+            </div>
+
+            <div className="flex flex-col text-center">
+              <p>
+                Transpose
+                {tranposition === 0 || ` (${formattedTransposition()})`}
+              </p>
+              <div className="flex gap-1 m-auto">
+                <ToolbarButton
+                  fn={() => setTranposition(tranposition - 1)}
+                  icon="➖"
+                />
+                <ToolbarButton
+                  fn={() => setTranposition(tranposition + 1)}
+                  icon="➕"
+                />
+              </div>
             </div>
           </div>
-          <TabSheet plainTab={plainTab} fontSize={fontSize}></TabSheet>
+          <TabSheet
+            plainTab={plainTab}
+            fontSize={fontSize}
+            transposition={tranposition}
+          ></TabSheet>
         </>
       ) : (
         <LoadingSpinner />

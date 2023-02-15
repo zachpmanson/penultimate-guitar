@@ -34,7 +34,10 @@ async function getTab(URL: string): Promise<TabDto> {
         jsStore?.getAttribute("data-content") || "{}"
       );
       songData.tab =
-        dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content;
+        dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
+          /\r\n/g,
+          "\n"
+        );
       songData.name = dataContent?.store?.page?.data?.tab?.song_name;
       songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
     })

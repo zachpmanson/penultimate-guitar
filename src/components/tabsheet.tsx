@@ -6,15 +6,19 @@ import reactStringReplace from "react-string-replace";
 type TabSheetProps = {
   plainTab: string;
   fontSize: number;
+  transposition: number;
 };
 
-export default function TabSheet({ plainTab, fontSize }: TabSheetProps) {
-  console.log(plainTab);
+export default function TabSheet({
+  plainTab,
+  fontSize,
+  transposition,
+}: TabSheetProps) {
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
 
   const insertChordTags = (line: string): string => {
-    return line.replace(/\b([^ ]+?)\b/g, "[ch]$1[/ch]");
+    return line.replace(/\b([^ \n]+)/g, "[ch]$1[/ch]");
   };
 
   const [lineCutoff, setLineCutoff] = useState(40);
@@ -71,6 +75,7 @@ export default function TabSheet({ plainTab, fontSize }: TabSheetProps) {
       )
     );
   }, [lineCutoff, plainTab]);
+  console.log(formattedTab);
 
   return (
     <div className="tab m-auto w-fit max-w-[100%]">
@@ -81,9 +86,17 @@ export default function TabSheet({ plainTab, fontSize }: TabSheetProps) {
         {reactStringReplace(
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
-          (match, i) => (
-            <Chord chord={match} id={i} key={i} />
-          )
+          (match, i) => {
+            console.log("match:", match);
+            return (
+              <Chord
+                chord={match}
+                id={i}
+                key={i}
+                transposition={transposition}
+              />
+            );
+          }
         )}
       </pre>
     </div>
