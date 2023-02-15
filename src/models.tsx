@@ -1,4 +1,13 @@
 export type TabDto = {
+  meta?: {
+    capo?: number;
+    tuning?: {
+      name: string;
+      value: string;
+      index: number;
+    };
+  };
+  contributors: { username: string }[];
   taburl: string;
   tab?: string;
   name: string;

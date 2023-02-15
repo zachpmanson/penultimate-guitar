@@ -4,6 +4,7 @@ import ToolbarButton from "@/components/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
 import { TabDto, TabLinks } from "@/models";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
@@ -59,7 +60,41 @@ export default function Tab() {
           <h1 className="text-center text-2xl my-4">
             {tabDetails?.name} - {tabDetails?.artist}
           </h1>
-          <div className="flex justify-between w-fit mx-auto my-4 gap-8 font-mono text-sm">
+          <div className="max-w-lg mx-auto my-4">
+            {!!tabDetails?.contributors?.length && (
+              <details>
+                <summary>
+                  {tabDetails?.contributors?.length} Contributors
+                </summary>
+                <ul>
+                  {tabDetails?.contributors?.map(({ username }, index) => (
+                    <li key={index}>
+                      <Link
+                        href={`https://www.ultimate-guitar.com/u/${username}`}
+                      >
+                        {username}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+
+            {!!tabDetails?.meta?.capo && (
+              <div>Capo: Fret {tabDetails?.meta?.capo}</div>
+            )}
+            {!!tabDetails?.meta?.tuning && (
+              <div>
+                Tuning:{" "}
+                <span className="font-bold">
+                  {tabDetails?.meta?.tuning.name}
+                </span>
+                , {tabDetails?.meta?.tuning.value}
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-between max-w-lg mx-auto my-4 gap-8 font-mono text-sm">
             <div className="flex flex-col text-center">
               Pin
               <ToolbarButton

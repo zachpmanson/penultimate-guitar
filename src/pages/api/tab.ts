@@ -15,6 +15,7 @@ export default async function handler(
   if (req.method === "POST") {
     const url = `https://tabs.ultimate-guitar.com/tab/${req.body["id"]}`;
     const tab = await getTab(url);
+    // console.log(tab);
     res.status(200).json({ ...tab, taburl: req.body["id"] });
   }
 }
@@ -24,6 +25,8 @@ async function getTab(URL: string): Promise<TabDto> {
     taburl: "",
     name: "",
     artist: "",
+    meta: {},
+    contributors: [],
   };
   await fetch(URL)
     .then((response) => response.text())
@@ -40,6 +43,9 @@ async function getTab(URL: string): Promise<TabDto> {
         );
       songData.name = dataContent?.store?.page?.data?.tab?.song_name;
       songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
+      songData.meta = dataContent?.store?.page?.data?.tab_view?.meta;
+      songData.contributors =
+        dataContent?.store?.page?.data?.tab_view?.contributors;
     })
     .catch((err) => {
       console.warn("Something went wrong.", err);
