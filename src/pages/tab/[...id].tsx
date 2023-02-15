@@ -47,7 +47,6 @@ export default function Tab() {
             : "Penultimate Guitar"}
         </title>
       </Head>
-
       {!!tabDetails?.name ? (
         <>
           <h1 className="text-center text-2xl my-4">

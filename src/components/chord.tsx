@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tooltip, TooltipWrapper } from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 
 type ChordProps = {
   chord: string;
@@ -13,16 +13,16 @@ export default function Chord({ chord, id }: ChordProps) {
   }, []);
   return (
     <>
+      <span id={`tooltip-${id}`} className="text-blue-500">
+        {chord}
+      </span>
       {isMounted && (
         <Tooltip
-          id={`tooltip-${id}`}
+          anchorId={`tooltip-${id}`}
           content={`${chord} Chord tooltip here`}
           clickable
         />
       )}
-      <TooltipWrapper tooltipId={`tooltip-${id}`}>
-        <span className="text-blue-500">{chord}</span>
-      </TooltipWrapper>
     </>
   );
 }
