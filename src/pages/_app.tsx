@@ -3,6 +3,7 @@ import GlobalProvider from "@/contexts/Global";
 import "@/styles/globals.css";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import type { ReactElement, ReactNode } from "react";
 import { TooltipProvider } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -23,6 +24,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <TooltipProvider>
       <GlobalProvider>
         <Layout>
+          <Head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+          </Head>
           <Component {...pageProps} />
         </Layout>
       </GlobalProvider>

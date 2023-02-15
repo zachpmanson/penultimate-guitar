@@ -1,5 +1,4 @@
 import { Tooltip, TooltipWrapper } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
 
 type ChordProps = {
   chord: string;
@@ -11,7 +10,12 @@ export default function Chord({ chord, id }: ChordProps) {
       <TooltipWrapper tooltipId={`tooltip-${id}`}>
         <span className="text-blue-500">{chord}</span>
       </TooltipWrapper>
-      <Tooltip id={`tooltip-${id}`} content={`${chord} Chord tooltip here`} />
+      <Tooltip
+        key={id}
+        id={`tooltip-${id}`}
+        content={`${chord} Chord tooltip here`}
+        clickable
+      />
     </>
   );
 }
