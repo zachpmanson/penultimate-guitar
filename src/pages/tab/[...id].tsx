@@ -66,14 +66,14 @@ export default function Tab() {
             </button>
             <div className="flex">
               <button
-                onClick={() => setFontSize(fontSize - 4)}
+                onClick={() => setFontSize(fontSize - 2)}
                 className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
               >
                 ➖
               </button>
 
               <button
-                onClick={() => setFontSize(fontSize + 4)}
+                onClick={() => setFontSize(fontSize + 2)}
                 className="flex items-center justify-center w-10 h-10 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
               >
                 ➕
