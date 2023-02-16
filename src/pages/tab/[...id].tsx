@@ -47,7 +47,7 @@ export default function Tab() {
   };
 
   return (
-    <>
+    <div>
       <Head>
         <title>
           {tabDetails?.name
@@ -93,45 +93,63 @@ export default function Tab() {
               </div>
             )}
           </div>
-
-          <div className="flex justify-between max-w-lg mx-auto my-4 gap-8 font-mono text-sm">
-            <div className="flex flex-col text-center">
-              Pin
-              <ToolbarButton
-                fn={() =>
-                  isPinned(tabDetails)
-                    ? removePinnedTab(tabDetails)
-                    : addPinnedTab(tabDetails)
-                }
-                icon={isPinned(tabDetails) ? "❌" : "📌"}
-              />
-            </div>
-
-            <div className="flex flex-col text-center">
-              Font size
-              <div className="flex gap-1">
-                <ToolbarButton fn={() => setFontSize(fontSize - 2)} icon="➖" />
-                <ToolbarButton fn={() => setFontSize(fontSize + 2)} icon="➕" />
+          <div className="bg-white/50 w-full sticky top-0 ">
+            <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 font-mono text-sm flex-wrap">
+              <div className="flex-1 flex-col text-center">
+                Pin
+                <div className="m-auto w-fit">
+                  <ToolbarButton
+                    fn={() =>
+                      isPinned(tabDetails)
+                        ? removePinnedTab(tabDetails)
+                        : addPinnedTab(tabDetails)
+                    }
+                    icon={isPinned(tabDetails) ? "❌" : "📌"}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex flex-col text-center">
-              <p>
-                Transpose
-                {tranposition === 0 || ` (${formattedTransposition()})`}
-              </p>
-              <div className="flex gap-1 m-auto">
-                <ToolbarButton
-                  fn={() => setTranposition(tranposition - 1)}
-                  icon="➖"
-                />
-                <ToolbarButton
-                  fn={() => setTranposition(tranposition + 1)}
-                  icon="➕"
-                />
+              <div className="flex-1 flex-col text-center">
+                Font size
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton
+                    fn={() => setFontSize(fontSize - 2)}
+                    icon="➖"
+                  />
+                  <ToolbarButton
+                    fn={() => setFontSize(fontSize + 2)}
+                    icon="➕"
+                  />
+                </div>
               </div>
+
+              <div className="flex-1 flex-col text-center">
+                <p>
+                  Transpose
+                  {tranposition === 0 || ` (${formattedTransposition()})`}
+                </p>
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton
+                    fn={() => setTranposition(tranposition - 1)}
+                    icon="➖"
+                  />
+                  <ToolbarButton
+                    fn={() => setTranposition(tranposition + 1)}
+                    icon="➕"
+                  />
+                </div>
+              </div>
+
+              {/* <div className="flex-1 flex-col text-center">
+                Autoscroll
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton fn={() => changeScrolling("down")} icon="➖" />
+                  <ToolbarButton fn={() => scrollToBottom(5)} icon="➕" />
+                </div>
+              </div> */}
             </div>
           </div>
+
           <TabSheet
             plainTab={plainTab}
             fontSize={fontSize}
@@ -141,6 +159,6 @@ export default function Tab() {
       ) : (
         <LoadingSpinner />
       )}
-    </>
+    </div>
   );
 }

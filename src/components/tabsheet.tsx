@@ -75,28 +75,20 @@ export default function TabSheet({
       )
     );
   }, [lineCutoff, plainTab]);
-  console.log(formattedTab);
+  // console.log(formattedTab);
 
   return (
     <div className="tab m-auto w-fit max-w-[100%]">
       <pre
-        className="max-w-[100%] overflow-x-scroll whitespace-pre-wrap"
+        className="max-w-[100%] whitespace-pre-wrap"
         style={{ fontSize: `${fontSize}px` }}
       >
         {reactStringReplace(
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
-          (match, i) => {
-            console.log("match:", match);
-            return (
-              <Chord
-                chord={match}
-                id={i}
-                key={i}
-                transposition={transposition}
-              />
-            );
-          }
+          (match, i) => (
+            <Chord chord={match} id={i} key={i} transposition={transposition} />
+          )
         )}
       </pre>
     </div>
