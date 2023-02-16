@@ -23,6 +23,6 @@ npm run dev
 - [x] Bookmarking
 - [x] Size options
 - [x] Transposing
-- [ ] Autoscrolling
-- [ ] Sticky toolbar
+- [x] Autoscrolling
+- [x] Sticky toolbar
 - [x] Tuning and capo info
