@@ -6,7 +6,7 @@ import { TabDto, TabLinks } from "@/models";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 
 export default function Tab() {
@@ -16,7 +16,8 @@ export default function Tab() {
   const [tabDetails, setTabDetails] = useState<TabDto>();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(0);
-
+  const [scrollSpeed, setScrollSpeed] = useState(0);
+  const scrollinterval = useRef<NodeJS.Timer>();
   const { addPinnedTab, removePinnedTab, isPinned } = useGlobal();
 
   useEffect(() => {
@@ -41,6 +42,26 @@ export default function Tab() {
         localStorage.setItem("recents", JSON.stringify(recents));
       });
   }, [id]);
+
+  const changeScrolling = (type: string) => {
+    clearInterval(scrollinterval.current);
+
+    if (type === "up") {
+      scrollinterval.current = setInterval(
+        () => window.scrollBy({ top: scrollSpeed + 1, left: 0 }),
+        60
+      );
+      setScrollSpeed(scrollSpeed + 1);
+    } else {
+      if (scrollSpeed > 0) {
+        scrollinterval.current = setInterval(
+          () => window.scrollBy({ top: scrollSpeed - 1, left: 0 }),
+          60
+        );
+        setScrollSpeed(scrollSpeed - 1);
+      }
+    }
+  };
 
   const formattedTransposition = () => {
     return tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
@@ -140,13 +161,13 @@ export default function Tab() {
                 </div>
               </div>
 
-              {/* <div className="flex-1 flex-col text-center">
+              <div className="flex-1 flex-col text-center">
                 Autoscroll
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton fn={() => changeScrolling("down")} icon="➖" />
-                  <ToolbarButton fn={() => scrollToBottom(5)} icon="➕" />
+                  <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
 
