@@ -22,5 +22,7 @@ npm run dev
 - [ ] Chord tooltips
 - [x] Bookmarking
 - [x] Size options
-- [ ] Transposing
+- [x] Transposing
 - [ ] Autoscrolling
+- [ ] Sticky toolbar
+- [x] Tuning and capo info
