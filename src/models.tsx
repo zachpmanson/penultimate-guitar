@@ -1,15 +1,13 @@
 export type TabDto = {
-  meta?: {
-    capo?: number;
-    tuning?: {
-      name: string;
-      value: string;
-      index: number;
-    };
+  capo?: number;
+  tuning?: {
+    name: string;
+    value: string;
+    index: number;
   };
-  contributors?: { username: string }[];
+  contributors?: string[];
   taburl: string;
-  tab?: string;
+  tab: string;
   name: string;
   artist: string;
 };
@@ -44,3 +42,5 @@ export type SearchResult = {
   artist_url: string;
   tab_url: string;
 };
+
+export const blacklist = ["Pro", "Video", "Official"];

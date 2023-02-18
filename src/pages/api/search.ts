@@ -1,10 +1,8 @@
-import { SearchResult } from "@/models";
+import { blacklist, SearchResult } from "@/models";
 import { JSDOM } from "jsdom";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = SearchResult[];
-
-const blacklist = ["Pro", "Video"];
 
 export default async function handler(
   req: NextApiRequest,

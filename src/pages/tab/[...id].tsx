@@ -95,12 +95,10 @@ export default function Tab() {
                   {tabDetails?.contributors?.length} Contributors
                 </summary>
                 <ul>
-                  {tabDetails?.contributors?.map(({ username }, index) => (
+                  {tabDetails?.contributors?.map((c, index) => (
                     <li key={index}>
-                      <Link
-                        href={`https://www.ultimate-guitar.com/u/${username}`}
-                      >
-                        {username}
+                      <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
+                        {c}
                       </Link>
                     </li>
                   ))}
@@ -108,16 +106,12 @@ export default function Tab() {
               </details>
             )}
 
-            {!!tabDetails?.meta?.capo && (
-              <div>Capo: Fret {tabDetails?.meta?.capo}</div>
-            )}
-            {!!tabDetails?.meta?.tuning && (
+            {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
+            {!!tabDetails?.tuning && (
               <div>
                 Tuning:{" "}
-                <span className="font-bold">
-                  {tabDetails?.meta?.tuning.name}
-                </span>
-                , {tabDetails?.meta?.tuning.value}
+                <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
+                {tabDetails?.tuning.value}
               </div>
             )}
           </div>
