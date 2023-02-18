@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 
+const scrollMs = 50;
+
 export default function Tab() {
   const router = useRouter();
   const { id } = router.query;
@@ -45,18 +47,27 @@ export default function Tab() {
 
   const changeScrolling = (type: string) => {
     clearInterval(scrollinterval.current);
-
     if (type === "up") {
       scrollinterval.current = setInterval(
-        () => window.scrollBy({ top: scrollSpeed + 1, left: 0 }),
-        60
+        () =>
+          window.scrollBy({
+            top: (scrollSpeed + 1) * 2,
+            left: 0,
+            behavior: "smooth",
+          }),
+        scrollMs
       );
       setScrollSpeed(scrollSpeed + 1);
     } else {
       if (scrollSpeed > 0) {
         scrollinterval.current = setInterval(
-          () => window.scrollBy({ top: scrollSpeed - 1, left: 0 }),
-          60
+          () =>
+            window.scrollBy({
+              top: (scrollSpeed - 1) * 2,
+              left: 0,
+              behavior: "smooth",
+            }),
+          scrollMs
         );
         setScrollSpeed(scrollSpeed - 1);
       }
