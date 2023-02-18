@@ -2,6 +2,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { TabDto } from "@/models";
 import Link from "next/link";
 
+/* TODO change Tablink props type to not use TabDto */
 type TabLinkProps = TabDto & {
   pinned: boolean;
 };

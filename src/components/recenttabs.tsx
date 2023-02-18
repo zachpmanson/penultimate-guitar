@@ -21,6 +21,7 @@ export default function RecentTabs() {
             .slice(0, 10)
             .map((taburl: string, i) => (
               <TabLink
+                tab={""}
                 taburl={taburl}
                 key={i}
                 {...recents[taburl]}
