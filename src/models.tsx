@@ -12,11 +12,10 @@ export type TabDto = {
   artist: string;
 };
 
-export type TabLinks = {
-  [link: string]: {
-    name: string;
-    artist: string;
-  };
+export type TabLinkProps = {
+  taburl: string;
+  name: string;
+  artist: string;
 };
 
 export type SearchResult = {

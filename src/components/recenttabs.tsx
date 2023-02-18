@@ -1,12 +1,27 @@
-import { TabLinks } from "@/models";
+import { TabLinkProps } from "@/models";
 import { useEffect, useState } from "react";
 import TabLink from "./tablink";
 
 export default function RecentTabs() {
-  const [recents, setRecents] = useState<TabLinks>({});
+  const [recents, setRecents] = useState<TabLinkProps[]>([]);
 
   useEffect(() => {
-    setRecents(JSON.parse(localStorage?.getItem("recents") || "[]"));
+    const savedRecents: any = JSON.parse(
+      localStorage?.getItem("recents") || "[]"
+    );
+    if (Array.isArray(savedRecents)) {
+      setRecents(savedRecents);
+    } else {
+      // convert to new format
+      const arrayRecents = Object.keys(savedRecents).map((r) => ({
+        taburl: r,
+        name: savedRecents[r].name,
+        artist: savedRecents[r].artist,
+      }));
+
+      setRecents(arrayRecents);
+      localStorage.setItem("recents", JSON.stringify(arrayRecents));
+    }
   }, []);
 
   return (
@@ -16,18 +31,9 @@ export default function RecentTabs() {
           <summary>
             <h1 className="text-center text-2xl my-4">Recent Tabs</h1>
           </summary>
-          {Object.keys(recents)
-            .reverse()
-            .slice(0, 10)
-            .map((taburl: string, i) => (
-              <TabLink
-                tab={""}
-                taburl={taburl}
-                key={i}
-                {...recents[taburl]}
-                pinned={false}
-              />
-            ))}
+          {recents.slice(0, 10).map((r: TabLinkProps, i) => (
+            <TabLink tab={""} key={i} {...r} pinned={false} />
+          ))}
         </details>
       ) : (
         <p className="text-center">Recent tabs will show up here!</p>

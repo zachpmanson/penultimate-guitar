@@ -2,13 +2,13 @@ import LoadingSpinner from "@/components/loadingspinner";
 import TabSheet from "@/components/tabsheet";
 import ToolbarButton from "@/components/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import { TabDto, TabLinks } from "@/models";
+import { TabDto, TabLinkProps } from "@/models";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
-
+import _ from "lodash";
 const scrollMs = 50;
 
 export default function Tab() {
@@ -37,11 +37,37 @@ export default function Tab() {
       .then((res: TabDto) => {
         setTabDetails(res);
         setPlainTab(res.tab ?? "");
-        const recents: TabLinks = JSON.parse(
+        const recents: any = JSON.parse(
           localStorage?.getItem("recents") || "{}"
         );
-        recents[link] = { name: res.name, artist: res.artist };
-        localStorage.setItem("recents", JSON.stringify(recents));
+        if (Array.isArray(recents)) {
+          recents.unshift({
+            taburl: res.taburl,
+            name: res.name,
+            artist: res.artist,
+          });
+          const uniqRecents = _.uniqBy(recents, (r: TabLinkProps) => r.taburl);
+          localStorage.setItem("recents", JSON.stringify(uniqRecents));
+        } else {
+          let arrayRecents = Object.keys(recents).map((r) => ({
+            taburl: r,
+            name: recents[r].name,
+            artist: recents[r].artist,
+          }));
+
+          arrayRecents.unshift({
+            taburl: res.taburl,
+            name: res.name,
+            artist: res.artist,
+          });
+
+          const uniqRecents = _.uniqBy(
+            arrayRecents,
+            (r: TabLinkProps) => r.taburl
+          );
+
+          localStorage.setItem("recents", JSON.stringify(uniqRecents));
+        }
       });
   }, [id]);
 
