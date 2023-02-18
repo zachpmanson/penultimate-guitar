@@ -48,31 +48,27 @@ export default function Tab() {
   const changeScrolling = (type: string) => {
     clearInterval(scrollinterval.current);
     if (type === "up") {
+      setScrollSpeed(scrollSpeed + 1);
+    } else {
+      if (scrollSpeed > 0) {
+        setScrollSpeed(scrollSpeed - 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (scrollSpeed > 0) {
       scrollinterval.current = setInterval(
         () =>
           window.scrollBy({
-            top: (scrollSpeed + 1) * 2,
+            top: scrollSpeed * 2,
             left: 0,
             behavior: "smooth",
           }),
         scrollMs
       );
-      setScrollSpeed(scrollSpeed + 1);
-    } else {
-      if (scrollSpeed > 0) {
-        scrollinterval.current = setInterval(
-          () =>
-            window.scrollBy({
-              top: (scrollSpeed - 1) * 2,
-              left: 0,
-              behavior: "smooth",
-            }),
-          scrollMs
-        );
-        setScrollSpeed(scrollSpeed - 1);
-      }
     }
-  };
+  }, [scrollSpeed]);
 
   const formattedTransposition = () => {
     return tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
