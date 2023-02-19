@@ -18,7 +18,7 @@ npm run dev
 - [x] Search
   - [ ] Filtering
   - [ ] Pagination?
-- [ ] Server caching
+- [x] Server caching
 - [ ] Chord tooltips
 - [x] Bookmarking
 - [x] Size options
