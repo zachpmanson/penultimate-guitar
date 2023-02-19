@@ -35,13 +35,11 @@ const flatNotes = [
 
 export default function Chord({ chord, id, transposition }: ChordProps) {
   let transposedChord = chord;
-  // console.log(chord);
   if (transposition !== 0) {
-    // transposedChord = chord.replace(/[A-Z][^#b]/g, (match) => {
-    //   let currentIndex = sharpNotes.findIndex((i) => i === match);
-    //   return sharpNotes[(currentIndex + transposition) % sharpNotes.length];
-    // });
-
+    if (transposition < 0) {
+      transposition =
+        sharpNotes.length - (Math.abs(transposition) % sharpNotes.length);
+    }
     if (chord.includes("#")) {
       transposedChord = chord.replace(/([A-Z]#)/g, (match) => {
         let currentIndex = sharpNotes.findIndex((i) => i === match);
@@ -54,8 +52,8 @@ export default function Chord({ chord, id, transposition }: ChordProps) {
       });
     } else {
       transposedChord = chord.replace(/([A-Z]+)/g, (match) => {
-        let currentIndex = flatNotes.findIndex((i) => i === match);
-        return flatNotes[(currentIndex + transposition) % flatNotes.length];
+        let currentIndex = sharpNotes.findIndex((i) => i === match);
+        return sharpNotes[(currentIndex + transposition) % sharpNotes.length];
       });
     }
   }

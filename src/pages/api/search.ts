@@ -8,12 +8,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log("req.body", Object.keys(req.body));
+  // console.log("req.body", Object.keys(req.body));
   if (Object.keys(req.body).length === 0) {
     res.status(400);
     return;
   }
-  console.log(req.body);
+  // console.log(req.body);
   if (req.method === "POST") {
     const url = `https://www.ultimate-guitar.com/search.php?search_type=${req.body["search_type"]}&value=${req.body["value"]}`;
     const results = await getSearch(url);
