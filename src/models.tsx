@@ -43,3 +43,10 @@ export type SearchResult = {
 };
 
 export const blacklist = ["Pro", "Video", "Official"];
+
+export type ContributorObj = {
+  userid: string;
+  username: string;
+  usergroupid: string;
+  iq: number;
+};
