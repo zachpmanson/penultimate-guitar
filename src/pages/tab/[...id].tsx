@@ -55,7 +55,7 @@ export default function Tab({ tabDetails }: TabProps) {
 
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
     }
-  }, [id]);
+  }, [id, tabDetails]);
 
   const changeScrolling = (type: string) => {
     clearInterval(scrollinterval.current);

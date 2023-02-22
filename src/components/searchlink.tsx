@@ -14,7 +14,7 @@ export default function SearchLink({
   return (
     <div>
       <Link href={`/tab/${tab_url}`}>
-        <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto hover:shadow-md transition ease-in-out flex-col">
+        <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto hover:shadow-md transition ease-in-out flex-col text-black">
           <div className="flex justify-between">
             <div>
               {song_name} - {artist_name}
