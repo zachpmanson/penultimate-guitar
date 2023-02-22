@@ -13,6 +13,14 @@ body {
 @tailwind components;
 @tailwind utilities;
 
+ol {
+  list-style: decimal;
+}
+
+a {
+  color: dodgerblue;
+}
+
 /* .tab {
   font-size: 2vw;
 } */
