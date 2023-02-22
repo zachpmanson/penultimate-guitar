@@ -13,16 +13,18 @@ export default function Directory({ allTabs }: ListProps) {
       <Head>
         <title>Song Directory</title>
       </Head>
-      <div className="max-w-md m-auto">
-        <ol>
-          {allTabs.map((t, i) => (
-            <li key={i}>
-              <Link href={`/tab/${t.taburl}`}>
-                {t.artist} - {t.name}
-              </Link>
-            </li>
-          ))}
-        </ol>
+      <div className="w-fit m-auto wrap">
+        <div>
+          <ol>
+            {allTabs.map((t, i) => (
+              <li key={i}>
+                <Link href={`/tab/${t.taburl}`}>
+                  {t.artist} - {t.name}
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </>
   );
