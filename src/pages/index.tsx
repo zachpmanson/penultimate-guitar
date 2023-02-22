@@ -9,7 +9,6 @@ const Page: NextPageWithLayout = () => {
     <>
       <Head>
         <title>Penultimate Guitar</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="max-w-xl mx-auto">
         <PinnedTabs />
