@@ -43,6 +43,6 @@ async function getSearch(URL: string): Promise<SearchResult[]> {
     .filter((r) => !blacklist.includes(r.type))
     .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
     .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-  console.log(results);
+  // console.log(results);
   return results;
 }

@@ -19,6 +19,17 @@ ol {
 
 a {
   color: dodgerblue;
+  transition: all 0.1s ease-in;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a.no-underline {
+  text-decoration: none;
 }
 
 /* .tab {

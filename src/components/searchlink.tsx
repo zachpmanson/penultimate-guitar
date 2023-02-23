@@ -13,7 +13,7 @@ export default function SearchLink({
 }: SearchLinkProps) {
   return (
     <div>
-      <Link href={`/tab/${tab_url}`}>
+      <Link href={`/tab/${tab_url}`} className="no-underline">
         <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto hover:shadow-md transition ease-in-out flex-col text-black">
           <div className="flex justify-between">
             <div>

@@ -11,7 +11,10 @@ export default function TabLink(props: TabLinkProps) {
   const { addPinnedTab, removePinnedTab } = useGlobal();
   return (
     <div className="max-w-xl flex my-4 mx-auto justify-between gap-2">
-      <Link href={`/tab/${props.taburl}`} className="w-full text-black">
+      <Link
+        href={`/tab/${props.taburl}`}
+        className="w-full text-black no-underline"
+      >
         <div className="border-grey-500 border-2 p-4 rounded-xl  hover:shadow-md transition ease-in-out flex justify-between">
           <div>
             {props.name} - {props.artist}
