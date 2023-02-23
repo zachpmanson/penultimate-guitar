@@ -14,7 +14,7 @@ export default function Directory({ allTabs }: ListProps) {
         <title>Song Directory</title>
       </Head>
       <div className="w-fit m-auto wrap">
-        <div>
+        <div className="mx-8">
           <ol>
             {allTabs.map((t, i) => (
               <li key={i}>

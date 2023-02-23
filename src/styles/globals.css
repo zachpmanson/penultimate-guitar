@@ -14,7 +14,7 @@ body {
 @tailwind utilities;
 
 ol {
-  list-style: inside decimal;
+  list-style: decimal;
 }
 
 a {
