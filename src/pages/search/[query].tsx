@@ -10,6 +10,27 @@ export default function Tab() {
   const { query } = router.query;
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const collapseResults = (results: SearchResult[]) => {
+    let colRes: SearchResult[] = [];
+    for (let r of results) {
+      const existing = colRes.findIndex(
+        (c) =>
+          c.song_name === r.song_name &&
+          c.artist_name === r.artist_name &&
+          c.type === r.type
+      );
+      if (existing !== -1) {
+        if (r.rating > colRes[existing].rating) {
+          colRes[existing] = r;
+        }
+      } else {
+        colRes.push(r);
+      }
+    }
+    return colRes;
+  };
+
   useEffect(() => {
     let value: string;
     let search_type: string = "title";
@@ -30,7 +51,7 @@ export default function Tab() {
     })
       .then((res) => res.json())
       .then((res: SearchResult[]) => {
-        setResults(res);
+        setResults(collapseResults(res));
         setIsLoading(false);
       });
   }, [query]);
