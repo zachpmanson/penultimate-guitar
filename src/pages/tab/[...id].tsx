@@ -125,7 +125,7 @@ export default function Tab({ tabDetails }: TabProps) {
           )}
         </div>
         <div className="bg-white/50 w-full sticky top-0 ">
-          <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 font-mono text-sm flex-wrap">
+          <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
             <div className="flex-1 flex-col text-center">
               Pin
               <div className="m-auto w-fit">
@@ -146,6 +146,7 @@ export default function Tab({ tabDetails }: TabProps) {
                 <ToolbarButton
                   fn={() => setFontSize(fontSize - 2)}
                   icon={<span className="text-xs">A</span>}
+                  disabled={fontSize < 8}
                 />
                 <ToolbarButton
                   fn={() => setFontSize(fontSize + 2)}
@@ -174,7 +175,11 @@ export default function Tab({ tabDetails }: TabProps) {
             <div className="flex-1 flex-col text-center">
               Autoscroll
               <div className="flex gap-1 m-auto w-fit">
-                <ToolbarButton fn={() => changeScrolling("down")} icon="➖" />
+                <ToolbarButton
+                  fn={() => changeScrolling("down")}
+                  icon="➖"
+                  disabled={scrollSpeed < 1}
+                />
                 <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
               </div>
             </div>
