@@ -35,7 +35,7 @@ const flatNotes = [
 
 export default function Chord({ chord, id, transposition }: ChordProps) {
   let transposedChord = chord;
-  if (transposition !== 0) {
+  if (transposition !== 0 && chord !== "N.C.") {
     if (transposition < 0) {
       transposition =
         sharpNotes.length - (Math.abs(transposition) % sharpNotes.length);

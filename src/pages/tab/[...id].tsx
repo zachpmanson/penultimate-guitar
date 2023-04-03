@@ -1,6 +1,5 @@
-import LoadingSpinner from "@/components/loadingspinner";
-import TabSheet from "@/components/tabsheet";
-import ToolbarButton from "@/components/toolbarbutton";
+import TabSheet from "@/components/tab/tabsheet";
+import ToolbarButton from "@/components/tab/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
 import { blacklist, ContributorObj, TabDto, TabLinkProps } from "@/models";
 import Head from "next/head";
@@ -243,7 +242,7 @@ export async function getServerSideProps({ params }: ServerProps) {
       console.log("tab not in db");
       const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
       const tab = await getTab(fullurl);
-      props = { ...tab, taburl: url };
+      props = { ...tab, taburl: url, capo: tab?.capo ?? 0 };
       try {
         if (!!tab.tab) {
           const result = await prisma.tab.create({

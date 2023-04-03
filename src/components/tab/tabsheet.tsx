@@ -1,4 +1,4 @@
-import Chord from "@/components/chord";
+import Chord from "@/components/tab/chord";
 import useWindowDimensions from "@/hooks/windowdimensions";
 import { useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
