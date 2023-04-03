@@ -40,9 +40,10 @@ async function getSearch(URL: string): Promise<SearchResult[]> {
 
   results = results
     .filter((r) => r.tab_access_type === "public")
+    .filter((r) => r.type !== "Power")
     .filter((r) => !blacklist.includes(r.type))
     .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
     .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-  // console.log(results);
+  console.log(results);
   return results;
 }

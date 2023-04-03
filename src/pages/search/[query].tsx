@@ -1,5 +1,5 @@
 import LoadingSpinner from "@/components/loadingspinner";
-import SearchLink from "@/components/searchlink";
+import SearchLink from "@/components/search/searchlink";
 import { SearchResult } from "@/models";
 import Head from "next/head";
 import { useRouter } from "next/router";

@@ -91,13 +91,18 @@ export default function Tab({ tabDetails }: TabProps) {
       <Head>
         <title>
           {tabDetails?.name
-            ? `${tabDetails?.name} - ${tabDetails?.artist}`
+            ? `${tabDetails?.name} ${
+                tabDetails?.artist && "- " + tabDetails?.artist
+              }`
             : "Penultimate Guitar"}
         </title>
       </Head>
       <>
         <h1 className="text-center text-2xl my-4">
-          {tabDetails?.name} - {tabDetails?.artist}
+          <span className="font-medium">{tabDetails?.name}</span>
+          <span className="font-light">
+            {` ${tabDetails?.artist && "- " + tabDetails?.artist}`}
+          </span>
         </h1>
         <div className="max-w-lg mx-auto my-4">
           {!!tabDetails?.contributors?.length && (
@@ -116,7 +121,7 @@ export default function Tab({ tabDetails }: TabProps) {
           )}
 
           {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
-          {!!tabDetails?.tuning && (
+          {!!tabDetails?.tuning?.value && (
             <div>
               Tuning:{" "}
               <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
@@ -124,67 +129,69 @@ export default function Tab({ tabDetails }: TabProps) {
             </div>
           )}
         </div>
-        <div className="bg-white/50 w-full sticky top-0 ">
-          <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
-            <div className="flex-1 flex-col text-center">
-              Pin
-              <div className="m-auto w-fit">
-                <ToolbarButton
-                  fn={() =>
-                    isPinned(tabDetails)
-                      ? removePinnedTab(tabDetails)
-                      : addPinnedTab(tabDetails)
-                  }
-                  icon={isPinned(tabDetails) ? "❌" : "📌"}
-                />
+        {tabDetails?.tab && (
+          <div className="bg-white/50 w-full sticky top-0 ">
+            <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
+              <div className="flex-1 flex-col text-center">
+                Pin
+                <div className="m-auto w-fit">
+                  <ToolbarButton
+                    fn={() =>
+                      isPinned(tabDetails)
+                        ? removePinnedTab(tabDetails)
+                        : addPinnedTab(tabDetails)
+                    }
+                    icon={isPinned(tabDetails) ? "❌" : "📌"}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex-1 flex-col text-center">
-              Font size
-              <div className="flex gap-1 m-auto w-fit">
-                <ToolbarButton
-                  fn={() => setFontSize(fontSize - 2)}
-                  icon={<span className="text-xs">A</span>}
-                  disabled={fontSize < 8}
-                />
-                <ToolbarButton
-                  fn={() => setFontSize(fontSize + 2)}
-                  icon={<span className="text-2xl">A</span>}
-                />
+              <div className="flex-1 flex-col text-center">
+                Font size
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton
+                    fn={() => setFontSize(fontSize - 2)}
+                    icon={<span className="text-xs">A</span>}
+                    disabled={fontSize < 8}
+                  />
+                  <ToolbarButton
+                    fn={() => setFontSize(fontSize + 2)}
+                    icon={<span className="text-2xl">A</span>}
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex-1 flex-col text-center">
-              <p>
-                Transpose
-                {tranposition === 0 || ` (${formattedTransposition()})`}
-              </p>
-              <div className="flex gap-1 m-auto w-fit">
-                <ToolbarButton
-                  fn={() => setTranposition(tranposition - 1)}
-                  icon="➖"
-                />
-                <ToolbarButton
-                  fn={() => setTranposition(tranposition + 1)}
-                  icon="➕"
-                />
+              <div className="flex-1 flex-col text-center">
+                <p>
+                  Transpose
+                  {tranposition === 0 || ` (${formattedTransposition()})`}
+                </p>
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton
+                    fn={() => setTranposition(tranposition - 1)}
+                    icon="➖"
+                  />
+                  <ToolbarButton
+                    fn={() => setTranposition(tranposition + 1)}
+                    icon="➕"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex-1 flex-col text-center">
-              Autoscroll
-              <div className="flex gap-1 m-auto w-fit">
-                <ToolbarButton
-                  fn={() => changeScrolling("down")}
-                  icon="➖"
-                  disabled={scrollSpeed < 1}
-                />
-                <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
+              <div className="flex-1 flex-col text-center">
+                Autoscroll
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton
+                    fn={() => changeScrolling("down")}
+                    icon="➖"
+                    disabled={scrollSpeed < 1}
+                  />
+                  <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         <TabSheet
           plainTab={plainTab}
@@ -201,7 +208,7 @@ type ServerProps = {
 };
 
 export async function getServerSideProps({ params }: ServerProps) {
-  let props: TabDto = {
+  let defaultProps: TabDto = {
     taburl: "",
     tab: "",
     artist: "",
@@ -210,6 +217,7 @@ export async function getServerSideProps({ params }: ServerProps) {
     tuning: { name: "", value: "", index: 0 },
     capo: 0,
   };
+  let props: TabDto = { ...defaultProps };
   if (typeof params.id === "object") {
     const url = params.id.join("/");
 
@@ -237,7 +245,7 @@ export async function getServerSideProps({ params }: ServerProps) {
       const tab = await getTab(fullurl);
       props = { ...tab, taburl: url };
       try {
-        if (tab.tab !== "") {
+        if (!!tab.tab) {
           const result = await prisma.tab.create({
             data: {
               taburl: url,
@@ -254,6 +262,9 @@ export async function getServerSideProps({ params }: ServerProps) {
         console.warn("Something went wrong.", err);
       }
     }
+  }
+  if (!props.name) {
+    props = { ...defaultProps, name: "Song not found" };
   }
   return { props: { tabDetails: props } };
 }
