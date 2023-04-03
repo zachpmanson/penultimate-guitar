@@ -209,21 +209,24 @@ type ServerProps = {
 export async function getServerSideProps({ params }: ServerProps) {
   let defaultProps: TabDto = {
     taburl: "",
-    tab: "",
+    name: "",
     artist: "",
     contributors: [],
-    name: "",
-    tuning: { name: "", value: "", index: 0 },
     capo: 0,
+    tab: "",
   };
-  let props: TabDto = { ...defaultProps };
+  let props: TabDto = {
+    ...defaultProps,
+  };
   if (typeof params.id === "object") {
     const url = params.id.join("/");
 
-    // Attempt to fetch from database API
     const savedTab = await prisma.tab.findFirst({
       where: {
         taburl: url,
+      },
+      include: {
+        song: true,
       },
     });
 
@@ -235,25 +238,47 @@ export async function getServerSideProps({ params }: ServerProps) {
         capo: savedTab.capo,
         tuning: JSON.parse(savedTab.tuning ?? "{}"),
         contributors: savedTab.contributors,
-        name: savedTab.name,
-        artist: savedTab.artist ?? "Unknown Artist",
+        name: savedTab.song.name,
+        artist: savedTab.song.artist ?? "Unknown Artist",
       };
     } else {
       console.log("tab not in db");
       const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
-      const tab = await getTab(fullurl);
-      props = { ...tab, taburl: url, capo: tab?.capo ?? 0 };
+      const [song, tab] = await getTab(fullurl);
+      tab.taburl = url;
+      props = {
+        ...tab,
+        name: song.name,
+        artist: song.artist,
+      };
       try {
+        // upsert song
+        if (!!song.id) {
+          const result = await prisma.song.upsert({
+            where: {
+              id: song.id,
+            },
+            create: {
+              id: song.id,
+              name: song.name,
+              artist: song.artist,
+            },
+            update: {},
+          });
+        }
+
+        // insert tab
         if (!!tab.tab) {
           const result = await prisma.tab.create({
             data: {
-              taburl: url,
+              songId: tab.songId,
+              taburl: tab.taburl,
               tab: tab.tab,
-              artist: tab.artist,
-              contributors: tab.contributors ?? "",
-              name: tab.name,
+              contributors: tab.contributors,
               tuning: JSON.stringify(tab?.tuning ?? {}),
-              capo: tab?.capo ?? 0,
+              capo: tab.capo ?? 0,
+              rating: tab.rating,
+              version: tab.version,
             },
           });
         }
@@ -268,14 +293,42 @@ export async function getServerSideProps({ params }: ServerProps) {
   return { props: { tabDetails: props } };
 }
 
-async function getTab(URL: string): Promise<TabDto> {
-  let songData: TabDto = {
-    taburl: "",
+type Song = {
+  id: number;
+  name: string;
+  artist: string;
+};
+type NewTab = {
+  taburl: string;
+  tab: string;
+  songId: number;
+  contributors: string[];
+  capo: number;
+  tuning?: {
+    name: string;
+    value: string;
+    index: number;
+  };
+  rating: number;
+  version: number;
+};
+async function getTab(URL: string): Promise<[Song, NewTab]> {
+  let songData: Song = {
+    id: 0,
     name: "",
     artist: "",
-    contributors: [],
-    tab: "",
   };
+
+  let tabData: NewTab = {
+    taburl: "",
+    songId: 0,
+    contributors: [],
+    capo: 0,
+    tab: "",
+    rating: -1,
+    version: -1,
+  };
+
   console.log("Fetching", URL);
   await fetch(URL)
     .then((response) => response.text())
@@ -291,22 +344,28 @@ async function getTab(URL: string): Promise<TabDto> {
         return;
       }
 
-      songData.tab =
+      songData.id = dataContent?.store?.page?.data?.tab?.song_id;
+      songData.name = dataContent?.store?.page?.data?.tab?.song_name;
+      songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
+
+      tabData.tab =
         dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
           /\r\n/g,
           "\n"
-        );
-      songData.name = dataContent?.store?.page?.data?.tab?.song_name;
-      songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
-      songData.tuning = dataContent?.store?.page?.data?.tab_view?.meta?.tuning;
-      songData.capo = dataContent?.store?.page?.data?.tab_view?.meta?.capo;
-      songData.contributors =
+        ) ?? "";
+      tabData.songId = songData.id;
+      tabData.tuning =
+        dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {};
+      tabData.rating = dataContent?.store?.page?.data?.tab?.rating ?? -1;
+      tabData.capo = dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
+      tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
+      tabData.contributors =
         dataContent?.store?.page?.data?.tab_view?.contributors?.map(
           (c: ContributorObj) => c.username
-        );
+        ) ?? {};
     })
     .catch((err) => {
       console.warn("Something went wrong.", err);
     });
-  return songData;
+  return [songData, tabData];
 }

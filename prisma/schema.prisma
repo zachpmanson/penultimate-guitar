@@ -12,11 +12,20 @@ datasource db {
 
 model Tab {
   id           String   @id @default(cuid())
-  name         String
+  song         Song     @relation(fields: [songId], references: [id])
+  songId       Int
   tab          String
   taburl       String   @unique
-  artist       String?
   contributors String[]
   capo         Int
   tuning       String
+  rating       Float
+  version      Int
+}
+
+model Song {
+  id     Int    @id
+  name   String
+  artist String
+  Tab    Tab[]
 }
