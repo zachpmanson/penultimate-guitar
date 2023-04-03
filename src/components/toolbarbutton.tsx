@@ -1,6 +1,6 @@
 type ToolbarButton = {
   fn: () => void;
-  icon: string;
+  icon: string | JSX.Element;
 };
 
 export default function ToolbarButton({ fn, icon }: ToolbarButton) {

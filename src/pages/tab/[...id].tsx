@@ -143,8 +143,14 @@ export default function Tab({ tabDetails }: TabProps) {
             <div className="flex-1 flex-col text-center">
               Font size
               <div className="flex gap-1 m-auto w-fit">
-                <ToolbarButton fn={() => setFontSize(fontSize - 2)} icon="➖" />
-                <ToolbarButton fn={() => setFontSize(fontSize + 2)} icon="➕" />
+                <ToolbarButton
+                  fn={() => setFontSize(fontSize - 2)}
+                  icon={<span className="text-xs">A</span>}
+                />
+                <ToolbarButton
+                  fn={() => setFontSize(fontSize + 2)}
+                  icon={<span className="text-2xl">A</span>}
+                />
               </div>
             </div>
 
