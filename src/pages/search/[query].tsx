@@ -1,6 +1,5 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
-import ToolbarButton from "@/components/tab/toolbarbutton";
 import { SearchResult } from "@/models";
 import Head from "next/head";
 import { useRouter } from "next/router";
