@@ -4,7 +4,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = SearchResult[];
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
   // console.log("req.body", Object.keys(req.body));
   if (Object.keys(req.body).length === 0) {
     res.status(400);
@@ -12,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
   // console.log(req.body);
   if (req.method === "POST") {
-    const url = `https://www.ultimate-guitar.com/search.php?search_type=${req.body["search_type"]}&value=${req.body["value"]}`;
+    const url = `https://www.ultimate-guitar.com/search.php?page=${req.body["page"]}&search_type=${req.body["search_type"]}&value=${req.body["value"]}`;
     const results = await getSearch(url);
     res.status(200).json([...results]);
   }
@@ -25,7 +28,9 @@ async function getSearch(URL: string): Promise<SearchResult[]> {
     .then((html) => {
       const dom = new JSDOM(html);
       let jsStore = dom.window.document.querySelector(".js-store");
-      let dataContent = JSON.parse(jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}");
+      let dataContent = JSON.parse(
+        jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}"
+      );
       let foundResults = dataContent?.store?.page?.data?.results;
       if (foundResults !== undefined) results = foundResults;
     })

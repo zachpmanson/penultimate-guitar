@@ -1,5 +1,6 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
+import ToolbarButton from "@/components/tab/toolbarbutton";
 import { SearchResult } from "@/models";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,6 +11,7 @@ export default function Tab() {
   const { query } = router.query;
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageNum, setPageNum] = useState(1);
 
   const collapseResults = (results: SearchResult[]) => {
     let colRes: SearchResult[] = [];
@@ -47,28 +49,54 @@ export default function Tab() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ value: value, search_type: search_type }),
+      body: JSON.stringify({
+        value: value,
+        search_type: search_type,
+        page: pageNum,
+      }),
     })
       .then((res) => res.json())
       .then((res: SearchResult[]) => {
-        setResults(collapseResults(res));
+        setResults((old) => collapseResults([...old, ...res]));
         setIsLoading(false);
       });
-  }, [query]);
+  }, [query, pageNum]);
 
+  const loadPage = () => {
+    setPageNum((old) => old + 1);
+  };
+  const cantLoadMore = false;
   return (
     <>
       <Head>
         <title>{`Search`}</title>
       </Head>
       <h1 className="text-center text-2xl my-4">Search Results</h1>
-      {isLoading ? (
-        <LoadingSpinner />
+      {results.length === 0 ? (
+        <></>
       ) : results.length > 0 ? (
-        results.map((r, i) => <SearchLink key={i} {...r} />)
+        <>
+          {results.map((r, i) => (
+            <SearchLink key={i} {...r} />
+          ))}
+          {isLoading || (
+            <div className="m-auto w-fit">
+              <button
+                onClick={loadPage}
+                disabled={cantLoadMore}
+                className={`flex items-center justify-center text-md text-lg border-grey-500 border-2 rounded-xl transition ease-in-out bg-white py-2 px-4 ${
+                  cantLoadMore ? "text-slate-400" : "hover:shadow-md"
+                }`}
+              >
+                Load more
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <p className="text-center">No results found</p>
       )}
+      {isLoading && <LoadingSpinner />}
     </>
   );
 }
