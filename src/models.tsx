@@ -1,4 +1,7 @@
+import { AltVersion } from "./pages/tab/[...id]";
+
 export type TabDto = {
+  rating: number;
   capo?: number;
   tuning?: {
     name: string;
@@ -8,8 +11,13 @@ export type TabDto = {
   contributors?: string[];
   taburl: string;
   tab: string;
-  name: string;
-  artist: string;
+  song: {
+    name: string;
+    artist: string;
+    Tab?: AltVersion[];
+  };
+  version: number;
+  songId: number;
 };
 
 export type TabLinkProps = {
@@ -42,7 +50,7 @@ export type SearchResult = {
   tab_url: string;
 };
 
-export const blacklist = ["Pro", "Video", "Official"];
+export const blacklist = ["Pro", "Video", "Official", "Power"];
 
 export type ContributorObj = {
   userid: string;

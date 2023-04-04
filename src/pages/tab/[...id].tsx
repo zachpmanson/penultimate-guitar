@@ -18,6 +18,7 @@ type TabProps = {
 };
 
 export default function Tab({ tabDetails }: TabProps) {
+  // console.log({ ...tabDetails, tab: undefined });
   const router = useRouter();
   const { id } = router.query;
   const plainTab = tabDetails.tab;
@@ -32,8 +33,8 @@ export default function Tab({ tabDetails }: TabProps) {
     if (Array.isArray(recents)) {
       recents.unshift({
         taburl: tabDetails.taburl,
-        name: tabDetails.name,
-        artist: tabDetails.artist,
+        name: tabDetails.song.name,
+        artist: tabDetails.song.artist,
       });
       const uniqRecents = _.uniqBy(recents, (r: TabLinkProps) => r.taburl);
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
@@ -46,8 +47,8 @@ export default function Tab({ tabDetails }: TabProps) {
 
       arrayRecents.unshift({
         taburl: tabDetails.taburl,
-        name: tabDetails.name,
-        artist: tabDetails.artist,
+        name: tabDetails.song.name,
+        artist: tabDetails.song.artist,
       });
 
       const uniqRecents = _.uniqBy(arrayRecents, (r: TabLinkProps) => r.taburl);
@@ -89,42 +90,53 @@ export default function Tab({ tabDetails }: TabProps) {
     <div>
       <Head>
         <title>
-          {tabDetails?.name
-            ? `${tabDetails?.name} ${
-                tabDetails?.artist && "- " + tabDetails?.artist
-              }`
+          {tabDetails.song.name
+            ? `${tabDetails.song.name} ${tabDetails.song.artist && "- " + tabDetails.song.artist}`
             : "Penultimate Guitar"}
         </title>
       </Head>
       <>
         <h1 className="text-center text-2xl my-4">
-          <span className="font-medium">{tabDetails?.name}</span>
-          <span className="font-light">
-            {` ${tabDetails?.artist && "- " + tabDetails?.artist}`}
-          </span>
+          <span className="font-medium">{tabDetails.song.name}</span>
+          <span className="font-light">{` ${tabDetails.song.artist && "- " + tabDetails.song.artist}`}</span>
         </h1>
         <div className="max-w-lg mx-auto my-4">
+          <details>
+            <summary>
+              Version {tabDetails?.version} of {tabDetails.song.Tab?.length}
+            </summary>
+
+            <ul>
+              {tabDetails.song.Tab?.map((t, index) => (
+                <li key={index}>
+                  {t.taburl === tabDetails.taburl || (
+                    <>
+                      <Link href={t.taburl}>
+                        {tabDetails.song.name} Version {t.version}{" "}
+                      </Link>
+                      Rating: {"⭐".repeat(Math.round(t.rating))}
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
           {!!tabDetails?.contributors?.length && (
             <details>
               <summary>{tabDetails?.contributors?.length} Contributors</summary>
               <ul>
                 {tabDetails?.contributors?.map((c, index) => (
                   <li key={index}>
-                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
-                      {c}
-                    </Link>
+                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>{c}</Link>
                   </li>
                 ))}
               </ul>
             </details>
           )}
-
           {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
           {!!tabDetails?.tuning?.value && (
             <div>
-              Tuning:{" "}
-              <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
-              {tabDetails?.tuning.value}
+              Tuning: <span className="font-bold">{tabDetails?.tuning.name}</span>, {tabDetails?.tuning.value}
             </div>
           )}
         </div>
@@ -135,11 +147,7 @@ export default function Tab({ tabDetails }: TabProps) {
                 Pin
                 <div className="m-auto w-fit">
                   <ToolbarButton
-                    fn={() =>
-                      isPinned(tabDetails)
-                        ? removePinnedTab(tabDetails)
-                        : addPinnedTab(tabDetails)
-                    }
+                    fn={() => (isPinned(tabDetails) ? removePinnedTab(tabDetails) : addPinnedTab(tabDetails))}
                     icon={isPinned(tabDetails) ? "❌" : "📌"}
                   />
                 </div>
@@ -153,10 +161,7 @@ export default function Tab({ tabDetails }: TabProps) {
                     icon={<span className="text-xs">A</span>}
                     disabled={fontSize < 8}
                   />
-                  <ToolbarButton
-                    fn={() => setFontSize(fontSize + 2)}
-                    icon={<span className="text-2xl">A</span>}
-                  />
+                  <ToolbarButton fn={() => setFontSize(fontSize + 2)} icon={<span className="text-2xl">A</span>} />
                 </div>
               </div>
 
@@ -166,25 +171,15 @@ export default function Tab({ tabDetails }: TabProps) {
                   {tranposition === 0 || ` (${formattedTransposition()})`}
                 </p>
                 <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    fn={() => setTranposition(tranposition - 1)}
-                    icon="➖"
-                  />
-                  <ToolbarButton
-                    fn={() => setTranposition(tranposition + 1)}
-                    icon="➕"
-                  />
+                  <ToolbarButton fn={() => setTranposition(tranposition - 1)} icon="➖" />
+                  <ToolbarButton fn={() => setTranposition(tranposition + 1)} icon="➕" />
                 </div>
               </div>
 
               <div className="flex-1 flex-col text-center">
                 Autoscroll
                 <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    fn={() => changeScrolling("down")}
-                    icon="➖"
-                    disabled={scrollSpeed < 1}
-                  />
+                  <ToolbarButton fn={() => changeScrolling("down")} icon="➖" disabled={scrollSpeed < 1} />
                   <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
                 </div>
               </div>
@@ -192,11 +187,7 @@ export default function Tab({ tabDetails }: TabProps) {
           </div>
         )}
 
-        <TabSheet
-          plainTab={plainTab}
-          fontSize={fontSize}
-          transposition={tranposition}
-        ></TabSheet>
+        <TabSheet plainTab={plainTab} fontSize={fontSize} transposition={tranposition}></TabSheet>
       </>
     </div>
   );
@@ -209,11 +200,13 @@ type ServerProps = {
 export async function getServerSideProps({ params }: ServerProps) {
   let defaultProps: TabDto = {
     taburl: "",
-    name: "",
-    artist: "",
+    song: { name: "", artist: "" },
     contributors: [],
     capo: 0,
     tab: "",
+    version: 0,
+    songId: 0,
+    rating: 0,
   };
   let props: TabDto = {
     ...defaultProps,
@@ -221,38 +214,44 @@ export async function getServerSideProps({ params }: ServerProps) {
   if (typeof params.id === "object") {
     const url = params.id.join("/");
 
-    const savedTab = await prisma.tab.findFirst({
+    const savedTab = await prisma.tab.findUnique({
       where: {
         taburl: url,
       },
       include: {
-        song: true,
+        song: {
+          include: {
+            Tab: {
+              select: {
+                taburl: true,
+                version: true,
+                rating: true,
+              },
+            },
+          },
+        },
       },
     });
 
-    if (savedTab) {
+    if (savedTab?.tab && savedTab?.tab !== "ALT") {
       console.log("tab is in db");
       props = {
-        tab: savedTab.tab,
-        taburl: savedTab.taburl,
-        capo: savedTab.capo,
+        ...savedTab,
         tuning: JSON.parse(savedTab.tuning ?? "{}"),
-        contributors: savedTab.contributors,
-        name: savedTab.song.name,
-        artist: savedTab.song.artist ?? "Unknown Artist",
       };
     } else {
       console.log("tab not in db");
       const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
-      const [song, tab] = await getTab(fullurl);
+      const [song, tab, altVersions] = await getTab(fullurl);
       tab.taburl = url;
       props = {
         ...tab,
-        ...song,
+        song: { ...song, Tab: [...altVersions, tab] },
       };
       try {
         // upsert song
         if (!!song.id) {
+          // left as await since later tab insertion needs songId
           const result = await prisma.song.upsert({
             where: {
               id: song.id,
@@ -268,8 +267,11 @@ export async function getServerSideProps({ params }: ServerProps) {
 
         // insert tab
         if (!!tab.tab) {
-          const result = await prisma.tab.create({
-            data: {
+          await prisma.tab.upsert({
+            where: {
+              taburl: tab.taburl,
+            },
+            create: {
               songId: tab.songId,
               taburl: tab.taburl,
               tab: tab.tab,
@@ -279,16 +281,42 @@ export async function getServerSideProps({ params }: ServerProps) {
               rating: tab.rating,
               version: tab.version,
             },
+            update: {
+              tab: tab.tab,
+              contributors: tab.contributors,
+              tuning: JSON.stringify(tab?.tuning ?? {}),
+              capo: tab.capo ?? 0,
+            },
           });
+
+          for (let altVersion of altVersions) {
+            await prisma.tab.upsert({
+              where: {
+                taburl: altVersion.taburl,
+              },
+              create: {
+                ...defaultProps,
+                ...altVersion,
+                songId: tab.songId,
+                tuning: "{}",
+                taburl: altVersion.taburl,
+                tab: "ALT",
+                capo: 0,
+                song: undefined,
+              },
+              update: {},
+            });
+          }
         }
       } catch (err) {
         console.warn("Something went wrong.", err);
       }
     }
   }
-  if (!props.name) {
-    props = { ...defaultProps, name: "Song not found" };
+  if (!props.song.name) {
+    props = { ...defaultProps, song: { ...defaultProps.song, name: "Song not found" } };
   }
+
   return { props: { tabDetails: props } };
 }
 
@@ -311,7 +339,14 @@ type NewTab = {
   rating: number;
   version: number;
 };
-async function getTab(URL: string): Promise<[Song, NewTab]> {
+export type AltVersion = {
+  tab_url?: string;
+  taburl: string;
+  rating: number;
+  version: number;
+  type?: string;
+};
+async function getTab(URL: string): Promise<[Song, NewTab, AltVersion[]]> {
   let songData: Song = {
     id: 0,
     name: "",
@@ -328,15 +363,15 @@ async function getTab(URL: string): Promise<[Song, NewTab]> {
     version: -1,
   };
 
+  let altVersions: AltVersion[] = [];
+
   console.log("Fetching", URL);
   await fetch(URL)
     .then((response) => response.text())
     .then((html) => {
       const dom = new JSDOM(html);
       let jsStore = dom.window.document.querySelector(".js-store");
-      let dataContent = JSON.parse(
-        jsStore?.getAttribute("data-content") || "{}"
-      );
+      let dataContent = JSON.parse(jsStore?.getAttribute("data-content") || "{}");
       if (blacklist.includes(dataContent?.store?.page?.data?.tab?.type)) {
         songData.name = "Couldn't display tab type";
         songData.artist = dataContent?.store?.page?.data?.tab?.type;
@@ -347,24 +382,24 @@ async function getTab(URL: string): Promise<[Song, NewTab]> {
       songData.name = dataContent?.store?.page?.data?.tab?.song_name;
       songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
 
-      tabData.tab =
-        dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
-          /\r\n/g,
-          "\n"
-        ) ?? "";
+      tabData.tab = dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(/\r\n/g, "\n") ?? "";
       tabData.songId = songData.id;
-      tabData.tuning =
-        dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {};
+      tabData.tuning = dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {};
       tabData.rating = dataContent?.store?.page?.data?.tab?.rating ?? -1;
       tabData.capo = dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
       tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
       tabData.contributors =
-        dataContent?.store?.page?.data?.tab_view?.contributors?.map(
-          (c: ContributorObj) => c.username
-        ) ?? {};
+        dataContent?.store?.page?.data?.tab_view?.contributors?.map((c: ContributorObj) => c.username) ?? {};
+      altVersions = dataContent?.store?.page?.data?.tab_view?.versions
+        .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
+        .map((v: AltVersion) => ({
+          rating: v.rating,
+          version: v.version,
+          taburl: v.tab_url?.replace("https://tabs.ultimate-guitar.com/tab/", ""),
+        }));
     })
     .catch((err) => {
       console.warn("Something went wrong.", err);
     });
-  return [songData, tabData];
+  return [songData, tabData, altVersions];
 }

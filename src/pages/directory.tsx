@@ -8,6 +8,14 @@ type ListProps = {
 };
 
 export default function Directory({ allTabs }: ListProps) {
+  const multipleVersions: { [key: string]: boolean } = {};
+  for (let tab of allTabs) {
+    if (multipleVersions[tab.songId] === undefined) {
+      multipleVersions[tab.songId] = false;
+    } else if (multipleVersions[tab.songId] === false) {
+      multipleVersions[tab.songId] = true;
+    }
+  }
   return (
     <>
       <Head>
@@ -15,11 +23,13 @@ export default function Directory({ allTabs }: ListProps) {
       </Head>
       <div className="w-fit m-auto wrap">
         <div className="mx-8">
+          {allTabs.length} songs
           <ol>
             {allTabs.map((t, i) => (
               <li key={i}>
                 <Link href={`/tab/${t.taburl}`}>
-                  {t.artist} - {t.name}
+                  {t.song.artist} - {t.song.name}
+                  {multipleVersions[t.songId] && <span className="font-light text-xs"> (v{t.version})</span>}
                 </Link>
               </li>
             ))}
@@ -32,19 +42,31 @@ export default function Directory({ allTabs }: ListProps) {
 
 export async function getServerSideProps() {
   const savedTabs = await prisma.tab.findMany({
+    where: {
+      tab: {
+        not: "ALT",
+      },
+    },
     include: {
       song: true,
     },
-    orderBy: {
-      song: {
-        name: "asc",
+    orderBy: [
+      {
+        song: {
+          name: "asc",
+        },
       },
-    },
+      {
+        song: {
+          artist: "asc",
+        },
+      },
+    ],
   });
 
-  const allTabs = savedTabs.map((t) => ({ ...t, ...t.song }));
+  // const allTabs = savedTabs.map((t) => ({ ...t, ...t.song }));
 
   return {
-    props: { allTabs: allTabs },
+    props: { allTabs: savedTabs },
   };
 }
