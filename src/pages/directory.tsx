@@ -23,13 +23,15 @@ export default function Directory({ allTabs }: ListProps) {
       </Head>
       <div className="w-fit m-auto wrap">
         <div className="mx-8">
-          {allTabs.length} songs
+          {Object.keys(multipleVersions).length} songs, {allTabs.length} tabs
           <ol>
             {allTabs.map((t, i) => (
               <li key={i}>
                 <Link href={`/tab/${t.taburl}`}>
                   {t.song.artist} - {t.song.name}
-                  {multipleVersions[t.songId] && <span className="font-light text-xs"> (v{t.version})</span>}
+                  {multipleVersions[t.songId] && (
+                    <span className="font-light text-xs"> (v{t.version})</span>
+                  )}
                 </Link>
               </li>
             ))}
@@ -61,10 +63,11 @@ export async function getServerSideProps() {
           artist: "asc",
         },
       },
+      {
+        version: "asc",
+      },
     ],
   });
-
-  // const allTabs = savedTabs.map((t) => ({ ...t, ...t.song }));
 
   return {
     props: { allTabs: savedTabs },

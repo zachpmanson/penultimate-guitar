@@ -1,4 +1,4 @@
-import { AltVersion } from "./pages/tab/[...id]";
+import prisma from "./lib/prisma";
 
 export type TabDto = {
   rating: number;
@@ -11,19 +11,46 @@ export type TabDto = {
   contributors?: string[];
   taburl: string;
   tab: string;
-  song: {
-    name: string;
-    artist: string;
-    Tab?: AltVersion[];
-  };
+  song: Song;
   version: number;
   songId: number;
+};
+
+export type Song = {
+  id: number;
+  name: string;
+  artist: string;
+  Tab?: AltVersion[];
+};
+
+export type NewTab = {
+  taburl: string;
+  tab: string;
+  songId: number;
+  contributors: string[];
+  capo: number;
+  tuning?: {
+    name: string;
+    value: string;
+    index: number;
+  };
+  rating: number;
+  version: number;
+};
+export type AltVersion = {
+  tab_url?: string;
+  taburl: string;
+  rating: number;
+  version: number;
+  type?: string;
 };
 
 export type TabLinkProps = {
   taburl: string;
   name: string;
   artist: string;
+  pinned?: boolean;
+  version?: number;
 };
 
 export type SearchResult = {

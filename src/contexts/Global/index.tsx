@@ -1,19 +1,22 @@
-import { TabDto } from "@/models";
+import { TabDto, TabLinkProps } from "@/models";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [pinnedTabs, setPinnedTabs] = useState<TabDto[]>([]);
+  const [pinnedTabs, setPinnedTabs] = useState<TabLinkProps[]>([]);
 
   useEffect(() => {
-    setPinnedTabs(JSON.parse(localStorage.getItem("pinnedTabs") ?? "[]"));
+    const parsedTabs = JSON.parse(
+      localStorage.getItem("pinnedTabs") ?? "[]"
+    ) as TabLinkProps[];
+    setPinnedTabs(parsedTabs.filter((t) => t.name && t.artist));
   }, []);
 
-  const updateLocalPins = (pins: TabDto[]) =>
+  const updateLocalPins = (pins: TabLinkProps[]) =>
     localStorage.setItem("pinnedTabs", JSON.stringify(pins));
 
   const addPinnedTab = useCallback(
-    (newTab: TabDto) => {
+    (newTab: TabLinkProps) => {
       let existingIndex = pinnedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
@@ -28,7 +31,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const removePinnedTab = useCallback(
-    (newTab: TabDto) => {
+    (newTab: TabLinkProps) => {
       let existingIndex = pinnedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
@@ -43,7 +46,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const isPinned = useCallback(
-    (newTab: TabDto) => {
+    (newTab: TabLinkProps) => {
       let existingIndex = pinnedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );

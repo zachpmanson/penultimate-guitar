@@ -1,5 +1,5 @@
-import PinnedTabs from "@/components/pinnedtabs";
-import RecentTabs from "@/components/recenttabs";
+import PinnedTabs from "@/components/home/pinnedtabs";
+import RecentTabs from "@/components/home/recenttabs";
 import Head from "next/head";
 import Link from "next/link";
 import type { NextPageWithLayout } from "./_app";
