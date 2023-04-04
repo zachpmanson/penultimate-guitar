@@ -302,19 +302,17 @@ export async function getServerSideProps({ params }: ServerProps) {
         // upsert song
         if (!!song.id) {
           // left as await since later tab insertion needs songId
-          prisma.song
-            .upsert({
-              where: {
-                id: song.id,
-              },
-              create: {
-                id: song.id,
-                name: song.name,
-                artist: song.artist,
-              },
-              update: {},
-            })
-            .then();
+          await prisma.song.upsert({
+            where: {
+              id: song.id,
+            },
+            create: {
+              id: song.id,
+              name: song.name,
+              artist: song.artist,
+            },
+            update: {},
+          });
         }
 
         // insert tab
