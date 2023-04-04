@@ -55,12 +55,12 @@ export async function getServerSideProps() {
     orderBy: [
       {
         song: {
-          name: "asc",
+          artist: "asc",
         },
       },
       {
         song: {
-          artist: "asc",
+          name: "asc",
         },
       },
       {
