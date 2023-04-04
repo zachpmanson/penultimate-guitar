@@ -14,9 +14,6 @@ const Page: NextPageWithLayout = () => {
         <PinnedTabs />
         <RecentTabs />
       </div>
-      <div className="text-center">
-        <Link href="/directory">Song Directory</Link>
-      </div>
     </>
   );
 };
