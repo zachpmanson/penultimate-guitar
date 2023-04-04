@@ -31,11 +31,18 @@ export default function Directory({ allTabs }: ListProps) {
 }
 
 export async function getServerSideProps() {
-  const allTabs = await prisma.tab.findMany({
+  const savedTabs = await prisma.tab.findMany({
+    include: {
+      song: true,
+    },
     orderBy: {
-      artist: "asc",
+      song: {
+        name: "asc",
+      },
     },
   });
+
+  const allTabs = savedTabs.map((t) => ({ ...t, ...t.song }));
 
   return {
     props: { allTabs: allTabs },

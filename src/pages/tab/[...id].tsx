@@ -248,8 +248,7 @@ export async function getServerSideProps({ params }: ServerProps) {
       tab.taburl = url;
       props = {
         ...tab,
-        name: song.name,
-        artist: song.artist,
+        ...song,
       };
       try {
         // upsert song
