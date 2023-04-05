@@ -30,7 +30,10 @@ export default function Directory({ allTabs }: ListProps) {
                 <Link href={`/tab/${t.taburl}`}>
                   {t.song.artist} - {t.song.name}
                   {multipleVersions[t.songId] && (
-                    <span className="font-light text-xs"> (v{t.version})</span>
+                    <span className="font-light text-xs">
+                      {" "}
+                      (v{t.version}) ({t.type})
+                    </span>
                   )}
                 </Link>
               </li>

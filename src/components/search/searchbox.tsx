@@ -7,12 +7,24 @@ export default function SearchBox() {
     event.preventDefault();
     const search: string = event.target.url.value;
     console.log(search);
+
+    const processPlaylist = async (playlistUrl: string) => {
+      const matches = playlistUrl.match(
+        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
+        // /https:\/\/open\.spotify\.com\/playlist\/([0-9A-Za-z]+).*/g
+      );
+      const playlistId = matches.groups.id;
+    };
+
     if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
       router.push(`/tab/${search.slice(37)}`);
+    } else if (search.startsWith("https://open.spotify.com/playlist/")) {
+      processPlaylist(search);
     } else {
       router.push(`/search/${event.target.url.value}`);
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit}>

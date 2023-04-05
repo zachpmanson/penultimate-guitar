@@ -255,6 +255,7 @@ export async function getServerSideProps({ params }: ServerProps) {
     version: 0,
     songId: 0,
     rating: 0,
+    type: "Tab",
   };
 
   let props: TabDto = {
@@ -323,14 +324,9 @@ export async function getServerSideProps({ params }: ServerProps) {
                 taburl: tab.taburl,
               },
               create: {
-                songId: tab.songId,
-                taburl: tab.taburl,
-                tab: tab.tab,
-                contributors: tab.contributors,
+                ...tab,
                 tuning: JSON.stringify(tab?.tuning ?? {}),
                 capo: tab.capo ?? 0,
-                rating: tab.rating,
-                version: tab.version,
               },
               update: {
                 tab: tab.tab,
@@ -392,6 +388,7 @@ async function getTab(URL: string): Promise<[Song, NewTab, AltVersion[]]> {
     tab: "",
     rating: -1,
     version: -1,
+    type: "",
   };
 
   let altVersions: AltVersion[] = [];
@@ -426,6 +423,7 @@ async function getTab(URL: string): Promise<[Song, NewTab, AltVersion[]]> {
       tabData.rating = dataContent?.store?.page?.data?.tab?.rating ?? -1;
       tabData.capo = dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
       tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
+      tabData.type = dataContent?.store?.page?.data?.tab?.type;
       tabData.contributors =
         dataContent?.store?.page?.data?.tab_view?.contributors?.map(
           (c: ContributorObj) => c.username

@@ -21,6 +21,7 @@ model Tab {
   tuning       String
   rating       Float
   version      Int
+  type         String
 }
 
 model Song {
