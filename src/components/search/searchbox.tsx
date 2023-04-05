@@ -13,7 +13,7 @@ export default function SearchBox() {
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
         // /https:\/\/open\.spotify\.com\/playlist\/([0-9A-Za-z]+).*/g
       );
-      const playlistId = matches.groups.id;
+      const playlistId = matches?.groups?.id;
     };
 
     if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
