@@ -9,6 +9,7 @@ import {
   Song,
   TabDto,
   TabLinkProps,
+  TabType,
 } from "@/models";
 import Head from "next/head";
 import Link from "next/link";
@@ -288,6 +289,7 @@ export async function getServerSideProps({ params }: ServerProps) {
       console.log("tab is in db");
       props = {
         ...savedTab,
+        type: savedTab.type as TabType,
         tuning: JSON.parse(savedTab.tuning ?? "{}"),
       };
     } else {
@@ -388,7 +390,7 @@ async function getTab(URL: string): Promise<[Song, NewTab, AltVersion[]]> {
     tab: "",
     rating: -1,
     version: -1,
-    type: "",
+    type: "Tab",
   };
 
   let altVersions: AltVersion[] = [];

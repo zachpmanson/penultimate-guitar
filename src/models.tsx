@@ -1,4 +1,4 @@
-export type TabTypes = "Tab" | "Chords" | "Ukulele" | "Bass";
+export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass";
 
 export type TabDto = {
   rating: number;
@@ -14,7 +14,7 @@ export type TabDto = {
   song: Song;
   version: number;
   songId: number;
-  type: TabTypes;
+  type: TabType;
 };
 
 export type Song = {
@@ -25,7 +25,7 @@ export type Song = {
 };
 
 export type NewTab = {
-  type: any;
+  type: TabType;
   taburl: string;
   tab: string;
   songId: number;
