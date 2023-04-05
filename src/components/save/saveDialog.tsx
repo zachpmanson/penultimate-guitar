@@ -2,7 +2,6 @@ import { useGlobal } from "@/contexts/Global/context";
 import { TabLinkProps } from "@/models";
 import { Dialog } from "@headlessui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DialogButton from "./DialogButton";
 
 type SaveDialogProps = {
   isOpen: boolean;
