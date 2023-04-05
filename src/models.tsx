@@ -51,8 +51,9 @@ export type TabLinkProps = {
   taburl: string;
   name: string;
   artist: string;
-  pinned?: boolean;
+  saved?: boolean;
   version?: number;
+  folder?: string;
 };
 
 export type SearchResult = {

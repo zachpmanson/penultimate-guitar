@@ -3,7 +3,7 @@ import { TabDto, TabLinkProps } from "@/models";
 import Link from "next/link";
 
 export default function TabLink(props: TabLinkProps) {
-  const { addPinnedTab, removePinnedTab } = useGlobal();
+  const { addsavedTab, removesavedTab } = useGlobal();
   return (
     <div className="max-w-xl flex my-4 mx-auto justify-between gap-2">
       <Link
@@ -21,11 +21,11 @@ export default function TabLink(props: TabLinkProps) {
       </Link>
       <button
         onClick={() =>
-          props.pinned ? removePinnedTab(props) : addPinnedTab(props)
+          props.saved ? removesavedTab(props) : addsavedTab(props)
         }
         className="flex items-center px-4 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
       >
-        {props.pinned ? "❌" : "📌"}
+        {props.saved ? "❌" : "💾"}
       </button>
     </div>
   );

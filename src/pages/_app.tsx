@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
             <link rel="manifest" href="/icons/site.webmanifest" />
             <link
               rel="mask-icon"
-              href="/icons/safari-pinned-tab.svg"
+              href="/icons/safari-saved-tab.svg"
               color="#bd93f9"
             />
             <link rel="shortcut icon" href="/icons/favicon.ico" />

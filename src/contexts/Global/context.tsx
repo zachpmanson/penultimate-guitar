@@ -2,17 +2,17 @@ import { TabDto, TabLinkProps } from "@/models";
 import { createContext, useContext } from "react";
 
 export type GlobalContextProps = {
-  pinnedTabs: TabLinkProps[];
-  addPinnedTab: (newTab: TabLinkProps) => void;
-  removePinnedTab: (newTab: TabLinkProps) => void;
-  isPinned: (newTab: TabLinkProps) => boolean;
+  savedTabs: TabLinkProps[];
+  addsavedTab: (newTab: TabLinkProps) => void;
+  removesavedTab: (newTab: TabLinkProps) => void;
+  issaved: (newTab: TabLinkProps) => boolean;
 };
 
 const GlobalContext = createContext<GlobalContextProps>({
-  pinnedTabs: new Array<TabLinkProps>(),
-  addPinnedTab: () => undefined,
-  removePinnedTab: () => undefined,
-  isPinned: () => false,
+  savedTabs: new Array<TabLinkProps>(),
+  addsavedTab: () => undefined,
+  removesavedTab: () => undefined,
+  issaved: () => false,
 });
 
 export const GlobalContextProvider = GlobalContext.Provider;

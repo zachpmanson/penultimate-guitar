@@ -1,7 +1,6 @@
-import PinnedTabs from "@/components/home/pinnedtabs";
 import RecentTabs from "@/components/home/recenttabs";
+import SavedTabs from "@/components/home/savedtabs";
 import Head from "next/head";
-import Link from "next/link";
 import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
@@ -11,7 +10,7 @@ const Page: NextPageWithLayout = () => {
         <title>Penultimate Guitar</title>
       </Head>
       <div className="max-w-xl mx-auto">
-        <PinnedTabs />
+        <SavedTabs />
         <RecentTabs />
       </div>
     </>

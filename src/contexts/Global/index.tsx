@@ -3,66 +3,66 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [pinnedTabs, setPinnedTabs] = useState<TabLinkProps[]>([]);
+  const [savedTabs, setsavedTabs] = useState<TabLinkProps[]>([]);
 
   useEffect(() => {
     const parsedTabs = JSON.parse(
-      localStorage.getItem("pinnedTabs") ?? "[]"
+      localStorage.getItem("savedTabs") ?? "[]"
     ) as TabLinkProps[];
-    setPinnedTabs(parsedTabs.filter((t) => t.name && t.artist));
+    setsavedTabs(parsedTabs.filter((t) => t.name && t.artist));
   }, []);
 
-  const updateLocalPins = (pins: TabLinkProps[]) =>
-    localStorage.setItem("pinnedTabs", JSON.stringify(pins));
+  const updateLocalSaves = (saves: TabLinkProps[]) =>
+    localStorage.setItem("savedTabs", JSON.stringify(saves));
 
-  const addPinnedTab = useCallback(
+  const addsavedTab = useCallback(
     (newTab: TabLinkProps) => {
-      let existingIndex = pinnedTabs.findIndex(
+      let existingIndex = savedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
       if (existingIndex === -1) {
-        let tempTabs = [...pinnedTabs, newTab];
+        let tempTabs = [...savedTabs, newTab];
 
-        setPinnedTabs(tempTabs);
-        updateLocalPins(tempTabs);
+        setsavedTabs(tempTabs);
+        updateLocalSaves(tempTabs);
       }
     },
-    [pinnedTabs]
+    [savedTabs]
   );
 
-  const removePinnedTab = useCallback(
+  const removesavedTab = useCallback(
     (newTab: TabLinkProps) => {
-      let existingIndex = pinnedTabs.findIndex(
+      let existingIndex = savedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
       if (existingIndex !== -1) {
-        let tempTabs = [...pinnedTabs];
+        let tempTabs = [...savedTabs];
         tempTabs.splice(existingIndex, 1);
-        setPinnedTabs(tempTabs);
-        updateLocalPins(tempTabs);
+        setsavedTabs(tempTabs);
+        updateLocalSaves(tempTabs);
       }
     },
-    [pinnedTabs]
+    [savedTabs]
   );
 
-  const isPinned = useCallback(
+  const issaved = useCallback(
     (newTab: TabLinkProps) => {
-      let existingIndex = pinnedTabs.findIndex(
+      let existingIndex = savedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
       return existingIndex !== -1;
     },
-    [pinnedTabs]
+    [savedTabs]
   );
 
   const value: GlobalContextProps = useMemo(
     () => ({
-      addPinnedTab: addPinnedTab,
-      removePinnedTab: removePinnedTab,
-      pinnedTabs: pinnedTabs,
-      isPinned: isPinned,
+      addsavedTab: addsavedTab,
+      removesavedTab: removesavedTab,
+      savedTabs: savedTabs,
+      issaved: issaved,
     }),
-    [pinnedTabs, addPinnedTab, removePinnedTab, isPinned]
+    [savedTabs, addsavedTab, removesavedTab, issaved]
   );
 
   return (

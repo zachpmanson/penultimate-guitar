@@ -20,6 +20,7 @@ import _ from "lodash";
 import prisma from "@/lib/prisma";
 import { JSDOM } from "jsdom";
 import { convertToTabLink } from "@/lib/conversion";
+import { SaveDialog } from "@/components/save/saveDialog";
 
 const scrollMs = 50;
 
@@ -35,7 +36,8 @@ export default function Tab({ tabDetails }: TabProps) {
   const [tranposition, setTranposition] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
-  const { addPinnedTab, removePinnedTab, isPinned } = useGlobal();
+  const { addsavedTab, removesavedTab, issaved } = useGlobal();
+  const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);
   useEffect(() => {
@@ -94,6 +96,15 @@ export default function Tab({ tabDetails }: TabProps) {
       );
     }
   }, [scrollSpeed]);
+
+  const handleSave = () => {
+    // if (issaved(tabLink)) {
+    //   removesavedTab(tabLink);
+    // } else {
+    //   addsavedTab(tabLink);
+    // }
+    setSaveDialogActive(true);
+  };
 
   const formattedTransposition = () => {
     return tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
@@ -155,15 +166,11 @@ export default function Tab({ tabDetails }: TabProps) {
           <div className="bg-white/50 w-full sticky top-0 ">
             <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
               <div className="flex-1 flex-col text-center">
-                Pin
+                Save
                 <div className="m-auto w-fit">
                   <ToolbarButton
-                    fn={() =>
-                      isPinned(tabLink)
-                        ? removePinnedTab(tabLink)
-                        : addPinnedTab(tabLink)
-                    }
-                    icon={isPinned(tabLink) ? "❌" : "📌"}
+                    fn={handleSave}
+                    icon={issaved(tabLink) ? "❌" : "💾"}
                   />
                 </div>
               </div>
@@ -237,6 +244,11 @@ export default function Tab({ tabDetails }: TabProps) {
             </details>
           )}
         </div>
+        <SaveDialog
+          isOpen={saveDialogActive}
+          setIsOpen={setSaveDialogActive}
+          tab={tabLink}
+        />
       </>
     </div>
   );

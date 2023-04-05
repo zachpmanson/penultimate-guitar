@@ -36,7 +36,7 @@ export default function RecentTabs() {
             .slice(0, 10)
             .filter((r) => r.name && r.artist)
             .map((r: TabLinkProps, i) => (
-              <TabLink key={i} {...r} pinned={false} />
+              <TabLink key={i} {...r} saved={false} />
             ))}
         </details>
       ) : (
