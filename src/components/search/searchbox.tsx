@@ -11,9 +11,21 @@ export default function SearchBox() {
     const processPlaylist = async (playlistUrl: string) => {
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
-        // /https:\/\/open\.spotify\.com\/playlist\/([0-9A-Za-z]+).*/g
       );
       const playlistId = matches?.groups?.id;
+      await fetch("/api/playlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playlistId: playlistId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data: any) => {
+          alert(JSON.stringify(data));
+        });
     };
 
     if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
