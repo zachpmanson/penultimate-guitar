@@ -59,7 +59,8 @@ a.no-underline {
   font-size: 1rem;
 } */
 
-summary h1 {
+summary h1,
+summary h2 {
   display: inline;
 }
 

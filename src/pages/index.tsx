@@ -9,7 +9,7 @@ const Page: NextPageWithLayout = () => {
       <Head>
         <title>Penultimate Guitar</title>
       </Head>
-      <div className="max-w-xl mx-auto">
+      <div className="max-w-xl mx-auto flex flex-col gap-2">
         <SavedTabs />
         <RecentTabs />
       </div>

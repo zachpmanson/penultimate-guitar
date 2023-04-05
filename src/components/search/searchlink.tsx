@@ -24,9 +24,7 @@ export default function SearchLink({
             </div>
           </div>
           <div className="flex justify-between">
-            <div>
-              <p>Version: {version}</p>
-            </div>
+            <div></div>
             <div>
               <p>
                 {!Math.round(rating) ||
