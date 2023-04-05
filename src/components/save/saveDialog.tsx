@@ -1,7 +1,14 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { TabLinkProps } from "@/models";
 import { Dialog } from "@headlessui/react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import DialogButton from "./dialogbutton";
 
 type SaveDialogProps = {
   isOpen: boolean;
@@ -14,7 +21,9 @@ export function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) {
   const [currentFolder, setCurrentFolder] = useState(tab.folder);
   const [addingNew, setAddingNew] = useState(false);
   const folderNames = [
-    ...new Set(Object.values(savedTabs).map((t) => t.folder ?? "Favourites")),
+    ...Array.from(
+      new Set(Object.values(savedTabs).map((t) => t.folder ?? "Favourites"))
+    ),
   ];
   const [folders, setFolders] = useState(folderNames);
   const [newFolder, setNewFolder] = useState("");
@@ -26,11 +35,11 @@ export function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) {
     setIsOpen(false);
   };
 
-  const handleFolderChange = (event) => {
+  const handleFolderChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCurrentFolder(event.target.value);
   };
 
-  const handleNewFolderChange = (event) => {
+  const handleNewFolderChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewFolder(event.target.value);
   };
 
