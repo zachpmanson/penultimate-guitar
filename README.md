@@ -17,7 +17,7 @@ npm run dev
 - [x] Remember recent tabs
 - [x] Search
   - [ ] Filtering
-  - [ ] Pagination?
+  - [x] Pagination?
 - [x] Server caching
 - [ ] Chord tooltips
 - [x] Bookmarking
