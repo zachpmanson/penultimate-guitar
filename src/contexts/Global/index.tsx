@@ -1,4 +1,4 @@
-import { TabDto, TabLinkProps } from "@/models";
+import { TabLinkProps } from "@/models";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
@@ -6,11 +6,15 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setsavedTabs] = useState<TabLinkProps[]>([]);
 
   useEffect(() => {
+    getSavedTabs();
+  }, []);
+
+  const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
     ) as TabLinkProps[];
     setsavedTabs(parsedTabs.filter((t) => t.name && t.artist));
-  }, []);
+  };
 
   const updateLocalSaves = (saves: TabLinkProps[]) =>
     localStorage.setItem("savedTabs", JSON.stringify(saves));
