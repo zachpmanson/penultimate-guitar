@@ -1,26 +1,17 @@
+import SaveDialog from "@/components/save/saveDialog";
 import TabSheet from "@/components/tab/tabsheet";
 import ToolbarButton from "@/components/tab/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import {
-  AltVersion,
-  blacklist,
-  ContributorObj,
-  NewTab,
-  Song,
-  TabDto,
-  TabLinkProps,
-  TabType,
-} from "@/models";
+import { convertToTabLink } from "@/lib/conversion";
+import prisma from "@/lib/prisma";
+import { getTab } from "@/lib/ug-interface/ug-interface";
+import { TabDto, TabLinkProps, TabType } from "@/models";
+import _ from "lodash";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
-import _ from "lodash";
-import prisma from "@/lib/prisma";
-import { JSDOM } from "jsdom";
-import { convertToTabLink } from "@/lib/conversion";
-import { SaveDialog } from "@/components/save/saveDialog";
 
 const scrollMs = 50;
 
@@ -36,7 +27,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const [tranposition, setTranposition] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
-  const { addsavedTab, removesavedTab, issaved } = useGlobal();
+  const { removesavedTab, issaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);
@@ -384,77 +375,4 @@ export async function getServerSideProps({ params }: ServerProps) {
   }
 
   return { props: { tabDetails: props } };
-}
-
-async function getTab(URL: string): Promise<[Song, NewTab, AltVersion[]]> {
-  let songData: Song = {
-    id: 0,
-    name: "",
-    artist: "",
-  };
-
-  let tabData: NewTab = {
-    taburl: "",
-    songId: 0,
-    contributors: [],
-    capo: 0,
-    tab: "",
-    rating: -1,
-    version: -1,
-    type: "Tab",
-  };
-
-  let altVersions: AltVersion[] = [];
-
-  console.log("Fetching", URL);
-  await fetch(URL)
-    .then((response) => response.text())
-    .then((html) => {
-      const dom = new JSDOM(html);
-      let jsStore = dom.window.document.querySelector(".js-store");
-      let dataContent = JSON.parse(
-        jsStore?.getAttribute("data-content") || "{}"
-      );
-      if (blacklist.includes(dataContent?.store?.page?.data?.tab?.type)) {
-        songData.name = "Couldn't display tab type";
-        songData.artist = dataContent?.store?.page?.data?.tab?.type;
-        return;
-      }
-
-      songData.id = dataContent?.store?.page?.data?.tab?.song_id;
-      songData.name = dataContent?.store?.page?.data?.tab?.song_name;
-      songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
-
-      tabData.tab =
-        dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
-          /\r\n/g,
-          "\n"
-        ) ?? "";
-      tabData.songId = songData.id;
-      tabData.tuning =
-        dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {};
-      tabData.rating = dataContent?.store?.page?.data?.tab?.rating ?? -1;
-      tabData.capo = dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
-      tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
-      tabData.type = dataContent?.store?.page?.data?.tab?.type;
-      tabData.contributors =
-        dataContent?.store?.page?.data?.tab_view?.contributors?.map(
-          (c: ContributorObj) => c.username
-        ) ?? {};
-
-      altVersions = dataContent?.store?.page?.data?.tab_view?.versions
-        .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
-        .map((v: AltVersion) => ({
-          rating: v.rating,
-          version: v.version,
-          taburl: v.tab_url?.replace(
-            "https://tabs.ultimate-guitar.com/tab/",
-            ""
-          ),
-        }));
-    })
-    .catch((err) => {
-      console.warn("Something went wrong.", err);
-    });
-  return [songData, tabData, altVersions];
 }

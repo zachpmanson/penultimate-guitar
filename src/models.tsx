@@ -1,4 +1,4 @@
-export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass";
+export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
 
 export type TabDto = {
   rating: number;
@@ -80,11 +80,7 @@ export type SearchResult = {
   tab_url: string;
 };
 
-export const blacklist = ["Pro", "Video", "Official", "Power"];
+export type Track = { name: string; artists: string[] };
+export type Playlist = { name: string; tracks: Track[] };
 
-export type ContributorObj = {
-  userid: string;
-  username: string;
-  usergroupid: string;
-  iq: number;
-};
+export type PlaylistDto = { title: string; tabs: TabLinkProps[] };

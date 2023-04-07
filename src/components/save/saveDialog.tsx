@@ -18,7 +18,11 @@ type SaveDialogProps = {
   tab: TabLinkProps;
 };
 
-export function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) {
+export default function SaveDialog({
+  isOpen,
+  setIsOpen,
+  tab,
+}: SaveDialogProps) {
   const { addsavedTab, savedTabs } = useGlobal();
   const [currentFolder, setCurrentFolder] = useState("Favourites");
   const [addingNew, setAddingNew] = useState(false);

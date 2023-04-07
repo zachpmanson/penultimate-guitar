@@ -27,7 +27,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       if (existingIndex === -1) {
         let tempTabs = [...savedTabs, newTab];
 
-        setsavedTabs(tempTabs);
+        setsavedTabs((old) => [...old, newTab]);
         updateLocalSaves(tempTabs);
       }
     },

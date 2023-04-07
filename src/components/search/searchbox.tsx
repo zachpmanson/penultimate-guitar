@@ -1,7 +1,18 @@
+import { useGlobal } from "@/contexts/Global/context";
+import { PlaylistDto } from "@/models";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function SearchBox() {
   const router = useRouter();
+  const { addsavedTab } = useGlobal();
+
+  const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
+
+  const fireDialog = (text: string) => {
+    setButtonText(text);
+    setTimeout(() => setButtonText("Search"), 5000);
+  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -9,6 +20,9 @@ export default function SearchBox() {
     console.log(search);
 
     const processPlaylist = async (playlistUrl: string) => {
+      console.log("Searching for playlist", playlistUrl);
+      setButtonText("Loading...");
+
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
@@ -23,8 +37,12 @@ export default function SearchBox() {
         }),
       })
         .then((res) => res.json())
-        .then((data: any) => {
-          alert(JSON.stringify(data));
+        .then((playlist: PlaylistDto) => {
+          for (let tab of playlist.tabs) {
+            console.log(tab);
+            addsavedTab({ ...tab, folder: playlist.title });
+          }
+          fireDialog(`Saved ${playlist.title}`);
         });
     };
 
@@ -73,10 +91,11 @@ export default function SearchBox() {
             required
           />
           <button
+            disabled={buttonText !== "Search"}
             type="submit"
             className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
           >
-            Search
+            {buttonText}
           </button>
         </div>
       </form>
