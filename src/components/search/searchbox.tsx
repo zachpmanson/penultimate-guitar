@@ -18,7 +18,9 @@ export default function SearchBox() {
     const processPlaylist = async (playlistUrl: string) => {
       console.log("Searching for playlist", playlistUrl);
       setButtonText("Loading...");
-      setGlobalLoading("Getting tabs from Spotify playlist");
+      setGlobalLoading(
+        "Getting tabs from Spotify playlist, this will take a minute"
+      );
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
