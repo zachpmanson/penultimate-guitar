@@ -8,10 +8,19 @@ import { useEffect, useState } from "react";
 export default function Tab() {
   const router = useRouter();
   const { query } = router.query;
+  let value: string;
+  if (query === undefined) {
+    value = "";
+  } else if (typeof query !== "string") {
+    value = query[0];
+  } else {
+    value = query;
+  }
+
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
-  const [searchString, setSearchString] = useState("");
+  const [searchString, setSearchString] = useState(value);
 
   const collapseResults = (results: SearchResult[]) => {
     let colRes: SearchResult[] = [];
@@ -33,43 +42,40 @@ export default function Tab() {
     return colRes;
   };
 
+  // const search = () => {
+
   useEffect(() => {
     setIsLoading(true);
-    getSearchResults();
-  }, [pageNum]);
+
+    let search_type: string = "title";
+    if (!!searchString && pageNum > 0) {
+      fetch("/api/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          value: searchString,
+          search_type: search_type,
+          page: pageNum,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res: SearchResult[]) => {
+          setResults((old) => collapseResults([...old, ...res]));
+          setIsLoading(false);
+        });
+    }
+  }, [pageNum, searchString]);
 
   useEffect(() => {
-    let value: string;
-    if (query === undefined) {
-      value = "";
-    } else if (typeof query !== "string") {
-      value = query[0];
-    } else {
-      value = query;
-    }
+    setPageNum(1);
+    return () => setResults([]);
+  }, [searchString]);
+
+  useEffect(() => {
     setSearchString(value);
-  }, [query]);
-
-  const getSearchResults = () => {
-    let search_type: string = "title";
-
-    fetch("/api/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        value: searchString,
-        search_type: search_type,
-        page: pageNum,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res: SearchResult[]) => {
-        setResults((old) => collapseResults([...old, ...res]));
-        setIsLoading(false);
-      });
-  };
+  }, [value]);
 
   const loadPage = () => {
     setPageNum((old) => old + 1);

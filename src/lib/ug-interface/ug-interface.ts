@@ -85,7 +85,7 @@ export async function getSearch(
   page: number
 ): Promise<SearchResult[]> {
   const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${search}`;
-
+  console.log(search, type, page);
   let results: SearchResult[] = [];
   await fetch(URL)
     .then((response) => response.text())
@@ -101,12 +101,11 @@ export async function getSearch(
     .catch((err) => {
       console.warn("Something went wrong.", err);
     });
-
   results = results
     .filter((r) => r.tab_access_type === "public")
     .filter((r) => !blacklist.includes(r.type))
     .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
     .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-  // console.log(results);
+  console.log(results.map((r) => r.song_name));
   return results;
 }
