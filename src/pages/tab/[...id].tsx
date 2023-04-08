@@ -31,6 +31,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);
+
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
     if (Array.isArray(recents)) {
@@ -86,6 +87,9 @@ export default function Tab({ tabDetails }: TabProps) {
         scrollMs
       );
     }
+    return () => {
+      clearInterval(scrollinterval.current);
+    };
   }, [scrollSpeed]);
 
   const handleSave = () => {
