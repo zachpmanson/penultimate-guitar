@@ -23,26 +23,31 @@ export default async function handler(
 
 async function getPlaylistTabs(tracks: Track[]): Promise<TabLinkDto[]> {
   const tabs: TabLinkDto[] = [];
-  for (let track of tracks) {
-    const search = `${track.name} ${track.artists[0]}`;
-    let results = await getSearch(search, "title", 1);
-    results.sort((a, b) => b.rating - a.rating);
-    const chordResults = results.filter((r) => r.type === "Chords");
-    if (chordResults.length > 0) {
-      tabs.push({
-        taburl: chordResults[0].tab_url,
-        name: chordResults[0].song_name,
-        artist: chordResults[0].artist_name,
-        version: chordResults[0].version,
-      });
-    } else if (results.length > 0) {
-      tabs.push({
-        taburl: results[0].tab_url,
-        name: results[0].song_name,
-        artist: results[0].artist_name,
-        version: results[0].version,
-      });
-    }
-  }
+  await Promise.all([
+    ...tracks.map((track) => {
+      return getSearch(`${track.name} ${track.artists}`, "title", 1).then(
+        (results) => {
+          results.sort((a, b) => b.rating - a.rating);
+          const chordResults = results.filter((r) => r.type === "Chords");
+          if (chordResults.length > 0) {
+            tabs.push({
+              taburl: chordResults[0].tab_url,
+              name: chordResults[0].song_name,
+              artist: chordResults[0].artist_name,
+              version: chordResults[0].version,
+            });
+          } else if (results.length > 0) {
+            tabs.push({
+              taburl: results[0].tab_url,
+              name: results[0].song_name,
+              artist: results[0].artist_name,
+              version: results[0].version,
+            });
+          }
+        }
+      );
+    }),
+  ]);
+
   return tabs;
 }
