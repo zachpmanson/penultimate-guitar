@@ -27,7 +27,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const [tranposition, setTranposition] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
-  const { removesavedTab, isSaved: issaved } = useGlobal();
+  const { removeSavedTab: removesavedTab, isSaved: issaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);

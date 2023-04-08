@@ -3,7 +3,7 @@ import { TabLinkDto } from "@/models";
 import TabLink from "./tablink";
 
 export default function SavedTabs() {
-  const { savedTabs, removesavedTab } = useGlobal();
+  const { savedTabs, removeSavedTab: removesavedTab } = useGlobal();
   console.log(savedTabs);
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
   for (let tab of savedTabs) {

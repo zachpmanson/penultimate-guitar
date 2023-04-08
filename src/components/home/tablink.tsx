@@ -9,7 +9,7 @@ type TabLinkProps = {
   recent?: boolean;
 };
 export default function TabLink({ tablink, recent }: TabLinkProps) {
-  const { removesavedTab, isSaved } = useGlobal();
+  const { removeSavedTab: removesavedTab, isSaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const handleSave = () => {

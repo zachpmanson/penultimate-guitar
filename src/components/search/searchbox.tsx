@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function SearchBox() {
   const router = useRouter();
-  const { addsavedTab, setGlobalLoading } = useGlobal();
+  const { addSavedTab, setGlobalLoading } = useGlobal();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
   const [searchText, setSearchText] = useState("");
@@ -38,7 +38,7 @@ export default function SearchBox() {
         .then((playlist: PlaylistDto) => {
           for (let tab of playlist.tabs) {
             console.log(tab);
-            addsavedTab({ ...tab, folder: playlist.title });
+            addSavedTab({ ...tab, folder: playlist.title });
           }
           const text = `Saved ${playlist.title}`;
           setButtonText(text);

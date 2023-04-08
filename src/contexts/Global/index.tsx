@@ -37,7 +37,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
-  const addsavedTab = useCallback(
+  const addSavedTab = useCallback(
     (newTab: TabLinkDto) => {
       let existingIndex = savedTabs.findIndex(
         (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
@@ -74,8 +74,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const value: GlobalContextProps = useMemo(
     () => ({
       setTabFolders: setTabFolders,
-      addsavedTab: addsavedTab,
-      removesavedTab: removesavedTab,
+      addSavedTab: addSavedTab,
+      removeSavedTab: removesavedTab,
       savedTabs: savedTabs,
       isSaved: isSaved,
       globalLoading: globalLoading,
@@ -84,7 +84,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     [
       setTabFolders,
       savedTabs,
-      addsavedTab,
+      addSavedTab,
       removesavedTab,
       isSaved,
       globalLoading,
