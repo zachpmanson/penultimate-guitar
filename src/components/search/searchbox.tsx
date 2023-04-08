@@ -1,14 +1,17 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { PlaylistDto } from "@/models";
+import { Playlist, PlaylistDto } from "@/models";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import ImportPlaylistDialog from "../spotify/importplaylistdialog";
 
 export default function SearchBox() {
   const router = useRouter();
-  const { addSavedTab, setGlobalLoading } = useGlobal();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
   const [searchText, setSearchText] = useState("");
+
+  const [playlist, setPlaylist] = useState<Playlist>();
+  const [isImportOpen, setIsImportOpen] = useState(false);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -18,9 +21,7 @@ export default function SearchBox() {
     const processPlaylist = async (playlistUrl: string) => {
       console.log("Searching for playlist", playlistUrl);
       setButtonText("Loading...");
-      setGlobalLoading(
-        "Getting tabs from Spotify playlist, this will take a minute"
-      );
+
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
@@ -35,16 +36,13 @@ export default function SearchBox() {
         }),
       })
         .then((res) => res.json())
-        .then((playlist: PlaylistDto) => {
-          for (let tab of playlist.tabs) {
-            console.log(tab);
-            addSavedTab({ ...tab, folder: playlist.title });
-          }
-          setButtonText(`Saved ${playlist.tabs.length} to ${playlist.title}`);
-          setTimeout(() => setButtonText("Search"), 5000);
-          setSearchText("");
-          setGlobalLoading("");
-          router.push("/");
+        .then((data: Playlist) => {
+          setButtonText("Search");
+          setIsImportOpen(true);
+          setPlaylist(data);
+        })
+        .catch(() => {
+          setButtonText("Search");
         });
     };
 
@@ -103,6 +101,13 @@ export default function SearchBox() {
           </button>
         </div>
       </form>
+      {isImportOpen && playlist && (
+        <ImportPlaylistDialog
+          playlist={playlist}
+          isOpen={isImportOpen}
+          setIsOpen={setIsImportOpen}
+        />
+      )}
     </>
   );
 }

@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<PlaylistDto>
+  res: NextApiResponse<Playlist>
 ) {
   if (Object.keys(req.body).length === 0) {
     res.status(400);
@@ -15,9 +15,11 @@ export default async function handler(
   if (req.method === "POST") {
     const playlistId = req.body["playlistId"];
     const playlist: Playlist = await getPlaylist(playlistId);
-    const tabs = await getPlaylistTabs(playlist.tracks);
+    res.status(200).json(playlist);
 
-    res.status(200).json({ title: playlist.name, tabs: tabs });
+    // const tabs = await getPlaylistTabs(playlist.tracks);
+
+    // res.status(200).json({ title: playlist.name, tabs: tabs });
   }
 }
 
