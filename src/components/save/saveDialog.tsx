@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { TabLinkProps } from "@/models";
+import { TabLinkDto } from "@/models";
 import { Dialog } from "@headlessui/react";
 import {
   ChangeEvent,
@@ -15,7 +15,7 @@ import DialogButton from "./dialogbutton";
 type SaveDialogProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  tab: TabLinkProps;
+  tab: TabLinkDto;
 };
 
 export default function SaveDialog({
@@ -23,8 +23,8 @@ export default function SaveDialog({
   setIsOpen,
   tab,
 }: SaveDialogProps) {
-  const { addsavedTab, savedTabs } = useGlobal();
-  const [currentFolder, setCurrentFolder] = useState("Favourites");
+  const { setTabFolders, savedTabs } = useGlobal();
+  const [currentFolders, setCurrentFolders] = useState<string[]>([]);
   const [addingNew, setAddingNew] = useState(false);
 
   const [folders, setFolders] = useState(["Favourites"]);
@@ -37,20 +37,37 @@ export default function SaveDialog({
       ...Array.from(
         new Set([
           "Favourites",
-          ...Object.values(savedTabs).map((t) => t.folder ?? "Favourites"),
+          ...savedTabs.map((t) => t.folder ?? "Favourites"),
         ])
       ),
     ];
     setFolders(folderNames);
-  }, [savedTabs]);
+
+    let currentFolderNames = savedTabs
+      .filter((t) => t.taburl === tab.taburl)
+      .map((t) => t.folder);
+
+    let actualFolderNames: string[] = [];
+    for (let name of currentFolderNames) {
+      if (name !== undefined) {
+        actualFolderNames.push(name);
+      }
+    }
+
+    setCurrentFolders(actualFolderNames);
+  }, [savedTabs, tab.taburl]);
 
   const save = () => {
-    addsavedTab({ ...tab, folder: currentFolder });
+    setTabFolders(tab, currentFolders);
     setIsOpen(false);
   };
 
   const handleFolderChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCurrentFolder(event.target.value);
+    if (currentFolders.includes(event.target.value)) {
+      setCurrentFolders((old) => old.filter((f) => f !== event.target.value));
+    } else {
+      setCurrentFolders((old) => [...old, event.target.value]);
+    }
   };
 
   const handleNewFolderChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +84,7 @@ export default function SaveDialog({
     let trimmedName = newFolder.trim();
     if (!!trimmedName && trimmedName.length < 20) {
       setFolders((old) => [...old, trimmedName]);
-      setCurrentFolder(trimmedName);
+      // setCurrentFolders(trimmedName);
     }
     setAddingNew(false);
   };
@@ -78,6 +95,7 @@ export default function SaveDialog({
       onClose={() => setIsOpen(false)}
       className="relative z-50"
     >
+      {currentFolders}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-xs rounded bg-white p-4">
@@ -87,10 +105,10 @@ export default function SaveDialog({
             {folders.map((f, i) => (
               <label key={i} className="w-full text-lg">
                 <input
-                  type="radio"
+                  type="checkbox"
                   value={f}
                   name={f}
-                  checked={currentFolder === f}
+                  checked={currentFolders.includes(f)}
                   onChange={handleFolderChange}
                 />{" "}
                 {f}

@@ -5,14 +5,10 @@ import { useState } from "react";
 
 export default function SearchBox() {
   const router = useRouter();
-  const { addsavedTab } = useGlobal();
+  const { addsavedTab, setGlobalLoading } = useGlobal();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
-
-  const fireDialog = (text: string) => {
-    setButtonText(text);
-    setTimeout(() => setButtonText("Search"), 5000);
-  };
+  const [searchText, setSearchText] = useState("");
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -22,7 +18,9 @@ export default function SearchBox() {
     const processPlaylist = async (playlistUrl: string) => {
       console.log("Searching for playlist", playlistUrl);
       setButtonText("Loading...");
-
+      setGlobalLoading(
+        "Getting tabs from Spotify playlist. This can take up to a minute for larger playlists."
+      );
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
@@ -42,7 +40,11 @@ export default function SearchBox() {
             console.log(tab);
             addsavedTab({ ...tab, folder: playlist.title });
           }
-          fireDialog(`Saved ${playlist.title}`);
+          const text = `Saved ${playlist.title}`;
+          setButtonText(text);
+          setTimeout(() => setButtonText("Search"), 5000);
+          setSearchText("");
+          setGlobalLoading("");
         });
     };
 
@@ -87,8 +89,10 @@ export default function SearchBox() {
             id="default-search"
             name="url"
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Song name or Chords URL..."
+            placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           />
           <button
             disabled={buttonText !== "Search"}

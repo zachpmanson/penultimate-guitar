@@ -11,6 +11,7 @@ export default function Tab() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
+  const [searchString, setSearchString] = useState("");
 
   const collapseResults = (results: SearchResult[]) => {
     let colRes: SearchResult[] = [];
@@ -33,8 +34,12 @@ export default function Tab() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
+    getSearchResults();
+  }, [pageNum]);
+
+  useEffect(() => {
     let value: string;
-    let search_type: string = "title";
     if (query === undefined) {
       value = "";
     } else if (typeof query !== "string") {
@@ -42,14 +47,19 @@ export default function Tab() {
     } else {
       value = query;
     }
-    setIsLoading(true);
+    setSearchString(value);
+  }, [query]);
+
+  const getSearchResults = () => {
+    let search_type: string = "title";
+
     fetch("/api/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        value: value,
+        value: searchString,
         search_type: search_type,
         page: pageNum,
       }),
@@ -59,12 +69,14 @@ export default function Tab() {
         setResults((old) => collapseResults([...old, ...res]));
         setIsLoading(false);
       });
-  }, [query, pageNum]);
+  };
 
   const loadPage = () => {
     setPageNum((old) => old + 1);
   };
+
   const cantLoadMore = false;
+
   return (
     <>
       <Head>

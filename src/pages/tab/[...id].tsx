@@ -5,7 +5,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
 import { getTab } from "@/lib/ug-interface/ug-interface";
-import { TabDto, TabLinkProps, TabType } from "@/models";
+import { TabDto, TabLinkDto, TabType } from "@/models";
 import _ from "lodash";
 import Head from "next/head";
 import Link from "next/link";
@@ -27,7 +27,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const [tranposition, setTranposition] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
-  const { removesavedTab, issaved } = useGlobal();
+  const { removesavedTab, isSaved: issaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);
@@ -40,7 +40,7 @@ export default function Tab({ tabDetails }: TabProps) {
         artist: tabDetails.song.artist,
         version: tabDetails.version,
       });
-      const uniqRecents = _.uniqBy(recents, (r: TabLinkProps) => r.taburl);
+      const uniqRecents = _.uniqBy(recents, (r: TabLinkDto) => r.taburl);
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
     } else {
       let arrayRecents = Object.keys(recents).map((r) => ({
@@ -57,7 +57,7 @@ export default function Tab({ tabDetails }: TabProps) {
         version: tabDetails.version,
       });
 
-      const uniqRecents = _.uniqBy(arrayRecents, (r: TabLinkProps) => r.taburl);
+      const uniqRecents = _.uniqBy(arrayRecents, (r: TabLinkDto) => r.taburl);
 
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
     }
@@ -79,7 +79,7 @@ export default function Tab({ tabDetails }: TabProps) {
       scrollinterval.current = setInterval(
         () =>
           window.scrollBy({
-            top: scrollSpeed * 2,
+            top: scrollSpeed,
             left: 0,
             behavior: "smooth",
           }),
@@ -89,11 +89,12 @@ export default function Tab({ tabDetails }: TabProps) {
   }, [scrollSpeed]);
 
   const handleSave = () => {
-    if (issaved(tabLink)) {
-      removesavedTab(tabLink);
-    } else {
-      setSaveDialogActive(true);
-    }
+    // if (issaved(tabLink)) {
+    //   removesavedTab(tabLink);
+    // } else {
+    //   setSaveDialogActive(true);
+    // }
+    setSaveDialogActive(true);
   };
 
   const formattedTransposition = () => {
@@ -129,12 +130,12 @@ export default function Tab({ tabDetails }: TabProps) {
                 {tabDetails.song.Tab?.map((t, index) => (
                   <li key={index}>
                     {t.taburl === tabDetails.taburl || (
-                      <>
+                      <div className="flex gap-8">
                         <Link href={t.taburl}>
                           {tabDetails.song.name} Version {t.version}{" "}
                         </Link>
-                        Rating: {"⭐".repeat(Math.round(t.rating))}
-                      </>
+                        Rating: {Math.round(t.rating * 100) / 100} / 5.00
+                      </div>
                     )}
                   </li>
                 ))}
@@ -217,6 +218,7 @@ export default function Tab({ tabDetails }: TabProps) {
           fontSize={fontSize}
           transposition={tranposition}
         ></TabSheet>
+
         <hr className="my-4" />
         <div className="max-w-lg mx-auto my-4">
           {!!tabDetails?.contributors?.length && (

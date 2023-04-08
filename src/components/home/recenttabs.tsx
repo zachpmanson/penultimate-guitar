@@ -1,9 +1,9 @@
-import { TabLinkProps } from "@/models";
+import { TabLinkDto } from "@/models";
 import { useEffect, useState } from "react";
 import TabLink from "./tablink";
 
 export default function RecentTabs() {
-  const [recents, setRecents] = useState<TabLinkProps[]>([]);
+  const [recents, setRecents] = useState<TabLinkDto[]>([]);
 
   useEffect(() => {
     const savedRecents: any = JSON.parse(
@@ -36,8 +36,12 @@ export default function RecentTabs() {
             {recents
               .slice(0, 10)
               .filter((r) => r.name && r.artist)
-              .map((r: TabLinkProps, i) => (
-                <TabLink key={i} {...r} saved={false} />
+              .map((r: TabLinkDto, i) => (
+                <TabLink
+                  key={i}
+                  tablink={{ ...r, saved: true }}
+                  recent={true}
+                />
               ))}
           </div>
         </details>

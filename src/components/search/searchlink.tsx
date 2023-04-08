@@ -7,7 +7,6 @@ export default function SearchLink({
   tab_url,
   song_name,
   artist_name,
-  version,
   rating,
   type,
 }: SearchLinkProps) {
@@ -28,7 +27,7 @@ export default function SearchLink({
             <div>
               <p>
                 {!Math.round(rating) ||
-                  "Rating: " + "⭐".repeat(Math.round(rating))}
+                  `Rating: ${Math.round(rating * 100) / 100} / 5.00`}
               </p>
             </div>
           </div>

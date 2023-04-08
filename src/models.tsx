@@ -47,7 +47,7 @@ export type AltVersion = {
   type?: string;
 };
 
-export type TabLinkProps = {
+export type TabLinkDto = {
   taburl: string;
   name: string;
   artist: string;
@@ -83,4 +83,4 @@ export type SearchResult = {
 export type Track = { name: string; artists: string[] };
 export type Playlist = { name: string; tracks: Track[] };
 
-export type PlaylistDto = { title: string; tabs: TabLinkProps[] };
+export type PlaylistDto = { title: string; tabs: TabLinkDto[] };

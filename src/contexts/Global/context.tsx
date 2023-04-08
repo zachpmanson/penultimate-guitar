@@ -1,18 +1,22 @@
-import { TabDto, TabLinkProps } from "@/models";
-import { createContext, useContext } from "react";
+import { TabLinkDto } from "@/models";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export type GlobalContextProps = {
-  savedTabs: TabLinkProps[];
-  addsavedTab: (newTab: TabLinkProps) => void;
-  removesavedTab: (newTab: TabLinkProps) => void;
-  issaved: (newTab: TabLinkProps) => boolean;
+  savedTabs: TabLinkDto[];
+  setTabFolders: (newTab: TabLinkDto, folders: string[]) => void;
+  removesavedTab: (newTab: TabLinkDto) => void;
+  isSaved: (newTab: TabLinkDto) => boolean;
+  globalLoading: string;
+  setGlobalLoading: Dispatch<SetStateAction<string>>;
 };
 
 const GlobalContext = createContext<GlobalContextProps>({
-  savedTabs: new Array<TabLinkProps>(),
-  addsavedTab: () => undefined,
+  savedTabs: new Array<TabLinkDto>(),
+  setTabFolders: () => undefined,
   removesavedTab: () => undefined,
-  issaved: () => false,
+  isSaved: () => false,
+  globalLoading: "",
+  setGlobalLoading: () => {},
 });
 
 export const GlobalContextProvider = GlobalContext.Provider;

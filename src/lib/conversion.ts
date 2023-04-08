@@ -1,6 +1,6 @@
-import { TabDto, TabLinkProps } from "@/models";
+import { TabDto, TabLinkDto } from "@/models";
 
-export function convertToTabLink(tabDto: TabDto): TabLinkProps {
+export function convertToTabLink(tabDto: TabDto): TabLinkDto {
   return {
     taburl: tabDto.taburl,
     name: tabDto.song.name,

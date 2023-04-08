@@ -1,56 +1,68 @@
-import { TabLinkProps } from "@/models";
+import { TabLinkDto } from "@/models";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [savedTabs, setsavedTabs] = useState<TabLinkProps[]>([]);
+  const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
+  const [globalLoading, setGlobalLoading] = useState("");
 
   useEffect(() => {
     getSavedTabs();
   }, []);
 
+  useEffect(() => {
+    updateLocalSaves(savedTabs);
+  }, [savedTabs]);
+
   const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
-    ) as TabLinkProps[];
-    setsavedTabs(parsedTabs.filter((t) => t.name && t.artist));
+    ) as TabLinkDto[];
+    setSavedTabs(parsedTabs.filter((t) => t.name && t.artist));
   };
 
-  const updateLocalSaves = (saves: TabLinkProps[]) =>
+  const updateLocalSaves = (saves: TabLinkDto[]) =>
     localStorage.setItem("savedTabs", JSON.stringify(saves));
 
+  const setTabFolders = useCallback(
+    (tabLink: TabLinkDto, folders: string[]) => {
+      setSavedTabs((old) => {
+        let newTabs = old.filter((t) => t.taburl !== tabLink.taburl);
+        for (let folder of folders) {
+          newTabs.push({ ...tabLink, folder: folder });
+        }
+        return newTabs;
+      });
+    },
+    []
+  );
+
   const addsavedTab = useCallback(
-    (newTab: TabLinkProps) => {
+    (newTab: TabLinkDto) => {
       let existingIndex = savedTabs.findIndex(
-        (t) => t.taburl === newTab.taburl
+        (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
       );
       if (existingIndex === -1) {
-        let tempTabs = [...savedTabs, newTab];
-
-        setsavedTabs((old) => [...old, newTab]);
-        updateLocalSaves(tempTabs);
+        setSavedTabs((old) => {
+          let newTabs = [...old, newTab];
+          return newTabs;
+        });
       }
     },
     [savedTabs]
   );
 
-  const removesavedTab = useCallback(
-    (newTab: TabLinkProps) => {
-      let existingIndex = savedTabs.findIndex(
-        (t) => t.taburl === newTab.taburl
+  const removesavedTab = useCallback((tab: TabLinkDto) => {
+    setSavedTabs((old) => {
+      let newTabs = old.filter(
+        (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
       );
-      if (existingIndex !== -1) {
-        let tempTabs = [...savedTabs];
-        tempTabs.splice(existingIndex, 1);
-        setsavedTabs(tempTabs);
-        updateLocalSaves(tempTabs);
-      }
-    },
-    [savedTabs]
-  );
+      return newTabs;
+    });
+  }, []);
 
-  const issaved = useCallback(
-    (newTab: TabLinkProps) => {
+  const isSaved = useCallback(
+    (newTab: TabLinkDto) => {
       let existingIndex = savedTabs.findIndex(
         (t) => t.taburl === newTab.taburl
       );
@@ -61,12 +73,23 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const value: GlobalContextProps = useMemo(
     () => ({
+      setTabFolders: setTabFolders,
       addsavedTab: addsavedTab,
       removesavedTab: removesavedTab,
       savedTabs: savedTabs,
-      issaved: issaved,
+      isSaved: isSaved,
+      globalLoading: globalLoading,
+      setGlobalLoading: setGlobalLoading,
     }),
-    [savedTabs, addsavedTab, removesavedTab, issaved]
+    [
+      setTabFolders,
+      savedTabs,
+      addsavedTab,
+      removesavedTab,
+      isSaved,
+      globalLoading,
+      setGlobalLoading,
+    ]
   );
 
   return (

@@ -1,11 +1,11 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { TabLinkProps } from "@/models";
+import { TabLinkDto } from "@/models";
 import TabLink from "./tablink";
 
 export default function SavedTabs() {
-  const { savedTabs } = useGlobal();
+  const { savedTabs, removesavedTab } = useGlobal();
   console.log(savedTabs);
-  const folders: { [key: string]: TabLinkProps[] } = { Favourites: [] };
+  const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
   for (let tab of savedTabs) {
     const folderName = tab.folder ?? "Favourites";
     if (folders[folderName]) {
@@ -14,6 +14,13 @@ export default function SavedTabs() {
       folders[folderName] = [tab];
     }
   }
+
+  const deleteFolder = (folder: TabLinkDto[]) => {
+    for (let tablink of folder) {
+      removesavedTab(tablink);
+    }
+  };
+
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -27,7 +34,7 @@ export default function SavedTabs() {
                 folder === "Favourites" ? (
                   <div key={i} className="flex flex-col gap-2">
                     {folders[folder].map((t, j) => (
-                      <TabLink key={j} {...t} saved={true} />
+                      <TabLink key={j} tablink={{ ...t, saved: true }} />
                     ))}
                   </div>
                 ) : (
@@ -37,17 +44,13 @@ export default function SavedTabs() {
                     </summary>
                     <div className="flex flex-col gap-2 mt-2">
                       {folders[folder].map((t, j) => (
-                        <TabLink key={j} {...t} saved={true} />
+                        <TabLink key={j} tablink={{ ...t, saved: true }} />
                       ))}
                     </div>
                   </details>
                 )
               )}
             </div>
-
-            {/* {savedTabs.map((savedTab: TabLinkProps, i) => (
-              <TabLink key={i} {...savedTab} saved={true} />
-            ))} */}
           </details>
         </div>
       )}
