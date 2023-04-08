@@ -21,6 +21,7 @@ export default function Tab() {
   const [isLoading, setIsLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
   const [searchString, setSearchString] = useState(value);
+  const [canLoadMore, setCanLoadMore] = useState(true);
 
   const collapseResults = (results: SearchResult[]) => {
     let colRes: SearchResult[] = [];
@@ -42,8 +43,6 @@ export default function Tab() {
     return colRes;
   };
 
-  // const search = () => {
-
   useEffect(() => {
     setIsLoading(true);
 
@@ -64,6 +63,7 @@ export default function Tab() {
         .then((res: SearchResult[]) => {
           setResults((old) => collapseResults([...old, ...res]));
           setIsLoading(false);
+          setCanLoadMore(res.length !== 0);
         });
     }
   }, [pageNum, searchString]);
@@ -81,8 +81,6 @@ export default function Tab() {
     setPageNum((old) => old + 1);
   };
 
-  const cantLoadMore = false;
-
   return (
     <>
       <Head>
@@ -96,13 +94,13 @@ export default function Tab() {
           {results.map((r, i) => (
             <SearchLink key={i} {...r} />
           ))}
-          {isLoading || (
+          {isLoading || !canLoadMore || (
             <div className="m-auto w-fit">
               <button
                 onClick={loadPage}
-                disabled={cantLoadMore}
+                disabled={!canLoadMore}
                 className={`flex items-center justify-center text-md text-lg border-grey-500 border-2 rounded-xl transition ease-in-out bg-white py-2 px-4 ${
-                  cantLoadMore ? "text-slate-400" : "hover:shadow-md"
+                  !canLoadMore ? "text-slate-400" : "hover:shadow-md"
                 }`}
               >
                 Load more

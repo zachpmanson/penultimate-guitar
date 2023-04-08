@@ -37,20 +37,15 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
-  const addSavedTab = useCallback(
-    (newTab: TabLinkDto) => {
-      let existingIndex = savedTabs.findIndex(
+  const addSavedTab = useCallback((newTab: TabLinkDto) => {
+    setSavedTabs((old) => {
+      let existingIndex = old.findIndex(
         (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
       );
-      if (existingIndex === -1) {
-        setSavedTabs((old) => {
-          let newTabs = [...old, newTab];
-          return newTabs;
-        });
-      }
-    },
-    [savedTabs]
-  );
+
+      return existingIndex === -1 ? [...old, newTab] : old;
+    });
+  }, []);
 
   const removesavedTab = useCallback((tab: TabLinkDto) => {
     setSavedTabs((old) => {

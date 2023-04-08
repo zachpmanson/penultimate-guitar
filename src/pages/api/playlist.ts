@@ -44,10 +44,23 @@ async function getPlaylistTabs(tracks: Track[]): Promise<TabLinkDto[]> {
               version: results[0].version,
             });
           }
+          if (results.length === 0) {
+            console.log(
+              "Couldn't find",
+              `${track.name} ${track.artists}`,
+              results
+            );
+          } else {
+            console.log(
+              "Found",
+              `${track.name} ${track.artists}`,
+              `${results.length} results`
+            );
+          }
         }
       );
     }),
   ]);
-
+  console.log(tabs.map((t) => t.taburl));
   return tabs;
 }

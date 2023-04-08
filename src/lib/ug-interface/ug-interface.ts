@@ -84,8 +84,11 @@ export async function getSearch(
   type: string,
   page: number
 ): Promise<SearchResult[]> {
-  const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${search}`;
-  console.log(search, type, page);
+  let cleanSearch = search.replace(
+    /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[Ss]tereo\))/,
+    ""
+  );
+  const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${cleanSearch}`;
   let results: SearchResult[] = [];
   await fetch(URL)
     .then((response) => response.text())
@@ -106,6 +109,6 @@ export async function getSearch(
     .filter((r) => !blacklist.includes(r.type))
     .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
     .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-  console.log(results.map((r) => r.song_name));
+
   return results;
 }

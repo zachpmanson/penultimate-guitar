@@ -18,9 +18,7 @@ export default function SearchBox() {
     const processPlaylist = async (playlistUrl: string) => {
       console.log("Searching for playlist", playlistUrl);
       setButtonText("Loading...");
-      setGlobalLoading(
-        "Getting tabs from Spotify playlist. This can take up to a minute for larger playlists."
-      );
+      setGlobalLoading("Getting tabs from Spotify playlist");
       const matches = playlistUrl.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
@@ -40,11 +38,11 @@ export default function SearchBox() {
             console.log(tab);
             addSavedTab({ ...tab, folder: playlist.title });
           }
-          const text = `Saved ${playlist.title}`;
-          setButtonText(text);
+          setButtonText(`Saved ${playlist.tabs.length} to ${playlist.title}`);
           setTimeout(() => setButtonText("Search"), 5000);
           setSearchText("");
           setGlobalLoading("");
+          router.push("/");
         });
     };
 
