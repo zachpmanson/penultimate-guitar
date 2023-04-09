@@ -104,9 +104,20 @@ export default function ImportPlaylistDialog({
             Found {playlistTabs.length}/{playlist.tracks.length}
           </div>
           <div>Couldn&apos;t find {attemptCount - playlistTabs.length}</div>
+          <div className="my-2 w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-200">
+            <div
+              className="bg-blue-600 h-2.5 rounded-full"
+              style={{
+                width: `${Math.round(
+                  (100 * attemptCount) / playlist.tracks.length
+                )}%`,
+              }}
+            ></div>
+          </div>
           {currentlyFinding && (
             <div className="my-2">
-              Finding:{" "}
+              Finding:
+              <br />
               <span className="font-weight-">
                 {currentlyFinding?.name} - {currentlyFinding?.artists}
               </span>
