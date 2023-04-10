@@ -1,4 +1,4 @@
-import SaveDialog from "@/components/save/saveDialog";
+import SaveDialog from "@/components/dialog/savedialog";
 import TabSheet from "@/components/tab/tabsheet";
 import ToolbarButton from "@/components/tab/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";

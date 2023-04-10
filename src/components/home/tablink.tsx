@@ -2,7 +2,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { TabLinkDto } from "@/models";
 import Link from "next/link";
 import { useState } from "react";
-import SaveDialog from "../save/saveDialog";
+import SaveDialog from "../dialog/savedialog";
 
 type TabLinkProps = {
   tablink: TabLinkDto;

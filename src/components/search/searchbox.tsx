@@ -2,7 +2,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { Playlist, PlaylistDto } from "@/models";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ImportPlaylistDialog from "../spotify/importplaylistdialog";
+import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 
 export default function SearchBox() {
   const router = useRouter();

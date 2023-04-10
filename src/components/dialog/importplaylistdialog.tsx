@@ -2,7 +2,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { Playlist, SearchResult, TabLinkDto, Track } from "@/models";
 import { Dialog } from "@headlessui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import DialogButton from "../save/dialogbutton";
+import DialogButton from "./dialogbutton";
 
 type ImportPlaylistDialogProps = {
   playlist: Playlist;
@@ -80,7 +80,7 @@ export default function ImportPlaylistDialog({
     };
 
     getTabs().catch();
-  }, [addSavedTab, playlist]);
+  }, [addSavedTab, isOpen, playlist]);
 
   return (
     <Dialog
