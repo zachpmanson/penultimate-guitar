@@ -1,28 +1,11 @@
 # Penultimate Guitar
 
-An alternate frontend for Ultimate Guitar.
+An alternate frontend for Ultimate Guitar that can import public Spotify playlists.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Running
-
-First, run the development server:
+To run it locally run:
 
 ```bash
 npm run dev
 ```
-
-## Todo
-
-- [x] Remember recent tabs
-- [x] Search
-  - [ ] Filtering
-  - [x] Pagination?
-- [x] Server caching
-- [ ] Chord tooltips
-- [x] Bookmarking
-- [x] Size options
-- [x] Transposing
-- [x] Autoscrolling
-- [x] Sticky toolbar
-- [x] Tuning and capo info
