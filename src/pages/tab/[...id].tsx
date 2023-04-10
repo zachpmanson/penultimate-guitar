@@ -27,7 +27,6 @@ export default function Tab({ tabDetails }: TabProps) {
   const [tranposition, setTranposition] = useState(0);
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
-  const { removeSavedTab: removesavedTab, isSaved: issaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const tabLink = convertToTabLink(tabDetails);
@@ -162,10 +161,7 @@ export default function Tab({ tabDetails }: TabProps) {
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Save</p>
                 <div className="m-auto w-fit">
-                  <ToolbarButton
-                    fn={handleSave}
-                    icon={issaved(tabLink) ? "❌" : "💾"}
-                  />
+                  <ToolbarButton fn={handleSave} icon="💾" />
                 </div>
               </div>
 
