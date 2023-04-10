@@ -33,14 +33,16 @@ ol {
   list-style: decimal;
 }
 
-a {
+a,
+a span {
   color: dodgerblue;
   transition: all 0.1s ease-in;
   text-decoration: underline;
   text-decoration-color: transparent;
 }
 
-a:hover {
+a:hover,
+a span:hover {
   text-decoration: underline;
 }
 

@@ -24,7 +24,7 @@ export default function Directory({ allTabs }: ListProps) {
       <div className="w-fit m-auto wrap">
         <div className="mx-8">
           {Object.keys(multipleVersions).length} songs, {allTabs.length} tabs
-          <ol>
+          <ol className=" max-w-xl">
             {allTabs.map((t, i) => (
               <li key={i}>
                 <Link href={`/tab/${t.taburl}`}>
@@ -52,7 +52,11 @@ export async function getServerSideProps() {
         not: "ALT",
       },
     },
-    include: {
+    select: {
+      taburl: true,
+      songId: true,
+      type: true,
+      version: true,
       song: true,
     },
     orderBy: [
