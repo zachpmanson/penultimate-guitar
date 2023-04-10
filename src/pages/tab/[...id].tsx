@@ -97,7 +97,11 @@ export default function Tab({ tabDetails }: TabProps) {
   };
 
   const formattedTransposition = () => {
-    return tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
+    return tranposition === 0
+      ? ""
+      : tranposition < 0
+      ? tranposition.toString()
+      : `+${tranposition}`;
   };
 
   return (
@@ -156,7 +160,7 @@ export default function Tab({ tabDetails }: TabProps) {
           <div className="bg-white/50 w-full sticky top-0 ">
             <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
               <div className="flex-1 flex-col text-center">
-                Save
+                <p className="text-xs whitespace-nowrap">Save</p>
                 <div className="m-auto w-fit">
                   <ToolbarButton
                     fn={handleSave}
@@ -166,7 +170,7 @@ export default function Tab({ tabDetails }: TabProps) {
               </div>
 
               <div className="flex-1 flex-col text-center">
-                Font size
+                <p className="text-xs whitespace-nowrap">Font size</p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
                     fn={() => setFontSize(fontSize - 2)}
@@ -181,7 +185,7 @@ export default function Tab({ tabDetails }: TabProps) {
               </div>
 
               <div className="flex-1 flex-col text-center">
-                <p>
+                <p className="text-xs whitespace-nowrap">
                   Transpose
                   {tranposition === 0 || ` (${formattedTransposition()})`}
                 </p>
@@ -198,7 +202,9 @@ export default function Tab({ tabDetails }: TabProps) {
               </div>
 
               <div className="flex-1 flex-col text-center">
-                Autoscroll
+                <p className="text-xs whitespace-nowrap">
+                  Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}
+                </p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
                     fn={() => changeScrolling("down")}
