@@ -24,6 +24,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const updateLocalSaves = (saves: TabLinkDto[]) =>
     localStorage.setItem("savedTabs", JSON.stringify(saves));
 
+  // removes all taburl in all folders, readds taburl to folder in string[]
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
       setSavedTabs((old) => {
@@ -47,7 +48,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const removesavedTab = useCallback((tab: TabLinkDto) => {
+  const removeSavedTab = useCallback((tab: TabLinkDto) => {
     setSavedTabs((old) => {
       let newTabs = old.filter(
         (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
@@ -70,7 +71,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       setTabFolders: setTabFolders,
       addSavedTab: addSavedTab,
-      removeSavedTab: removesavedTab,
+      removeSavedTab: removeSavedTab,
       savedTabs: savedTabs,
       isSaved: isSaved,
       globalLoading: globalLoading,
@@ -80,7 +81,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setTabFolders,
       savedTabs,
       addSavedTab,
-      removesavedTab,
+      removeSavedTab,
       isSaved,
       globalLoading,
       setGlobalLoading,

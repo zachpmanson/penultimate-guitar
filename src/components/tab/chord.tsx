@@ -62,7 +62,7 @@ export default function Chord({ chord, id, transposition }: ChordProps) {
     <>
       <span
         id={`tooltip-${id}`}
-        className="text-blue-500"
+        className="bg-gray-200 font-bold chord"
         data-tooltip-variant="success"
       >
         {transposedChord}

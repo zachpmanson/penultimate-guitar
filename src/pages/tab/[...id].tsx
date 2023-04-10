@@ -93,11 +93,6 @@ export default function Tab({ tabDetails }: TabProps) {
   }, [scrollSpeed]);
 
   const handleSave = () => {
-    // if (issaved(tabLink)) {
-    //   removesavedTab(tabLink);
-    // } else {
-    //   setSaveDialogActive(true);
-    // }
     setSaveDialogActive(true);
   };
 

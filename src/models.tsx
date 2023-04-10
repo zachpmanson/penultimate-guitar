@@ -24,6 +24,7 @@ export type Song = {
   Tab?: AltVersion[];
 };
 
+// Tab object as taken from UG js-store, gets tranformed into TabDto
 export type NewTab = {
   type: TabType;
   taburl: string;
@@ -39,6 +40,8 @@ export type NewTab = {
   rating: number;
   version: number;
 };
+
+// cut down version of NewTab with metadata only
 export type AltVersion = {
   tab_url?: string;
   taburl: string;
@@ -82,5 +85,3 @@ export type SearchResult = {
 
 export type Track = { name: string; artists: string[] };
 export type Playlist = { name: string; tracks: Track[] };
-
-export type PlaylistDto = { title: string; tabs: TabLinkDto[] };

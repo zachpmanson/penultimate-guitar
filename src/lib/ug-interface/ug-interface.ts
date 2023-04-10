@@ -85,7 +85,7 @@ export async function getSearch(
   page: number
 ): Promise<SearchResult[]> {
   let cleanSearch = search.replace(
-    /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[Ss]tereo\))/,
+    /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[0-9]* ?[Ss]tereo ?[0-9]*\))/,
     ""
   );
   const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${cleanSearch}`;

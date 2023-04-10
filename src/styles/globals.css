@@ -81,3 +81,9 @@ summary h2 {
     transform: rotate(360deg);
   }
 }
+
+.chord {
+  padding-left: 2px;
+  padding-right: 2px;
+  border-radius: 2px;
+}
