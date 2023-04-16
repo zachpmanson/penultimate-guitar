@@ -43,7 +43,7 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
           onClick={handleSave}
           className="flex items-center bg-white px-4 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
         >
-          {isSaved(tablink) ? "❌" : "💾"}
+          {recent ? "💾" : "❌"}
         </button>
       </div>
       <SaveDialog
