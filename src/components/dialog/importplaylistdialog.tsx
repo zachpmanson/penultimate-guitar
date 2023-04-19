@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { Playlist, SearchResult, TabLinkDto, Track } from "@/models";
+import { Playlist, SearchResult, TabLinkDto, TabType, Track } from "@/models";
 import { Dialog } from "@headlessui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DialogButton from "./dialogbutton";
@@ -44,6 +44,7 @@ export default function ImportPlaylistDialog({
               name: chordResults[0].song_name,
               artist: chordResults[0].artist_name,
               version: chordResults[0].version,
+              type: chordResults[0].type as TabType,
             };
           } else if (results.length > 0) {
             newTab = {
@@ -51,6 +52,7 @@ export default function ImportPlaylistDialog({
               name: results[0].song_name,
               artist: results[0].artist_name,
               version: results[0].version,
+              type: results[0].type as TabType,
             };
           }
           if (newTab !== undefined) {

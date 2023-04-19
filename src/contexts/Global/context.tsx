@@ -7,6 +7,8 @@ export type GlobalContextProps = {
   addSavedTab: (newTab: TabLinkDto) => void;
   removeSavedTab: (newTab: TabLinkDto) => void;
   isSaved: (newTab: TabLinkDto) => boolean;
+  searchText: string;
+  setSearchText: Dispatch<SetStateAction<string>>;
   globalLoading: string;
   setGlobalLoading: Dispatch<SetStateAction<string>>;
 };
@@ -17,6 +19,8 @@ const GlobalContext = createContext<GlobalContextProps>({
   addSavedTab: () => undefined,
   removeSavedTab: () => undefined,
   isSaved: () => false,
+  searchText: "",
+  setSearchText: () => {},
   globalLoading: "",
   setGlobalLoading: () => {},
 });

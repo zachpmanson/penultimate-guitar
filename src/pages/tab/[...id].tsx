@@ -1,7 +1,6 @@
 import SaveDialog from "@/components/dialog/savedialog";
 import TabSheet from "@/components/tab/tabsheet";
 import ToolbarButton from "@/components/tab/toolbarbutton";
-import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
 import { getTab } from "@/lib/ug-interface/ug-interface";
@@ -13,7 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 
-const scrollMs = 50;
+const scrollMs = 100;
 
 type TabProps = {
   tabDetails: TabDto;
@@ -39,6 +38,7 @@ export default function Tab({ tabDetails }: TabProps) {
         name: tabDetails.song.name,
         artist: tabDetails.song.artist,
         version: tabDetails.version,
+        type: tabDetails.type,
       });
       const uniqRecents = _.uniqBy(recents, (r: TabLinkDto) => r.taburl);
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
@@ -48,6 +48,7 @@ export default function Tab({ tabDetails }: TabProps) {
         name: recents[r].name,
         artist: recents[r].artist,
         version: recents[r].version,
+        type: recents[r].type,
       }));
 
       arrayRecents.unshift({
@@ -55,6 +56,7 @@ export default function Tab({ tabDetails }: TabProps) {
         name: tabDetails.song.name,
         artist: tabDetails.song.artist,
         version: tabDetails.version,
+        type: tabDetails.type,
       });
 
       const uniqRecents = _.uniqBy(arrayRecents, (r: TabLinkDto) => r.taburl);

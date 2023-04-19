@@ -1,13 +1,28 @@
+import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 
 export default function SearchBox() {
   const router = useRouter();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setLocalSearchText] = useState("");
+  const { setSearchText } = useGlobal();
+
+  useEffect(() => {
+    if (router.route === "/") {
+      setSearchText("");
+      setLocalSearchText("");
+    }
+  }, [router.route, setSearchText]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSearchText(searchText);
+    }, 50);
+  }, [searchText, setSearchText]);
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -89,7 +104,7 @@ export default function SearchBox() {
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
             value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => setLocalSearchText(e.target.value)}
           />
           <button
             disabled={buttonText !== "Search"}

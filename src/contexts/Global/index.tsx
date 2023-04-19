@@ -4,6 +4,7 @@ import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
 
   useEffect(() => {
@@ -69,13 +70,15 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const value: GlobalContextProps = useMemo(
     () => ({
-      setTabFolders: setTabFolders,
-      addSavedTab: addSavedTab,
-      removeSavedTab: removeSavedTab,
-      savedTabs: savedTabs,
-      isSaved: isSaved,
-      globalLoading: globalLoading,
-      setGlobalLoading: setGlobalLoading,
+      setTabFolders,
+      addSavedTab,
+      removeSavedTab,
+      savedTabs,
+      isSaved,
+      searchText,
+      setSearchText,
+      globalLoading,
+      setGlobalLoading,
     }),
     [
       setTabFolders,
@@ -83,6 +86,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       addSavedTab,
       removeSavedTab,
       isSaved,
+      searchText,
+      setSearchText,
       globalLoading,
       setGlobalLoading,
     ]

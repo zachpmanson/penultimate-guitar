@@ -46,7 +46,7 @@ export default function RecentTabs() {
           </div>
         </details>
       ) : (
-        <p className="text-center">Recent tabs will show up here!</p>
+        <p className="text-center">Saved and recent tabs will show up here!</p>
       )}
     </div>
   );

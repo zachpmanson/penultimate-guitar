@@ -57,6 +57,7 @@ export type TabLinkDto = {
   saved?: boolean;
   version?: number;
   folder?: string;
+  type?: TabType;
 };
 
 export type SearchResult = {
