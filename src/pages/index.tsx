@@ -6,9 +6,10 @@ import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
-  const { searchText, setSearchText } = useGlobal();
+  const { searchText, savedTabs } = useGlobal();
 
   const isFilter = (text: string) => {
+    if (savedTabs.length === 0) return false;
     if (text.trim() === "") return false;
     if (text.length < 3) return false;
     try {

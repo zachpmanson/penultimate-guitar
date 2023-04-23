@@ -10,7 +10,7 @@ export default function Layout({ children }: any) {
       <Header />
       {globalLoading !== "" && (
         <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-black opacity-75 flex flex-col items-center justify-center">
-          <div className="loading-spinner m-4"></div>
+          <LoadingSpinner />
           <h2 className="text-center text-white text-xl font-semibold text-opacity-100">
             Loading...
           </h2>

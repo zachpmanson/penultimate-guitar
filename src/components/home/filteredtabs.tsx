@@ -17,15 +17,11 @@ export default function FilteredSavedTabs() {
   );
   //   const filteredTabs = savedTabs;
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       {Object.keys(filteredTabs).length === 0 ? (
         <>
           <p className="text-center text-gray-400">
             No tabs containing &quot;{searchText}&quot; in favourites.
-          </p>
-          <p className="text-center">
-            Click <Link href={`/search/${searchText}`}>search</Link> to search
-            all tabs.
           </p>
         </>
       ) : (
@@ -44,6 +40,10 @@ export default function FilteredSavedTabs() {
           </details>
         </div>
       )}
+      <p className="text-center">
+        Click <Link href={`/search/${searchText}`}>search</Link> to search all
+        tabs.
+      </p>
     </div>
   );
 }
