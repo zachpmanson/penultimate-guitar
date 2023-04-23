@@ -15,7 +15,7 @@ export default function FilteredSavedTabs() {
     ),
     (t: TabLinkDto) => t.taburl
   );
-  //   const filteredTabs = savedTabs;
+
   return (
     <div className="flex flex-col gap-4">
       {Object.keys(filteredTabs).length === 0 ? (
