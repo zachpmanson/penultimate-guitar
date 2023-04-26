@@ -86,32 +86,37 @@ export default function Tab() {
       <Head>
         <title>{`Search`}</title>
       </Head>
-      <h1 className="text-center text-2xl my-4">Search Results</h1>
-      {results.length === 0 ? (
-        <></>
-      ) : results.length > 0 ? (
-        <>
-          {results.map((r, i) => (
-            <SearchLink key={i} {...r} />
-          ))}
-          {isLoading || !canLoadMore || (
-            <div className="m-auto w-fit">
-              <button
-                onClick={loadPage}
-                disabled={!canLoadMore}
-                className={`flex items-center justify-center text-md text-lg border-grey-500 border-2 rounded-xl transition ease-in-out bg-white py-2 px-4 ${
-                  !canLoadMore ? "text-slate-400" : "hover:shadow-md"
-                }`}
-              >
-                Load more
-              </button>
-            </div>
-          )}
-        </>
-      ) : (
-        <p className="text-center">No results found</p>
-      )}
-      {isLoading && <LoadingSpinner />}
+      <h1 className="text-center text-2xl">Search Results</h1>
+      <p className="text-center text-gray-400 mb-4 font-extralight">
+        Only the highest rated versions of each are shown.
+      </p>
+      <div className="max-w-xl mx-auto flex flex-col gap-2">
+        {results.length === 0 ? (
+          <></>
+        ) : results.length > 0 ? (
+          <>
+            {results.map((r, i) => (
+              <SearchLink key={i} {...r} />
+            ))}
+            {isLoading || !canLoadMore || (
+              <div className="m-auto w-fit">
+                <button
+                  onClick={loadPage}
+                  disabled={!canLoadMore}
+                  className={`flex items-center justify-center text-md text-lg border-grey-500 border-2 rounded-xl transition ease-in-out bg-white py-2 px-4 ${
+                    !canLoadMore ? "text-slate-400" : "hover:shadow-md"
+                  }`}
+                >
+                  Load more
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="text-center">No results found</p>
+        )}
+        {isLoading && <LoadingSpinner />}
+      </div>
     </>
   );
 }

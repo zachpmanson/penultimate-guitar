@@ -11,24 +11,24 @@ export default function SearchLink({
   type,
 }: SearchLinkProps) {
   return (
-    <div>
-      <Link href={`/tab/${tab_url}`} className="no-underline">
-        <div className="border-grey-500 border-2 p-4 my-4 rounded-xl max-w-xl mx-auto hover:shadow-md transition ease-in-out flex-col text-black">
+    <div className="w-full flex mx-auto justify-between gap-2">
+      <Link href={`/tab/${tab_url}`} className="w-full text-black no-underline">
+        <div className="border-grey-500 border-2 p-4 rounded-xl hover:shadow-md transition ease-in-out flex-col text-black">
           <div className="flex justify-between">
             <div>
-              {song_name} - {artist_name}
+              <span className="font-bold">{song_name}</span> - {artist_name}
             </div>
-            <div>
-              <p>{type}</p>
-            </div>
+            <div></div>
           </div>
           <div className="flex justify-between">
-            <div></div>
             <div>
               <p>
                 {!Math.round(rating) ||
                   `Rating: ${Math.round(rating * 100) / 100} / 5.00`}
               </p>
+            </div>
+            <div>
+              <p>{type}</p>
             </div>
           </div>
         </div>

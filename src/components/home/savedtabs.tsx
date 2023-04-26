@@ -38,7 +38,10 @@ export default function SavedTabs() {
                     ))}
                   </div>
                 ) : (
-                  <details key={i} className="bg-gray-200 rounded-xl p-4">
+                  <details
+                    key={i}
+                    className="bg-gray-200 rounded-xl p-4 hover:shadow-md  transition ease-in-out"
+                  >
                     <summary>
                       <h2 className="text-xl">{folder}</h2>
                     </summary>

@@ -20,7 +20,7 @@ export default function FilteredSavedTabs() {
     <div className="flex flex-col gap-4">
       {Object.keys(filteredTabs).length === 0 ? (
         <>
-          <p className="text-center text-gray-400">
+          <p className="text-center text-gray-400 font-extralight">
             No tabs containing &quot;{searchText}&quot; in favourites.
           </p>
         </>
