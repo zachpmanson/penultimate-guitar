@@ -133,13 +133,16 @@ export default function SaveDialog({
                 <>
                   <div>
                     <DialogButton
-                      fn={() => setAddingNew(true)}
-                      icon="New"
+                      onClick={() => setAddingNew(true)}
                       disabled={false}
-                    />
+                    >
+                      New
+                    </DialogButton>
                   </div>
                   <div className="flex gap-4">
-                    <DialogButton fn={save} icon="Save" disabled={false} />
+                    <DialogButton onClick={save} disabled={false}>
+                      Save
+                    </DialogButton>
                   </div>
                 </>
               )}

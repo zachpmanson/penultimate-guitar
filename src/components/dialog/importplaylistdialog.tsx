@@ -127,11 +127,9 @@ export default function ImportPlaylistDialog({
           )}
           {attemptCount === playlist.tracks.length && (
             <div className="flex justify-end mt-4">
-              <DialogButton
-                fn={() => setIsOpen(false)}
-                icon="Finish"
-                disabled={false}
-              />
+              <DialogButton onClick={() => setIsOpen(false)} disabled={false}>
+                Finish
+              </DialogButton>
             </div>
           )}
         </Dialog.Panel>
