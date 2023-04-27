@@ -40,12 +40,12 @@ export default function SavedTabs() {
                 ) : (
                   <details
                     key={i}
-                    className="bg-gray-200 rounded-xl p-4 hover:shadow-md  transition ease-in-out"
+                    className="bg-gray-200 rounded-xl  border-2 hover:border-gray-400  transition ease-in-out"
                   >
-                    <summary>
+                    <summary className="p-4">
                       <h2 className="text-xl">{folder}</h2>
                     </summary>
-                    <div className="flex flex-col gap-2 mt-2">
+                    <div className="flex flex-col gap-2 m-4 mt-0">
                       {folders[folder].map((t, j) => (
                         <TabLink key={j} tablink={{ ...t, saved: true }} />
                       ))}

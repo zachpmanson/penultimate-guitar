@@ -1,4 +1,5 @@
 import LoadingSpinner from "@/components/loadingspinner";
+import PlainButton from "@/components/plainbutton";
 import SearchLink from "@/components/search/searchlink";
 import { SearchResult } from "@/models";
 import Head from "next/head";
@@ -100,15 +101,13 @@ export default function Tab() {
             ))}
             {isLoading || !canLoadMore || (
               <div className="m-auto w-fit">
-                <button
-                  onClick={loadPage}
-                  disabled={!canLoadMore}
-                  className={`flex items-center justify-center text-md text-lg border-grey-500 border-2 rounded-xl transition ease-in-out bg-white py-2 px-4 ${
-                    !canLoadMore ? "text-slate-400" : "hover:shadow-md"
-                  }`}
-                >
-                  Load more
-                </button>
+                {canLoadMore && (
+                  <PlainButton onClick={loadPage}>
+                    <div className="flex items-center justify-center">
+                      Load more
+                    </div>
+                  </PlainButton>
+                )}
               </div>
             )}
           </>

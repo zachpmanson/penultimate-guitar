@@ -3,6 +3,7 @@ import { TabLinkDto } from "@/models";
 import Link from "next/link";
 import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
+import PlainButton from "../plainbutton";
 
 type TabLinkProps = {
   tablink: TabLinkDto;
@@ -25,27 +26,22 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
       <div className="w-full flex mx-auto justify-between gap-2">
         <Link
           href={`/tab/${tablink.taburl}`}
-          className="w-full text-black no-underline"
+          className="w-full text-black no-underline hover:no-underline active:text-black"
         >
-          <div className="border-grey-500 bg-white border-2 p-4 rounded-xl  hover:shadow-md transition ease-in-out flex justify-between">
-            <div>
-              {tablink.name} - {tablink.artist}
-              {tablink.version && (
-                <span className="font-light text-xs">
-                  {" "}
-                  {tablink.type && `(${tablink.type})`}
-                  (v{tablink.version})
-                </span>
-              )}
-            </div>
-          </div>
+          <PlainButton>
+            <span className="font-bold">{tablink.name}</span> - {tablink.artist}
+            {tablink.version && (
+              <span className="font-light text-xs">
+                {" "}
+                {tablink.type && `(${tablink.type})`}
+                (v{tablink.version})
+              </span>
+            )}
+          </PlainButton>
         </Link>
-        <button
-          onClick={handleSave}
-          className="flex items-center bg-white px-4 text-md text-lg border-grey-500 border-2 rounded-xl hover:shadow-md transition ease-in-out "
-        >
-          {recent ? "💾" : "❌"}
-        </button>
+        <PlainButton onClick={handleSave}>
+          <div className="flex items-center h-full">{recent ? "💾" : "❌"}</div>
+        </PlainButton>
       </div>
       <SaveDialog
         isOpen={saveDialogActive}

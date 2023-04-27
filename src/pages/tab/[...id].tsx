@@ -163,7 +163,7 @@ export default function Tab({ tabDetails }: TabProps) {
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Save</p>
                 <div className="m-auto w-fit">
-                  <ToolbarButton fn={handleSave} icon="💾" />
+                  <ToolbarButton onClick={handleSave}>💾</ToolbarButton>
                 </div>
               </div>
 
@@ -171,14 +171,14 @@ export default function Tab({ tabDetails }: TabProps) {
                 <p className="text-xs whitespace-nowrap">Font size</p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
-                    fn={() => setFontSize(fontSize - 2)}
-                    icon={<span className="text-xs">A</span>}
+                    onClick={() => setFontSize(fontSize - 2)}
                     disabled={fontSize < 8}
-                  />
-                  <ToolbarButton
-                    fn={() => setFontSize(fontSize + 2)}
-                    icon={<span className="text-2xl">A</span>}
-                  />
+                  >
+                    <span className="text-xs">A</span>
+                  </ToolbarButton>
+                  <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
+                    <span className="text-2xl">A</span>
+                  </ToolbarButton>
                 </div>
               </div>
 
@@ -189,13 +189,15 @@ export default function Tab({ tabDetails }: TabProps) {
                 </p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
-                    fn={() => setTranposition(tranposition - 1)}
-                    icon="➖"
-                  />
+                    onClick={() => setTranposition(tranposition - 1)}
+                  >
+                    ➖
+                  </ToolbarButton>
                   <ToolbarButton
-                    fn={() => setTranposition(tranposition + 1)}
-                    icon="➕"
-                  />
+                    onClick={() => setTranposition(tranposition + 1)}
+                  >
+                    ➕
+                  </ToolbarButton>
                 </div>
               </div>
 
@@ -205,11 +207,14 @@ export default function Tab({ tabDetails }: TabProps) {
                 </p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
-                    fn={() => changeScrolling("down")}
-                    icon="➖"
+                    onClick={() => changeScrolling("down")}
                     disabled={scrollSpeed < 1}
-                  />
-                  <ToolbarButton fn={() => changeScrolling("up")} icon="➕" />
+                  >
+                    ➖
+                  </ToolbarButton>
+                  <ToolbarButton onClick={() => changeScrolling("up")}>
+                    ➕
+                  </ToolbarButton>
                 </div>
               </div>
             </div>
@@ -293,14 +298,12 @@ export async function getServerSideProps({ params }: ServerProps) {
     });
 
     if (savedTab?.tab && savedTab?.tab !== "ALT") {
-      console.log("tab is in db");
       props = {
         ...savedTab,
         type: savedTab.type as TabType,
         tuning: JSON.parse(savedTab.tuning ?? "{}"),
       };
     } else {
-      console.log("tab not in db");
       const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
       const [song, tab, altVersions] = await getTab(fullurl);
       tab.taburl = url;
