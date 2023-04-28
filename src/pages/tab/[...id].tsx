@@ -219,7 +219,7 @@ export default function Tab({ tabDetails }: TabProps) {
 export const getServerSideProps: GetServerSideProps<TabProps> = async ({ params, res }) => {
   res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=31536000");
 
-  if (!params?.id) {
+  if (params?.id?.length !== 2) {
     return {
       notFound: true,
     };
