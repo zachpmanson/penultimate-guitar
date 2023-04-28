@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { getTab } from "@/lib/ug-interface/ug-interface";
 import { TabDto, TabLinkDto, TabType } from "@/models";
 import _ from "lodash";
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -98,11 +98,7 @@ export default function Tab({ tabDetails }: TabProps) {
   };
 
   const formattedTransposition = () => {
-    return tranposition === 0
-      ? ""
-      : tranposition < 0
-      ? tranposition.toString()
-      : `+${tranposition}`;
+    return tranposition === 0 ? "" : tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
   };
 
   return (
@@ -110,18 +106,14 @@ export default function Tab({ tabDetails }: TabProps) {
       <Head>
         <title>
           {tabDetails.song.name
-            ? `${tabDetails.song.name} ${
-                tabDetails.song.artist && "- " + tabDetails.song.artist
-              }`
+            ? `${tabDetails.song.name} ${tabDetails.song.artist && "- " + tabDetails.song.artist}`
             : "Penultimate Guitar"}
         </title>
       </Head>
       <>
         <h1 className="text-center text-2xl my-4">
           <span className="font-medium">{tabDetails.song.name}</span>
-          <span className="font-light">{` ${
-            tabDetails.song.artist && "- " + tabDetails.song.artist
-          }`}</span>
+          <span className="font-light">{` ${tabDetails.song.artist && "- " + tabDetails.song.artist}`}</span>
         </h1>
         <div className="max-w-lg mx-auto my-4">
           {(tabDetails?.song?.Tab?.length ?? 1) > 1 && (
@@ -149,9 +141,7 @@ export default function Tab({ tabDetails }: TabProps) {
           {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
           {!!tabDetails?.tuning?.value && (
             <div>
-              Tuning:{" "}
-              <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
-              {tabDetails?.tuning.value}
+              Tuning: <span className="font-bold">{tabDetails?.tuning.name}</span>, {tabDetails?.tuning.value}
             </div>
           )}
         </div>
@@ -170,10 +160,7 @@ export default function Tab({ tabDetails }: TabProps) {
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Font size</p>
                 <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => setFontSize(fontSize - 2)}
-                    disabled={fontSize < 8}
-                  >
+                  <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
                     <span className="text-xs">A</span>
                   </ToolbarButton>
                   <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
@@ -188,44 +175,25 @@ export default function Tab({ tabDetails }: TabProps) {
                   {tranposition === 0 || ` (${formattedTransposition()})`}
                 </p>
                 <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => setTranposition(tranposition - 1)}
-                  >
-                    ➖
-                  </ToolbarButton>
-                  <ToolbarButton
-                    onClick={() => setTranposition(tranposition + 1)}
-                  >
-                    ➕
-                  </ToolbarButton>
+                  <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>➖</ToolbarButton>
+                  <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>➕</ToolbarButton>
                 </div>
               </div>
 
               <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">
-                  Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}
-                </p>
+                <p className="text-xs whitespace-nowrap">Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</p>
                 <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => changeScrolling("down")}
-                    disabled={scrollSpeed < 1}
-                  >
+                  <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
                     ➖
                   </ToolbarButton>
-                  <ToolbarButton onClick={() => changeScrolling("up")}>
-                    ➕
-                  </ToolbarButton>
+                  <ToolbarButton onClick={() => changeScrolling("up")}>➕</ToolbarButton>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        <TabSheet
-          plainTab={plainTab}
-          fontSize={fontSize}
-          transposition={tranposition}
-        ></TabSheet>
+        <TabSheet plainTab={plainTab} fontSize={fontSize} transposition={tranposition}></TabSheet>
 
         <hr className="my-4" />
         <div className="max-w-lg mx-auto my-4">
@@ -235,30 +203,27 @@ export default function Tab({ tabDetails }: TabProps) {
               <ul>
                 {tabDetails?.contributors?.map((c, index) => (
                   <li key={index}>
-                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
-                      {c}
-                    </Link>
+                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>{c}</Link>
                   </li>
                 ))}
               </ul>
             </details>
           )}
         </div>
-        <SaveDialog
-          isOpen={saveDialogActive}
-          setIsOpen={setSaveDialogActive}
-          tab={tabLink}
-        />
+        <SaveDialog isOpen={saveDialogActive} setIsOpen={setSaveDialogActive} tab={tabLink} />
       </>
     </div>
   );
 }
 
 export const getServerSideProps: GetServerSideProps<TabProps> = async ({ params, res }) => {
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=86400, stale-while-revalidate=31536000'
-  )
+  res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=31536000");
+
+  if (!params?.id) {
+    return {
+      notFound: true,
+    };
+  }
 
   let defaultProps: TabDto = {
     taburl: "",
@@ -384,4 +349,4 @@ export const getServerSideProps: GetServerSideProps<TabProps> = async ({ params,
   }
 
   return { props: { tabDetails: props } };
-}
+};
