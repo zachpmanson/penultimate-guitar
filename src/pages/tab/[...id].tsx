@@ -6,12 +6,12 @@ import prisma from "@/lib/prisma";
 import { getTab } from "@/lib/ug-interface/ug-interface";
 import { TabDto, TabLinkDto, TabType } from "@/models";
 import _ from "lodash";
+import { GetServerSideProps } from 'next'
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
-
 const scrollMs = 100;
 
 type TabProps = {
@@ -254,11 +254,12 @@ export default function Tab({ tabDetails }: TabProps) {
   );
 }
 
-type ServerProps = {
-  params: { id: string | string[] };
-};
+export const getServerSideProps: GetServerSideProps<TabProps> = async ({ params, res }) => {
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=86400, stale-while-revalidate=31536000'
+  )
 
-export async function getServerSideProps({ params }: ServerProps) {
   let defaultProps: TabDto = {
     taburl: "",
     song: { id: 0, name: "", artist: "" },
