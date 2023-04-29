@@ -413,6 +413,6 @@ async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
       }
     }
   } catch (err) {
-    console.warn("Something went wrong.", err);
+    console.warn("Insertion failed.", err);
   }
 }

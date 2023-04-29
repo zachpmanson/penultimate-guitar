@@ -18,7 +18,6 @@ const Page: NextPageWithLayout = () => {
       return true;
     }
   };
-  console.log(isFilter(searchText));
 
   return (
     <>
