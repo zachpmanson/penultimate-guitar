@@ -244,7 +244,7 @@ export default function Tab({ tabDetails }: TabProps) {
 
         {tabDetails?.tab && (
           <div className="bg-white/50 w-full sticky top-0 top-toolbar no-print">
-            <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
+            <div className="flex justify-between max-w-lg mx-auto my-4 gap-2 text-sm flex-wrap">
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Font size</p>
                 <div className="flex gap-1 m-auto w-fit">
