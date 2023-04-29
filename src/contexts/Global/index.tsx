@@ -1,4 +1,4 @@
-import { TabLinkDto } from "@/models";
+import { Mode, TabLinkDto } from "@/models";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
@@ -6,20 +6,36 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
+  const [mode, setMode] = useState<Mode>("Default");
 
   useEffect(() => {
     getSavedTabs();
+    getLocalMode();
   }, []);
 
   useEffect(() => {
     updateLocalSaves(savedTabs);
   }, [savedTabs]);
 
+  useEffect(() => {
+    updateLocalMode(mode);
+  }, [mode]);
+
+  const updateLocalMode = (mode: Mode) =>
+    localStorage.setItem("mode", JSON.stringify(mode));
+
   const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
     ) as TabLinkDto[];
     setSavedTabs(parsedTabs.filter((t) => t.name && t.artist));
+  };
+
+  const getLocalMode = () => {
+    const parsedMode = JSON.parse(
+      localStorage.getItem("mode") ?? "Default"
+    ) as Mode;
+    setMode(parsedMode);
   };
 
   const updateLocalSaves = (saves: TabLinkDto[]) =>
@@ -79,6 +95,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setSearchText,
       globalLoading,
       setGlobalLoading,
+      mode,
+      setMode,
     }),
     [
       setTabFolders,
@@ -90,6 +108,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setSearchText,
       globalLoading,
       setGlobalLoading,
+      mode,
+      setMode,
     ]
   );
 

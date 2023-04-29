@@ -6,7 +6,7 @@ import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
-  const { searchText, savedTabs } = useGlobal();
+  const { searchText, savedTabs, mode } = useGlobal();
 
   const isFilter = (text: string) => {
     if (savedTabs.length === 0) return false;
@@ -32,6 +32,9 @@ const Page: NextPageWithLayout = () => {
             <SavedTabs />
             <RecentTabs />
           </>
+        )}
+        {mode === "Guitalele" && (
+          <p className="text-center">Guitalele mode active!</p>
         )}
       </div>
     </>

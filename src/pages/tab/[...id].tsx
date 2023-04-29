@@ -1,6 +1,8 @@
 import SaveDialog from "@/components/dialog/savedialog";
 import TabSheet from "@/components/tab/tabsheet";
-import ToolbarButton from "@/components/tab/toolbarbutton";
+import ToolbarButton, {
+  getToolbarButtonStyle,
+} from "@/components/tab/toolbarbutton";
 import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
@@ -13,13 +15,15 @@ import {
   TabLinkDto,
   TabType,
 } from "@/models";
+import { Menu, Transition } from "@headlessui/react";
 import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
+
 const scrollMs = 100;
 
 type TabProps = {
@@ -28,16 +32,18 @@ type TabProps = {
 
 export default function Tab({ tabDetails }: TabProps) {
   const router = useRouter();
+  const { mode, setMode } = useGlobal();
   const { id } = router.query;
   const [fontSize, setFontSize] = useState(12);
-  const [tranposition, setTranposition] = useState(0);
+  const [tranposition, setTranposition] = useState(
+    mode === "Guitalele" ? -5 : 0
+  );
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const plainTab = tabDetails.tab;
   const tabLink = convertToTabLink(tabDetails);
-
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
     if (Array.isArray(recents)) {
@@ -101,6 +107,14 @@ export default function Tab({ tabDetails }: TabProps) {
     };
   }, [scrollSpeed]);
 
+  useEffect(() => {
+    if (tranposition !== -5) setMode("Default");
+  }, [tranposition, setMode]);
+
+  useEffect(() => {
+    if (mode === "Guitalele") setTranposition(-5);
+  }, [mode, setTranposition]);
+
   const handleSave = () => {
     setSaveDialogActive(true);
   };
@@ -112,6 +126,67 @@ export default function Tab({ tabDetails }: TabProps) {
       ? tranposition.toString()
       : `+${tranposition}`;
   };
+
+  const toggleMode = () => {
+    setMode((old) => {
+      if (old === "Guitalele") {
+        setTranposition(0);
+        return "Default";
+      } else {
+        return "Guitalele";
+      }
+    });
+  };
+
+  let options = (
+    <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <Menu.Button className={getToolbarButtonStyle(false)}>▼</Menu.Button>
+      </div>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => toggleMode()}
+                  className={`${
+                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  {mode === "Default"
+                    ? "Enable Guitalele Mode"
+                    : "Disable Guitalele Mode"}
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+          <div className="px-1 py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => print()}
+                  className={`${
+                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  Print
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
 
   return (
     <div>
@@ -133,24 +208,26 @@ export default function Tab({ tabDetails }: TabProps) {
         </h1>
         <div className="max-w-lg mx-auto my-4">
           {(tabDetails?.song?.Tab?.length ?? 1) > 1 && (
-            <details>
+            <details className="no-print">
               <summary>
                 Version {tabDetails?.version} of {tabDetails.song.Tab?.length}
               </summary>
 
               <ul>
-                {tabDetails.song.Tab?.map((t, index) => (
-                  <li key={index}>
-                    {t.taburl === tabDetails.taburl || (
-                      <div className="flex gap-8">
-                        <Link href={t.taburl} prefetch={false}>
-                          {tabDetails.song.name} Version {t.version}{" "}
-                        </Link>
-                        Rating: {Math.round(t.rating * 100) / 100} / 5.00
-                      </div>
-                    )}
-                  </li>
-                ))}
+                {tabDetails.song.Tab?.sort((a, b) => a.version - b.version).map(
+                  (t, index) => (
+                    <li key={index}>
+                      {t.taburl === tabDetails.taburl || (
+                        <div className="flex gap-8">
+                          <Link href={t.taburl} prefetch={false}>
+                            {tabDetails.song.name} Version {t.version}{" "}
+                          </Link>
+                          Rating: {Math.round(t.rating * 100) / 100} / 5.00
+                        </div>
+                      )}
+                    </li>
+                  )
+                )}
               </ul>
             </details>
           )}
@@ -163,18 +240,11 @@ export default function Tab({ tabDetails }: TabProps) {
             </div>
           )}
         </div>
-        <hr className="my-4" />
+        <hr className="my-4 no-print" />
 
         {tabDetails?.tab && (
-          <div className="bg-white/50 w-full sticky top-0 top-toolbar">
+          <div className="bg-white/50 w-full sticky top-0 top-toolbar no-print">
             <div className="flex justify-between max-w-lg mx-auto my-4 gap-4 text-sm flex-wrap">
-              <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">Save</p>
-                <div className="m-auto w-fit">
-                  <ToolbarButton onClick={handleSave}>💾</ToolbarButton>
-                </div>
-              </div>
-
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Font size</p>
                 <div className="flex gap-1 m-auto w-fit">
@@ -192,8 +262,10 @@ export default function Tab({ tabDetails }: TabProps) {
 
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">
-                  Transpose
-                  {tranposition === 0 || ` (${formattedTransposition()})`}
+                  {mode !== "Guitalele" ? "Transpose" : "Guitalele Mode!"}
+                  {mode === "Guitalele" ||
+                    tranposition === 0 ||
+                    ` (${formattedTransposition()})`}
                 </p>
                 <div className="flex gap-1 m-auto w-fit">
                   <ToolbarButton
@@ -225,6 +297,13 @@ export default function Tab({ tabDetails }: TabProps) {
                   </ToolbarButton>
                 </div>
               </div>
+              <div className="flex-1 flex-col text-center">
+                <p className="text-xs whitespace-nowrap">Options</p>
+                <div className="flex gap-1 m-auto w-fit">
+                  <ToolbarButton onClick={handleSave}>💾</ToolbarButton>
+                  {options}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -235,22 +314,26 @@ export default function Tab({ tabDetails }: TabProps) {
           transposition={tranposition}
         ></TabSheet>
 
-        <hr className="my-4" />
-        <div className="max-w-lg mx-auto my-4">
-          {!!tabDetails?.contributors?.length && (
-            <details>
-              <summary>{tabDetails?.contributors?.length} Contributors</summary>
-              <ul>
-                {tabDetails?.contributors?.map((c, index) => (
-                  <li key={index}>
-                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
-                      {c}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          )}
+        <hr className="my-4 no-print" />
+        <div className="max-w-lg mx-auto my-4 no-print flex">
+          <div>
+            {!!tabDetails?.contributors?.length && (
+              <details>
+                <summary>
+                  {tabDetails?.contributors?.length} Contributors
+                </summary>
+                <ul>
+                  {tabDetails?.contributors?.map((c, index) => (
+                    <li key={index}>
+                      <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
+                        {c}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </div>
         </div>
         <SaveDialog
           isOpen={saveDialogActive}
@@ -261,6 +344,18 @@ export default function Tab({ tabDetails }: TabProps) {
     </div>
   );
 }
+
+const defaultProps: TabDto = {
+  taburl: "",
+  song: { id: 0, name: "", artist: "" },
+  contributors: [],
+  capo: 0,
+  tab: "",
+  version: 0,
+  songId: 0,
+  rating: 0,
+  type: "Tab",
+};
 
 export async function getStaticPaths() {
   const savedTabs = await prisma.tab.findMany({
@@ -280,18 +375,6 @@ export async function getStaticPaths() {
 
   return { paths, fallback: "blocking" };
 }
-
-const defaultProps: TabDto = {
-  taburl: "",
-  song: { id: 0, name: "", artist: "" },
-  contributors: [],
-  capo: 0,
-  tab: "",
-  version: 0,
-  songId: 0,
-  rating: 0,
-  type: "Tab",
-};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (params?.id?.length !== 2) {

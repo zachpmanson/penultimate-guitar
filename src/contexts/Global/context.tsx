@@ -1,4 +1,4 @@
-import { TabLinkDto } from "@/models";
+import { Mode, TabLinkDto } from "@/models";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export type GlobalContextProps = {
@@ -11,6 +11,8 @@ export type GlobalContextProps = {
   setSearchText: Dispatch<SetStateAction<string>>;
   globalLoading: string;
   setGlobalLoading: Dispatch<SetStateAction<string>>;
+  mode: Mode;
+  setMode: Dispatch<SetStateAction<Mode>>;
 };
 
 const GlobalContext = createContext<GlobalContextProps>({
@@ -23,6 +25,8 @@ const GlobalContext = createContext<GlobalContextProps>({
   setSearchText: () => {},
   globalLoading: "",
   setGlobalLoading: () => {},
+  mode: "Default",
+  setMode: () => {},
 });
 
 export const GlobalContextProvider = GlobalContext.Provider;

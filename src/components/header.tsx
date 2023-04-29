@@ -3,7 +3,7 @@ import SearchBox from "./search/searchbox";
 
 export default function Header() {
   return (
-    <>
+    <div className="no-print">
       <div className="flex justify-between m-auto max-w-2xl">
         <Link href="/">
           <h1 className="m-auto w-fit font-bold">Penultimate Guitar</h1>
@@ -18,6 +18,6 @@ export default function Header() {
         </div>
       </div>
       <SearchBox />
-    </>
+    </div>
   );
 }

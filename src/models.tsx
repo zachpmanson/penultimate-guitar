@@ -1,5 +1,7 @@
 export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
 
+export type Mode = "Default" | "Guitalele";
+
 export type TabDto = {
   rating: number;
   capo?: number;
@@ -16,7 +18,6 @@ export type TabDto = {
   songId: number;
   type: TabType;
 };
-
 export type Song = {
   id: number;
   name: string;
