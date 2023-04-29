@@ -6,7 +6,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
-  const [mode, setMode] = useState<Mode>("Default");
+  const [mode, setMode] = useState<Mode>("default");
 
   useEffect(() => {
     getSavedTabs();

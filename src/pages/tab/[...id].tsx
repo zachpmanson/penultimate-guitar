@@ -36,7 +36,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const { id } = router.query;
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
-    mode === "Guitalele" ? -5 : 0
+    mode === "guitalele" ? -5 : 0
   );
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const scrollinterval = useRef<NodeJS.Timer>();
@@ -108,11 +108,11 @@ export default function Tab({ tabDetails }: TabProps) {
   }, [scrollSpeed]);
 
   useEffect(() => {
-    if (tranposition !== -5) setMode("Default");
+    if (tranposition !== -5) setMode("default");
   }, [tranposition, setMode]);
 
   useEffect(() => {
-    if (mode === "Guitalele") setTranposition(-5);
+    if (mode === "guitalele") setTranposition(-5);
   }, [mode, setTranposition]);
 
   const handleSave = () => {
@@ -129,11 +129,11 @@ export default function Tab({ tabDetails }: TabProps) {
 
   const toggleMode = () => {
     setMode((old) => {
-      if (old === "Guitalele") {
+      if (old === "guitalele") {
         setTranposition(0);
-        return "Default";
+        return "default";
       } else {
-        return "Guitalele";
+        return "guitalele";
       }
     });
   };
@@ -162,7 +162,7 @@ export default function Tab({ tabDetails }: TabProps) {
                     active ? "bg-blue-700 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
-                  {mode === "Default"
+                  {mode === "default"
                     ? "Enable Guitalele Mode"
                     : "Disable Guitalele Mode"}
                 </button>
@@ -262,8 +262,8 @@ export default function Tab({ tabDetails }: TabProps) {
 
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">
-                  {mode !== "Guitalele" ? "Transpose" : "Guitalele Mode!"}
-                  {mode === "Guitalele" ||
+                  {mode !== "guitalele" ? "Transpose" : "Guitalele Mode!"}
+                  {mode === "guitalele" ||
                     tranposition === 0 ||
                     ` (${formattedTransposition()})`}
                 </p>

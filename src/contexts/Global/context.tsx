@@ -25,7 +25,7 @@ const GlobalContext = createContext<GlobalContextProps>({
   setSearchText: () => {},
   globalLoading: "",
   setGlobalLoading: () => {},
-  mode: "Default",
+  mode: "default",
   setMode: () => {},
 });
 

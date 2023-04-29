@@ -33,7 +33,7 @@ const Page: NextPageWithLayout = () => {
             <RecentTabs />
           </>
         )}
-        {mode === "Guitalele" && (
+        {mode === "guitalele" && (
           <p className="text-center">Guitalele mode active!</p>
         )}
       </div>
