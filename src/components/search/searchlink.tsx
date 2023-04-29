@@ -1,6 +1,6 @@
 import { SearchResult } from "@/models";
 import Link from "next/link";
-import PlainButton from "../plainbutton";
+import PlainButton from "../shared/plainbutton";
 
 type SearchLinkProps = SearchResult;
 
@@ -15,6 +15,7 @@ export default function SearchLink({
     <Link
       href={`/tab/${tab_url}`}
       className="w-full text-black no-underline hover:no-underline active:text-black"
+      prefetch={false}
     >
       <PlainButton>
         <div className="flex justify-between">

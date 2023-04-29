@@ -3,7 +3,7 @@ import { TabLinkDto } from "@/models";
 import Link from "next/link";
 import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
-import PlainButton from "../plainbutton";
+import PlainButton from "../shared/plainbutton";
 
 type TabLinkProps = {
   tablink: TabLinkDto;
@@ -27,6 +27,7 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
         <Link
           href={`/tab/${tablink.taburl}`}
           className="w-full text-black no-underline hover:no-underline active:text-black"
+          prefetch={false}
         >
           <PlainButton>
             <span className="font-bold">{tablink.name}</span> - {tablink.artist}

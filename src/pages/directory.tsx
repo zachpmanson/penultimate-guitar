@@ -45,7 +45,7 @@ export default function Directory({ allTabs }: ListProps) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const savedTabs = await prisma.tab.findMany({
     where: {
       tab: {
@@ -78,5 +78,6 @@ export async function getServerSideProps() {
 
   return {
     props: { allTabs: savedTabs },
+    revalidate: 60,
   };
 }

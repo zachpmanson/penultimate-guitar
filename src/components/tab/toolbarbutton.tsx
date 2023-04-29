@@ -1,4 +1,4 @@
-import PlainButton from "../plainbutton";
+import PlainButton from "../shared/plainbutton";
 
 type ToolbarButton = {
   onClick: () => void;
