@@ -299,7 +299,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-  console.log("SSR!");
 
   let props: TabDto = {
     ...defaultProps,
