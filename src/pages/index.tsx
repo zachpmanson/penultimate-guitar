@@ -34,7 +34,12 @@ const Page: NextPageWithLayout = () => {
           </>
         )}
         {mode === "guitalele" && (
-          <p className="text-center">Guitalele mode active!</p>
+          <p className="text-center">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+              Guitalele mode
+            </span>{" "}
+            active!
+          </p>
         )}
       </div>
     </>

@@ -262,7 +262,13 @@ export default function Tab({ tabDetails }: TabProps) {
 
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">
-                  {mode !== "guitalele" ? "Transpose" : "Guitalele Mode!"}
+                  {mode !== "guitalele" ? (
+                    "Transpose"
+                  ) : (
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+                      Guitalele Mode!
+                    </span>
+                  )}
                   {mode === "guitalele" ||
                     tranposition === 0 ||
                     ` (${formattedTransposition()})`}
