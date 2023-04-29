@@ -1,6 +1,6 @@
 export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
 
-export type Mode = "Default" | "Guitalele";
+export type Mode = "default" | "guitalele";
 
 export type TabDto = {
   rating: number;
