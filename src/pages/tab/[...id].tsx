@@ -345,6 +345,10 @@ export default function Tab({ tabDetails }: TabProps) {
   );
 }
 
+/**
+ * ============= SERVER SIDE =============
+ */
+
 const defaultProps: TabDto = {
   taburl: "",
   song: { id: 0, name: "", artist: "" },
@@ -418,6 +422,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     } else {
       const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
       const [song, tab, altVersions] = await getTab(fullurl);
+      if (tab.songId === undefined) {
+        return {
+          notFound: true,
+        };
+      }
       tab.taburl = url;
       props = {
         ...tab,
