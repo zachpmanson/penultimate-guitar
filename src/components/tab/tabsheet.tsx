@@ -75,7 +75,6 @@ export default function TabSheet({
       )
     );
   }, [lineCutoff, plainTab]);
-  // console.log(formattedTab);
 
   return (
     <div className="tab m-auto w-fit max-w-[100%]">

@@ -4,7 +4,6 @@ import TabLink from "./tablink";
 
 export default function SavedTabs() {
   const { savedTabs, removeSavedTab } = useGlobal();
-  console.log(savedTabs);
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
   for (let tab of savedTabs) {
     const folderName = tab.folder ?? "Favourites";

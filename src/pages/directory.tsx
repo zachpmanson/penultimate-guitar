@@ -27,7 +27,7 @@ export default function Directory({ allTabs }: ListProps) {
           <ol className=" max-w-xl">
             {allTabs.map((t, i) => (
               <li key={i}>
-                <Link href={`/tab/${t.taburl}`}>
+                <Link href={`/tab/${t.taburl}`} prefetch={false}>
                   {t.song.artist} - {t.song.name}
                   {multipleVersions[t.songId] && (
                     <span className="font-light text-xs">
