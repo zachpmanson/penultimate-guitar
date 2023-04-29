@@ -71,6 +71,9 @@ export async function getStaticProps() {
         },
       },
       {
+        type: "asc",
+      },
+      {
         version: "asc",
       },
     ],
