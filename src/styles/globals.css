@@ -74,3 +74,19 @@ summary h2 {
     display: none;
   }
 }
+
+#headlessui-portal-root div div div {
+  visibility: hidden;
+}
+
+#headlessui-portal-root div div div[id^="headlessui-dialog"] div {
+  visibility: visible;
+}
+
+#headlessui-portal-root div div div div[id^="headlessui-dialog-panel"] {
+  visibility: visible;
+}
+
+#headlessui-portal-root div div div div[id^="headlessui-dialog-panel"] * {
+  visibility: visible;
+}
