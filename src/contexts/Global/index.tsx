@@ -21,8 +21,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     updateLocalMode(mode);
   }, [mode]);
 
-  const updateLocalMode = (mode: Mode) =>
-    localStorage.setItem("mode", JSON.stringify(mode));
+  const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
@@ -32,9 +31,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getLocalMode = () => {
-    const parsedMode = JSON.parse(
-      localStorage.getItem("mode") ?? "Default"
-    ) as Mode;
+    const parsedMode = (localStorage.getItem("mode") ?? "Default") as Mode;
     setMode(parsedMode);
   };
 
