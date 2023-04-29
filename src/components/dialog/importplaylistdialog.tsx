@@ -1,5 +1,11 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { Playlist, SearchResult, TabLinkDto, TabType, Track } from "@/models";
+import {
+  Playlist,
+  SearchResult,
+  TabLinkDto,
+  TabType,
+  Track,
+} from "@/models/models";
 import { Dialog } from "@headlessui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DialogButton from "./dialogbutton";

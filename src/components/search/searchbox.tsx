@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { Playlist } from "@/models";
+import { Playlist } from "@/models/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";

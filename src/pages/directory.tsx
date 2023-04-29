@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { TabDto } from "@/models";
+import { TabDto } from "@/models/models";
 import Head from "next/head";
 import Link from "next/link";
 

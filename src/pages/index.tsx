@@ -1,6 +1,7 @@
 import FilteredSavedTabs from "@/components/home/filteredtabs";
 import RecentTabs from "@/components/home/recenttabs";
 import SavedTabs from "@/components/home/savedtabs";
+import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
@@ -35,10 +36,7 @@ const Page: NextPageWithLayout = () => {
         )}
         {mode === "guitalele" && (
           <p className="text-center">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-              Guitalele mode
-            </span>{" "}
-            active!
+            <span className={GuitaleleStyle}>Guitalele mode</span> active!
           </p>
         )}
       </div>

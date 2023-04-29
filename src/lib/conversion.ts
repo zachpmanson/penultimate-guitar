@@ -1,4 +1,4 @@
-import { TabDto, TabLinkDto } from "@/models";
+import { TabDto, TabLinkDto } from "@/models/models";
 
 export function convertToTabLink(tabDto: TabDto): TabLinkDto {
   return {

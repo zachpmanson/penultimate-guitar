@@ -1,4 +1,4 @@
-import { SearchResult } from "@/models";
+import { SearchResult } from "@/models/models";
 import Link from "next/link";
 import PlainButton from "../shared/plainbutton";
 

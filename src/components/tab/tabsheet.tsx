@@ -1,4 +1,4 @@
-import Chord from "@/components/tab/chord";
+import ChordText from "@/components/tab/chordtext";
 import useWindowDimensions from "@/hooks/windowdimensions";
 import { useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
@@ -86,7 +86,12 @@ export default function TabSheet({
           formattedTab,
           /\[ch\](.+?)\[\/ch\]/g,
           (match, i) => (
-            <Chord chord={match} id={i} key={i} transposition={transposition} />
+            <ChordText
+              chord={match}
+              key={i}
+              transposition={transposition}
+              fontSize={fontSize}
+            />
           )
         )}
       </pre>

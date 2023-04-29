@@ -1,4 +1,4 @@
-import { TabLinkDto } from "@/models";
+import { TabLinkDto } from "@/models/models";
 import { useEffect, useState } from "react";
 import TabLink from "./tablink";
 

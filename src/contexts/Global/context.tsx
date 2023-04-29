@@ -1,4 +1,5 @@
-import { Mode, TabLinkDto } from "@/models";
+import { ChordDB } from "@/models/chorddb.models";
+import { Mode, TabLinkDto } from "@/models/models";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
 export type GlobalContextProps = {
@@ -13,6 +14,7 @@ export type GlobalContextProps = {
   setGlobalLoading: Dispatch<SetStateAction<string>>;
   mode: Mode;
   setMode: Dispatch<SetStateAction<Mode>>;
+  chords?: ChordDB.GuitarChords;
 };
 
 const GlobalContext = createContext<GlobalContextProps>({

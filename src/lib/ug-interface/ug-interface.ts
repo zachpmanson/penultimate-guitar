@@ -1,8 +1,8 @@
 import { blacklist } from "@/constants";
-import { AltVersion, NewTab, Song } from "@/models";
+import { AltVersion, NewTab, Song } from "@/models/models";
 import { JSDOM } from "jsdom";
 import { Contributor } from "./models";
-import { SearchResult } from "@/models";
+import { SearchResult } from "@/models/models";
 
 export async function getTab(
   URL: string

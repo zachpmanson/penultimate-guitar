@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { TabLinkDto } from "@/models";
+import { TabLinkDto } from "@/models/models";
 import { Dialog } from "@headlessui/react";
 import {
   ChangeEvent,

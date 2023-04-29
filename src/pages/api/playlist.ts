@@ -1,5 +1,5 @@
 import { getPlaylist } from "@/lib/spotify-interface/spotify-interface";
-import { Playlist } from "@/models";
+import { Playlist } from "@/models/models";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

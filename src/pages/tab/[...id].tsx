@@ -3,6 +3,7 @@ import TabSheet from "@/components/tab/tabsheet";
 import ToolbarButton, {
   getToolbarButtonStyle,
 } from "@/components/tab/toolbarbutton";
+import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
@@ -14,7 +15,7 @@ import {
   TabDto,
   TabLinkDto,
   TabType,
-} from "@/models";
+} from "@/models/models";
 import { Menu, Transition } from "@headlessui/react";
 import _ from "lodash";
 import { GetStaticProps } from "next";
@@ -162,9 +163,17 @@ export default function Tab({ tabDetails }: TabProps) {
                     active ? "bg-blue-700 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
-                  {mode === "default"
-                    ? "Enable Guitalele Mode"
-                    : "Disable Guitalele Mode"}
+                  {mode === "default" ? (
+                    <span>
+                      Enable{" "}
+                      <span className={GuitaleleStyle}>Guitalele Mode</span>
+                    </span>
+                  ) : (
+                    <span>
+                      Disable{" "}
+                      <span className={GuitaleleStyle}>Guitalele Mode</span>
+                    </span>
+                  )}
                 </button>
               )}
             </Menu.Item>
@@ -265,9 +274,7 @@ export default function Tab({ tabDetails }: TabProps) {
                   {mode !== "guitalele" ? (
                     "Transpose"
                   ) : (
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-                      Guitalele Mode!
-                    </span>
+                    <span className={GuitaleleStyle}>Guitalele Mode!</span>
                   )}
                   {mode === "guitalele" ||
                     tranposition === 0 ||

@@ -1,6 +1,6 @@
 import { AccessReponse } from "./models";
 import memoryCache from "memory-cache";
-import { Playlist } from "@/models";
+import { Playlist } from "@/models/models";
 
 async function getToken(): Promise<string> {
   let token = memoryCache.get("spotify-token");

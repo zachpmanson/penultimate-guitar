@@ -1,4 +1,5 @@
-import { Mode, TabLinkDto } from "@/models";
+import { Mode, TabLinkDto } from "@/models/models";
+import { ChordDB } from "@/models/chorddb.models";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
@@ -7,10 +8,12 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
   const [mode, setMode] = useState<Mode>("default");
+  const [chords, setChords] = useState<ChordDB.GuitarChords>();
 
   useEffect(() => {
     getSavedTabs();
     getLocalMode();
+    getChords();
   }, []);
 
   useEffect(() => {
@@ -20,8 +23,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     updateLocalMode(mode);
   }, [mode]);
-
-  const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
@@ -34,6 +35,25 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     const parsedMode = (localStorage.getItem("mode") ?? "Default") as Mode;
     setMode(parsedMode);
   };
+
+  const getChords = () => {
+    let guitarChords = JSON.parse(localStorage.getItem("guitarChords") ?? "{}");
+    if (guitarChords.main) {
+      setChords(guitarChords as ChordDB.GuitarChords);
+      console.log("set chords", guitarChords);
+    } else {
+      fetch("/chords/guitar.json", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((res: ChordDB.GuitarChords) => {
+          setChords(res);
+          localStorage.setItem("guitarChords", JSON.stringify(res));
+        });
+    }
+  };
+
+  const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const updateLocalSaves = (saves: TabLinkDto[]) =>
     localStorage.setItem("savedTabs", JSON.stringify(saves));
@@ -94,6 +114,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setGlobalLoading,
       mode,
       setMode,
+      chords,
     }),
     [
       setTabFolders,
@@ -107,6 +128,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setGlobalLoading,
       mode,
       setMode,
+      chords,
     ]
   );
 

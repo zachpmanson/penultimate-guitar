@@ -1,5 +1,5 @@
 import { getSearch } from "@/lib/ug-interface/ug-interface";
-import { SearchResult } from "@/models";
+import { SearchResult } from "@/models/models";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

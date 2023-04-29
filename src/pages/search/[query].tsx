@@ -1,7 +1,7 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import PlainButton from "@/components/shared/plainbutton";
 import SearchLink from "@/components/search/searchlink";
-import { SearchResult } from "@/models";
+import { SearchResult } from "@/models/models";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
