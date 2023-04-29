@@ -143,7 +143,7 @@ export default function Tab({ tabDetails }: TabProps) {
                   <li key={index}>
                     {t.taburl === tabDetails.taburl || (
                       <div className="flex gap-8">
-                        <Link href={t.taburl}>
+                        <Link href={t.taburl} prefetch={false}>
                           {tabDetails.song.name} Version {t.version}{" "}
                         </Link>
                         Rating: {Math.round(t.rating * 100) / 100} / 5.00
