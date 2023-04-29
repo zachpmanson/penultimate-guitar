@@ -34,8 +34,7 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
             {tablink.version && (
               <span className="font-light text-xs">
                 {" "}
-                {tablink.type && `(${tablink.type})`}
-                (v{tablink.version})
+                {tablink.type && `(${tablink.type})`} (v{tablink.version})
               </span>
             )}
           </PlainButton>
