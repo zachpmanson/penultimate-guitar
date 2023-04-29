@@ -64,3 +64,7 @@ summary h2 {
   padding-right: 2px;
   border-radius: 2px;
 }
+
+.top-toolbar {
+  box-shadow: 0 20px 5px rgb(255 255 255 / 0.5);
+}
