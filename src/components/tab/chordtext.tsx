@@ -6,6 +6,7 @@ type ChordProps = {
   chord: string;
   transposition: number;
   fontSize: number;
+  inversion: number;
 };
 
 const KEY_MAP: { [key: string]: string } = {
@@ -40,9 +41,9 @@ export default function ChordText({
   chord,
   transposition,
   fontSize,
+  inversion,
 }: ChordProps) {
   const { chords: chordsDB } = useGlobal();
-  const [inversion, setInversion] = useState(0);
   let keys = chordsDB?.keys;
 
   let matches = chord.match(/^[A-Z][#b]?/);
@@ -87,7 +88,6 @@ export default function ChordText({
         className={`bg-gray-200 font-bold chord z-10 relative ${
           chordObj && "cursor-pointer"
         }`}
-        onClick={() => setInversion((o) => o + 1)}
       >{`${transposedKey}${suffix}`}</span>
 
       {chordObj && (
@@ -107,7 +107,7 @@ export default function ChordText({
               ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
             </span>
           </div>
-          <Chord chord={chordObj} instrument={instrument} lite={false} />
+          <Chord chord={chordObj} instrument={instrument} lite={true} />
         </div>
       )}
     </span>

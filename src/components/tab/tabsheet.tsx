@@ -16,6 +16,27 @@ export default function TabSheet({
 }: TabSheetProps) {
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
+  const [inversions, setInversions] = useState<{ [key: string]: number }>({});
+
+  let chordElements: { [key: string]: JSX.Element } = {};
+  for (let chord of Object.keys(inversions)) {
+    chordElements[chord] = (
+      <ChordText
+        chord={chord}
+        transposition={transposition}
+        fontSize={fontSize}
+        inversion={inversions[chord] ?? 0}
+      />
+    );
+  }
+
+  const increaseInversion = (chord: string) => {
+    setInversions((old) => {
+      let value = { ...old };
+      value[chord] += 1;
+      return value;
+    });
+  };
 
   const insertChordTags = (line: string): string => {
     return line.replace(/\b([^ \n]+)/g, "[ch]$1[/ch]");
@@ -25,6 +46,20 @@ export default function TabSheet({
   useEffect(() => {
     setLineCutoff(Math.floor((width + 16) / (fontSize * 0.67)));
   }, [width, fontSize]);
+
+  useEffect(() => {
+    const allChords = plainTab.match(/\[ch\](.*?)\[\/ch\]/gm);
+    const allUniqueChords = [
+      ...new Set(
+        allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", ""))
+      ),
+    ];
+    setInversions(() => {
+      let newValue = {};
+      Object.assign(newValue, ...allUniqueChords.map((k) => ({ [k]: 0 })));
+      return newValue;
+    });
+  }, [plainTab, transposition]);
 
   useEffect(() => {
     setFormattedTab(
@@ -82,18 +117,11 @@ export default function TabSheet({
         className="max-w-[100%] whitespace-pre-wrap"
         style={{ fontSize: `${fontSize}px` }}
       >
-        {reactStringReplace(
-          formattedTab,
-          /\[ch\](.+?)\[\/ch\]/g,
-          (match, i) => (
-            <ChordText
-              chord={match}
-              key={i}
-              transposition={transposition}
-              fontSize={fontSize}
-            />
-          )
-        )}
+        {reactStringReplace(formattedTab, /\[ch\](.+?)\[\/ch\]/gm, (match) => (
+          <span onClick={() => increaseInversion(match)}>
+            {chordElements[match]}
+          </span>
+        ))}
       </pre>
     </div>
   );
