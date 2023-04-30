@@ -2,6 +2,7 @@ import ChordText from "@/components/tab/chordtext";
 import useWindowDimensions from "@/hooks/windowdimensions";
 import { useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
+import { isMobile } from "react-device-detect";
 
 type TabSheetProps = {
   plainTab: string;
@@ -15,7 +16,6 @@ export default function TabSheet({
   transposition,
 }: TabSheetProps) {
   const { width } = useWindowDimensions();
-  const isMobile = width <= 768;
   const [formattedTab, setFormattedTab] = useState("");
   const [inversions, setInversions] = useState<{ [key: string]: number }>({});
 
