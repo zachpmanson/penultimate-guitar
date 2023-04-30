@@ -15,6 +15,7 @@ export default function TabSheet({
   transposition,
 }: TabSheetProps) {
   const { width } = useWindowDimensions();
+  const isMobile = width <= 768;
   const [formattedTab, setFormattedTab] = useState("");
   const [inversions, setInversions] = useState<{ [key: string]: number }>({});
 
@@ -31,11 +32,13 @@ export default function TabSheet({
   }
 
   const increaseInversion = (chord: string) => {
-    setInversions((old) => {
-      let value = { ...old };
-      value[chord] += 1;
-      return value;
-    });
+    if (!isMobile) {
+      setInversions((old) => {
+        let value = { ...old };
+        value[chord] += 1;
+        return value;
+      });
+    }
   };
 
   const insertChordTags = (line: string): string => {
