@@ -80,10 +80,13 @@ export default function ChordText({
     ? positions[inversion % positions.length]
     : undefined;
   const size = fontSize * 12;
+
   return (
     <span className="group relative w-max">
       <span
-        className="bg-gray-200 font-bold chord cursor-pointer -z-10 relative"
+        className={`bg-gray-200 font-bold chord z-10 relative ${
+          chordObj && "cursor-pointer"
+        }`}
         onClick={() => setInversion((o) => o + 1)}
       >{`${transposedKey}${suffix}`}</span>
 
@@ -94,11 +97,15 @@ export default function ChordText({
             top: -size - 5,
             left: -size / 2.5,
           }}
-          className="pointer-events-none absolute bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
+          className="pointer-events-none absolute z-20 bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
         >
-          <div className="text-center font-bold chord">
-            {`${transposedKey}${simpleSuffix}`} (
-            {(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
+          <div className="text-center chord">
+            <span className="font-bold mr-2">
+              {`${transposedKey}${simpleSuffix}`}
+            </span>
+            <span>
+              ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
+            </span>
           </div>
           <Chord chord={chordObj} instrument={instrument} lite={false} />
         </div>
