@@ -252,7 +252,7 @@ export default function Tab({ tabDetails }: TabProps) {
         <hr className="my-4 no-print" />
 
         {tabDetails?.tab && (
-          <div className="bg-white/50 w-full sticky top-0 top-toolbar no-print z-50">
+          <div className="bg-white/50 w-full sticky top-0 top-toolbar no-print z-40">
             <div className="flex justify-between max-w-lg mx-auto my-4 gap-2 text-sm flex-wrap relative">
               <div className="flex-1 flex-col text-center">
                 <p className="text-xs whitespace-nowrap">Font size</p>

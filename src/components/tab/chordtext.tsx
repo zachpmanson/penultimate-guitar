@@ -97,7 +97,7 @@ export default function ChordText({
             top: -size - 5,
             left: -size / 2.5,
           }}
-          className="pointer-events-none absolute z-20 bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
+          className="pointer-events-none absolute z-50 bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
         >
           <div className="text-center chord">
             <span className="font-bold mr-2">
