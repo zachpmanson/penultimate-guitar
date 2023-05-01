@@ -394,12 +394,6 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (params?.id?.length !== 2) {
-    return {
-      notFound: true,
-    };
-  }
-
   let props: TabDto = {
     ...defaultProps,
   };
