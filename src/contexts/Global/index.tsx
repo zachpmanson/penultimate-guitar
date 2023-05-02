@@ -1,6 +1,13 @@
 import { Mode, TabLinkDto } from "@/models/models";
 import { ChordDB } from "@/models/chorddb.models";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
@@ -10,6 +17,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<Mode>("default");
   const [chords, setChords] = useState<ChordDB.GuitarChords>();
 
+  const notInitialRender = useRef(false);
+
   useEffect(() => {
     getSavedTabs();
     getLocalMode();
@@ -17,7 +26,12 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    updateLocalSaves(savedTabs);
+    console.log("notInitialRender", notInitialRender);
+    if (notInitialRender.current) {
+      updateLocalSaves(savedTabs);
+    } else {
+      notInitialRender.current = true;
+    }
   }, [savedTabs]);
 
   useEffect(() => {
@@ -25,6 +39,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [mode]);
 
   const getSavedTabs = () => {
+    console.log("get local");
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
     ) as TabLinkDto[];
@@ -40,7 +55,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     let guitarChords = JSON.parse(localStorage.getItem("guitarChords") ?? "{}");
     if (guitarChords.main) {
       setChords(guitarChords as ChordDB.GuitarChords);
-      console.log("set chords", guitarChords);
     } else {
       fetch("/chords/guitar.json", {
         method: "GET",
@@ -55,17 +69,28 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
-  const updateLocalSaves = (saves: TabLinkDto[]) =>
+  const updateLocalSaves = (saves: TabLinkDto[]) => {
+    console.log("updating local");
+
     localStorage.setItem("savedTabs", JSON.stringify(saves));
+  };
 
   // removes all taburl in all folders, readds taburl to folder in string[]
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
       setSavedTabs((old) => {
-        let newTabs = old.filter((t) => t.taburl !== tabLink.taburl);
-        for (let folder of folders) {
+        let newTabs = old.filter(
+          (t) =>
+            t.taburl !== tabLink.taburl ||
+            folders.includes(t.folder ?? "Favourites")
+        );
+        let currentFolders = newTabs
+          .filter((t) => t.taburl === tabLink.taburl)
+          .map((f) => f.folder);
+        for (let folder of folders.filter((f) => !currentFolders.includes(f))) {
           newTabs.push({ ...tabLink, folder: folder });
         }
+
         return newTabs;
       });
     },
