@@ -398,6 +398,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     ...defaultProps,
   };
 
+  if (params === undefined) {
+    return {
+      notFound: true,
+    };
+  }
+
   if (typeof params.id === "object") {
     const url = params.id.join("/");
 
