@@ -1,10 +1,16 @@
 import prisma from "@/lib/prisma";
-import { TabDto } from "@/models/models";
+import { Song } from "@prisma/client";
 import Head from "next/head";
 import Link from "next/link";
 
 type ListProps = {
-  allTabs: TabDto[];
+  allTabs: {
+    songId: number;
+    taburl: string;
+    type: string;
+    version: number;
+    song: Song;
+  }[];
 };
 
 export default function Directory({ allTabs }: ListProps) {
