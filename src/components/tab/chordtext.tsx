@@ -1,6 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
 import Chord from "@tombatossals/react-chords/lib/Chord";
-import { useState } from "react";
 
 type ChordProps = {
   chord: string;
@@ -24,7 +23,7 @@ const KEY_MAP: { [key: string]: string } = {
   Gb: "F#",
   G: "G",
   "G#": "Ab",
-  Ab: "ab",
+  Ab: "Ab",
 };
 
 const instrument = {
@@ -74,9 +73,11 @@ export default function ChordText({
   let chordSuffix = chordsDB?.suffixes
     ? getSuffix(simpleSuffix, chordsDB?.suffixes)
     : "major";
-  let positions = chordsDB?.chords[transposedKey.replace("#", "sharp")]?.find(
-    (c) => c.suffix === chordSuffix
-  )?.positions;
+
+  let chordsDBConvertedKey = KEY_MAP[transposedKey];
+  let positions = chordsDB?.chords[
+    chordsDBConvertedKey.replace("#", "sharp")
+  ]?.find((c) => c.suffix === chordSuffix)?.positions;
   let chordObj = positions
     ? positions[inversion % positions.length]
     : undefined;
