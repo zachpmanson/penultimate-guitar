@@ -11,6 +11,7 @@ type ChordProps = {
 const KEY_MAP: { [key: string]: string } = {
   A: "A",
   "A#": "Bb",
+  Bb: "Bb",
   B: "B",
   C: "C",
   "C#": "C#",

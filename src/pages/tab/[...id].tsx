@@ -193,18 +193,14 @@ export default function Tab({ tabDetails }: TabProps) {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <button
-                  onClick={() =>
-                    router.push(
-                      `https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`
-                    )
-                  }
+                <Link
+                  href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
                   className={`${
                     active ? "bg-blue-700 text-white" : "text-gray-900"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline hover:text-white`}
                 >
                   View on Ultimate Guitar
-                </button>
+                </Link>
               )}
             </Menu.Item>
           </div>
