@@ -8,11 +8,17 @@ type ChordProps = {
   inversion: number;
 };
 
+/**
+ * For chords that shouldn't exist but somehow do
+ */
+const GODS_MISTAKES = ["H"];
+
 const KEY_MAP: { [key: string]: string } = {
   A: "A",
   "A#": "Bb",
   Bb: "Bb",
   B: "B",
+  H: "B", // exists in some German songs, see tab/1684995
   C: "C",
   "C#": "C#",
   Db: "C#",
@@ -75,7 +81,12 @@ export default function ChordText({
     ? getSuffix(simpleSuffix, chordsDB?.suffixes)
     : "major";
 
-  let chordsDBConvertedKey = KEY_MAP[transposedKey];
+  if (GODS_MISTAKES.includes(transposedKey)) {
+    transposedKey = KEY_MAP[transposedKey];
+  }
+
+  let chordsDBConvertedKey = KEY_MAP[transposedKey] ?? transposedKey;
+  console.log("chord", transposedKey, chordsDBConvertedKey);
   let positions = chordsDB?.chords[
     chordsDBConvertedKey.replace("#", "sharp")
   ]?.find((c) => c.suffix === chordSuffix)?.positions;

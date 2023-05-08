@@ -46,7 +46,6 @@ export default function Tab({ tabDetails }: TabProps) {
 
   const plainTab = tabDetails.tab;
   const tabLink = convertToTabLink(tabDetails);
-
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
     if (Array.isArray(recents)) {
@@ -96,7 +95,6 @@ export default function Tab({ tabDetails }: TabProps) {
   useEffect(() => {
     if (scrollSpeed > 0) {
       scrollinterval.current = setInterval(() => {
-        console.log("attempting scroll", !isTouching.current);
         if (!isTouching.current) {
           window.scrollBy({
             top: scrollSpeed,
@@ -122,7 +120,7 @@ export default function Tab({ tabDetails }: TabProps) {
   useEffect(() => {
     const onTouch = () => (isTouching.current = true);
     const onTouchEnd = () =>
-      setTimeout(() => (isTouching.current = false), 1000);
+      setTimeout(() => (isTouching.current = false), 2000);
     window.addEventListener("touchstart", onTouch);
     window.addEventListener("touchend", onTouchEnd);
 
