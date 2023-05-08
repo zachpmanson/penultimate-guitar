@@ -32,6 +32,7 @@ type TabProps = {
 };
 
 export default function Tab({ tabDetails }: TabProps) {
+  const element = useRef<any>(null);
   const router = useRouter();
   const { mode, setMode } = useGlobal();
   const { id } = router.query;
@@ -40,12 +41,14 @@ export default function Tab({ tabDetails }: TabProps) {
     mode === "guitalele" ? -5 : 0
   );
   const [scrollSpeed, setScrollSpeed] = useState(0);
+  const oldScrollSpeed = useRef(1);
   const scrollinterval = useRef<NodeJS.Timer>();
   const isTouching = useRef(false);
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const plainTab = tabDetails.tab;
   const tabLink = convertToTabLink(tabDetails);
+
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
     if (Array.isArray(recents)) {
@@ -90,6 +93,7 @@ export default function Tab({ tabDetails }: TabProps) {
         setScrollSpeed(scrollSpeed - 1);
       }
     }
+    if (element?.current?.focus) element.current.focus();
   };
 
   useEffect(() => {
@@ -121,12 +125,35 @@ export default function Tab({ tabDetails }: TabProps) {
     const onTouch = () => (isTouching.current = true);
     const onTouchEnd = () =>
       setTimeout(() => (isTouching.current = false), 2000);
+
     window.addEventListener("touchstart", onTouch);
     window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("keydown", onTouchEnd);
+
+    const keyDownHandler = (event: KeyboardEvent) => {
+      if (
+        event.key === " " &&
+        (document.activeElement === element.current ||
+          document.activeElement?.tagName === "BODY")
+      ) {
+        event.preventDefault();
+        setScrollSpeed((old) => {
+          if (old === 0) {
+            return oldScrollSpeed.current;
+          } else {
+            oldScrollSpeed.current = old;
+            return 0;
+          }
+        });
+      }
+    };
+
+    window.addEventListener("keydown", keyDownHandler);
 
     return () => {
       window.removeEventListener("touchstart", onTouch);
       window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
 
@@ -224,7 +251,7 @@ export default function Tab({ tabDetails }: TabProps) {
   );
 
   return (
-    <div>
+    <div ref={element} tabIndex={0}>
       <Head>
         <title>
           {tabDetails.song.name
