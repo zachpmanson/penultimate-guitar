@@ -129,6 +129,7 @@ export default function ChordText({
 const SUBS = {
   "": "major",
   m: "minor",
+  sus: "sus4",
 };
 
 /**
