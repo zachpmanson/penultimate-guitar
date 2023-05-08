@@ -26,7 +26,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    console.log("notInitialRender", notInitialRender);
     if (notInitialRender.current) {
       updateLocalSaves(savedTabs);
     } else {
@@ -39,7 +38,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [mode]);
 
   const getSavedTabs = () => {
-    console.log("get local");
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
     ) as TabLinkDto[];
@@ -70,8 +68,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
-    console.log("updating local");
-
     localStorage.setItem("savedTabs", JSON.stringify(saves));
   };
 

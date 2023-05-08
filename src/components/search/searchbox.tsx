@@ -30,7 +30,6 @@ export default function SearchBox() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const search: string = event.target.url.value;
-    console.log(search);
 
     const processPlaylist = async (playlistUrl: string) => {
       console.log("Searching for playlist", playlistUrl);

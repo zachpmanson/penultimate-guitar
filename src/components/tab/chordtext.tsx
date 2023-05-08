@@ -86,7 +86,6 @@ export default function ChordText({
   }
 
   let chordsDBConvertedKey = KEY_MAP[transposedKey] ?? transposedKey;
-  console.log("chord", transposedKey, chordsDBConvertedKey);
   let positions = chordsDB?.chords[
     chordsDBConvertedKey.replace("#", "sharp")
   ]?.find((c) => c.suffix === chordSuffix)?.positions;
