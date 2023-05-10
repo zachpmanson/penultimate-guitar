@@ -1,4 +1,4 @@
-import { getSearch } from "@/lib/ug-interface/ug-interface";
+import { UGAdapter } from "@/lib/ug-interface/ug-interface";
 import { SearchResult } from "@/models/models";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,7 +15,7 @@ export default async function handler(
       res.status(400);
       return;
     }
-    const results = await getSearch(
+    const results = await UGAdapter.getSearch(
       req.body["value"],
       req.body["search_type"],
       req.body["page"]

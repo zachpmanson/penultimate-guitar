@@ -86,4 +86,10 @@ export type SearchResult = {
 };
 
 export type Track = { name: string; artists: string[] };
-export type Playlist = { name: string; tracks: Track[] };
+export type Playlist = {
+  name: string;
+  image: string;
+  owner: string;
+  tracks: Track[];
+  description: "";
+};

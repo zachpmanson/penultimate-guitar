@@ -7,6 +7,7 @@ import {
   Track,
 } from "@/models/models";
 import { Dialog } from "@headlessui/react";
+import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DialogButton from "./dialogbutton";
 
@@ -100,18 +101,32 @@ export default function ImportPlaylistDialog({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-xs rounded bg-white p-4">
           <Dialog.Title>
-            <span className="text-lg">
-              Importing: <span className="font-bold">{playlist.name}</span>
-            </span>
+            <div className="flex flex-col gap-2">
+              <div className="text-lg font-bold">{playlist.name}</div>
+
+              <div className="flex gap-2 align-middle justify-between">
+                <Image
+                  src={playlist.image}
+                  alt="Playlist image"
+                  width={60}
+                  height={60}
+                  className="rounded-md"
+                />
+                <div className="flex flex-col my-auto text-right">
+                  <div className="text-sm">{playlist.tracks.length} tracks</div>
+                  <div className="text-xs">Created by {playlist.owner}</div>
+                </div>
+              </div>
+            </div>
           </Dialog.Title>
           <Dialog.Description>
             <div className="font-bold"></div>
           </Dialog.Description>
           <hr className="m-4" />
-          <div>
-            Found {playlistTabs.length}/{playlist.tracks.length}
+          <div className="flex justify-between">
+            <div>Found {playlistTabs.length}</div>
+            <div>Couldn&apos;t find {attemptCount - playlistTabs.length}</div>
           </div>
-          <div>Couldn&apos;t find {attemptCount - playlistTabs.length}</div>
           <div className="my-2 w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-200">
             <div
               className="bg-blue-600 h-2.5 rounded-full"

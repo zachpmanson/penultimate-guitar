@@ -1,4 +1,4 @@
-import { getPlaylist } from "@/lib/spotify-interface/spotify-interface";
+import { SpotifyAdapter } from "@/lib/spotify-interface/spotify-interface";
 import { Playlist } from "@/models/models";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -18,7 +18,7 @@ export default async function handler(
     }
 
     const playlistId = req.body["playlistId"];
-    const playlist: Playlist = await getPlaylist(playlistId);
+    const playlist: Playlist = await SpotifyAdapter.getPlaylist(playlistId);
     res.status(200).json(playlist);
     return;
   }
