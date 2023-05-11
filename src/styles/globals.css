@@ -55,7 +55,7 @@ a.no-underline {
 }
 
 summary h1,
-summary div {
+summary h2 {
   display: inline;
 }
 

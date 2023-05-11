@@ -88,9 +88,7 @@ export default function SavedTabs() {
                     className="bg-gray-200 rounded-xl  border-2 hover:border-gray-400  transition ease-in-out"
                   >
                     <summary className="p-4">
-                      <div className="inline-flex justify-between align-items-middle">
-                        <h2 className="text-xl">{folder}</h2>
-                      </div>
+                      <h2 className="text-xl">{folder}</h2>
                     </summary>
 
                     <div className="flex flex-col gap-2 m-4 mt-0">
