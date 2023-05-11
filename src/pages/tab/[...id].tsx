@@ -17,7 +17,6 @@ import {
   TabType,
 } from "@/models/models";
 import { Menu, Transition } from "@headlessui/react";
-import { Tab } from "@prisma/client";
 import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
