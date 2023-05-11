@@ -17,6 +17,7 @@ import {
   TabType,
 } from "@/models/models";
 import { Menu, Transition } from "@headlessui/react";
+import { Tab } from "@prisma/client";
 import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
@@ -460,24 +461,29 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (typeof params.id === "object") {
     const url = params.id.join("/");
 
-    const savedTab = await prisma.tab.findUnique({
-      where: {
-        taburl: url,
-      },
-      include: {
-        song: {
-          include: {
-            Tab: {
-              select: {
-                taburl: true,
-                version: true,
-                rating: true,
+    let savedTab: any;
+    try {
+      savedTab = await prisma.tab.findUnique({
+        where: {
+          taburl: url,
+        },
+        include: {
+          song: {
+            include: {
+              Tab: {
+                select: {
+                  taburl: true,
+                  version: true,
+                  rating: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+    } catch (e) {
+      console.error("Find unique failed", e);
+    }
 
     if (savedTab?.tab && savedTab?.tab !== "ALT") {
       props = {
