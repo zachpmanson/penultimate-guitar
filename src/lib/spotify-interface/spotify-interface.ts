@@ -58,7 +58,7 @@ export namespace SpotifyAdapter {
     let playlist: Playlist = {
       name: playlistPayload.name,
       image:
-        playlistPayload.images.length > 0
+        playlistPayload?.images?.length > 0
           ? playlistPayload.images[0].url
           : undefined,
       tracks: [],
