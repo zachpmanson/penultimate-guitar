@@ -88,7 +88,7 @@ export type SearchResult = {
 export type Track = { name: string; artists: string[] };
 export type Playlist = {
   name: string;
-  image: string;
+  image?: string;
   owner: string;
   tracks: Track[];
   description: "";

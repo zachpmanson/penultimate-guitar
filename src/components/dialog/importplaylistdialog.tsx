@@ -105,13 +105,15 @@ export default function ImportPlaylistDialog({
               <div className="text-lg font-bold">{playlist.name}</div>
 
               <div className="flex gap-2 align-middle justify-between">
-                <Image
-                  src={playlist.image}
-                  alt="Playlist image"
-                  width={60}
-                  height={60}
-                  className="rounded-md"
-                />
+                {playlist.image && (
+                  <Image
+                    src={playlist.image}
+                    alt="Playlist image"
+                    width={60}
+                    height={60}
+                    className="rounded-md"
+                  />
+                )}
                 <div className="flex flex-col my-auto text-right">
                   <div className="text-sm">{playlist.tracks.length} tracks</div>
                   <div className="text-xs">Created by {playlist.owner}</div>
