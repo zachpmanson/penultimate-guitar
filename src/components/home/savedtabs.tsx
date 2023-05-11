@@ -1,9 +1,8 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { TabLinkDto } from "@/models/models";
-import TabLink from "./tablink";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { getToolbarButtonStyle } from "../tab/toolbarbutton";
+import TabLink from "./tablink";
 
 export default function SavedTabs() {
   const { savedTabs, removeSavedTab } = useGlobal();
