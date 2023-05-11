@@ -1,6 +1,9 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { TabLinkDto } from "@/models/models";
 import TabLink from "./tablink";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { getToolbarButtonStyle } from "../tab/toolbarbutton";
 
 export default function SavedTabs() {
   const { savedTabs, removeSavedTab } = useGlobal();
@@ -14,11 +17,55 @@ export default function SavedTabs() {
     }
   }
 
-  const deleteFolder = (folder: TabLinkDto[]) => {
-    for (let tablink of folder) {
-      removeSavedTab(tablink);
+  const deleteFolder = (folder: string) => {
+    for (let tablink of savedTabs) {
+      if (tablink.folder === folder) {
+        removeSavedTab(tablink);
+      }
     }
   };
+
+  const folderMenu = (folder: string) => (
+    <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <Menu.Button
+          className={`
+  border-gray-200 border-2 rounded-xl transition ease-in-out
+  flex items-center justify-center text-md text-lg  bg-white px-4 hover:border-gray-400
+`}
+        >
+          <div className="w-4">▼</div>
+        </Menu.Button>
+      </div>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => deleteFolder(folder)}
+                  className={`${
+                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  Delete
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
 
   return (
     <div>
@@ -42,12 +89,21 @@ export default function SavedTabs() {
                     className="bg-gray-200 rounded-xl  border-2 hover:border-gray-400  transition ease-in-out"
                   >
                     <summary className="p-4">
-                      <h2 className="text-xl">{folder}</h2>
+                      <div className="inline-flex justify-between align-items-middle">
+                        <h2 className="text-xl">{folder}</h2>
+                      </div>
                     </summary>
+
                     <div className="flex flex-col gap-2 m-4 mt-0">
                       {folders[folder].map((t, j) => (
                         <TabLink key={j} tablink={{ ...t, saved: true }} />
                       ))}
+                      <div className="flex justify-between items-middle">
+                        <div className="ml-2">
+                          {folders[folder].length} items
+                        </div>
+                        {folderMenu(folder)}
+                      </div>
                     </div>
                   </details>
                 )

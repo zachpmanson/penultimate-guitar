@@ -40,7 +40,9 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
           </PlainButton>
         </Link>
         <PlainButton onClick={handleSave}>
-          <div className="flex items-center h-full">{recent ? "💾" : "❌"}</div>
+          <div className="flex items-center h-full w-4">
+            {recent ? "💾" : "❌"}
+          </div>
         </PlainButton>
       </div>
       <SaveDialog
