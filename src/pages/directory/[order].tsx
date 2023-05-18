@@ -46,7 +46,7 @@ export default function Directory({ allTabs }: ListProps) {
             <option key="new" value="new">
               By newest
             </option>
-            <option key="old" value="Old">
+            <option key="old" value="old">
               By oldest
             </option>
           </select>
