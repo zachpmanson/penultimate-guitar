@@ -9,7 +9,7 @@ export default function Header() {
           <h1 className="m-auto w-fit font-bold">Penultimate Guitar</h1>
         </Link>
         <div className="flex gap-6">
-          <Link prefetch={false} href="/directory">
+          <Link prefetch={false} href="/directory/artist">
             <span className="m-auto w-fit">Song Directory</span>
           </Link>
           <Link href="https://notes.zachmanson.com/penultimate-guitar">

@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import { Song } from "@prisma/client";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type ListProps = {
   allTabs: {
@@ -14,6 +16,7 @@ type ListProps = {
 };
 
 export default function Directory({ allTabs }: ListProps) {
+  const router = useRouter();
   const multipleVersions: { [key: string]: boolean } = {};
   for (let tab of allTabs) {
     if (multipleVersions[tab.songId] === undefined) {
@@ -22,14 +25,36 @@ export default function Directory({ allTabs }: ListProps) {
       multipleVersions[tab.songId] = true;
     }
   }
+
   return (
     <>
       <Head>
         <title>Song Directory</title>
       </Head>
       <div className="w-fit m-auto wrap">
+        <div className="">
+          <select
+            className="p-2 rounded-md float-right"
+            name="order"
+            id="order"
+            defaultValue={router.query.order}
+            onChange={(e) => router.push(`/directory/${e.target.value}`)}
+          >
+            <option key="artist" value="artist">
+              By artist
+            </option>
+            <option key="new" value="new">
+              By newest
+            </option>
+            <option key="old" value="Old">
+              By oldest
+            </option>
+          </select>
+          <div>
+            {Object.keys(multipleVersions).length} songs, {allTabs.length} tabs
+          </div>
+        </div>
         <div className="mx-8">
-          {Object.keys(multipleVersions).length} songs, {allTabs.length} tabs
           <ol className=" max-w-xl">
             {allTabs.map((t, i) => (
               <li key={i}>
@@ -51,8 +76,41 @@ export default function Directory({ allTabs }: ListProps) {
   );
 }
 
-export async function getStaticProps() {
-  const savedTabs = await prisma.tab.findMany({
+export async function getStaticPaths() {
+  const paths = [
+    { params: { order: "artist" } },
+    { params: { order: "new" } },
+    { params: { order: "old" } },
+  ];
+
+  return { paths, fallback: "blocking" };
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  let order = params?.order ?? "artist";
+  let orderBy =
+    order === "artist"
+      ? [
+          {
+            song: {
+              artist: "asc",
+            },
+          },
+          {
+            song: {
+              name: "asc",
+            },
+          },
+          {
+            type: "asc",
+          },
+          {
+            version: "asc",
+          },
+        ]
+      : {};
+
+  let savedTabs = await prisma.tab.findMany({
     where: {
       tab: {
         not: "ALT",
@@ -65,28 +123,15 @@ export async function getStaticProps() {
       version: true,
       song: true,
     },
-    orderBy: [
-      {
-        song: {
-          artist: "asc",
-        },
-      },
-      {
-        song: {
-          name: "asc",
-        },
-      },
-      {
-        type: "asc",
-      },
-      {
-        version: "asc",
-      },
-    ],
+    orderBy,
   });
+
+  if (order == "new") {
+    savedTabs = savedTabs.reverse();
+  }
 
   return {
     props: { allTabs: savedTabs },
     revalidate: 60,
   };
-}
+};
