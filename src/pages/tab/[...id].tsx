@@ -550,6 +550,7 @@ async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
             ...tab,
             tuning: JSON.stringify(tab?.tuning ?? {}),
             capo: tab.capo ?? 0,
+            timestamp: new Date().toISOString(),
           },
           update: {
             tab: tab.tab,
@@ -575,6 +576,7 @@ async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
               tab: "ALT",
               capo: 0,
               song: undefined,
+              timestamp: null,
             },
             update: {},
           })

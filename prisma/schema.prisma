@@ -22,6 +22,7 @@ model Tab {
   rating       Float
   version      Int
   type         String
+  timestamp    String?  @default("2023-05-27T16:51:42.319Z")
 }
 
 model Song {
