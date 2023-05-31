@@ -557,6 +557,7 @@ async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
             contributors: tab.contributors,
             tuning: JSON.stringify(tab?.tuning ?? {}),
             capo: tab.capo ?? 0,
+            timestamp: new Date().toISOString(),
           },
         })
         .catch((e) => console.error(`Error upserting tab '${tab.taburl}':`, e));

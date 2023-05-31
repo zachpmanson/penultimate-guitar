@@ -12,6 +12,7 @@ type ListProps = {
     type: string;
     version: number;
     song: Song;
+    timestamp: string;
   }[];
 };
 
@@ -58,7 +59,11 @@ export default function Directory({ allTabs }: ListProps) {
           <ol className=" max-w-xl">
             {allTabs.map((t, i) => (
               <li key={i}>
-                <Link href={`/tab/${t.taburl}`} prefetch={false}>
+                <Link
+                  href={`/tab/${t.taburl}`}
+                  prefetch={false}
+                  title={t.timestamp}
+                >
                   {t.song.artist} - {t.song.name}
                   {multipleVersions[t.songId] && (
                     <span className="font-light text-xs">
@@ -126,6 +131,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       type: true,
       version: true,
       song: true,
+      timestamp: true,
     },
     orderBy: orderBy as any,
   });
