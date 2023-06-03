@@ -59,10 +59,16 @@ export namespace UGAdapter {
           dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
         tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
         tabData.type = dataContent?.store?.page?.data?.tab?.type;
-        tabData.contributors =
-          dataContent?.store?.page?.data?.tab_view?.contributors?.map(
+
+        tabData.contributors = dataContent?.store?.page?.data?.tab?.username
+          ? [dataContent?.store?.page?.data?.tab?.username]
+          : [];
+        tabData.contributors = [
+          ...tabData.contributors,
+          ...(dataContent?.store?.page?.data?.tab_view?.contributors?.map(
             (c: Contributor) => c.username
-          ) ?? {};
+          ) ?? []),
+        ];
 
         altVersions = dataContent?.store?.page?.data?.tab_view?.versions
           .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
