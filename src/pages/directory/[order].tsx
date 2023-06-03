@@ -1,3 +1,4 @@
+import { useGlobal } from "@/contexts/Global/context";
 import prisma from "@/lib/prisma";
 import { Song } from "@prisma/client";
 import { GetStaticProps } from "next";
@@ -21,7 +22,22 @@ type ListProps = {
 
 export default function Directory({ allTabs }: ListProps) {
   const router = useRouter();
+  const { searchText, setSearchText } = useGlobal();
+
+  useEffect(() => {
+    setSearchText("");
+  }, [setSearchText]);
+
   const [collapseVersions, setCollapseVersions] = useState(false);
+
+  if (searchText.length >= 3) {
+    let lowerSearch = searchText.toLowerCase();
+    allTabs = allTabs.filter(
+      (t) =>
+        t.song.name.toLowerCase().includes(lowerSearch) ||
+        t.song.artist.toLowerCase().includes(lowerSearch)
+    );
+  }
 
   const groupedOrder: number[] = [];
   const groupedVersions: { [key: string]: TabMetadata[] } = {};
@@ -86,7 +102,7 @@ export default function Directory({ allTabs }: ListProps) {
       <Head>
         <title>Song Directory</title>
       </Head>
-      <div className="w-fit m-auto wrap">
+      <div className="max-w-full w-[40rem] m-auto wrap">
         <div className="flex justify-between items-center gap-2 flex-wrap-reverse">
           <div>
             {Object.keys(groupedVersions).length} songs, {allTabs.length} tabs
