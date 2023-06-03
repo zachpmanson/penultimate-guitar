@@ -4,28 +4,82 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+type TabMetadata = {
+  songId: number;
+  taburl: string;
+  type: string;
+  version: number;
+  song: Song;
+  timestamp: string;
+};
 
 type ListProps = {
-  allTabs: {
-    songId: number;
-    taburl: string;
-    type: string;
-    version: number;
-    song: Song;
-    timestamp: string;
-  }[];
+  allTabs: TabMetadata[];
 };
 
 export default function Directory({ allTabs }: ListProps) {
   const router = useRouter();
-  const multipleVersions: { [key: string]: boolean } = {};
+  const [collapseVersions, setCollapseVersions] = useState(false);
+
+  const groupedOrder: number[] = [];
+  const groupedVersions: { [key: string]: TabMetadata[] } = {};
   for (let tab of allTabs) {
-    if (multipleVersions[tab.songId] === undefined) {
-      multipleVersions[tab.songId] = false;
-    } else if (multipleVersions[tab.songId] === false) {
-      multipleVersions[tab.songId] = true;
+    if (groupedVersions[tab.songId] === undefined) {
+      groupedVersions[tab.songId] = [tab];
+      groupedOrder.push(tab.songId);
+    } else {
+      groupedVersions[tab.songId].push(tab);
     }
   }
+
+  const generateLink = (t: TabMetadata) => (
+    <Link href={`/tab/${t.taburl}`} prefetch={false} title={t.timestamp}>
+      {t.song.artist} - {t.song.name}
+      {groupedVersions[t.songId].length > 1 && (
+        <span className="font-light text-xs">
+          {" "}
+          ({t.type}) (v{t.version})
+        </span>
+      )}
+    </Link>
+  );
+
+  const tabList = collapseVersions ? (
+    <>
+      {groupedOrder.map((songId, i) => (
+        <li key={i}>
+          {groupedVersions[songId].length === 1 ? (
+            generateLink(groupedVersions[songId][0])
+          ) : (
+            <details>
+              <summary>
+                {groupedVersions[songId][0].song.artist} -{" "}
+                {groupedVersions[songId][0].song.name}{" "}
+                <span className="font-light text-xs">
+                  ({groupedVersions[songId].length} versions)
+                </span>
+              </summary>
+              <ul className="pl-4">
+                {groupedVersions[songId]
+                  .sort((a, b) => a.version - b.version)
+                  .map((t, j) => (
+                    <li key={j}>{generateLink(t)}</li>
+                  ))}
+              </ul>
+            </details>
+          )}
+        </li>
+      ))}
+    </>
+  ) : (
+    <>
+      {allTabs.map((t, i) => (
+        <li key={i}>{generateLink(t)}</li>
+      ))}
+    </>
+  );
 
   return (
     <>
@@ -33,48 +87,42 @@ export default function Directory({ allTabs }: ListProps) {
         <title>Song Directory</title>
       </Head>
       <div className="w-fit m-auto wrap">
-        <div className="">
-          <select
-            className="p-2 rounded-md float-right"
-            name="order"
-            id="order"
-            defaultValue={router.query.order}
-            onChange={(e) => router.push(`/directory/${e.target.value}`)}
-          >
-            <option key="artist" value="artist">
-              By artist
-            </option>
-            <option key="new" value="new">
-              By newest
-            </option>
-            <option key="old" value="old">
-              By oldest
-            </option>
-          </select>
+        <div className="flex justify-between items-center gap-2 flex-wrap-reverse">
           <div>
-            {Object.keys(multipleVersions).length} songs, {allTabs.length} tabs
+            {Object.keys(groupedVersions).length} songs, {allTabs.length} tabs
+          </div>
+          <div className="flex gap-2 items-center justify-end">
+            <label className="whitespace-nowrap">
+              <input
+                type="checkbox"
+                checked={collapseVersions}
+                onChange={() => setCollapseVersions((old) => !old)}
+              />{" "}
+              Group by song
+            </label>{" "}
+            <select
+              className="p-2 rounded-md"
+              name="order"
+              id="order"
+              defaultValue={router.query.order}
+              onChange={(e) => router.push(`/directory/${e.target.value}`)}
+            >
+              <option key="artist" value="artist">
+                By artist
+              </option>
+              <option key="new" value="new">
+                By newest
+              </option>
+              <option key="old" value="old">
+                By oldest
+              </option>
+            </select>
           </div>
         </div>
+        <hr className="m-2" />
+
         <div className="mx-8">
-          <ol className=" max-w-xl">
-            {allTabs.map((t, i) => (
-              <li key={i}>
-                <Link
-                  href={`/tab/${t.taburl}`}
-                  prefetch={false}
-                  title={t.timestamp}
-                >
-                  {t.song.artist} - {t.song.name}
-                  {multipleVersions[t.songId] && (
-                    <span className="font-light text-xs">
-                      {" "}
-                      (v{t.version}) ({t.type})
-                    </span>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ol>
+          <ol className=" max-w-xl">{tabList}</ol>
         </div>
       </div>
     </>
