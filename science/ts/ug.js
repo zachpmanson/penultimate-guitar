@@ -54,6 +54,7 @@ function getChords(URL) {
                             return response.text();
                         })
                             .then(function (html) {
+                            var _a, _b, _c;
                             // Convert the HTML string into a document object
                             var dom = new jsdom.JSDOM(html);
                             // Get the image file
@@ -62,13 +63,14 @@ function getChords(URL) {
                             var dataContent = JSON.parse(jsStore.getAttribute("data-content"));
                             chords =
                                 dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"];
+                            console.log((_c = (_b = (_a = dataContent === null || dataContent === void 0 ? void 0 : dataContent.store) === null || _a === void 0 ? void 0 : _a.page) === null || _b === void 0 ? void 0 : _b.data) === null || _c === void 0 ? void 0 : _c.tab);
                         })["catch"](function (err) {
                             // There was an error
                             console.warn("Something went wrong.", err);
                         })];
                 case 1:
                     _a.sent();
-                    console.log(chords);
+                    // console.log(chords);
                     return [2 /*return*/, chords];
             }
         });
@@ -109,8 +111,10 @@ function getSearch(URL) {
         });
     });
 }
-getSearch("https://www.ultimate-guitar.com/search.php?search_type=title&value=hotel");
-// readline.question("URL: ", (URL) => {
-//   getChords(URL);
-//   readline.close();
-// });
+// getSearch(
+//   "https://www.ultimate-guitar.com/search.php?search_type=title&value=hotel"
+// );
+readline.question("URL: ", function (URL) {
+    getChords(URL);
+    readline.close();
+});

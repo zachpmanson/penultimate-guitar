@@ -23,12 +23,13 @@ async function getChords(URL: string): Promise<string> {
       let dataContent = JSON.parse(jsStore.getAttribute("data-content"));
       chords =
         dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"];
+      console.log(dataContent?.store?.page?.data?.tab);
     })
     .catch((err) => {
       // There was an error
       console.warn("Something went wrong.", err);
     });
-  console.log(chords);
+  // console.log(chords);
   return chords;
 }
 
@@ -62,11 +63,11 @@ async function getSearch(URL: string): Promise<string> {
   return results;
 }
 
-getSearch(
-  "https://www.ultimate-guitar.com/search.php?search_type=title&value=hotel"
-);
+// getSearch(
+//   "https://www.ultimate-guitar.com/search.php?search_type=title&value=hotel"
+// );
 
-// readline.question("URL: ", (URL) => {
-//   getChords(URL);
-//   readline.close();
-// });
+readline.question("URL: ", (URL) => {
+  getChords(URL);
+  readline.close();
+});
