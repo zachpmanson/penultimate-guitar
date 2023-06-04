@@ -411,9 +411,7 @@ export default function Tab({ tabDetails }: TabProps) {
   );
 }
 
-/**
- * ============= SERVER SIDE =============
- */
+/* ============= SERVER SIDE ============= */
 
 const defaultProps: TabDto = {
   taburl: "",
@@ -558,6 +556,7 @@ async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
             tuning: JSON.stringify(tab?.tuning ?? {}),
             capo: tab.capo ?? 0,
             timestamp: new Date().toISOString(),
+            type: tab.type,
           },
         })
         .catch((e) => console.error(`Error upserting tab '${tab.taburl}':`, e));

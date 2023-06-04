@@ -41,7 +41,6 @@ export namespace UGAdapter {
           songData.artist = dataContent?.store?.page?.data?.tab?.type;
           return;
         }
-
         songData.id = dataContent?.store?.page?.data?.tab?.song_id;
         songData.name = dataContent?.store?.page?.data?.tab?.song_name;
         songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
@@ -79,11 +78,13 @@ export namespace UGAdapter {
               "https://tabs.ultimate-guitar.com/tab/",
               ""
             ),
+            type: v.type,
           }));
       })
       .catch((err) => {
         console.warn("Something went wrong.", err);
       });
+
     return [songData, tabData, altVersions];
   }
 
