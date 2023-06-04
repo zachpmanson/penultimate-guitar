@@ -22,13 +22,24 @@ type ListProps = {
 
 export default function Directory({ allTabs }: ListProps) {
   const router = useRouter();
+
   const { searchText, setSearchText } = useGlobal();
+
+  const [collapseVersions, setCollapseVersions] = useState(
+    router.query.order === "artist"
+  );
 
   useEffect(() => {
     setSearchText("");
   }, [setSearchText]);
 
-  const [collapseVersions, setCollapseVersions] = useState(false);
+  useEffect(() => {
+    if (router.query.order === "artist") {
+      setCollapseVersions(true);
+    } else {
+      setCollapseVersions(false);
+    }
+  }, [router.query]);
 
   if (searchText.length >= 3) {
     let lowerSearch = searchText.toLowerCase();
