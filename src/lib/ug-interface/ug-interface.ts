@@ -22,7 +22,7 @@ export namespace UGAdapter {
       tab: "",
       rating: -1,
       version: -1,
-      type: "Tab",
+      type: "Unknown",
     };
 
     let altVersions: AltVersion[] = [];

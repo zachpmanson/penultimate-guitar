@@ -50,7 +50,7 @@ export type AltVersion = {
   taburl: string;
   rating: number;
   version: number;
-  type?: string;
+  type: string;
 };
 
 export type TabLinkDto = {

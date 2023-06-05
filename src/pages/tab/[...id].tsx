@@ -7,6 +7,7 @@ import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
+import { tabCompareFn } from "@/lib/sort";
 import { UGAdapter } from "@/lib/ug-interface/ug-interface";
 import {
   AltVersion,
@@ -276,20 +277,24 @@ export default function Tab({ tabDetails }: TabProps) {
               </summary>
 
               <ul>
-                {tabDetails.song.Tab?.sort((a, b) => a.version - b.version).map(
-                  (t, index) => (
-                    <li key={index}>
-                      {t.taburl === tabDetails.taburl || (
-                        <div className="flex gap-8">
-                          <Link href={t.taburl} prefetch={false}>
-                            {tabDetails.song.name} Version {t.version}{" "}
-                          </Link>
+                {tabDetails.song.Tab?.sort(tabCompareFn).map((t, index) => (
+                  <li key={index}>
+                    {t.taburl === tabDetails.taburl || (
+                      <div className="flex justify-between">
+                        <Link href={t.taburl} prefetch={false}>
+                          {tabDetails.song.name}
+                          <span className="font-light text-xs">
+                            {" "}
+                            ({t.type}) (v{t.version}){" "}
+                          </span>
+                        </Link>
+                        <div>
                           Rating: {Math.round(t.rating * 100) / 100} / 5.00
                         </div>
-                      )}
-                    </li>
-                  )
-                )}
+                      </div>
+                    )}
+                  </li>
+                ))}
               </ul>
             </details>
           )}
@@ -472,6 +477,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                   taburl: true,
                   version: true,
                   rating: true,
+                  type: true,
                 },
               },
             },
