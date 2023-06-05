@@ -73,6 +73,17 @@ export default function Directory({ allTabs }: ListProps) {
     </Link>
   );
 
+  // sort by type then version
+  const tabCompareFn = (a: TabMetadata, b: TabMetadata) => {
+    if (a.type < b.type) {
+      return -1;
+    }
+    if (a.type > b.type) {
+      return 1;
+    }
+    return a.version - b.version;
+  };
+
   const tabList = collapseVersions ? (
     <>
       {groupedOrder.map((songId, i) => (
@@ -89,11 +100,9 @@ export default function Directory({ allTabs }: ListProps) {
                 </span>
               </summary>
               <ul className="pl-4">
-                {groupedVersions[songId]
-                  .sort((a, b) => a.version - b.version)
-                  .map((t, j) => (
-                    <li key={j}>{generateLink(t)}</li>
-                  ))}
+                {groupedVersions[songId].sort(tabCompareFn).map((t, j) => (
+                  <li key={j}>{generateLink(t)}</li>
+                ))}
               </ul>
             </details>
           )}
