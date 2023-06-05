@@ -1,4 +1,6 @@
-export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
+// switched to string because I don't know all the different forms that Tab parts can come in
+export type TabType = string;
+// export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
 
 export type Mode = "default" | "guitalele";
 

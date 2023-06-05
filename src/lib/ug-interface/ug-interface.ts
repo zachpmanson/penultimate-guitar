@@ -59,6 +59,10 @@ export namespace UGAdapter {
         tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
         tabData.type = dataContent?.store?.page?.data?.tab?.type;
 
+        if (dataContent?.store?.page?.data?.tab?.part) {
+          tabData.type = `${tabData.type} ${dataContent?.store?.page?.data?.tab?.part}`;
+        }
+
         tabData.contributors = dataContent?.store?.page?.data?.tab?.username
           ? [dataContent?.store?.page?.data?.tab?.username]
           : [];
