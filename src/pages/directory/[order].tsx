@@ -63,7 +63,12 @@ export default function Directory({ allTabs }: ListProps) {
   }
 
   const generateLink = (t: TabMetadata) => (
-    <Link href={`/tab/${t.taburl}`} prefetch={false} title={t.timestamp}>
+    <Link
+      href={`/tab/${t.taburl}`}
+      prefetch={false}
+      title={t.timestamp}
+      className="color-unset"
+    >
       {t.song.artist} - {t.song.name}
       {groupedVersions[t.songId].length > 1 && (
         <span className="font-light text-xs">

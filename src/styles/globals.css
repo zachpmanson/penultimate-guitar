@@ -90,3 +90,9 @@ summary h2 {
 #headlessui-portal-root div div div div[id^="headlessui-dialog-panel"] * {
   visibility: visible;
 }
+
+.color-unset:visited,
+.color-unset:visited:hover {
+  color: #551a8b;
+  text-decoration-color: #551a8b;
+}
