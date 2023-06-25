@@ -67,6 +67,7 @@ export default function Directory({ allTabs }: ListProps) {
       href={`/tab/${t.taburl}`}
       prefetch={false}
       title={t.timestamp}
+      alt={t.timestamp}
       className="color-unset"
     >
       {t.song.artist} - {t.song.name}
