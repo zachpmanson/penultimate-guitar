@@ -1,4 +1,4 @@
-import { Mode, TabLinkDto } from "@/models/models";
+import { Mode, PlaylistCollection, TabLinkDto } from "@/models/models";
 import { ChordDB } from "@/models/chorddb.models";
 import {
   ReactNode,
@@ -14,6 +14,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
+  const [playlists, setPlaylists] = useState<PlaylistCollection>({});
   const [mode, setMode] = useState<Mode>("default");
   const [chords, setChords] = useState<ChordDB.GuitarChords>();
 
@@ -23,6 +24,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     getSavedTabs();
     getLocalMode();
     getChords();
+    getPlaylists();
   }, []);
 
   useEffect(() => {
@@ -37,6 +39,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     updateLocalMode(mode);
   }, [mode]);
 
+  useEffect(() => {
+    updatePlaylists(playlists);
+  }, [playlists]);
+
   const getSavedTabs = () => {
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedTabs") ?? "[]"
@@ -47,6 +53,13 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const getLocalMode = () => {
     const parsedMode = (localStorage.getItem("mode") ?? "Default") as Mode;
     setMode(parsedMode);
+  };
+
+  const getPlaylists = () => {
+    const parsedPlaylists = JSON.parse(
+      localStorage.getItem("playlists") ?? "{}"
+    ) as PlaylistCollection;
+    setPlaylists(parsedPlaylists);
   };
 
   const getChords = () => {
@@ -69,6 +82,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
     localStorage.setItem("savedTabs", JSON.stringify(saves));
+  };
+
+  const updatePlaylists = (playlists: PlaylistCollection) => {
+    localStorage.setItem("playlists", JSON.stringify(playlists));
   };
 
   // removes all taburl in all folders, readds taburl to folder in string[]
@@ -136,6 +153,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       mode,
       setMode,
       chords,
+      playlists,
+      setPlaylists,
     }),
     [
       setTabFolders,
@@ -150,6 +169,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       mode,
       setMode,
       chords,
+      playlists,
+      setPlaylists,
     ]
   );
 

@@ -1,11 +1,16 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { TabLinkDto } from "@/models/models";
+import { Playlist, TabLinkDto } from "@/models/models";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import TabLink from "./tablink";
 
 export default function SavedTabs() {
-  const { savedTabs, removeSavedTab } = useGlobal();
+  const { savedTabs, removeSavedTab, playlists } = useGlobal();
+
+  const [playlist, setPlaylist] = useState<Playlist>();
+  const [isImportOpen, setIsImportOpen] = useState(false);
+
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
   for (let tab of savedTabs) {
     const folderName = tab.folder ?? "Favourites";
@@ -22,6 +27,23 @@ export default function SavedTabs() {
         removeSavedTab(tablink);
       }
     }
+  };
+
+  const refreshPlaylist = async (folderName: string) => {
+    await fetch("/api/playlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        playlistId: playlists[folderName],
+      }),
+    })
+      .then((res) => res.json())
+      .then((data: Playlist) => {
+        setIsImportOpen(true);
+        setPlaylist(data);
+      });
   };
 
   const folderMenu = (folder: string) => (
@@ -48,6 +70,20 @@ export default function SavedTabs() {
       >
         <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
           <div className="px-1 py-1 ">
+            {playlists[folder] && (
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={() => refreshPlaylist(folder)}
+                    className={`${
+                      active ? "bg-blue-700 text-white" : "text-gray-900"
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  >
+                    Refresh playlist
+                  </button>
+                )}
+              </Menu.Item>
+            )}
             <Menu.Item>
               {({ active }) => (
                 <button
@@ -108,6 +144,13 @@ export default function SavedTabs() {
             </div>
           </details>
         </div>
+      )}
+      {isImportOpen && playlist && (
+        <ImportPlaylistDialog
+          playlist={playlist}
+          isOpen={isImportOpen}
+          setIsOpen={setIsImportOpen}
+        />
       )}
     </div>
   );

@@ -9,7 +9,7 @@ export default function SearchBox() {
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
   const [searchText, setLocalSearchText] = useState("");
-  const { setSearchText } = useGlobal();
+  const { setSearchText, setPlaylists } = useGlobal();
 
   useEffect(() => {
     if (router.route === "/") {
@@ -53,6 +53,13 @@ export default function SearchBox() {
           setButtonText("Search");
           setIsImportOpen(true);
           setPlaylist(data);
+          if (data.name !== undefined) {
+            setPlaylists((o) => {
+              let n = { ...o };
+              n[data.name] = playlistId;
+              return n;
+            });
+          }
         })
         .catch(() => {
           setButtonText("Search");

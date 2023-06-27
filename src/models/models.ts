@@ -95,3 +95,5 @@ export type Playlist = {
   tracks: Track[];
   description: "";
 };
+
+export type PlaylistCollection = { [key: string]: string };
