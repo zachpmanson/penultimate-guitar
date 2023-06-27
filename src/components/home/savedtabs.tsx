@@ -1,6 +1,7 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist, TabLinkDto } from "@/models/models";
 import { Menu, Transition } from "@headlessui/react";
+import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import TabLink from "./tablink";
@@ -80,6 +81,18 @@ export default function SavedTabs() {
           <div className="px-1 py-1 ">
             {playlists[folder] && (
               <>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link
+                      href={`https://open.spotify.com/playlist/${playlists[folder]}`}
+                      className={`${
+                        active ? "bg-blue-700 text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline`}
+                    >
+                      View playlist on Spotify
+                    </Link>
+                  )}
+                </Menu.Item>
                 <Menu.Item>
                   {({ active }) => (
                     <button
