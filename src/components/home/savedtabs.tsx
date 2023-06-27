@@ -46,6 +46,14 @@ export default function SavedTabs() {
       });
   };
 
+  const scrapeAll = async (folder: string) => {
+    for (let tabLink of folders[folder]) {
+      await fetch(`/tab/${tabLink.taburl}`);
+      console.log("Scraped", tabLink.taburl);
+      await new Promise((r) => setTimeout(r, 8000));
+    }
+  };
+
   const folderMenu = (folder: string) => (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -71,18 +79,32 @@ export default function SavedTabs() {
         <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
           <div className="px-1 py-1 ">
             {playlists[folder] && (
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={() => refreshPlaylist(folder)}
-                    className={`${
-                      active ? "bg-blue-700 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    Refresh playlist
-                  </button>
-                )}
-              </Menu.Item>
+              <>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => refreshPlaylist(folder)}
+                      className={`${
+                        active ? "bg-blue-700 text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    >
+                      Refresh playlist
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => scrapeAll(folder)}
+                      className={`${
+                        active ? "bg-blue-700 text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    >
+                      Pull all tracks
+                    </button>
+                  )}
+                </Menu.Item>
+              </>
             )}
             <Menu.Item>
               {({ active }) => (

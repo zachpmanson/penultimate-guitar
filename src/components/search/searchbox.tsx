@@ -53,13 +53,11 @@ export default function SearchBox() {
           setButtonText("Search");
           setIsImportOpen(true);
           setPlaylist(data);
-          if (data.name !== undefined) {
-            setPlaylists((o) => {
-              let n = { ...o };
-              n[data.name] = playlistId;
-              return n;
-            });
-          }
+          setPlaylists((o) => {
+            let n = { ...o };
+            if (playlistId) n[data.name] = playlistId;
+            return n;
+          });
         })
         .catch(() => {
           setButtonText("Search");
