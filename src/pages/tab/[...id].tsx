@@ -11,6 +11,7 @@ import { tabCompareFn } from "@/lib/sort";
 import { UGAdapter } from "@/lib/ug-interface/ug-interface";
 import {
   AltVersion,
+  Mode,
   NewTab,
   Song,
   TabDto,
@@ -35,7 +36,11 @@ type TabProps = {
 export default function Tab({ tabDetails }: TabProps) {
   const element = useRef<any>(null);
   const router = useRouter();
-  const { mode, setMode } = useGlobal();
+  const {
+    config: { mode, font },
+    setMode,
+    setFont,
+  } = useGlobal();
   const { id } = router.query;
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
@@ -171,14 +176,18 @@ export default function Tab({ tabDetails }: TabProps) {
   };
 
   const toggleMode = () => {
-    setMode((old) => {
-      if (old === "guitalele") {
-        setTranposition(0);
-        return "default";
-      } else {
-        return "guitalele";
-      }
-    });
+    let newMode: Mode = "default";
+    if (mode === "guitalele") {
+      setTranposition(0);
+      newMode = "default";
+    } else {
+      newMode = "guitalele";
+    }
+    setMode(newMode);
+  };
+
+  const toggleFont = () => {
+    setFont(font === "default" ? "open-dyslexic" : "default");
   };
 
   let options = (
@@ -219,6 +228,20 @@ export default function Tab({ tabDetails }: TabProps) {
                 </button>
               )}
             </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  onClick={() => toggleFont()}
+                  className={`${
+                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  {font === "default"
+                    ? "Switch to OpenDyslexic"
+                    : "Switch to default font"}
+                </button>
+              )}
+            </Menu.Item>
           </div>
           <div className="px-1 py-1">
             <Menu.Item>
@@ -251,8 +274,10 @@ export default function Tab({ tabDetails }: TabProps) {
     </Menu>
   );
 
+  const fontClass = font === "open-dyslexic" ? "dyslexic" : "";
+
   return (
-    <div ref={element} tabIndex={0}>
+    <div ref={element} tabIndex={0} className={fontClass}>
       <Head>
         <title>
           {tabDetails.song.name
@@ -263,7 +288,7 @@ export default function Tab({ tabDetails }: TabProps) {
         </title>
       </Head>
       <>
-        <h1 className="text-center text-2xl my-4">
+        <h1 className={"text-center text-2xl my-4 fontClass"}>
           <span className="font-medium">{tabDetails.song.name}</span>
           <span className="font-light">{` ${
             tabDetails.song.artist && "- " + tabDetails.song.artist

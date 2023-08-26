@@ -1,0 +1,27 @@
+@font-face {
+  font-family: OpenDyslexicMono;
+  src: url("/fonts/OpenDyslexicMono-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: OpenDyslexicRegular;
+  src: url("/fonts/OpenDyslexic3-Regular.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: OpenDyslexicBold;
+  src: url("/fonts/OpenDyslexic3-Bold.ttf") format("opentype");
+}
+
+.dyslexic,
+.dyslexic * {
+  font-family: OpenDyslexicRegular;
+}
+
+.dyslexic .font-medium {
+  font-family: OpenDyslexicBold;
+}
+
+.dyslexic pre {
+  font-family: OpenDyslexicMono;
+}

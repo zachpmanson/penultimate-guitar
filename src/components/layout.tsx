@@ -3,10 +3,14 @@ import Header from "./header";
 import LoadingSpinner from "./loadingspinner";
 
 export default function Layout({ children }: any) {
-  const { globalLoading } = useGlobal();
+  const {
+    globalLoading,
+    config: { font },
+  } = useGlobal();
+  const fontClass = font === "open-dyslexic" ? "dyslexic" : "";
 
   return (
-    <>
+    <div className={fontClass}>
       <Header />
       {globalLoading !== "" && (
         <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-black opacity-75 flex flex-col items-center justify-center">
@@ -20,6 +24,6 @@ export default function Layout({ children }: any) {
         </div>
       )}
       <main>{children}</main>
-    </>
+    </div>
   );
 }

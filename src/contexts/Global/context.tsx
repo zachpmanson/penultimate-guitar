@@ -1,9 +1,12 @@
 import { ChordDB } from "@/models/chorddb.models";
 import {
+  Config,
+  defaultConfig,
+  Font,
   Mode,
-  Playlist,
   PlaylistCollection,
   TabLinkDto,
+  Theme,
 } from "@/models/models";
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
@@ -17,8 +20,10 @@ export type GlobalContextProps = {
   setSearchText: Dispatch<SetStateAction<string>>;
   globalLoading: string;
   setGlobalLoading: Dispatch<SetStateAction<string>>;
-  mode: Mode;
-  setMode: Dispatch<SetStateAction<Mode>>;
+  config: Config;
+  setMode: (mode: Mode) => void;
+  setTheme: (theme: Theme) => void;
+  setFont: (font: Font) => void;
   chords?: ChordDB.GuitarChords;
   playlists: PlaylistCollection;
   setPlaylists: Dispatch<SetStateAction<PlaylistCollection>>;
@@ -34,8 +39,10 @@ const GlobalContext = createContext<GlobalContextProps>({
   setSearchText: () => {},
   globalLoading: "",
   setGlobalLoading: () => {},
-  mode: "default",
-  setMode: () => {},
+  config: defaultConfig,
+  setMode: (_mode: Mode) => {},
+  setTheme: (_theme: Theme) => {},
+  setFont: (_font: Font) => {},
   playlists: {},
   setPlaylists: () => {},
 });

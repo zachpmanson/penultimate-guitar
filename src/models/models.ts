@@ -2,8 +2,6 @@
 export type TabType = string;
 // export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
 
-export type Mode = "default" | "guitalele";
-
 export type TabDto = {
   rating: number;
   capo?: number;
@@ -97,3 +95,19 @@ export type Playlist = {
 };
 
 export type PlaylistCollection = { [key: string]: string };
+
+export type Theme = "light" | "dark";
+export type Font = "default" | "open-dyslexic";
+export type Mode = "default" | "guitalele";
+
+export type Config = {
+  mode: Mode;
+  theme: Theme;
+  font: Font;
+};
+
+export const defaultConfig: Config = {
+  mode: "default",
+  theme: "light",
+  font: "default",
+};

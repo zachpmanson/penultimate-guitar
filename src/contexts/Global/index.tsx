@@ -1,4 +1,12 @@
-import { Mode, PlaylistCollection, TabLinkDto } from "@/models/models";
+import {
+  Config,
+  defaultConfig,
+  Font,
+  Mode,
+  PlaylistCollection,
+  TabLinkDto,
+  Theme,
+} from "@/models/models";
 import { ChordDB } from "@/models/chorddb.models";
 import {
   ReactNode,
@@ -15,14 +23,14 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
-  const [mode, setMode] = useState<Mode>("default");
+  const [config, setConfig] = useState<Config>(defaultConfig);
   const [chords, setChords] = useState<ChordDB.GuitarChords>();
 
   const notInitialRender = useRef(false);
 
   useEffect(() => {
     getSavedTabs();
-    getLocalMode();
+    getLocalConfig();
     getChords();
     getPlaylists();
   }, []);
@@ -36,8 +44,9 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [savedTabs]);
 
   useEffect(() => {
-    updateLocalMode(mode);
-  }, [mode]);
+    console.log("useEffect config", config);
+    updateLocalConfig(config);
+  }, [config]);
 
   useEffect(() => {
     updatePlaylists(playlists);
@@ -50,9 +59,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setSavedTabs(parsedTabs.filter((t) => t.name && t.artist));
   };
 
-  const getLocalMode = () => {
-    const parsedMode = (localStorage.getItem("mode") ?? "Default") as Mode;
-    setMode(parsedMode);
+  const getLocalConfig = () => {
+    const rawConfig = localStorage.getItem("config");
+    const parsedConfig = rawConfig ? JSON.parse(rawConfig) : defaultConfig;
+    setConfig(parsedConfig);
   };
 
   const getPlaylists = () => {
@@ -78,7 +88,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
+  const updateLocalConfig = (config: Config) =>
+    localStorage.setItem("config", JSON.stringify(config));
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
     localStorage.setItem("savedTabs", JSON.stringify(saves));
@@ -139,6 +150,16 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     [savedTabs]
   );
 
+  const setMode = useCallback((mode: Mode) => {
+    setConfig((old) => ({ ...old, mode: mode }));
+  }, []);
+  const setTheme = useCallback((theme: Theme) => {
+    setConfig((old) => ({ ...old, theme: theme }));
+  }, []);
+  const setFont = useCallback((font: Font) => {
+    setConfig((old) => ({ ...old, font: font }));
+  }, []);
+
   const value: GlobalContextProps = useMemo(
     () => ({
       setTabFolders,
@@ -150,8 +171,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setSearchText,
       globalLoading,
       setGlobalLoading,
-      mode,
+      config,
       setMode,
+      setTheme,
+      setFont,
       chords,
       playlists,
       setPlaylists,
@@ -166,8 +189,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setSearchText,
       globalLoading,
       setGlobalLoading,
-      mode,
+      config,
       setMode,
+      setTheme,
+      setFont,
       chords,
       playlists,
       setPlaylists,

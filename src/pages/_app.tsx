@@ -1,14 +1,15 @@
 import Layout from "@/components/layout";
 import GlobalProvider from "@/contexts/Global";
 import "@/styles/globals.css";
+import "@/styles/dyslexic.css";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ReactElement, ReactNode, useEffect } from "react";
-import NProgress from "nprogress";
-import "../styles/nprogress.css";
 import Script from "next/script";
+import NProgress from "nprogress";
+import { ReactElement, ReactNode, useEffect } from "react";
+import "../styles/nprogress.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
