@@ -169,7 +169,7 @@ export async function getStaticPaths() {
   const songPages = Math.ceil(songCount._count.id / PAGE_SIZE);
 
   const artistPaths = Array.from(Array(songPages).keys()).map((num) => ({
-    params: { order: "artist", page: num.toString() },
+    params: { order: "artist", page: (num + 1).toString() },
   }));
 
   const paths = [...artistPaths];
