@@ -149,10 +149,10 @@ export async function getStaticPaths() {
   const tabPages = Math.ceil(tabCount._count.taburl / PAGE_SIZE);
 
   const newPaths = Array.from(Array(tabPages).keys()).map((num) => ({
-    params: { order: "new", page: num.toString() },
+    params: { order: "new", page: (num + 1).toString() },
   }));
   const oldPaths = Array.from(Array(tabPages).keys()).map((num) => ({
-    params: { order: "old", page: num.toString() },
+    params: { order: "old", page: (num + 1).toString() },
   }));
 
   const paths = [...newPaths, ...oldPaths];
