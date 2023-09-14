@@ -100,7 +100,6 @@ export default function Directory({
         className="p-2 rounded-md"
         name="order"
         id="order"
-        defaultValue={pageNum}
         value={pageNum}
         onChange={(e) => router.push(`/directory/artist/${e.target.value}`)}
       >
