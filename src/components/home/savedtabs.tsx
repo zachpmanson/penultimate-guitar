@@ -50,7 +50,7 @@ export default function SavedTabs() {
   const scrapeAll = async (folder: string) => {
     for (let tabLink of folders[folder]) {
       await fetch(`/tab/${tabLink.taburl}`);
-      console.log("Scraped", tabLink.taburl);
+      console.log("Pulled", tabLink.taburl);
       await new Promise((r) => setTimeout(r, 8000));
     }
   };
