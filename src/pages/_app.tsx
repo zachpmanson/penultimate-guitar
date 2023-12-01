@@ -46,8 +46,8 @@ export default function App({
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
   return getLayout(
-    <GlobalProvider>
-      <SessionProvider session={session}>
+    <SessionProvider session={session}>
+      <GlobalProvider>
         <Layout>
           <Head>
             <meta
@@ -95,7 +95,7 @@ export default function App({
           </Head>
           <Component {...pageProps} />
         </Layout>
-      </SessionProvider>
-    </GlobalProvider>
+      </GlobalProvider>
+    </SessionProvider>
   );
 }

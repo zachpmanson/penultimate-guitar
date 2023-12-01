@@ -20,9 +20,10 @@ export default function SearchBox() {
   }, [router.route, setSearchText]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setSearchText(searchText);
     }, 50);
+    return () => clearTimeout(timeoutId);
   }, [searchText, setSearchText]);
 
   const [playlist, setPlaylist] = useState<Playlist>();

@@ -7,16 +7,16 @@ import { authOptions } from "@/lib/auth";
 import { processPlaylist } from "@/lib/processPlaylist";
 import { Playlist } from "@/models/models";
 import { GetServerSideProps } from "next";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
-export default function Profile({ jwt }: { jwt: any }) {
-  const token = JSON.parse(jwt);
+export default function Profile() {
   const router = useRouter();
+  const session = useSession();
 
   const [items, setItems] = useState<any[]>([]);
   const [visibleItems, setVisibleItems] = useState<any[]>([]);
@@ -26,23 +26,18 @@ export default function Profile({ jwt }: { jwt: any }) {
   const [maxItems, setMaxItems] = useState<number>();
 
   const [userId, setUserId] = useState<string>(
-    token.account?.providerAccountId
+    (session?.data as Session & { token: any })?.token.account
+      ?.providerAccountId
   );
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
   const { setPlaylists, searchText } = useGlobal();
 
-  const session = useSession();
-
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
 
-    console.log({
-      userId: userId,
-      page: page,
-    });
     const data = await fetch("/api/userPlaylists", {
       method: "POST",
       headers: {
@@ -62,10 +57,17 @@ export default function Profile({ jwt }: { jwt: any }) {
   };
 
   useEffect(() => {
+    setUserId(
+      (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId
+    );
+  }, [session]);
+
+  useEffect(() => {
     if (userId) {
       fetchData();
     }
-  }, [page, userId]);
+  }, [userId, page]);
 
   const pullPlaylist = (url: string) => {
     console.log("pulling playlist", url);
@@ -112,9 +114,10 @@ export default function Profile({ jwt }: { jwt: any }) {
       </div>
       Select a playlist to import:
       <div className="flex flex-col gap-4">
-        {visibleItems?.map((playlist) => (
+        {visibleItems?.map((playlist, i) => (
           <PlainButton
             onClick={() => pullPlaylist(playlist.external_urls.spotify)}
+            key={i}
           >
             <div className="flex gap-2 justify-between align-top">
               <div>
@@ -168,7 +171,6 @@ export default function Profile({ jwt }: { jwt: any }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  let jwt = (await getToken(context)) as any;
 
   if (!session) {
     return {
@@ -180,6 +182,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { jwt: JSON.stringify(jwt) },
+    props: {},
   };
 };

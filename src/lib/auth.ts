@@ -31,8 +31,9 @@ export const authOptions = {
         // return '/unauthorized'
       }
     },
-    session({ session, token }) {
-      return session;
+    async session({ session, token }) {
+      const extendedSession = { ...session, token: token };
+      return extendedSession;
     },
     async jwt({ token, account }) {
       if (account) {

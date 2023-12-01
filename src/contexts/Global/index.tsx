@@ -1,4 +1,9 @@
-import { Mode, PlaylistCollection, TabLinkDto } from "@/models/models";
+import {
+  Mode,
+  PlaylistCollection,
+  SavedUserTabLinks,
+  TabLinkDto,
+} from "@/models/models";
 import { ChordDB } from "@/models/chorddb.models";
 import {
   ReactNode,
@@ -9,6 +14,8 @@ import {
   useState,
 } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
@@ -17,6 +24,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
   const [mode, setMode] = useState<Mode>("default");
   const [chords, setChords] = useState<ChordDB.GuitarChords>();
+
+  const session = useSession();
 
   const notInitialRender = useRef(false);
 
@@ -43,11 +52,22 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     updatePlaylists(playlists);
   }, [playlists]);
 
-  const getSavedTabs = () => {
+  useEffect(() => {
+    const userId = (session?.data as Session & { token: any })?.token.account
+      ?.providerAccountId;
+
+    getSavedTabs(userId);
+  }, [session]);
+
+  const getSavedTabs = (userId: string) => {
     const parsedTabs = JSON.parse(
-      localStorage.getItem("savedTabs") ?? "[]"
-    ) as TabLinkDto[];
-    setSavedTabs(parsedTabs.filter((t) => t.name && t.artist));
+      localStorage.getItem("savedUserTabs") ?? "{}"
+    ) as SavedUserTabLinks;
+    setSavedTabs(
+      (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
+        (t) => t.name && t.artist
+      )
+    );
   };
 
   const getLocalMode = () => {
@@ -81,7 +101,29 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
-    localStorage.setItem("savedTabs", JSON.stringify(saves));
+    const userId = (session?.data as Session & { token: any })?.token.account
+      ?.providerAccountId;
+
+    fetch("/api/user/tablinks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tablinks: saves,
+      }),
+    }).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+    });
+
+    const parsedTabs = JSON.parse(
+      localStorage.getItem("savedUserTabs") ?? "{}"
+    ) as SavedUserTabLinks;
+
+    localStorage.setItem(
+      "savedUserTabs",
+      JSON.stringify({ ...parsedTabs, [userId ?? "@localStorage"]: saves })
+    );
   };
 
   const updatePlaylists = (playlists: PlaylistCollection) => {

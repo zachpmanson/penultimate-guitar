@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,7 +9,6 @@ datasource db {
 
 model Tab {
   id           String   @id @default(cuid())
-  song         Song     @relation(fields: [songId], references: [id])
   songId       Int
   tab          String
   taburl       String   @unique
@@ -23,6 +19,7 @@ model Tab {
   version      Int
   type         String
   timestamp    String?  @default("2023-05-27T16:51:42.319Z")
+  song         Song     @relation(fields: [songId], references: [id])
 }
 
 model Song {
@@ -30,4 +27,10 @@ model Song {
   name   String
   artist String
   Tab    Tab[]
+}
+
+model User {
+  id            String @id @default(cuid())
+  spotifyUserId String @unique
+  tablink       Json?
 }
