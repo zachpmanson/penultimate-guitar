@@ -11,12 +11,15 @@ import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Profile({ jwt }: { jwt: any }) {
   const token = JSON.parse(jwt);
+  const router = useRouter();
 
   const [items, setItems] = useState<any[]>([]);
+  const [visibleItems, setVisibleItems] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<any>();
   const [page, setPage] = useState(0);
@@ -28,7 +31,7 @@ export default function Profile({ jwt }: { jwt: any }) {
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const { setPlaylists } = useGlobal();
+  const { setPlaylists, searchText } = useGlobal();
 
   const session = useSession();
 
@@ -81,6 +84,19 @@ export default function Profile({ jwt }: { jwt: any }) {
     });
   };
 
+  useEffect(() => {
+    let searchTextLower = searchText.toLowerCase();
+    setVisibleItems((o) =>
+      items.filter((p) => p.name.toLowerCase().includes(searchTextLower))
+    );
+  }, [searchText, items]);
+
+  useEffect(() => {
+    if (visibleItems.length === 0 && maxItems && items.length < maxItems) {
+      setPage((i) => (i ?? 0) + 1);
+    }
+  }, [searchText, items]);
+
   return (
     <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
       <div className="flex justify-between">
@@ -96,7 +112,7 @@ export default function Profile({ jwt }: { jwt: any }) {
       </div>
       Select a playlist to import:
       <div className="flex flex-col gap-4">
-        {items?.map((playlist) => (
+        {visibleItems?.map((playlist) => (
           <PlainButton
             onClick={() => pullPlaylist(playlist.external_urls.spotify)}
           >
@@ -140,7 +156,10 @@ export default function Profile({ jwt }: { jwt: any }) {
         <ImportPlaylistDialog
           playlist={playlist}
           isOpen={isImportOpen}
-          setIsOpen={setIsImportOpen}
+          setIsOpen={(isOpen) => {
+            setIsImportOpen(isImportOpen);
+            router.push("/");
+          }}
         />
       )}
     </div>
