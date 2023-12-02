@@ -1,4 +1,9 @@
-import { Mode, PlaylistCollection, TabLinkDto } from "@/models/models";
+import {
+  Mode,
+  PlaylistCollection,
+  SavedUserTabLinks,
+  TabLinkDto,
+} from "@/models/models";
 import { ChordDB } from "@/models/chorddb.models";
 import {
   ReactNode,
@@ -9,6 +14,8 @@ import {
   useState,
 } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
@@ -17,6 +24,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
   const [mode, setMode] = useState<Mode>("default");
   const [chords, setChords] = useState<ChordDB.GuitarChords>();
+
+  const session = useSession();
 
   const notInitialRender = useRef(false);
 
@@ -43,11 +52,36 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     updatePlaylists(playlists);
   }, [playlists]);
 
-  const getSavedTabs = () => {
+  useEffect(() => {
+    const userId = (session?.data as Session & { token: any })?.token.account
+      ?.providerAccountId;
+    getSavedTabs(userId);
+  }, [session]);
+
+  const getSavedTabs = (userId?: string) => {
     const parsedTabs = JSON.parse(
-      localStorage.getItem("savedTabs") ?? "[]"
-    ) as TabLinkDto[];
-    setSavedTabs(parsedTabs.filter((t) => t.name && t.artist));
+      localStorage.getItem("savedUserTabs") ?? "{}"
+    ) as SavedUserTabLinks;
+
+    console.log("getSavedTabs", userId);
+    if (userId) {
+      fetch("/api/user/tablinks", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setSavedTabs(res);
+          // console.log(JSON.stringify(res, null, 2));
+        });
+    } else {
+      setSavedTabs(
+        (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
+          (t) => t.name && t.artist
+        )
+      );
+    }
   };
 
   const getLocalMode = () => {
@@ -81,7 +115,17 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
-    localStorage.setItem("savedTabs", JSON.stringify(saves));
+    const userId = (session?.data as Session & { token: any })?.token.account
+      ?.providerAccountId;
+
+    const parsedTabs = JSON.parse(
+      localStorage.getItem("savedUserTabs") ?? "{}"
+    ) as SavedUserTabLinks;
+
+    localStorage.setItem(
+      "savedUserTabs",
+      JSON.stringify({ ...parsedTabs, [userId ?? "@localStorage"]: saves })
+    );
   };
 
   const updatePlaylists = (playlists: PlaylistCollection) => {
@@ -91,6 +135,24 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   // removes all taburl in all folders, readds taburl to folder in string[]
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
+
+      if (userId) {
+        fetch("/api/user/tablinks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newTab: tabLink,
+            folders: folders,
+          }),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
+
       setSavedTabs((old) => {
         let newTabs = old.filter(
           (t) =>
@@ -107,27 +169,65 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
         return newTabs;
       });
     },
-    []
+    [session]
   );
 
-  const addSavedTab = useCallback((newTab: TabLinkDto) => {
-    setSavedTabs((old) => {
-      let existingIndex = old.findIndex(
-        (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
-      );
+  const addSavedTab = useCallback(
+    (newTab: TabLinkDto) => {
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
 
-      return existingIndex === -1 ? [...old, newTab] : old;
-    });
-  }, []);
+      if (userId) {
+        fetch("/api/user/tablinks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newTab: newTab,
+            folders: [newTab.folder ?? "Favourites"],
+          }),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
 
-  const removeSavedTab = useCallback((tab: TabLinkDto) => {
-    setSavedTabs((old) => {
-      let newTabs = old.filter(
-        (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
-      );
-      return newTabs;
-    });
-  }, []);
+      setSavedTabs((old) => {
+        let existingIndex = old.findIndex(
+          (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
+        );
+        return existingIndex === -1 ? [...old, newTab] : old;
+      });
+    },
+    [session]
+  );
+
+  const removeSavedTab = useCallback(
+    (tab: TabLinkDto) => {
+      console.log("removeSavedTab", tab);
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
+      if (userId) {
+        console.log("removeSavedTab", tab);
+        fetch("/api/user/tablinks", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(tab),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
+      setSavedTabs((old) => {
+        let newTabs = old.filter(
+          (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
+        );
+        return newTabs;
+      });
+    },
+    [session]
+  );
 
   const isSaved = useCallback(
     (newTab: TabLinkDto) => {

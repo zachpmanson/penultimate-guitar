@@ -63,6 +63,10 @@ export type TabLinkDto = {
   type?: TabType;
 };
 
+export type SavedUserTabLinks = {
+  [userId: string]: TabLinkDto[];
+};
+
 export type SearchResult = {
   id: number;
   song_id: number;

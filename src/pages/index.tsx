@@ -5,6 +5,7 @@ import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
+import Link from "next/link";
 
 const Page: NextPageWithLayout = () => {
   const { searchText, savedTabs, mode } = useGlobal();
@@ -25,7 +26,7 @@ const Page: NextPageWithLayout = () => {
       <Head>
         <title>Penultimate Guitar</title>
       </Head>
-      <div className="max-w-xl mx-auto flex flex-col gap-2">
+      <div className="max-w-xl mx-auto flex flex-col gap-4">
         {isFilter(searchText) ? (
           <FilteredSavedTabs />
         ) : (

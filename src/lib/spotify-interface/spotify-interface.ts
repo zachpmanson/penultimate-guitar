@@ -73,14 +73,14 @@ export namespace SpotifyAdapter {
     }));
 
     if (playlistPayload.tracks.total > 100) {
-      let pages = Math.floor(playlistPayload.tracks.total / pageSize);
+      let pages = Math.floor(playlistPayload.tracks.total / PAGESIZE);
       let offsets = [...Array(pages).keys()].map(
-        (pageNum) => (pageNum + 1) * pageSize
+        (pageNum) => (pageNum + 1) * PAGESIZE
       );
 
       await Promise.all(
         offsets.map((offset) => {
-          let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${pageSize}&offset=${offset}`;
+          let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${PAGESIZE}&offset=${offset}`;
           return fetch(url, {
             method: "GET",
             headers: authHeader,
@@ -101,6 +101,29 @@ export namespace SpotifyAdapter {
     playlist.tracks = _.uniqWith(tracks, _.isEqual);
     return playlist;
   }
+
+  export async function getUserPlaylists(
+    userId: string,
+    page: number
+  ): Promise<any> {
+    console.log("getUserPlaylists", userId, page);
+    const token = await getToken();
+    const authHeader: HeadersInit = {
+      Authorization: `Bearer ${token}`,
+    };
+    let payload = await fetch(
+      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${PLAYLISTS_PAGESIZE}&offset=${
+        page * PLAYLISTS_PAGESIZE
+      }`,
+      {
+        method: "GET",
+        headers: authHeader,
+      }
+    ).then((res) => res.json());
+    console.log(userId, page, payload);
+    return payload;
+  }
 }
 
-const pageSize = 100; // max 100
+const PAGESIZE = 100;
+const PLAYLISTS_PAGESIZE = 50;

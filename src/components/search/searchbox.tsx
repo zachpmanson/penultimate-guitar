@@ -3,6 +3,7 @@ import { Playlist } from "@/models/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
+import { processPlaylist } from "@/lib/processPlaylist";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -19,9 +20,10 @@ export default function SearchBox() {
   }, [router.route, setSearchText]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setSearchText(searchText);
     }, 50);
+    return () => clearTimeout(timeoutId);
   }, [searchText, setSearchText]);
 
   const [playlist, setPlaylist] = useState<Playlist>();
@@ -31,43 +33,25 @@ export default function SearchBox() {
     event.preventDefault();
     const search: string = event.target.url.value;
 
-    const processPlaylist = async (playlistUrl: string) => {
-      console.log("Searching for playlist", playlistUrl);
-      setButtonText("Loading...");
-
-      const matches = playlistUrl.match(
-        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
-      );
-      const playlistId = matches?.groups?.id;
-      await fetch("/api/playlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          playlistId: playlistId,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data: Playlist) => {
-          setButtonText("Search");
-          setIsImportOpen(true);
-          setPlaylist(data);
-          setPlaylists((o) => {
-            let n = { ...o };
-            if (playlistId) n[data.name] = playlistId;
-            return n;
-          });
-        })
-        .catch(() => {
-          setButtonText("Search");
-        });
-    };
-
     if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
       router.push(`/tab/${search.slice(37)}`);
     } else if (search.startsWith("https://open.spotify.com/playlist/")) {
-      processPlaylist(search);
+      setButtonText("Loading...");
+      const matches = search.match(
+        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
+      );
+      const playlistId = matches?.groups?.id!;
+      processPlaylist(playlistId).then((playlist) => {
+        setPlaylist(playlist);
+        setIsImportOpen(true);
+        setPlaylists((o) => {
+          let n = { ...o };
+          if (playlistId) n[playlist.name] = playlistId;
+          return n;
+        });
+
+        setButtonText("Search");
+      });
     } else {
       router.push(`/search/${event.target.url.value}`);
     }
