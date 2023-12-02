@@ -73,7 +73,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
         .then((res) => res.json())
         .then((res) => {
           setSavedTabs(res);
-          console.log(JSON.stringify(res, null, 2));
+          // console.log(JSON.stringify(res, null, 2));
         });
     } else {
       setSavedTabs(
@@ -136,6 +136,24 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   //
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
+
+      if (userId) {
+        fetch("/api/user/tablinks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newTab: tabLink,
+            folders: folders,
+          }),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
+
       setSavedTabs((old) => {
         let newTabs = old.filter(
           (t) =>
@@ -152,38 +170,65 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
         return newTabs;
       });
     },
-    []
+    [session]
   );
 
-  const addSavedTab = useCallback((newTab: TabLinkDto) => {
-    fetch("/api/user/tablinks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        newTab: newTab,
-      }),
-    }).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
-    });
+  const addSavedTab = useCallback(
+    (newTab: TabLinkDto) => {
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
 
-    setSavedTabs((old) => {
-      let existingIndex = old.findIndex(
-        (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
-      );
-      return existingIndex === -1 ? [...old, newTab] : old;
-    });
-  }, []);
+      if (userId) {
+        fetch("/api/user/tablinks", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newTab: newTab,
+            folders: [newTab.folder ?? "Favourites"],
+          }),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
 
-  const removeSavedTab = useCallback((tab: TabLinkDto) => {
-    setSavedTabs((old) => {
-      let newTabs = old.filter(
-        (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
-      );
-      return newTabs;
-    });
-  }, []);
+      setSavedTabs((old) => {
+        let existingIndex = old.findIndex(
+          (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
+        );
+        return existingIndex === -1 ? [...old, newTab] : old;
+      });
+    },
+    [session]
+  );
+
+  const removeSavedTab = useCallback(
+    (tab: TabLinkDto) => {
+      console.log("removeSavedTab", tab);
+      const userId = (session?.data as Session & { token: any })?.token.account
+        ?.providerAccountId;
+      if (userId) {
+        console.log("removeSavedTab", tab);
+        fetch("/api/user/tablinks", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(tab),
+        }).then((res) => {
+          console.log(JSON.stringify(res, null, 2));
+        });
+      }
+      setSavedTabs((old) => {
+        let newTabs = old.filter(
+          (t) => !(t.taburl === tab.taburl && t.folder === tab.folder)
+        );
+        return newTabs;
+      });
+    },
+    [session]
+  );
 
   const isSaved = useCallback(
     (newTab: TabLinkDto) => {
