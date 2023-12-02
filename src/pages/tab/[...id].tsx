@@ -431,22 +431,24 @@ const defaultProps: TabDto = {
 };
 
 export async function getStaticPaths() {
-  const savedTabs = await prisma.tab.findMany({
-    where: {
-      tab: {
-        not: "ALT",
-      },
-    },
-    select: {
-      taburl: true,
-    },
-  });
+  // TODO removed proper path discovery because build time was too long
 
-  const paths = savedTabs.map((tab) => ({
-    params: { id: tab.taburl.split("/") },
-  }));
+  // const savedTabs = await prisma.tab.findMany({
+  //   where: {
+  //     tab: {
+  //       not: "ALT",
+  //     },
+  //   },
+  //   select: {
+  //     taburl: true,
+  //   },
+  // });
 
-  return { paths, fallback: "blocking" };
+  // const paths = savedTabs.map((tab) => ({
+  //   params: { id: tab.taburl.split("/") },
+  // }));
+
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
