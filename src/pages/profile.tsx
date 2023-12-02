@@ -52,7 +52,9 @@ export default function Profile() {
       .catch((err) => setError(err));
 
     setMaxItems(data.total);
-    setItems((prevItems) => [...prevItems, ...data.items]);
+    if (data.items?.length > 0) {
+      setItems((prevItems) => [...prevItems, ...data.items]);
+    }
     setIsLoading(false);
   };
 

@@ -30,7 +30,22 @@ model Song {
 }
 
 model User {
-  id            String @id @default(cuid())
-  spotifyUserId String @unique
-  tablink       Json?
+  id            String        @id @default(cuid())
+  spotifyUserId String        @unique
+  UserTablink   UserTablink[]
+}
+
+model UserTablink {
+  id            String  @id @default(cuid())
+  spotifyUserId String
+  taburl        String
+  folder        String
+  name          String?
+  artist        String?
+  type          String?
+  version       Int?
+
+  // removed because tablink can exist before tab is added to db
+  // tab           Tab    @relation(fields: [taburl], references: [taburl])
+  user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
 }

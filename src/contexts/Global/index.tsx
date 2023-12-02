@@ -55,19 +55,33 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const userId = (session?.data as Session & { token: any })?.token.account
       ?.providerAccountId;
-
     getSavedTabs(userId);
   }, [session]);
 
-  const getSavedTabs = (userId: string) => {
+  const getSavedTabs = (userId?: string) => {
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedUserTabs") ?? "{}"
     ) as SavedUserTabLinks;
-    setSavedTabs(
-      (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
-        (t) => t.name && t.artist
-      )
-    );
+
+    console.log("getSavedTabs", userId);
+    if (userId) {
+      fetch("/api/user/tablinks", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setSavedTabs(res);
+          console.log(JSON.stringify(res, null, 2));
+        });
+    } else {
+      setSavedTabs(
+        (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
+          (t) => t.name && t.artist
+        )
+      );
+    }
   };
 
   const getLocalMode = () => {
@@ -104,18 +118,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     const userId = (session?.data as Session & { token: any })?.token.account
       ?.providerAccountId;
 
-    fetch("/api/user/tablinks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        tablinks: saves,
-      }),
-    }).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
-    });
-
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedUserTabs") ?? "{}"
     ) as SavedUserTabLinks;
@@ -131,6 +133,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // removes all taburl in all folders, readds taburl to folder in string[]
+  //
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
       setSavedTabs((old) => {
@@ -153,11 +156,22 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const addSavedTab = useCallback((newTab: TabLinkDto) => {
+    fetch("/api/user/tablinks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newTab: newTab,
+      }),
+    }).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+    });
+
     setSavedTabs((old) => {
       let existingIndex = old.findIndex(
         (t) => t.taburl === newTab.taburl && t.folder === newTab.folder
       );
-
       return existingIndex === -1 ? [...old, newTab] : old;
     });
   }, []);
