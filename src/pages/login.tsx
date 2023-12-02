@@ -12,8 +12,14 @@ export default function Login() {
 
   return (
     <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
-      You don't need to log in to save songs or import playlists, but you will
-      need log in to sync saved songs across multiple devices.
+      <p>
+        You don't need to log in to save songs or import playlists, but you will
+        need log in to sync saved songs across multiple devices.
+      </p>
+      <p>
+        This is in ALPHA. Currently Spotify login is only available for certain
+        accounts.
+      </p>
       <div className="flex justify-center">
         <SpotifyButton
           onClick={() => signIn("spotify")}
