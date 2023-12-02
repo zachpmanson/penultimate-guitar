@@ -22,12 +22,6 @@ export default function Header() {
               <span className="m-auto w-fit">Login</span>
             </Link>
           )}
-          <Link prefetch={false} href="/directory/artist/1">
-            <span className="m-auto w-fit">Song Directory</span>
-          </Link>
-          <Link href="https://notes.zachmanson.com/penultimate-guitar">
-            <span className="m-auto w-fit">About</span>
-          </Link>
         </div>
       </div>
       <SearchBox />

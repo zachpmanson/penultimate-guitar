@@ -1,6 +1,7 @@
 import { useGlobal } from "@/contexts/Global/context";
 import Header from "./header";
 import LoadingSpinner from "./loadingspinner";
+import Link from "next/link";
 
 export default function Layout({ children }: any) {
   const { globalLoading } = useGlobal();
@@ -19,7 +20,20 @@ export default function Layout({ children }: any) {
           </p>
         </div>
       )}
-      <main>{children}</main>
+      <div className="flex flex-col gap-4">
+        <main>{children}</main>
+        <footer>
+          <div className="flex gap-8 justify-center">
+            <Link prefetch={false} href="/directory/artist/1">
+              <span className="m-auto w-fit">Song Directory</span>
+            </Link>
+
+            <Link href="https://notes.zachmanson.com/penultimate-guitar">
+              <span className="m-auto w-fit">About</span>
+            </Link>
+          </div>
+        </footer>
+      </div>
     </>
   );
 }

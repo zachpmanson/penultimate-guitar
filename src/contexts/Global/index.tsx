@@ -133,7 +133,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // removes all taburl in all folders, readds taburl to folder in string[]
-  //
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
       const userId = (session?.data as Session & { token: any })?.token.account

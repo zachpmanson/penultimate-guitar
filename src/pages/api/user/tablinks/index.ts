@@ -25,7 +25,6 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
   console.log("tablinks", req.method, req.body);
   const session = await getServerSession(req, res, authOptions);
   if (session) {
-    // Signed in
     const userId = (session.token as JWT & { account: any }).account
       .providerAccountId as string;
 
@@ -40,6 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
         break;
       }
+
       case "POST": {
         const response = schema.safeParse(req.body);
         if (!response.success) {
@@ -95,6 +95,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
 
         break;
       }
+
       case "DELETE": {
         const response = newTabSchema.safeParse(req.body);
         if (!response.success) {
@@ -117,6 +118,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
         res.status(200).json({ status: "success" });
         break;
       }
+
       default:
         return res.status(405).json({ error: "Invalid method" });
     }
