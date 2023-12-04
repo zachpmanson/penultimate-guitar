@@ -10,6 +10,7 @@ import { GetServerSideProps } from "next";
 import { Session, getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 import { signOut, useSession } from "next-auth/react";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { use, useEffect, useState } from "react";
@@ -102,72 +103,77 @@ export default function Profile() {
   }, [searchText, items]);
 
   return (
-    <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
-      <div className="flex justify-between">
-        <div>
-          <div className="font-medium  text-2xl">
-            {session.data?.user?.name}
+    <>
+      <Head>
+        <title>Profile</title>
+      </Head>
+      <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
+        <div className="flex justify-between">
+          <div>
+            <div className="font-medium  text-2xl">
+              {session.data?.user?.name}
+            </div>
+            <div>{session.data?.user?.email}</div>
           </div>
-          <div>{session.data?.user?.email}</div>
+          <div>
+            <SpotifyButton onClick={() => signOut()}>Sign out</SpotifyButton>
+          </div>
         </div>
-        <div>
-          <SpotifyButton onClick={() => signOut()}>Sign out</SpotifyButton>
-        </div>
-      </div>
-      Select a playlist to import:
-      <div className="flex flex-col gap-4">
-        {visibleItems?.map((playlist, i) => (
-          <PlainButton
-            onClick={() => pullPlaylist(playlist.external_urls.spotify)}
-            key={i}
-          >
-            <div className="flex gap-2 justify-between align-top">
-              <div>
-                <div className="text-lg font-bold">{playlist.name}</div>
+        Select a playlist to import:
+        <div className="flex flex-col gap-4">
+          {visibleItems?.map((playlist, i) => (
+            <PlainButton
+              onClick={() => pullPlaylist(playlist.external_urls.spotify)}
+              key={i}
+            >
+              <div className="flex gap-2 justify-between align-top">
+                <div>
+                  <div className="text-lg font-bold">{playlist.name}</div>
 
-                <div className="flex gap-2 align-middle justify-between">
-                  <div className="flex flex-col my-auto text-left">
-                    <div className="text-sm">
-                      {playlist.tracks.total} tracks
-                    </div>
-                    <div className="text-xs">
-                      Created by {playlist.owner.display_name}
+                  <div className="flex gap-2 align-middle justify-between">
+                    <div className="flex flex-col my-auto text-left">
+                      <div className="text-sm">
+                        {playlist.tracks.total} tracks
+                      </div>
+                      <div className="text-xs">
+                        Created by {playlist.owner.display_name}
+                      </div>
                     </div>
                   </div>
                 </div>
+                {playlist.images[1] && (
+                  <Image
+                    src={playlist.images[1].url}
+                    alt="Playlist image"
+                    width={60}
+                    height={60}
+                    className="rounded-md"
+                  />
+                )}
               </div>
-              {playlist.images[1] && (
-                <Image
-                  src={playlist.images[1].url}
-                  alt="Playlist image"
-                  width={60}
-                  height={60}
-                  className="rounded-md"
-                />
-              )}
-            </div>
-          </PlainButton>
-        ))}
-      </div>
-      {!isLoading && maxItems && items.length < maxItems && (
-        <div className="m-auto w-fit">
-          <PlainButton onClick={() => setPage((i) => (i ?? 0) + 1)}>
-            <div className="flex items-center justify-center">Load more</div>
-          </PlainButton>
+            </PlainButton>
+          ))}
         </div>
-      )}
-      {isLoading && <LoadingSpinner />}
-      {isImportOpen && playlist && (
-        <ImportPlaylistDialog
-          playlist={playlist}
-          isOpen={isImportOpen}
-          setIsOpen={(isOpen) => {
-            setIsImportOpen(isImportOpen);
-            router.push("/");
-          }}
-        />
-      )}
-    </div>
+        {!isLoading && maxItems && items.length < maxItems && (
+          <div className="m-auto w-fit">
+            <PlainButton onClick={() => setPage((i) => (i ?? 0) + 1)}>
+              <div className="flex items-center justify-center">Load more</div>
+            </PlainButton>
+          </div>
+        )}
+        {isLoading && <LoadingSpinner />}
+        {isImportOpen && playlist && (
+          <ImportPlaylistDialog
+            playlist={playlist}
+            isOpen={isImportOpen}
+            setIsOpen={(isOpen) => {
+              setIsImportOpen(isImportOpen);
+              router.push("/");
+            }}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
