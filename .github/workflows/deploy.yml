@@ -1,0 +1,12 @@
+name: deployment
+on: push
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run migrations on prod
+        run: npm run migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
