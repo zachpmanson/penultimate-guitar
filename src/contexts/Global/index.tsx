@@ -149,7 +149,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
             folders: folders,
           }),
         }).then((res) => {
-          console.log(JSON.stringify(res, null, 2));
+          // console.log(JSON.stringify(res, null, 2));
         });
       }
 
@@ -188,7 +188,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
             folders: [newTab.folder ?? "Favourites"],
           }),
         }).then((res) => {
-          console.log(JSON.stringify(res, null, 2));
+          // console.log(JSON.stringify(res, null, 2));
         });
       }
 
@@ -216,7 +216,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
           },
           body: JSON.stringify(tab),
         }).then((res) => {
-          console.log(JSON.stringify(res, null, 2));
+          // console.log(JSON.stringify(res, null, 2));
         });
       }
       setSavedTabs((old) => {

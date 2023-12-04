@@ -120,7 +120,7 @@ export namespace SpotifyAdapter {
         headers: authHeader,
       }
     ).then((res) => res.json());
-    console.log(userId, page, payload);
+    // console.log(userId, page, payload);
     return payload;
   }
 }

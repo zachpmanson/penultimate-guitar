@@ -6,6 +6,7 @@ import type {
 import type { NextAuthOptions } from "next-auth";
 import { getServerSession } from "next-auth";
 import Spotify from "next-auth/providers/spotify";
+import prisma from "./prisma";
 
 export const authOptions = {
   providers: [
@@ -18,10 +19,10 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const isAllowedToSignIn = true;
-      console.log(
-        "signIn",
-        JSON.stringify({ user, account, profile, email, credentials }, null, 2)
-      );
+      // console.log(
+      //   "signIn",
+      //   JSON.stringify({ user, account, profile, email, credentials }, null, 2)
+      // );
       if (isAllowedToSignIn) {
         return true;
       } else {
@@ -40,6 +41,20 @@ export const authOptions = {
         token.account = account;
       }
       return token;
+    },
+  },
+  events: {
+    async signIn(message) {
+      console.log("signIn", JSON.stringify(message, null, 2));
+      const result = await prisma.user.upsert({
+        where: {
+          spotifyUserId: message.user.id,
+        },
+        create: {
+          spotifyUserId: message.user.id,
+        },
+        update: {},
+      });
     },
   },
 } satisfies NextAuthOptions;
