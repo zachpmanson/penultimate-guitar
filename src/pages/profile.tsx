@@ -8,12 +8,11 @@ import { processPlaylist } from "@/lib/processPlaylist";
 import { Playlist } from "@/models/models";
 import { GetServerSideProps } from "next";
 import { Session, getServerSession } from "next-auth";
-import { getToken } from "next-auth/jwt";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
   const router = useRouter();
