@@ -8,6 +8,7 @@ on:
 jobs:
   migrate:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v2
       - run: npm install
