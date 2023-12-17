@@ -53,7 +53,7 @@ export default function SearchBox() {
         setButtonText("Search");
       });
     } else {
-      router.push(`/search/${event.target.url.value}`);
+      router.push(`/search?q=${encodeURIComponent(event.target.url.value)}`);
     }
   };
 
