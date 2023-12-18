@@ -41,8 +41,9 @@ export default function FilteredSavedTabs() {
         </div>
       )}
       <p className="text-center">
-        Click <Link href={`/search/${searchText}`}>search</Link> to search all
-        tabs.
+        Click{" "}
+        <Link href={`/search?q=${encodeURIComponent(searchText)}`}>search</Link>{" "}
+        to search all tabs.
       </p>
     </div>
   );

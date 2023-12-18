@@ -8,14 +8,14 @@ import { useEffect, useState } from "react";
 
 export default function Tab() {
   const router = useRouter();
-  const { query } = router.query;
+  const { q } = router.query;
   let value: string;
-  if (query === undefined) {
+  if (q === undefined) {
     value = "";
-  } else if (typeof query !== "string") {
-    value = query[0];
+  } else if (typeof q !== "string") {
+    value = q[0];
   } else {
-    value = query;
+    value = q;
   }
 
   const [results, setResults] = useState<SearchResult[]>([]);
