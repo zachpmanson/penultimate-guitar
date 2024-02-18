@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import NProgress from "nprogress";
 import { ReactElement, ReactNode, useEffect } from "react";
 import "../styles/nprogress.css";
+import Script from 'next/script'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
