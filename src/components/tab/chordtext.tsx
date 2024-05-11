@@ -57,25 +57,27 @@ export default function ChordText({
   let suffix = chord.replace(/^[A-Z][#b]?/g, "");
 
   let transposedKey = key;
+
+  // tranpose the key
   if (keys && transposition !== 0 && chord !== "N.C.") {
     key = KEY_MAP[key];
     if (transposition < 0) {
       transposition = keys.length - (Math.abs(transposition) % keys.length);
     }
-    let currentIndex = keys.findIndex((i) => i === key);
-    transposedKey = keys[(currentIndex + transposition) % keys.length];
+    let keyIndex = keys.findIndex((i) => i === key);
+    transposedKey = keys[(keyIndex + transposition) % keys.length];
   }
 
-  if (keys && suffix.includes("/") && transposition !== 0) {
-    let [start, bassNote] = suffix.split("/");
+  let [simpleSuffix, bassNote] = suffix.split("/");
+  let transposedBassNote = bassNote;
+
+  // if transpose the bass note
+  if (keys && bassNote && transposition !== 0) {
     bassNote = KEY_MAP[bassNote];
-    let currentIndex = keys.findIndex((i) => i === bassNote);
-    transposedKey = keys[(currentIndex + transposition) % keys.length];
 
-    suffix = `${start}/${transposedKey}`;
+    let bassIndex = keys.findIndex((i) => i === bassNote);
+    transposedBassNote = keys[(bassIndex + transposition) % keys.length];
   }
-
-  let simpleSuffix = suffix.split("/")[0];
 
   let chordSuffix = chordsDB?.suffixes
     ? getSuffix(simpleSuffix, chordsDB?.suffixes)
@@ -94,13 +96,19 @@ export default function ChordText({
     : undefined;
   const size = fontSize * 12;
 
+  const fullTransposedChord = `${transposedKey}${simpleSuffix}${
+    bassNote?.length > 0 ? `/${transposedBassNote}` : ""
+  }`;
+
   return (
     <span className="group relative w-max">
       <span
         className={`bg-gray-200 font-bold chord z-10 relative ${
           chordObj && "cursor-pointer"
         }`}
-      >{`${transposedKey}${suffix}`}</span>
+      >
+        {fullTransposedChord}
+      </span>
 
       {chordObj && (
         <div
