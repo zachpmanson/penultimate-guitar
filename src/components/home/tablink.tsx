@@ -5,11 +5,13 @@ import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
 
-type TabLinkProps = {
+export default function TabLink({
+  tablink,
+  recent,
+}: {
   tablink: TabLinkDto;
   recent?: boolean;
-};
-export default function TabLink({ tablink, recent }: TabLinkProps) {
+}) {
   const { removeSavedTab, isSaved } = useGlobal();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
@@ -23,7 +25,10 @@ export default function TabLink({ tablink, recent }: TabLinkProps) {
 
   return (
     <>
-      <div className="w-full flex mx-auto justify-between gap-2">
+      <div
+        className="w-full flex mx-auto justify-between gap-2"
+        onMouseOver={(e) => e.stopPropagation()}
+      >
         <Link
           href={`/tab/${tablink.taburl}`}
           className="w-full text-black no-underline hover:no-underline active:text-black"
