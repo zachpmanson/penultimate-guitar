@@ -5,7 +5,6 @@ import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
-import Link from "next/link";
 
 const Page: NextPageWithLayout = () => {
   const { searchText, savedTabs, mode } = useGlobal();

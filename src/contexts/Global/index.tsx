@@ -16,8 +16,13 @@ import {
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
+import { trpc } from "@/utils/trpc";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
+  const { data: tablinks, isLoading } = trpc.user.getTabLinks.useQuery();
+  const addTabLink = trpc.user.addTabLink.useMutation();
+  const deleteTabLink = trpc.user.deleteTabLink.useMutation();
+
   const [savedTabs, setSavedTabs] = useState<TabLinkDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [globalLoading, setGlobalLoading] = useState("");
@@ -53,8 +58,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [playlists]);
 
   useEffect(() => {
-    const userId = (session?.data as Session & { token: any })?.token.account
-      ?.providerAccountId;
+    const userId = session?.data?.user?.id;
     getSavedTabs(userId);
   }, [session]);
 
@@ -63,18 +67,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       localStorage.getItem("savedUserTabs") ?? "{}"
     ) as SavedUserTabLinks;
 
-    console.log("getSavedTabs", userId);
-    if (userId) {
-      fetch("/api/user/tablinks", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          setSavedTabs(res);
-          // console.log(JSON.stringify(res, null, 2));
-        });
+    if (userId && tablinks) {
+      setSavedTabs(tablinks);
     } else {
       setSavedTabs(
         (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
@@ -115,8 +109,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
 
   const updateLocalSaves = (saves: TabLinkDto[]) => {
-    const userId = (session?.data as Session & { token: any })?.token.account
-      ?.providerAccountId;
+    const userId = session?.data?.user?.id;
 
     const parsedTabs = JSON.parse(
       localStorage.getItem("savedUserTabs") ?? "{}"
@@ -135,21 +128,12 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   // removes all taburl in all folders, readds taburl to folder in string[]
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
-      const userId = (session?.data as Session & { token: any })?.token.account
-        ?.providerAccountId;
+      const userId = session?.data?.user?.id;
 
       if (userId) {
-        fetch("/api/user/tablinks", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            newTab: tabLink,
-            folders: folders,
-          }),
-        }).then((res) => {
-          // console.log(JSON.stringify(res, null, 2));
+        addTabLink.mutate({
+          newTab: tabLink,
+          folders: folders,
         });
       }
 
@@ -174,21 +158,12 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const addSavedTab = useCallback(
     (newTab: TabLinkDto) => {
-      const userId = (session?.data as Session & { token: any })?.token.account
-        ?.providerAccountId;
+      const userId = session?.data?.user?.id;
 
       if (userId) {
-        fetch("/api/user/tablinks", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            newTab: newTab,
-            folders: [newTab.folder ?? "Favourites"],
-          }),
-        }).then((res) => {
-          // console.log(JSON.stringify(res, null, 2));
+        addTabLink.mutate({
+          newTab: newTab,
+          folders: [newTab.folder ?? "Favourites"],
         });
       }
 
@@ -205,19 +180,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const removeSavedTab = useCallback(
     (tab: TabLinkDto) => {
       console.log("removeSavedTab", tab);
-      const userId = (session?.data as Session & { token: any })?.token.account
-        ?.providerAccountId;
+      const userId = session?.data?.user?.id;
       if (userId) {
         console.log("removeSavedTab", tab);
-        fetch("/api/user/tablinks", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(tab),
-        }).then((res) => {
-          // console.log(JSON.stringify(res, null, 2));
-        });
+        deleteTabLink.mutate(tab);
       }
       setSavedTabs((old) => {
         let newTabs = old.filter(

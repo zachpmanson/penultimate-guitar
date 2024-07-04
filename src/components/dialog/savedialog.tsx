@@ -49,7 +49,7 @@ export default function SaveDialog({
 
     let actualFolderNames: string[] = [];
     for (let name of currentFolderNames) {
-      if (name !== undefined) {
+      if (!!name) {
         actualFolderNames.push(name);
       }
     }

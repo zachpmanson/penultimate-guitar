@@ -1,10 +1,12 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist, TabLinkDto } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import TabLink from "./tablink";
+import LoadingSpinner from "../loadingspinner";
 
 function savedTabToFolders(savedTabs: TabLinkDto[]) {
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
@@ -21,8 +23,8 @@ function savedTabToFolders(savedTabs: TabLinkDto[]) {
 
 export default function SavedTabs() {
   const { savedTabs } = useGlobal();
-
-  const folders = savedTabToFolders(savedTabs);
+  const { data: tablinks, isLoading } = trpc.user.getTabLinks.useQuery();
+  const folders = !!tablinks ? savedTabToFolders(tablinks) : {};
 
   return (
     <div>
@@ -33,17 +35,21 @@ export default function SavedTabs() {
               <h1 className="text-center text-2xl my-4">Favourites</h1>
             </summary>
             <div className="flex flex-col gap-2 mt-2">
-              {Object.keys(folders).map((folder, i) =>
-                folder === "Favourites" ? (
-                  <div key={i} className="flex flex-col gap-2">
-                    {folders[folder].map((t, j) => (
-                      <TabLink key={j} tablink={{ ...t, saved: true }} />
-                    ))}
-                  </div>
-                ) : (
-                  <div key={i}>
-                    <Folder folders={folders} folder={folder} />
-                  </div>
+              {isLoading ? (
+                <LoadingSpinner />
+              ) : (
+                Object.keys(folders).map((folder, i) =>
+                  folder === "Favourites" ? (
+                    <div key={i} className="flex flex-col gap-2">
+                      {folders[folder].map((t, j) => (
+                        <TabLink key={j} tablink={{ ...t, saved: true }} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div key={i}>
+                      <Folder folders={folders} folder={folder} />
+                    </div>
+                  )
                 )
               )}
             </div>

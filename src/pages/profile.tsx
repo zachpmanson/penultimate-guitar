@@ -3,7 +3,7 @@ import ImportPlaylistDialog from "@/components/dialog/importplaylistdialog";
 import LoadingSpinner from "@/components/loadingspinner";
 import PlainButton from "@/components/shared/plainbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/server/auth";
 import { processPlaylist } from "@/lib/processPlaylist";
 import { Playlist } from "@/models/models";
 import { GetServerSideProps } from "next";
@@ -25,11 +25,6 @@ export default function Profile() {
   const [page, setPage] = useState(0);
   const [maxItems, setMaxItems] = useState<number>();
 
-  const [userId, setUserId] = useState<string>(
-    (session?.data as Session & { token: any })?.token.account
-      ?.providerAccountId
-  );
-
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
   const { setPlaylists, searchText } = useGlobal();
@@ -44,7 +39,7 @@ export default function Profile() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: userId,
+        userId: session?.data?.user?.id,
         page: page,
       }),
     })
@@ -59,17 +54,10 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    setUserId(
-      (session?.data as Session & { token: any })?.token.account
-        ?.providerAccountId
-    );
-  }, [session]);
-
-  useEffect(() => {
-    if (userId) {
+    if (session?.data?.user?.id) {
       fetchData();
     }
-  }, [userId, page]);
+  }, [session?.data?.user?.id, page]);
 
   const pullPlaylist = (url: string) => {
     console.log("pulling playlist", url);
@@ -178,6 +166,7 @@ export default function Profile() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
+  console.log("getStaticProps", session);
 
   if (!session) {
     return {

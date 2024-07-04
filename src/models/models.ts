@@ -55,12 +55,12 @@ export type AltVersion = {
 
 export type TabLinkDto = {
   taburl: string;
-  name: string;
-  artist: string;
-  saved?: boolean;
-  version?: number;
+  name: string | null;
+  artist: string | null;
+  saved?: boolean | null;
+  version?: number | null;
   folder?: string;
-  type?: TabType;
+  type?: TabType | null;
 };
 
 export type SavedUserTabLinks = {

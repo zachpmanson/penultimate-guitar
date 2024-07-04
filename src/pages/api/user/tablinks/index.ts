@@ -1,8 +1,6 @@
-import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getServerAuthSession } from "@/server/auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import { JWT } from "next-auth/jwt";
-import { getServerSession } from "next-auth/next";
 import { z } from "zod";
 
 const newTabSchema = z.object({
@@ -22,11 +20,9 @@ const schema = z.object({
 type PostSchema = z.infer<typeof schema>;
 
 export default async (req: NextApiRequest, res: NextApiResponse<any>) => {
-  console.log("tablinks", req.method, req.body);
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getServerAuthSession(req, res);
   if (session) {
-    const userId = (session.token as JWT & { account: any }).account
-      .providerAccountId as string;
+    const userId = (session.user?.id as string) ?? "";
 
     switch (req.method) {
       case "GET": {
