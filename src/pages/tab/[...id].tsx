@@ -8,7 +8,7 @@ import { useGlobal } from "@/contexts/Global/context";
 import { convertToTabLink } from "@/lib/conversion";
 import prisma from "@/lib/prisma";
 import { tabCompareFn } from "@/lib/sort";
-import { UGAdapter } from "@/lib/ug-interface/ug-interface";
+import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import {
   AltVersion,
   NewTab,

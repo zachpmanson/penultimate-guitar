@@ -5,6 +5,27 @@ import { SearchResult } from "@/models/models";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { trpc } from "@/utils/trpc";
+
+function collapseResults(results: SearchResult[]) {
+  let colRes: SearchResult[] = [];
+  for (let r of results) {
+    const existing = colRes.findIndex(
+      (c) =>
+        c.song_name === r.song_name &&
+        c.artist_name === r.artist_name &&
+        c.type === r.type
+    );
+    if (existing !== -1) {
+      if (r.rating > colRes[existing].rating) {
+        colRes[existing] = r;
+      }
+    } else {
+      colRes.push(r);
+    }
+  }
+  return colRes;
+}
 
 export default function Tab() {
   const router = useRouter();
@@ -18,61 +39,36 @@ export default function Tab() {
     value = q;
   }
 
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [pageNum, setPageNum] = useState(1);
   const [searchString, setSearchString] = useState(value);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
-  const collapseResults = (results: SearchResult[]) => {
-    let colRes: SearchResult[] = [];
-    for (let r of results) {
-      const existing = colRes.findIndex(
-        (c) =>
-          c.song_name === r.song_name &&
-          c.artist_name === r.artist_name &&
-          c.type === r.type
-      );
-      if (existing !== -1) {
-        if (r.rating > colRes[existing].rating) {
-          colRes[existing] = r;
-        }
-      } else {
-        colRes.push(r);
-      }
+  const {
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+
+    data,
+    isFetching,
+    isLoading,
+  } = trpc.tab.searchTabs.useInfiniteQuery(
+    {
+      value: searchString,
+      search_type: "title",
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: 1,
     }
-    return colRes;
-  };
+  );
 
-  useEffect(() => {
-    setIsLoading(true);
-
-    let search_type: string = "title";
-    if (!!searchString && pageNum > 0) {
-      fetch("/api/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          value: searchString,
-          search_type: search_type,
-          page: pageNum,
-        }),
-      })
-        .then((res) => res.json())
-        .then((res: SearchResult[]) => {
-          setResults((old) => collapseResults([...old, ...res]));
-          setIsLoading(false);
-          setCanLoadMore(res.length !== 0);
-        });
-    }
-  }, [pageNum, searchString]);
-
-  useEffect(() => {
-    setPageNum(1);
-    return () => setResults([]);
-  }, [searchString]);
+  // useEffect(() => {
+  //   setPageNum(1);
+  //   return () => setResults([]);
+  // }, [searchString]);
 
   useEffect(() => {
     setSearchString(value);
@@ -80,41 +76,46 @@ export default function Tab() {
 
   const loadPage = () => {
     setPageNum((old) => old + 1);
+    fetchNextPage();
   };
+
+  const allItems = data
+    ? collapseResults(data.pages.map((p) => p.items).flat())
+    : [];
 
   return (
     <>
       <Head>
-        <title>{`Search`}</title>
+        <title>Search</title>
       </Head>
       <h1 className="text-center text-2xl">Search Results</h1>
       <p className="text-center text-gray-400 mb-4 font-extralight">
         Only the highest rated versions of each are shown.
       </p>
       <div className="max-w-xl mx-auto flex flex-col gap-2">
-        {results.length === 0 ? (
+        {allItems.length === 0 ? (
           <></>
-        ) : results.length > 0 ? (
+        ) : data && !isLoading ? (
           <>
-            {results.map((r, i) => (
-              <SearchLink key={i} {...r} />
+            {allItems.map((r, i) => (
+              <SearchLink {...r} key={i} />
             ))}
-            {isLoading || !canLoadMore || (
+            {
               <div className="m-auto w-fit">
-                {canLoadMore && (
+                {hasNextPage && !isFetching && (
                   <PlainButton onClick={loadPage}>
                     <div className="flex items-center justify-center">
-                      Load more
+                      Load More
                     </div>
                   </PlainButton>
                 )}
               </div>
-            )}
+            }
           </>
         ) : (
           <p className="text-center">No results found</p>
         )}
-        {isLoading && <LoadingSpinner />}
+        {isFetching && <LoadingSpinner />}
       </div>
     </>
   );

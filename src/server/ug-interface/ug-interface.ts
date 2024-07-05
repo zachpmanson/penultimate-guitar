@@ -96,7 +96,7 @@ export namespace UGAdapter {
     search: string,
     type: string,
     page: number
-  ): Promise<SearchResult[]> {
+  ): Promise<{ items: SearchResult[]; nextCursor?: number }> {
     let cleanSearch = search.replace(
       /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[0-9]* ?[Ss]tereo ?[0-9]*\))/,
       ""
@@ -128,7 +128,10 @@ export namespace UGAdapter {
       .filter((r) => !blacklist.includes(r.type))
       .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
       .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-
-    return results;
+    console.log(results.length);
+    return {
+      items: results,
+      nextCursor: results.length > 25 ? page + 1 : undefined,
+    };
   }
 }

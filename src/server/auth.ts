@@ -29,7 +29,6 @@ export const authOptions = {
       }
     },
     session({ session, token, user }) {
-      console.log("session", { session, token, user });
       if (token.sub) {
         session.user = {
           ...session.user,

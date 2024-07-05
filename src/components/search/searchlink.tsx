@@ -1,8 +1,5 @@
-import { SearchResult } from "@/models/models";
 import Link from "next/link";
 import PlainButton from "../shared/plainbutton";
-
-type SearchLinkProps = SearchResult;
 
 export default function SearchLink({
   tab_url,
@@ -10,7 +7,13 @@ export default function SearchLink({
   artist_name,
   rating,
   type,
-}: SearchLinkProps) {
+}: {
+  tab_url: string;
+  song_name: string;
+  artist_name: string;
+  rating: number;
+  type: string;
+}) {
   return (
     <Link
       href={`/tab/${tab_url}`}
@@ -22,19 +25,15 @@ export default function SearchLink({
           <div>
             <span className="font-bold">{song_name}</span> - {artist_name}
           </div>
-          <div></div>
-        </div>
-        <div className="flex justify-between">
-          <div>
-            <p>
+          <div className="flex gap-1">
+            <div className="text-gray-400">
               {!Math.round(rating) ||
-                `Rating: ${Math.round(rating * 100) / 100} / 5.00`}
-            </p>
-          </div>
-          <div>
-            <p>{type}</p>
+                `${Math.round(rating * 100) / 100} / 5.00`}
+            </div>
+            <div>{type}</div>
           </div>
         </div>
+        <div className="flex justify-between"></div>
       </PlainButton>
     </Link>
   );
