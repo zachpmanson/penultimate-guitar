@@ -1,4 +1,4 @@
-import { SpotifyAdapter } from "@/lib/spotify-interface/spotify-interface";
+import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

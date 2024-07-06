@@ -22,15 +22,17 @@ export default function SearchLink({
     >
       <PlainButton>
         <div className="flex justify-between">
-          <div>
-            <span className="font-bold">{song_name}</span> - {artist_name}
+          <div className="flex flex-col">
+            <div className="font-bold">{song_name}</div>
+            <div className="">{artist_name}</div>
           </div>
-          <div className="flex gap-1">
+
+          <div className="flex flex-col gap-1">
+            <div className="text-right">{type}</div>
             <div className="text-gray-400">
               {!Math.round(rating) ||
                 `${Math.round(rating * 100) / 100} / 5.00`}
             </div>
-            <div>{type}</div>
           </div>
         </div>
         <div className="flex justify-between"></div>

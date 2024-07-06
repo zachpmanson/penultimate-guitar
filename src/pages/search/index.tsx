@@ -39,43 +39,25 @@ export default function Tab() {
     value = q;
   }
 
-  const [pageNum, setPageNum] = useState(1);
   const [searchString, setSearchString] = useState(value);
-  const [canLoadMore, setCanLoadMore] = useState(true);
 
-  const {
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-
-    data,
-    isFetching,
-    isLoading,
-  } = trpc.tab.searchTabs.useInfiniteQuery(
-    {
-      value: searchString,
-      search_type: "title",
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialCursor: 1,
-    }
-  );
-
-  // useEffect(() => {
-  //   setPageNum(1);
-  //   return () => setResults([]);
-  // }, [searchString]);
+  const { fetchNextPage, hasNextPage, data, isFetching, isLoading } =
+    trpc.tab.searchTabs.useInfiniteQuery(
+      {
+        value: searchString,
+        search_type: "title",
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        initialCursor: 1,
+      }
+    );
 
   useEffect(() => {
     setSearchString(value);
   }, [value]);
 
   const loadPage = () => {
-    setPageNum((old) => old + 1);
     fetchNextPage();
   };
 

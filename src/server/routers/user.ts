@@ -1,5 +1,7 @@
 import { TabSchema, NewTabSchema } from "@/types/user";
 import { authProcedure, createRouter } from "../trpc";
+import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
+import { z } from "zod";
 
 export const userRouter = createRouter({
   getTabLinks: authProcedure.query(async ({ ctx }) => {
@@ -73,6 +75,19 @@ export const userRouter = createRouter({
         },
       });
       return result;
+    }),
+
+  getPlaylists: authProcedure
+    .input(
+      z.object({
+        cursor: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await SpotifyAdapter.getUserPlaylists(
+        ctx.session.user.id,
+        input.cursor
+      );
     }),
 });
 
