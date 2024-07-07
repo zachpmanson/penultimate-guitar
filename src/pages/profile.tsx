@@ -123,8 +123,7 @@ export default function Profile() {
             playlist={playlist}
             isOpen={isImportOpen}
             setIsOpen={(isOpen) => {
-              setIsImportOpen(isImportOpen);
-              router.push("/");
+              setIsImportOpen(isOpen);
             }}
           />
         )}
@@ -135,7 +134,6 @@ export default function Profile() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  console.log("getStaticProps", session);
 
   if (!session) {
     return {

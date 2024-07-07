@@ -10,8 +10,8 @@ export default function FilteredSavedTabs() {
   const filteredTabs = _.uniqBy(
     savedTabs.filter(
       (t) =>
-        t.name.toLowerCase().includes(lowerSearchText) ||
-        t.artist.toLowerCase().includes(lowerSearchText)
+        t.name?.toLowerCase().includes(lowerSearchText) ||
+        t.artist?.toLowerCase().includes(lowerSearchText)
     ),
     (t: TabLinkDto) => t.taburl
   );

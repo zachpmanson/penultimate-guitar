@@ -79,7 +79,7 @@ function Folder({
       onMouseOver={() => setHovering(true)}
       onMouseOut={() => setHovering(false)}
     >
-      <summary className="p-4">
+      <summary className="p-3">
         <h2 className="text-xl">{folder}</h2>
       </summary>
 
@@ -99,26 +99,21 @@ function Folder({
 function FolderMenu({ folder }: { folder: string }) {
   const { savedTabs, removeSavedTab, playlists } = useGlobal();
 
+  const { data, refetch } = trpc.getPlaylists.useQuery(
+    { playlistId: playlists[folder] },
+    {
+      enabled: false,
+    }
+  );
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   const folders = savedTabToFolders(savedTabs);
 
   const refreshPlaylist = async (folderName: string) => {
-    await fetch("/api/playlist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playlistId: playlists[folderName],
-      }),
-    })
-      .then((res) => res.json())
-      .then((data: Playlist) => {
-        setIsImportOpen(true);
-        setPlaylist(data);
-      });
+    await refetch();
+    setIsImportOpen(true);
+    setPlaylist(data);
   };
 
   const deleteFolder = (folder: string) => {

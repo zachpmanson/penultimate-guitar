@@ -1,5 +1,5 @@
 import ChordText from "@/components/tab/chordtext";
-import useWindowDimensions from "@/hooks/windowdimensions";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { useEffect, useState } from "react";
 import reactStringReplace from "react-string-replace";
 import { isMobile } from "react-device-detect";

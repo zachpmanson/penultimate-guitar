@@ -97,38 +97,40 @@ export namespace UGAdapter {
     type: string,
     page: number
   ): Promise<{ items: SearchResult[]; nextCursor?: number }> {
+    if (search.length < 3) return { items: [], nextCursor: undefined };
+
     let cleanSearch = search.replace(
       /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[0-9]* ?[Ss]tereo ?[0-9]*\))/,
       ""
     );
     const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${cleanSearch}`;
     let results: SearchResult[] = [];
-    await fetch(URL, {
-      method: "GET",
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0",
-      },
-    })
-      .then((response) => response.text())
-      .then((html) => {
-        const dom = new JSDOM(html);
-        let jsStore = dom.window.document.querySelector(".js-store");
-        let dataContent = JSON.parse(
-          jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}"
-        );
-        let foundResults = dataContent?.store?.page?.data?.results;
-        if (foundResults !== undefined) results = foundResults;
-      })
-      .catch((err) => {
-        console.warn("Something went wrong.", err);
-      });
+    try {
+      const html = await fetch(URL, {
+        method: "GET",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0",
+        },
+      }).then((response) => response.text());
+      const dom = new JSDOM(html);
+      let jsStore = dom.window.document.querySelector(".js-store");
+      let dataContent = JSON.parse(
+        jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}"
+      );
+      let foundResults = dataContent?.store?.page?.data?.results;
+      if (foundResults !== undefined) results = foundResults;
+    } catch (err) {
+      console.warn("Something went wrong.", err);
+      throw err;
+    }
+
     results = results
       .filter((r) => r.tab_access_type === "public")
       .filter((r) => !blacklist.includes(r.type))
       .map((r) => ({ ...r, tab_url: r.tab_url.split("/tab/")[1] }))
       .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
-    console.log(results.length);
+    console.log(`Search '${cleanSearch}' found ${results.length}`);
     return {
       items: results,
       nextCursor: results.length > 25 ? page + 1 : undefined,

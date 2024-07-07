@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import prisma from "@/lib/prisma";
+import prisma from "@/server/prisma";
 import { Song } from "@prisma/client";
 import { GetStaticProps } from "next";
 import Head from "next/head";

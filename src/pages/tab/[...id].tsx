@@ -5,38 +5,34 @@ import ToolbarButton, {
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
-import { convertToTabLink } from "@/lib/conversion";
-import prisma from "@/lib/prisma";
-import { tabCompareFn } from "@/lib/sort";
-import { UGAdapter } from "@/server/ug-interface/ug-interface";
-import {
-  AltVersion,
-  NewTab,
-  Song,
-  TabDto,
-  TabLinkDto,
-  TabType,
-} from "@/models/models";
+import { TabDto, TabLinkDto } from "@/models/models";
+import { createContextInner } from "@/server/context";
+import prisma from "@/server/prisma";
+import { appRouter } from "@/server/routers/_app";
+import { DEFAULT_TAB } from "@/types/tab";
+import { convertToTabLink } from "@/utils/conversion";
+import { tabCompareFn } from "@/utils/sort";
+import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Fragment, useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 
 const scrollMs = 100;
 
-type TabProps = {
-  tabDetails: TabDto;
-};
+export default function Tab({ id }: { trpcState: any; id: string }) {
+  const { data, status } = trpc.tab.getTab.useQuery(id);
+  const tabDetails = data ?? DEFAULT_TAB;
+  console.log("tabDetails", tabDetails);
 
-export default function Tab({ tabDetails }: TabProps) {
   const element = useRef<any>(null);
-  const router = useRouter();
+  // const router = useRouter();
   const { mode, setMode } = useGlobal();
-  const { id } = router.query;
+  // const { id } = router.query;
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
     mode === "guitalele" ? -5 : 0
@@ -47,7 +43,7 @@ export default function Tab({ tabDetails }: TabProps) {
   const isTouching = useRef(false);
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
-  const plainTab = tabDetails.tab;
+  const plainTab = tabDetails?.tab ?? "";
   const tabLink = convertToTabLink(tabDetails);
 
   useEffect(() => {
@@ -180,6 +176,11 @@ export default function Tab({ tabDetails }: TabProps) {
       }
     });
   };
+
+  if (status !== "success" || !tabDetails) {
+    // won't happen since we're using `fallback: "blocking"`
+    return <>Loading...</>;
+  }
 
   let options = (
     <Menu as="div" className="relative inline-block text-left">
@@ -452,9 +453,12 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  let props: TabDto = {
-    ...defaultProps,
-  };
+  console.log("getStaticProps", params);
+  const helpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: await createContextInner(),
+    // transformer: superjson, // optional - adds superjson serialization
+  });
 
   if (params === undefined) {
     return {
@@ -462,138 +466,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  if (typeof params.id === "object") {
-    const url = params.id.join("/");
-
-    let savedTab: any;
-    try {
-      savedTab = await prisma.tab.findUnique({
-        where: {
-          taburl: url,
-        },
-        include: {
-          song: {
-            include: {
-              Tab: {
-                select: {
-                  taburl: true,
-                  version: true,
-                  rating: true,
-                  type: true,
-                },
-              },
-            },
-          },
-        },
-      });
-    } catch (e) {
-      console.error("Find unique failed", e);
-    }
-
-    if (savedTab?.tab && savedTab?.tab !== "ALT") {
-      props = {
-        ...savedTab,
-        type: savedTab.type as TabType,
-        tuning: JSON.parse(savedTab.tuning ?? "{}"),
-      };
-    } else {
-      const fullurl = `https://tabs.ultimate-guitar.com/tab/${url}`;
-      const [song, tab, altVersions] = await UGAdapter.getTab(fullurl);
-      if (tab.songId === undefined) {
-        return {
-          notFound: true,
-        };
-      }
-      tab.taburl = url;
-      props = {
-        ...tab,
-        song: { ...song, Tab: [...altVersions, tab] },
-      };
-      insertTab(song, tab, altVersions).catch(() =>
-        console.error("Database error occured for", tab.taburl)
-      );
-    }
-  }
-  if (!props.song.name) {
+  if (typeof params.id !== "object") {
     return {
       notFound: true,
     };
   }
 
-  return { props: { tabDetails: props } };
+  const url = params.id.join("/");
+  await helpers.tab.getTab.prefetch(url);
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+      id: url,
+    },
+    revalidate: 1,
+  };
 };
-
-async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
-  try {
-    // upsert song
-    if (!!song.id) {
-      try {
-        // left as await since later tab insertion needs songId
-        await prisma.song.upsert({
-          where: {
-            id: song.id,
-          },
-          create: {
-            id: song.id,
-            name: song.name,
-            artist: song.artist,
-          },
-          update: {},
-        });
-      } catch (e) {
-        console.error(`Error upserting song '${song.id}':`, e);
-      }
-    }
-
-    // insert tab
-    if (!!tab.tab) {
-      prisma.tab
-        .upsert({
-          where: {
-            taburl: tab.taburl,
-          },
-          create: {
-            ...tab,
-            tuning: JSON.stringify(tab?.tuning ?? {}),
-            capo: tab.capo ?? 0,
-            timestamp: new Date().toISOString(),
-          },
-          update: {
-            tab: tab.tab,
-            contributors: tab.contributors,
-            tuning: JSON.stringify(tab?.tuning ?? {}),
-            capo: tab.capo ?? 0,
-            timestamp: new Date().toISOString(),
-            type: tab.type,
-          },
-        })
-        .catch((e) => console.error(`Error upserting tab '${tab.taburl}':`, e));
-
-      for (let altVersion of altVersions) {
-        prisma.tab
-          .upsert({
-            where: {
-              taburl: altVersion.taburl,
-            },
-            create: {
-              ...defaultProps,
-              ...altVersion,
-              songId: tab.songId,
-              tuning: "{}",
-              taburl: altVersion.taburl,
-              tab: "ALT",
-              capo: 0,
-              song: undefined,
-              timestamp: null,
-            },
-            update: {},
-          })
-          .catch((e) =>
-            console.error(`Error upserting alt '${altVersion.taburl}':`, e)
-          );
-      }
-    }
-  } catch (err) {
-    console.warn("Insertion failed.", err);
-  }
-}

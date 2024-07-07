@@ -6,7 +6,7 @@ import type {
 import type { NextAuthOptions } from "next-auth";
 import { getServerSession } from "next-auth";
 import Spotify from "next-auth/providers/spotify";
-import prisma from "../lib/prisma";
+import prisma from "./prisma";
 
 export const authOptions = {
   providers: [
