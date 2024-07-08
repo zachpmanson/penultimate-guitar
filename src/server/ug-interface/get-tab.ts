@@ -40,7 +40,7 @@ export async function getTab(taburl: string) {
       tuning: JSON.parse(savedTab.tuning ?? "{}"),
     };
   } else {
-    const fullurl = `https://tabs.ultimate-guitar.com/tab/${input}`;
+    const fullurl = `https://tabs.ultimate-guitar.com/tab/${taburl}`;
 
     const [song, tab, altVersions] = await UGAdapter.getTab(fullurl);
     if (tab.songId === undefined) {
