@@ -2,8 +2,8 @@ import { TabDto, TabType } from "@/models/models";
 import { DEFAULT_TAB } from "@/types/tab";
 import { TRPCError } from "@trpc/server";
 import { insertTab } from "./insert-tab";
-import prisma from "./prisma";
-import { UGAdapter } from "./ug-interface/ug-interface";
+import prisma from "../prisma";
+import { UGAdapter } from "./ug-interface";
 
 export async function getTab(taburl: string) {
   let props: TabDto = DEFAULT_TAB;

@@ -26,7 +26,6 @@ const scrollMs = 100;
 export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
-  console.log("tabDetails", tabDetails);
 
   const element = useRef<any>(null);
   // const router = useRouter();

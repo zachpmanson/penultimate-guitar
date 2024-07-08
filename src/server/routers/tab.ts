@@ -1,12 +1,7 @@
+import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
 import { createRouter, publicProcedure } from "../trpc";
-import { UGAdapter } from "@/server/ug-interface/ug-interface";
-import prisma from "@/server/prisma";
-import { TabDto, TabType } from "@/models/models";
-import { insertTab } from "../insert-tab";
-import { DEFAULT_TAB } from "@/types/tab";
-import { TRPCError } from "@trpc/server";
-import { getTab } from "../get-tab";
+import { getTab } from "../ug-interface/get-tab";
 
 export const tabRouter = createRouter({
   getTab: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
