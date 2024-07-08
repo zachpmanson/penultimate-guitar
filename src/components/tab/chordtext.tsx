@@ -1,6 +1,6 @@
-import { useGlobal } from "@/contexts/Global/context";
 import { useConfigStore } from "@/state/config";
 import Chord from "@tombatossals/react-chords/lib/Chord";
+import { LegacyRef, useRef } from "react";
 
 type ChordProps = {
   chord: string;
@@ -95,14 +95,17 @@ export default function ChordText({
   let chordObj = positions
     ? positions[inversion % positions.length]
     : undefined;
+
   const size = fontSize * 12;
 
   const fullTransposedChord = `${transposedKey}${simpleSuffix}${
     bassNote?.length > 0 ? `/${transposedBassNote}` : ""
   }`;
 
+  const inputRef = useRef<HTMLElement>(null);
+
   return (
-    <span className="group relative w-max">
+    <span className="group w-max" ref={inputRef}>
       <span
         className={`bg-gray-200 font-bold chord z-10 relative ${
           chordObj && "cursor-pointer"
@@ -114,8 +117,9 @@ export default function ChordText({
         <div
           style={{
             width: size,
-            top: -size - 5,
-            left: -size / 2.5,
+            top: inputRef.current ? inputRef.current?.offsetTop - size : 0,
+            left: `50%`,
+            transform: `translateX(-50%)`,
           }}
           className="pointer-events-none absolute z-50 bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
         >
