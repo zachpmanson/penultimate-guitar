@@ -1,12 +1,13 @@
 import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { Playlist, TabLinkDto } from "@/models/models";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import TabLink from "./tablink";
 import LoadingSpinner from "../loadingspinner";
+import TabLink from "./tablink";
 
 function savedTabToFolders(savedTabs: TabLinkDto[]) {
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
@@ -22,10 +23,8 @@ function savedTabToFolders(savedTabs: TabLinkDto[]) {
 }
 
 export default function SavedTabs() {
-  const { savedTabs } = useGlobal();
-  const { data: tablinks, isLoading } = trpc.user.getTabLinks.useQuery();
-  const folders = !!tablinks ? savedTabToFolders(tablinks) : {};
-
+  const { savedTabs, isLoadingTabs } = useSavedTabs();
+  const folders = !!savedTabs ? savedTabToFolders(savedTabs) : {};
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -35,7 +34,7 @@ export default function SavedTabs() {
               <h1 className="text-center text-2xl my-4">Favourites</h1>
             </summary>
             <div className="flex flex-col gap-2 mt-2">
-              {isLoading ? (
+              {isLoadingTabs ? (
                 <LoadingSpinner />
               ) : (
                 Object.keys(folders).map((folder, i) =>
@@ -73,7 +72,7 @@ function Folder({
   return (
     <details
       className={
-        "bg-gray-200 rounded-xl  border-2 transition ease-in-out" +
+        "bg-gray-200 rounded-xl  border transition duration-75" +
         (hovering ? " hover:border-gray-400" : "")
       }
       onMouseOver={() => setHovering(true)}
@@ -97,7 +96,8 @@ function Folder({
 }
 
 function FolderMenu({ folder }: { folder: string }) {
-  const { savedTabs, removeSavedTab, playlists } = useGlobal();
+  const { playlists } = useGlobal();
+  const { savedTabs, removeSavedTab } = useSavedTabs();
 
   const { data, refetch } = trpc.getPlaylists.useQuery(
     { playlistId: playlists[folder] },

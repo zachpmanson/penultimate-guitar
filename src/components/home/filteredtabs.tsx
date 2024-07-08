@@ -3,9 +3,12 @@ import { TabLinkDto } from "@/models/models";
 import _ from "lodash";
 import Link from "next/link";
 import TabLink from "./tablink";
+import useSavedTabs from "@/hooks/useSavedTabs";
 
 export default function FilteredSavedTabs() {
-  const { savedTabs, searchText } = useGlobal();
+  const { searchText } = useGlobal();
+  const { savedTabs } = useSavedTabs();
+
   const lowerSearchText = searchText.toLowerCase();
   const filteredTabs = _.uniqBy(
     savedTabs.filter(

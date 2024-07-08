@@ -1,4 +1,4 @@
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import {
   Playlist,
   SearchResult,
@@ -6,12 +6,12 @@ import {
   TabType,
   Track,
 } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DialogButton from "./dialogbutton";
-import { trpc } from "@/utils/trpc";
-import { useRouter } from "next/router";
 
 function getTabLinkIfExists(results: SearchResult[]): TabLinkDto | undefined {
   results.sort((a, b) => b.rating - a.rating);
@@ -50,7 +50,7 @@ export default function ImportPlaylistDialog({
 }) {
   const router = useRouter();
   const { mutateAsync: search } = trpc.tab.searchTabsLazy.useMutation();
-  const { addSavedTab } = useGlobal();
+  const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
   const [playlistTabs, setPlaylistTabs] = useState<TabLinkDto[]>([]);
   const [attemptCount, setAttemptCount] = useState(0);
@@ -94,7 +94,7 @@ export default function ImportPlaylistDialog({
     };
 
     getTabs().catch();
-  }, [addSavedTab, isOpen, playlist]);
+  }, [addSavedTab, search, isOpen, playlist]);
 
   return (
     <Dialog

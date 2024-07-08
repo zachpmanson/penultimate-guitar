@@ -11,6 +11,7 @@ import {
   KeyboardEvent,
 } from "react";
 import DialogButton from "./dialogbutton";
+import useSavedTabs from "@/hooks/useSavedTabs";
 
 type SaveDialogProps = {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export default function SaveDialog({
   setIsOpen,
   tab,
 }: SaveDialogProps) {
-  const { setTabFolders, savedTabs } = useGlobal();
+  const { setTabFolders, savedTabs } = useSavedTabs();
   const [currentFolders, setCurrentFolders] = useState<string[]>([]);
   const [addingNew, setAddingNew] = useState(false);
 
@@ -84,7 +85,7 @@ export default function SaveDialog({
     let trimmedName = newFolder.trim();
     if (!!trimmedName && trimmedName.length < 20) {
       setFolders((old) => [...old, trimmedName]);
-      // setCurrentFolders(trimmedName);
+      setCurrentFolders((old) => [...old, trimmedName]);
     }
     setAddingNew(false);
   };

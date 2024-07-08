@@ -1,7 +1,7 @@
-import { TabSchema, NewTabSchema } from "@/types/user";
-import { authProcedure, createRouter } from "../trpc";
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
+import { NewTabSchema, TabSchema } from "@/types/user";
 import { z } from "zod";
+import { authProcedure, createRouter } from "../trpc";
 
 export const userRouter = createRouter({
   getTabLinks: authProcedure.query(async ({ ctx }) => {
@@ -77,6 +77,36 @@ export const userRouter = createRouter({
       return result;
     }),
 
+  setTabLinks: authProcedure
+    .input(
+      z.object({
+        tab: TabSchema,
+        folders: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.userTablink.deleteMany({
+        where: {
+          spotifyUserId: ctx.session.user.id,
+          taburl: input.tab.taburl,
+        },
+      });
+
+      const newTabs = await ctx.prisma.userTablink.createMany({
+        data: input.folders.map((folder) => ({
+          id: `${ctx.session.user.id}-${input.tab.taburl}-${folder}`,
+          spotifyUserId: ctx.session.user.id,
+          taburl: input.tab.taburl,
+          folder,
+          name: input.tab.name,
+          artist: input.tab.artist,
+          type: input.tab.type,
+          version: input.tab.version,
+        })),
+      });
+      return newTabs;
+    }),
+
   getPlaylists: authProcedure
     .input(
       z.object({
@@ -91,5 +121,4 @@ export const userRouter = createRouter({
     }),
 });
 
-// export type definition of API
 export type UserRouter = typeof userRouter;

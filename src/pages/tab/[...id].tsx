@@ -4,11 +4,10 @@ import ToolbarButton, {
   getToolbarButtonStyle,
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
-import { useGlobal } from "@/contexts/Global/context";
-import { TabDto, TabLinkDto } from "@/models/models";
+import { TabLinkDto } from "@/models/models";
 import { createContextInner } from "@/server/context";
-import prisma from "@/server/prisma";
 import { appRouter } from "@/server/routers/_app";
+import { useConfigStore } from "@/state/config";
 import { DEFAULT_TAB } from "@/types/tab";
 import { convertToTabLink } from "@/utils/conversion";
 import { tabCompareFn } from "@/utils/sort";
@@ -31,7 +30,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 
   const element = useRef<any>(null);
   // const router = useRouter();
-  const { mode, setMode } = useGlobal();
+  const { mode, setMode } = useConfigStore();
   // const { id } = router.query;
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
@@ -167,14 +166,12 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   };
 
   const toggleMode = () => {
-    setMode((old) => {
-      if (old === "guitalele") {
-        setTranposition(0);
-        return "default";
-      } else {
-        return "guitalele";
-      }
-    });
+    if (mode === "guitalele") {
+      setTranposition(0);
+      setMode("default");
+    } else {
+      setMode("guitalele");
+    }
   };
 
   if (status !== "success" || !tabDetails) {
@@ -418,19 +415,6 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 }
 
 /* ============= SERVER SIDE ============= */
-
-const defaultProps: TabDto = {
-  taburl: "",
-  song: { id: 0, name: "", artist: "" },
-  contributors: [],
-  capo: 0,
-  tab: "",
-  version: 0,
-  songId: 0,
-  rating: 0,
-  type: "Tab",
-};
-
 export async function getStaticPaths() {
   // TODO removed proper path discovery because build time was too long
 

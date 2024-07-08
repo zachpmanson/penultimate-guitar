@@ -1,6 +1,6 @@
 import { useGlobal } from "@/contexts/Global/context";
 import prisma from "@/server/prisma";
-import { tabCompareFn } from "@/lib/sort";
+import { tabCompareFn } from "@/utils/sort";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
