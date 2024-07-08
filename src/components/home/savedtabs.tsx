@@ -105,6 +105,7 @@ function FolderMenu({ folder }: { folder: string }) {
       enabled: false,
     }
   );
+  const getTab = trpc.tab.getTabLazy.useMutation();
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -126,8 +127,7 @@ function FolderMenu({ folder }: { folder: string }) {
 
   const scrapeAll = async (folder: string) => {
     for (let tabLink of folders[folder]) {
-      await fetch(`/tab/${tabLink.taburl}`);
-      console.log("Pulled", tabLink.taburl);
+      getTab.mutate(tabLink.taburl);
       await new Promise((r) => setTimeout(r, 8000));
     }
   };

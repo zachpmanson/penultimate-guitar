@@ -4,13 +4,12 @@ import { useAuthStore } from "@/state/auth";
 import { useSession } from "next-auth/react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
+import { useConfigStore } from "@/state/config";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [searchText, setSearchText] = useState<string>("");
-  const [globalLoading, setGlobalLoading] = useState("");
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
-  const [mode, setMode] = useState<Mode>("default");
-  const [chords, setChords] = useState<ChordDB.GuitarChords>();
+  const { guitarChords, setGuitarChords } = useConfigStore();
 
   const session = useSession();
   const userId = session?.data?.user?.id;
@@ -18,17 +17,21 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userId) setUserId(userId);
-    else setUserId("");
+    else setUserId(undefined);
   }, [userId]);
 
   useEffect(() => {
-    getChords();
+    if (!guitarChords) {
+      fetch("/chords/guitar.json", {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((res: ChordDB.GuitarChords) => {
+          setGuitarChords(res);
+        });
+    }
     getPlaylists();
   }, []);
-
-  useEffect(() => {
-    updateLocalMode(mode);
-  }, [mode]);
 
   useEffect(() => {
     updatePlaylists(playlists);
@@ -41,24 +44,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setPlaylists(parsedPlaylists);
   };
 
-  const getChords = () => {
-    let guitarChords = JSON.parse(localStorage.getItem("guitarChords") ?? "{}");
-    if (guitarChords.main) {
-      setChords(guitarChords as ChordDB.GuitarChords);
-    } else {
-      fetch("/chords/guitar.json", {
-        method: "GET",
-      })
-        .then((res) => res.json())
-        .then((res: ChordDB.GuitarChords) => {
-          setChords(res);
-          localStorage.setItem("guitarChords", JSON.stringify(res));
-        });
-    }
-  };
-
-  const updateLocalMode = (mode: Mode) => localStorage.setItem("mode", mode);
-
   const updatePlaylists = (playlists: PlaylistCollection) => {
     localStorage.setItem("playlists", JSON.stringify(playlists));
   };
@@ -67,21 +52,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       searchText,
       setSearchText,
-      globalLoading,
-      setGlobalLoading,
-      chords,
       playlists,
       setPlaylists,
     }),
-    [
-      searchText,
-      setSearchText,
-      globalLoading,
-      setGlobalLoading,
-      chords,
-      playlists,
-      setPlaylists,
-    ]
+    [searchText, setSearchText, playlists, setPlaylists]
   );
 
   return (

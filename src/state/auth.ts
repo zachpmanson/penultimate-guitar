@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
 type AuthStore = {
-  userId: string;
+  userId?: string;
 };
 
 type AuthActions = {
-  setUserId: (userId: string) => void;
+  setUserId: (userId?: string) => void;
 };
 
 export const useAuthStore = create<AuthStore & AuthActions>()((set) => ({
-  userId: "",
-  setUserId: (userId: string) => set({ userId }),
+  userId: undefined,
+  setUserId: (userId?: string) => set({ userId }),
 }));

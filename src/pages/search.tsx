@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { trpc } from "@/utils/trpc";
+import { parseAsString, useQueryState } from "nuqs";
 
 function collapseResults(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
@@ -29,33 +30,20 @@ function collapseResults(results: SearchResult[]) {
 
 export default function Tab() {
   const router = useRouter();
-  const { q } = router.query;
-  let value: string;
-  if (q === undefined) {
-    value = "";
-  } else if (typeof q !== "string") {
-    value = q[0];
-  } else {
-    value = q;
-  }
-
-  const [searchString, setSearchString] = useState(value);
+  const [q, setQ] = useQueryState("q", parseAsString);
 
   const { fetchNextPage, hasNextPage, data, isFetching, isLoading } =
     trpc.tab.searchTabs.useInfiniteQuery(
       {
-        value: searchString,
+        value: q ?? "",
         search_type: "title",
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
+        enabled: !!q,
       }
     );
-
-  useEffect(() => {
-    setSearchString(value);
-  }, [value]);
 
   const loadPage = () => {
     fetchNextPage();

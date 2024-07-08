@@ -4,27 +4,16 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import { processPlaylist } from "@/lib/processPlaylist";
+import { parseAsString, useQueryState } from "nuqs";
 
 export default function SearchBox() {
   const router = useRouter();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
-  const [searchText, setLocalSearchText] = useState("");
-  const { setSearchText, setPlaylists } = useGlobal();
 
-  useEffect(() => {
-    if (router.route === "/") {
-      setSearchText("");
-      setLocalSearchText("");
-    }
-  }, [router.route, setSearchText]);
+  const { setPlaylists } = useGlobal();
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setSearchText(searchText);
-    }, 50);
-    return () => clearTimeout(timeoutId);
-  }, [searchText, setSearchText]);
+  const [localSearchText, setLocalSearchText] = useState("");
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -91,7 +80,7 @@ export default function SearchBox() {
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
-            value={searchText}
+            value={localSearchText}
             onChange={(e) => setLocalSearchText(e.target.value)}
           />
           <button
