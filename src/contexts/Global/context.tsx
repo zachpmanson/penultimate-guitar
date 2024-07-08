@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction, createContext, useContext } from "react";
 export type GlobalContextProps = {
   searchText: string;
   setSearchText: Dispatch<SetStateAction<string>>;
-  chords?: ChordDB.GuitarChords;
   playlists: PlaylistCollection;
   setPlaylists: Dispatch<SetStateAction<PlaylistCollection>>;
 };

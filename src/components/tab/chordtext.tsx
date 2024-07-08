@@ -1,4 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
+import { useConfigStore } from "@/state/config";
 import Chord from "@tombatossals/react-chords/lib/Chord";
 
 type ChordProps = {
@@ -49,7 +50,7 @@ export default function ChordText({
   fontSize,
   inversion,
 }: ChordProps) {
-  const { chords: chordsDB } = useGlobal();
+  const { guitarChords: chordsDB } = useConfigStore();
   let keys = chordsDB?.keys;
 
   let matches = chord.match(/^[A-Z][#b]?/);
@@ -109,7 +110,6 @@ export default function ChordText({
       >
         {fullTransposedChord}
       </span>
-
       {chordObj && (
         <div
           style={{
