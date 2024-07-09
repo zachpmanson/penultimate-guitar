@@ -1,10 +1,10 @@
 import { ChordDB } from "@/models/chorddb.models";
-import { Mode, PlaylistCollection } from "@/models/models";
+import { PlaylistCollection } from "@/models/models";
 import { useAuthStore } from "@/state/auth";
+import { useConfigStore } from "@/state/config";
 import { useSession } from "next-auth/react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
-import { useConfigStore } from "@/state/config";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [searchText, setSearchText] = useState<string>("");

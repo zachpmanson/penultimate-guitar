@@ -138,7 +138,7 @@ function FolderMenu({ folder }: { folder: string }) {
         <div>
           <Menu.Button
             className={`
-  border-gray-200 border-2 rounded-xl transition ease-in-out
+  border-gray-200 border rounded-xl transition ease-in-out
   flex items-center justify-center text-md text-lg  bg-white px-4 hover:border-gray-400
 `}
           >
