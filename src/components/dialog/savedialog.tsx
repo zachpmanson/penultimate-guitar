@@ -100,7 +100,7 @@ export default function SaveDialog({
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-xs rounded bg-white p-4">
-          <Dialog.Title>Save Tab to Folder</Dialog.Title>
+          <Dialog.Title>Save tab to folder</Dialog.Title>
           <Dialog.Description></Dialog.Description>
           <div className="flex flex-col">
             {folders.map((f, i) => (

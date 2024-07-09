@@ -5,6 +5,7 @@ import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
 import useSavedTabs from "@/hooks/useSavedTabs";
+import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function TabLink({
   tablink,
@@ -47,7 +48,11 @@ export default function TabLink({
         </Link>
         <PlainButton onClick={handleSave}>
           <div className="flex items-center h-full w-4">
-            {recent ? "💾" : "❌"}
+            {recent ? (
+              <BookmarkIcon className="w-full h-full" />
+            ) : (
+              <XMarkIcon className="w-full h-full" />
+            )}
           </div>
         </PlainButton>
       </div>
