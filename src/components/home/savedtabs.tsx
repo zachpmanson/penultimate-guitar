@@ -33,7 +33,7 @@ export default function SavedTabs() {
             <summary>
               <h1 className="text-center text-2xl my-4">Favourites</h1>
             </summary>
-            <div className="flex flex-col gap-2 mt-2">
+            <div className="flex flex-col gap-1 mt-2">
               {isLoadingTabs ? (
                 <LoadingSpinner />
               ) : (
@@ -79,10 +79,10 @@ function Folder({
       onMouseOut={() => setHovering(false)}
     >
       <summary className="p-3">
-        <h2 className="text-xl">{folder}</h2>
+        <h2 className="text-lg">{folder}</h2>
       </summary>
 
-      <div className="flex flex-col gap-2 m-4 mt-0">
+      <div className="flex flex-col gap-1 m-4 mt-0">
         {folders[folder].map((t, j) => (
           <TabLink key={j} tablink={{ ...t, saved: true }} />
         ))}

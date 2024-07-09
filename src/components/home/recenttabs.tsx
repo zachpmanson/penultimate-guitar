@@ -32,7 +32,7 @@ export default function RecentTabs() {
           <summary>
             <h1 className="text-center text-2xl my-4">Recent Tabs</h1>
           </summary>
-          <div className="flex flex-col gap-2 mt-2">
+          <div className="flex flex-col gap-1 mt-2">
             {recents
               .slice(0, 10)
               .filter((r) => r.name && r.artist)
