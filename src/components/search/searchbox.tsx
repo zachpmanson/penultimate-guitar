@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import { useSearchStore } from "@/state/search";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -85,13 +86,20 @@ export default function SearchBox() {
               setSearchText(e.target.value);
             }}
           />
-          <button
-            disabled={buttonText !== "Search"}
-            type="submit"
-            className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
-          >
-            {buttonText}
-          </button>
+          <div className="absolute right-2.5 bottom-2.5 flex gap-4 items-center">
+            {searchText !== "" && (
+              <button onClick={() => setSearchText("")}>
+                <XMarkIcon className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              disabled={buttonText !== "Search"}
+              type="submit"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
+            >
+              {buttonText}
+            </button>
+          </div>
         </div>
       </form>
       {isImportOpen && playlist && (
