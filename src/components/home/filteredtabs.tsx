@@ -1,17 +1,20 @@
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
+import { useSearchStore } from "@/state/search";
 import _ from "lodash";
 import Link from "next/link";
 import TabLink from "./tablink";
 
 export default function FilteredSavedTabs() {
-  const { savedTabs, searchText } = useGlobal();
+  const { searchText } = useSearchStore();
+  const { savedTabs } = useSavedTabs();
+
   const lowerSearchText = searchText.toLowerCase();
   const filteredTabs = _.uniqBy(
     savedTabs.filter(
       (t) =>
-        t.name.toLowerCase().includes(lowerSearchText) ||
-        t.artist.toLowerCase().includes(lowerSearchText)
+        t.name?.toLowerCase().includes(lowerSearchText) ||
+        t.artist?.toLowerCase().includes(lowerSearchText)
     ),
     (t: TabLinkDto) => t.taburl
   );

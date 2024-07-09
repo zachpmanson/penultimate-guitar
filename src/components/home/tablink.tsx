@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
+import useSavedTabs from "@/hooks/useSavedTabs";
 
 export default function TabLink({
   tablink,
@@ -12,7 +13,7 @@ export default function TabLink({
   tablink: TabLinkDto;
   recent?: boolean;
 }) {
-  const { removeSavedTab, isSaved } = useGlobal();
+  const { removeSavedTab, isSaved } = useSavedTabs();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const handleSave = () => {

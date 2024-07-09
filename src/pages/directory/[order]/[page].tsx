@@ -1,5 +1,6 @@
 import { useGlobal } from "@/contexts/Global/context";
-import prisma from "@/lib/prisma";
+import prisma from "@/server/prisma";
+import { useSearchStore } from "@/state/search";
 import { Song } from "@prisma/client";
 import { GetStaticProps } from "next";
 import Head from "next/head";
@@ -31,7 +32,7 @@ export default function Directory({
   const { page, order } = router.query;
   let orderName = order ?? "new";
   const pageNum = +(page ?? 1);
-  const { searchText, setSearchText } = useGlobal();
+  const { searchText, setSearchText } = useSearchStore();
 
   useEffect(() => {
     setSearchText("");

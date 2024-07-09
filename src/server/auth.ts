@@ -19,10 +19,6 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       const isAllowedToSignIn = true;
-      // console.log(
-      //   "signIn",
-      //   JSON.stringify({ user, account, profile, email, credentials }, null, 2)
-      // );
       if (isAllowedToSignIn) {
         return true;
       } else {
@@ -32,9 +28,14 @@ export const authOptions = {
         // return '/unauthorized'
       }
     },
-    async session({ session, token }) {
-      const extendedSession = { ...session, token: token };
-      return extendedSession;
+    session({ session, token, user }) {
+      if (token.sub) {
+        session.user = {
+          ...session.user,
+          id: token.sub,
+        };
+      }
+      return session;
     },
     async jwt({ token, account }) {
       if (account) {
@@ -57,14 +58,28 @@ export const authOptions = {
       });
     },
   },
+  session: {
+    strategy: "jwt",
+  },
 } satisfies NextAuthOptions;
 
 // Use it in server contexts
-export function auth(
+export function getServerAuthSession(
   ...args:
     | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
     | [NextApiRequest, NextApiResponse]
     | []
 ) {
+  // console.log("getServerAuthSession", args);
   return getServerSession(...args, authOptions);
+}
+
+import { DefaultSession } from "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user?: {
+      id: string;
+    } & DefaultSession["user"];
+  }
 }

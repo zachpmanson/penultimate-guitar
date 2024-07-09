@@ -2,13 +2,16 @@ import FilteredSavedTabs from "@/components/home/filteredtabs";
 import RecentTabs from "@/components/home/recenttabs";
 import SavedTabs from "@/components/home/savedtabs";
 import { GuitaleleStyle } from "@/constants";
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
+import { useConfigStore } from "@/state/config";
+import { useSearchStore } from "@/state/search";
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
-import Link from "next/link";
 
 const Page: NextPageWithLayout = () => {
-  const { searchText, savedTabs, mode } = useGlobal();
+  const { searchText } = useSearchStore();
+  const { mode } = useConfigStore();
+  const { savedTabs } = useSavedTabs();
 
   const isFilter = (text: string) => {
     if (savedTabs.length === 0) return false;

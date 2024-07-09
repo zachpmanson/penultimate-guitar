@@ -1,9 +1,12 @@
 import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { Playlist, TabLinkDto } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
+import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
 
 function savedTabToFolders(savedTabs: TabLinkDto[]) {
@@ -20,10 +23,8 @@ function savedTabToFolders(savedTabs: TabLinkDto[]) {
 }
 
 export default function SavedTabs() {
-  const { savedTabs } = useGlobal();
-
-  const folders = savedTabToFolders(savedTabs);
-
+  const { savedTabs, isLoadingTabs } = useSavedTabs();
+  const folders = !!savedTabs ? savedTabToFolders(savedTabs) : {};
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -33,17 +34,21 @@ export default function SavedTabs() {
               <h1 className="text-center text-2xl my-4">Favourites</h1>
             </summary>
             <div className="flex flex-col gap-2 mt-2">
-              {Object.keys(folders).map((folder, i) =>
-                folder === "Favourites" ? (
-                  <div key={i} className="flex flex-col gap-2">
-                    {folders[folder].map((t, j) => (
-                      <TabLink key={j} tablink={{ ...t, saved: true }} />
-                    ))}
-                  </div>
-                ) : (
-                  <div key={i}>
-                    <Folder folders={folders} folder={folder} />
-                  </div>
+              {isLoadingTabs ? (
+                <LoadingSpinner />
+              ) : (
+                Object.keys(folders).map((folder, i) =>
+                  folder === "Favourites" ? (
+                    <div key={i} className="flex flex-col gap-2">
+                      {folders[folder].map((t, j) => (
+                        <TabLink key={j} tablink={{ ...t, saved: true }} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div key={i}>
+                      <Folder folders={folders} folder={folder} />
+                    </div>
+                  )
                 )
               )}
             </div>
@@ -67,13 +72,13 @@ function Folder({
   return (
     <details
       className={
-        "bg-gray-200 rounded-xl  border-2 transition ease-in-out" +
+        "bg-gray-200 rounded-xl  border transition duration-75" +
         (hovering ? " hover:border-gray-400" : "")
       }
       onMouseOver={() => setHovering(true)}
       onMouseOut={() => setHovering(false)}
     >
-      <summary className="p-4">
+      <summary className="p-3">
         <h2 className="text-xl">{folder}</h2>
       </summary>
 
@@ -91,28 +96,25 @@ function Folder({
 }
 
 function FolderMenu({ folder }: { folder: string }) {
-  const { savedTabs, removeSavedTab, playlists } = useGlobal();
+  const { playlists } = useGlobal();
+  const { savedTabs, removeSavedTab } = useSavedTabs();
 
+  const { data, refetch } = trpc.spotify.getPlaylist.useQuery(
+    { playlistId: playlists[folder] },
+    {
+      enabled: false,
+    }
+  );
+  const getTab = trpc.tab.getTabLazy.useMutation();
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   const folders = savedTabToFolders(savedTabs);
 
   const refreshPlaylist = async (folderName: string) => {
-    await fetch("/api/playlist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playlistId: playlists[folderName],
-      }),
-    })
-      .then((res) => res.json())
-      .then((data: Playlist) => {
-        setIsImportOpen(true);
-        setPlaylist(data);
-      });
+    await refetch();
+    setIsImportOpen(true);
+    setPlaylist(data);
   };
 
   const deleteFolder = (folder: string) => {
@@ -125,8 +127,7 @@ function FolderMenu({ folder }: { folder: string }) {
 
   const scrapeAll = async (folder: string) => {
     for (let tabLink of folders[folder]) {
-      await fetch(`/tab/${tabLink.taburl}`);
-      console.log("Pulled", tabLink.taburl);
+      getTab.mutate(tabLink.taburl);
       await new Promise((r) => setTimeout(r, 8000));
     }
   };
@@ -137,7 +138,7 @@ function FolderMenu({ folder }: { folder: string }) {
         <div>
           <Menu.Button
             className={`
-  border-gray-200 border-2 rounded-xl transition ease-in-out
+  border-gray-200 border rounded-xl transition ease-in-out
   flex items-center justify-center text-md text-lg  bg-white px-4 hover:border-gray-400
 `}
           >

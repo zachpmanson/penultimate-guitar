@@ -3,14 +3,14 @@ import ImportPlaylistDialog from "@/components/dialog/importplaylistdialog";
 import LoadingSpinner from "@/components/loadingspinner";
 import PlainButton from "@/components/shared/plainbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import { authOptions } from "@/lib/auth";
-import { processPlaylist } from "@/lib/processPlaylist";
 import { Playlist } from "@/models/models";
+import { authOptions } from "@/server/auth";
+import { useSearchStore } from "@/state/search";
+import { trpc } from "@/utils/trpc";
 import { GetServerSideProps } from "next";
-import { Session, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -18,58 +18,27 @@ export default function Profile() {
   const router = useRouter();
   const session = useSession();
 
-  const [items, setItems] = useState<any[]>([]);
-  const [visibleItems, setVisibleItems] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<any>();
-  const [page, setPage] = useState(0);
-  const [maxItems, setMaxItems] = useState<number>();
+  // const [playlist, setPlaylist] = useState<Playlist>();
 
-  const [userId, setUserId] = useState<string>(
-    (session?.data as Session & { token: any })?.token.account
-      ?.providerAccountId
+  const [playlistId, setPlaylistId] = useState<string>();
+  const { data: playlist, refetch } = trpc.spotify.getPlaylist.useQuery(
+    { playlistId: playlistId ?? "" },
+    {
+      enabled: !!playlistId,
+    }
   );
-
-  const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const { setPlaylists, searchText } = useGlobal();
+  const { setPlaylists } = useGlobal();
+  const { searchText } = useSearchStore();
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    const data = await fetch("/api/userPlaylists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId,
-        page: page,
-      }),
-    })
-      .then((res) => res.json())
-      .catch((err) => setError(err));
-
-    setMaxItems(data.total);
-    if (data.items?.length > 0) {
-      setItems((prevItems) => [...prevItems, ...data.items]);
-    }
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    setUserId(
-      (session?.data as Session & { token: any })?.token.account
-        ?.providerAccountId
+  const { data, isFetching, hasNextPage, fetchNextPage } =
+    trpc.user.getPlaylists.useInfiniteQuery(
+      {},
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        initialCursor: 1,
+      }
     );
-  }, [session]);
-
-  useEffect(() => {
-    if (userId) {
-      fetchData();
-    }
-  }, [userId, page]);
 
   const pullPlaylist = (url: string) => {
     console.log("pulling playlist", url);
@@ -77,36 +46,40 @@ export default function Profile() {
       /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
     );
     const playlistId = matches?.groups?.id!;
-    processPlaylist(playlistId).then((playlist) => {
-      setPlaylist(playlist);
+    setPlaylistId(playlistId);
+    // processPlaylist(playlistId).then((playlist) => {
+    //   setPlaylist(playlist);
+    //   setIsImportOpen(true);
+    //   setPlaylists((o) => {
+    //     let n = { ...o };
+    //     if (playlistId) n[playlist.name] = playlistId;
+    //     return n;
+    //   });
+    // });
+  };
+
+  useEffect(() => {
+    if (playlistId) {
       setIsImportOpen(true);
+    }
+  }, [playlistId]);
+
+  useEffect(() => {
+    if (playlist) {
       setPlaylists((o) => {
         let n = { ...o };
         if (playlistId) n[playlist.name] = playlistId;
         return n;
       });
-    });
-  };
-
-  useEffect(() => {
-    let searchTextLower = searchText.toLowerCase();
-    setVisibleItems((o) =>
-      items.filter((p) => p.name.toLowerCase().includes(searchTextLower))
-    );
-  }, [searchText, items]);
-
-  useEffect(() => {
-    if (visibleItems.length === 0 && maxItems && items.length < maxItems) {
-      setPage((i) => (i ?? 0) + 1);
     }
-  }, [searchText, items]);
+  }, [playlist]);
 
   return (
     <>
       <Head>
         <title>Profile</title>
       </Head>
-      <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
+      <div className="max-w-[100ch] mx-auto my-4 flex flex-col gap-4">
         <div className="flex justify-between">
           <div>
             <div className="font-medium  text-2xl">
@@ -119,55 +92,63 @@ export default function Profile() {
           </div>
         </div>
         Select a playlist to import:
-        <div className="flex flex-col gap-4">
-          {visibleItems?.map((playlist, i) => (
-            <PlainButton
-              onClick={() => pullPlaylist(playlist.external_urls.spotify)}
-              key={i}
-            >
-              <div className="flex gap-2 justify-between align-top">
-                <div>
-                  <div className="text-lg font-bold">{playlist.name}</div>
-
-                  <div className="flex gap-2 align-middle justify-between">
-                    <div className="flex flex-col my-auto text-left">
-                      <div className="text-sm">
-                        {playlist.tracks.total} tracks
+        <div
+          className="gap-2 grid"
+          style={{
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+          }}
+        >
+          {data &&
+            data?.pages
+              .flatMap((p) => p.items)
+              .map((playlist, i) => (
+                <PlainButton
+                  onClick={() => pullPlaylist(playlist.external_urls.spotify)}
+                  key={i}
+                >
+                  <div className="flex flex-col justify-between sm:h-32 h-fit min-w-20">
+                    <div
+                      className="text-lg font-bold overflow-hidden
+                    "
+                    >
+                      {playlist.name}
+                    </div>
+                    <div className="flex gap-2 justify-between border-gray-200 w-full border-t-[1px] pt-2">
+                      <div className="">
+                        {playlist.images?.[1] && (
+                          <img
+                            src={playlist.images[1].url}
+                            alt="Playlist image"
+                            className="rounded-md h-12 w-12"
+                          />
+                        )}
                       </div>
-                      <div className="text-xs">
-                        Created by {playlist.owner.display_name}
+                      <div className="flex flex-col my-auto text-right">
+                        <div className="text-sm">
+                          {playlist.tracks.total} tracks
+                        </div>
+                        <div className="text-xs">
+                          {playlist.owner.display_name}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                {playlist.images[1] && (
-                  <Image
-                    src={playlist.images[1].url}
-                    alt="Playlist image"
-                    width={60}
-                    height={60}
-                    className="rounded-md"
-                  />
-                )}
+                </PlainButton>
+              ))}
+          {hasNextPage && (
+            <PlainButton onClick={fetchNextPage}>
+              <div className="w-full h-full flex items-center justify-center sm:h-32">
+                {isFetching ? <LoadingSpinner /> : "Load more"}
               </div>
             </PlainButton>
-          ))}
+          )}
         </div>
-        {!isLoading && maxItems && items.length < maxItems && (
-          <div className="m-auto w-fit">
-            <PlainButton onClick={() => setPage((i) => (i ?? 0) + 1)}>
-              <div className="flex items-center justify-center">Load more</div>
-            </PlainButton>
-          </div>
-        )}
-        {isLoading && <LoadingSpinner />}
         {isImportOpen && playlist && (
           <ImportPlaylistDialog
             playlist={playlist}
             isOpen={isImportOpen}
             setIsOpen={(isOpen) => {
-              setIsImportOpen(isImportOpen);
-              router.push("/");
+              setIsImportOpen(isOpen);
             }}
           />
         )}

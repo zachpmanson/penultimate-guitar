@@ -1,30 +1,19 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { processPlaylist } from "@/lib/processPlaylist";
+import { useSearchStore } from "@/state/search";
 
 export default function SearchBox() {
   const router = useRouter();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
-  const [searchText, setLocalSearchText] = useState("");
-  const { setSearchText, setPlaylists } = useGlobal();
+  const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
 
-  useEffect(() => {
-    if (router.route === "/") {
-      setSearchText("");
-      setLocalSearchText("");
-    }
-  }, [router.route, setSearchText]);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setSearchText(searchText);
-    }, 50);
-    return () => clearTimeout(timeoutId);
-  }, [searchText, setSearchText]);
+  const { setPlaylists } = useGlobal();
+  const { setSearchText, searchText } = useSearchStore();
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -41,7 +30,7 @@ export default function SearchBox() {
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
       const playlistId = matches?.groups?.id!;
-      processPlaylist(playlistId).then((playlist) => {
+      getPlaylist.mutateAsync({ playlistId }).then((playlist) => {
         setPlaylist(playlist);
         setIsImportOpen(true);
         setPlaylists((o) => {
@@ -92,7 +81,9 @@ export default function SearchBox() {
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
             value={searchText}
-            onChange={(e) => setLocalSearchText(e.target.value)}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
           />
           <button
             disabled={buttonText !== "Search"}

@@ -1,4 +1,4 @@
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import {
   Playlist,
   SearchResult,
@@ -6,90 +6,104 @@ import {
   TabType,
   Track,
 } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import DialogButton from "./dialogbutton";
 
-type ImportPlaylistDialogProps = {
-  playlist: Playlist;
-  isOpen: boolean;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-};
+function getTabLinkIfExists(results: SearchResult[]): TabLinkDto | undefined {
+  results.sort((a, b) => b.rating - a.rating);
+  const chordResults = results.filter((r) => r.type === "Chords");
+  let newTab: TabLinkDto | undefined = undefined;
+  if (chordResults.length > 0) {
+    newTab = {
+      taburl: chordResults[0].tab_url,
+      name: chordResults[0].song_name,
+      artist: chordResults[0].artist_name,
+      version: chordResults[0].version,
+      type: chordResults[0].type as TabType,
+    };
+  } else if (results.length > 0) {
+    newTab = {
+      taburl: results[0].tab_url,
+      name: results[0].song_name,
+      artist: results[0].artist_name,
+      version: results[0].version,
+      type: results[0].type as TabType,
+    };
+  }
+  return newTab;
+}
 
 export default function ImportPlaylistDialog({
   playlist,
   isOpen,
   setIsOpen,
-}: ImportPlaylistDialogProps) {
-  const { addSavedTab } = useGlobal();
-  const [playlistTabs, setPlaylistTabs] = useState<TabLinkDto[]>([]);
+  navigateOnComplete,
+}: {
+  playlist: Playlist;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  navigateOnComplete?: string;
+}) {
+  const router = useRouter();
+  const { mutateAsync: search } = trpc.tab.searchTabsLazy.useMutation();
+  const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
+  const alreadySearching = useRef(false);
+  const [playlistTabs, setPlaylistTabs] = useState<TabLinkDto[]>([]);
   const [attemptCount, setAttemptCount] = useState(0);
 
   useEffect(() => {
     const getSearch = async (searchString: string) => {
-      await fetch("/api/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          value: searchString,
-          search_type: "title",
-          page: 1,
-        }),
+      await search({
+        value: searchString,
+        search_type: "title",
+        cursor: 1,
       })
-        .then((res) => res.json())
-        .then((results: SearchResult[]) => {
-          results.sort((a, b) => b.rating - a.rating);
-          const chordResults = results.filter((r) => r.type === "Chords");
-          let newTab!: TabLinkDto;
-          if (chordResults.length > 0) {
-            newTab = {
-              taburl: chordResults[0].tab_url,
-              name: chordResults[0].song_name,
-              artist: chordResults[0].artist_name,
-              version: chordResults[0].version,
-              type: chordResults[0].type as TabType,
-            };
-          } else if (results.length > 0) {
-            newTab = {
-              taburl: results[0].tab_url,
-              name: results[0].song_name,
-              artist: results[0].artist_name,
-              version: results[0].version,
-              type: results[0].type as TabType,
-            };
-          }
-          if (newTab !== undefined) {
+        .then((res) => {
+          const newTab = getTabLinkIfExists(res.items);
+          if (newTab) {
             setPlaylistTabs((old) => [...old, newTab]);
             addSavedTab({ ...newTab, folder: playlist.name });
 
             console.log(
               "Found",
               `${searchString}`,
-              `${results.length} results`
+              `${res.items.length} results`
             );
           } else {
-            console.log("Couldn't find", `${searchString}`, results);
+            console.log("Couldn't find", `${searchString}`, res);
           }
+        })
+        .catch((e) => {
+          console.log(e);
         });
     };
 
-    const getTabs = async () => {
-      for (let track of playlist.tracks) {
-        if (isOpen) {
-          setCurrentlyFinding(track);
-          await getSearch(`${track.name} ${track.artists}`);
-          setAttemptCount((old) => old + 1);
-        }
+    const getTabs = async (currentPlaylist: Playlist) => {
+      alreadySearching.current = true;
+      for (let track of currentPlaylist.tracks) {
+        setCurrentlyFinding(track);
+        await getSearch(`${track.name} ${track.artists}`);
+        setAttemptCount((old) => old + 1);
       }
       setCurrentlyFinding(undefined);
     };
 
-    getTabs().catch();
-  }, [addSavedTab, isOpen, playlist]);
+    if (isOpen && playlist && !currentlyFinding && !alreadySearching.current) {
+      getTabs(playlist).catch();
+    }
+  }, [
+    addSavedTab,
+    search,
+    isOpen,
+    playlist,
+    currentlyFinding,
+    alreadySearching,
+  ]);
 
   return (
     <Dialog
@@ -148,9 +162,15 @@ export default function ImportPlaylistDialog({
               </span>
             </div>
           )}
-          {attemptCount === playlist.tracks.length && (
+          {attemptCount >= playlist.tracks.length && (
             <div className="flex justify-end mt-4">
-              <DialogButton onClick={() => setIsOpen(false)} disabled={false}>
+              <DialogButton
+                onClick={() => {
+                  setIsOpen(false);
+                  if (navigateOnComplete) router.push(navigateOnComplete);
+                }}
+                disabled={false}
+              >
                 Finish
               </DialogButton>
             </div>

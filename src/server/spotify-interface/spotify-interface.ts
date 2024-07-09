@@ -2,6 +2,7 @@ import { AccessReponse } from "./models";
 import memoryCache from "memory-cache";
 import { Playlist, Track } from "@/models/models";
 import _ from "lodash";
+import { SpotifyPlaylistResponse } from "@/types/spotify";
 export namespace SpotifyAdapter {
   async function getToken(): Promise<string> {
     let token = memoryCache.get("spotify-token");
@@ -105,23 +106,27 @@ export namespace SpotifyAdapter {
   export async function getUserPlaylists(
     userId: string,
     page: number
-  ): Promise<any> {
+  ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
     console.log("getUserPlaylists", userId, page);
     const token = await getToken();
     const authHeader: HeadersInit = {
       Authorization: `Bearer ${token}`,
     };
-    let payload = await fetch(
+    let payload = (await fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists?limit=${PLAYLISTS_PAGESIZE}&offset=${
-        page * PLAYLISTS_PAGESIZE
+        (page - 1) * PLAYLISTS_PAGESIZE
       }`,
       {
         method: "GET",
         headers: authHeader,
       }
-    ).then((res) => res.json());
+    ).then((res) => res.json())) as SpotifyPlaylistResponse;
     // console.log(userId, page, payload);
-    return payload;
+    return {
+      ...payload,
+      nextCursor:
+        payload.total > PLAYLISTS_PAGESIZE * page ? page + 1 : undefined,
+    };
   }
 }
 
