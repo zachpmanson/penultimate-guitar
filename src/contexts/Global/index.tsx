@@ -1,15 +1,16 @@
 import { ChordDB } from "@/models/chorddb.models";
-import { PlaylistCollection } from "@/models/models";
+import { PlaylistCollection, SavedUserTabLinks } from "@/models/models";
 import { useAuthStore } from "@/state/auth";
 import { useConfigStore } from "@/state/config";
 import { useSession } from "next-auth/react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
+import { useSavedTabsStore } from "@/state/savedTabs";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [searchText, setSearchText] = useState<string>("");
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
   const { guitarChords, setGuitarChords } = useConfigStore();
+  const { setUserAllTabLinks } = useSavedTabsStore();
 
   const session = useSession();
   const userId = session?.data?.user?.id;
@@ -19,6 +20,19 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     if (userId) setUserId(userId);
     else setUserId(undefined);
   }, [userId]);
+
+  useEffect(() => {
+    // put old saved tabs into new format and remove old format
+    const parsedTabs = JSON.parse(
+      localStorage.getItem("savedUserTabs") ?? "{}"
+    ) as SavedUserTabLinks;
+
+    console.log("getSavedTabs", userId);
+    if (parsedTabs["@localStorage"]) {
+      setUserAllTabLinks(parsedTabs["@localStorage"], "@localStorage");
+      localStorage.removeItem("savedUserTabs");
+    }
+  }, []);
 
   useEffect(() => {
     if (!guitarChords) {
@@ -50,12 +64,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const value: GlobalContextProps = useMemo(
     () => ({
-      searchText,
-      setSearchText,
       playlists,
       setPlaylists,
     }),
-    [searchText, setSearchText, playlists, setPlaylists]
+    [playlists, setPlaylists]
   );
 
   return (

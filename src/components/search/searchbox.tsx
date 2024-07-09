@@ -4,6 +4,7 @@ import { trpc } from "@/utils/trpc";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
+import { useSearchStore } from "@/state/search";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -12,8 +13,7 @@ export default function SearchBox() {
   const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
 
   const { setPlaylists } = useGlobal();
-
-  const [localSearchText, setLocalSearchText] = useState("");
+  const { setSearchText, searchText } = useSearchStore();
 
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -80,8 +80,10 @@ export default function SearchBox() {
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
-            value={localSearchText}
-            onChange={(e) => setLocalSearchText(e.target.value)}
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
           />
           <button
             disabled={buttonText !== "Search"}

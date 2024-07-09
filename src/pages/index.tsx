@@ -2,14 +2,14 @@ import FilteredSavedTabs from "@/components/home/filteredtabs";
 import RecentTabs from "@/components/home/recenttabs";
 import SavedTabs from "@/components/home/savedtabs";
 import { GuitaleleStyle } from "@/constants";
-import { useGlobal } from "@/contexts/Global/context";
-import Head from "next/head";
-import type { NextPageWithLayout } from "./_app";
 import useSavedTabs from "@/hooks/useSavedTabs";
 import { useConfigStore } from "@/state/config";
+import { useSearchStore } from "@/state/search";
+import Head from "next/head";
+import type { NextPageWithLayout } from "./_app";
 
 const Page: NextPageWithLayout = () => {
-  const { searchText } = useGlobal();
+  const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
   const { savedTabs } = useSavedTabs();
 

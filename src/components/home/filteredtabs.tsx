@@ -1,12 +1,12 @@
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
+import { useSearchStore } from "@/state/search";
 import _ from "lodash";
 import Link from "next/link";
 import TabLink from "./tablink";
-import useSavedTabs from "@/hooks/useSavedTabs";
 
 export default function FilteredSavedTabs() {
-  const { searchText } = useGlobal();
+  const { searchText } = useSearchStore();
   const { savedTabs } = useSavedTabs();
 
   const lowerSearchText = searchText.toLowerCase();

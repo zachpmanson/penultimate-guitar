@@ -5,6 +5,7 @@ import PlainButton from "@/components/shared/plainbutton";
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models/models";
 import { authOptions } from "@/server/auth";
+import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
@@ -27,7 +28,8 @@ export default function Profile() {
     }
   );
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const { setPlaylists, searchText } = useGlobal();
+  const { setPlaylists } = useGlobal();
+  const { searchText } = useSearchStore();
 
   const { data, isFetching, hasNextPage, fetchNextPage } =
     trpc.user.getPlaylists.useInfiniteQuery(

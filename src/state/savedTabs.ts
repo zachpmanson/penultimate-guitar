@@ -1,4 +1,4 @@
-import { TabLinkDto } from "@/models/models";
+import { SavedUserTabLinks, TabLinkDto } from "@/models/models";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -11,6 +11,7 @@ type SavedTabsActions = {
   removeSavedTab: (tab: TabLinkDto, userId?: string) => void;
   setTabFolders: (tab: TabLinkDto, folders: string[], userId?: string) => void;
   setUserAllTabLinks: (tab: TabLinkDto[], userId: string) => void;
+  setAllSavedTabs: (newValue: SavedUserTabLinks) => void;
 };
 
 export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
@@ -73,6 +74,9 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
         set((old) => ({
           savedTabs: { ...old.savedTabs, [userId]: tabs },
         }));
+      },
+      setAllSavedTabs: (newValue: SavedUserTabLinks) => {
+        set({ savedTabs: newValue });
       },
     }),
     {
