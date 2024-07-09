@@ -30,65 +30,21 @@ export default function useSavedTabs() {
   const deleteTabLinkApi = trpc.user.deleteTabLink.useMutation();
   const setTabLinksApi = trpc.user.setTabLinks.useMutation();
 
-  // const getSavedTabs = useCallback(() => {
-  //   const parsedTabs = JSON.parse(
-  //     localStorage.getItem("savedUserTabs") ?? "{}"
-  //   ) as SavedUserTabLinks;
-
-  //   if (userId && tablinks) {
-  //     setSavedTabs(tablinks);
-  //   } else {
-  //     setSavedTabs(
-  //       (parsedTabs[userId ?? "@localStorage"] ?? []).filter(
-  //         (t) => t.name && t.artist
-  //       )
-  //     );
-  //   }
-  // }, [tablinks, userId]);
-
-  // useEffect(() => {
-  //   getSavedTabs();
-  // }, [getSavedTabs]);
-
   useEffect(() => {
     if (tablinks && userId) setUserAllTabLinks(tablinks, userId);
   }, [userId, tablinks]);
-
-  // const updateLocalSaves = useCallback(
-  //   (saves: TabLinkDto[]) => {
-  //     const parsedTabs = JSON.parse(
-  //       localStorage.getItem("savedUserTabs") ?? "{}"
-  //     ) as SavedUserTabLinks;
-
-  //     localStorage.setItem(
-  //       "savedUserTabs",
-  //       JSON.stringify({ ...parsedTabs, [userId ?? "@localStorage"]: saves })
-  //     );
-  //   },
-  //   [userId]
-  // );
-  // console.log("savedTabs", savedTabs);
-
-  // Save all changes to in memory savedTabs to localStorage
-  // useEffect(() => {
-  //   console.log("saving tabs", savedTabs);
-  //   if (notInitialRender.current) {
-  //     // updateLocalSaves(savedTabs);
-  //   } else {
-  //     notInitialRender.current = true;
-  //   }
-  // }, [savedTabs, updateLocalSaves]);
 
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
       const userId = session?.data?.user?.id;
 
       if (userId) {
-        setTabLinksApi.mutate({
-          tab: tabLink,
-          folders: folders,
-        });
-        refetchTabs();
+        setTabLinksApi
+          .mutateAsync({
+            tab: tabLink,
+            folders: folders,
+          })
+          .then(() => refetchTabs());
       }
 
       setTabFoldersLocal(tabLink, folders, userId);
@@ -99,11 +55,12 @@ export default function useSavedTabs() {
   const addSavedTab = useCallback(
     (newTab: TabLinkDto) => {
       if (userId) {
-        addTabLinkApi.mutate({
-          newTab: newTab,
-          folders: [newTab.folder ?? "Favourites"],
-        });
-        refetchTabs();
+        addTabLinkApi
+          .mutateAsync({
+            newTab: newTab,
+            folders: [newTab.folder ?? "Favourites"],
+          })
+          .then(() => refetchTabs());
       }
 
       addTabLinkLocal(newTab, userId);
@@ -114,8 +71,7 @@ export default function useSavedTabs() {
   const removeSavedTab = useCallback(
     (tab: TabLinkDto) => {
       if (userId) {
-        deleteTabLinkApi.mutate(tab);
-        refetchTabs();
+        deleteTabLinkApi.mutateAsync(tab).then(() => refetchTabs());
       }
       removeSavedTabLocal(tab, userId);
     },

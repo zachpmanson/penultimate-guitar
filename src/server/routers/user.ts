@@ -1,7 +1,7 @@
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
 import { NewTabSchema, TabSchema } from "@/types/user";
 import { z } from "zod";
-import { authProcedure, createRouter } from "../trpc";
+import { authProcedure, createRouter, publicProcedure } from "../trpc";
 
 export const userRouter = createRouter({
   getTabLinks: authProcedure.query(async ({ ctx }) => {

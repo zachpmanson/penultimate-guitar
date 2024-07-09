@@ -1,15 +1,15 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models/models";
+import { trpc } from "@/utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { processPlaylist } from "@/lib/processPlaylist";
-import { parseAsString, useQueryState } from "nuqs";
 
 export default function SearchBox() {
   const router = useRouter();
 
   const [buttonText, setButtonText] = useState<string | JSX.Element>("Search");
+  const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
 
   const { setPlaylists } = useGlobal();
 
@@ -30,7 +30,7 @@ export default function SearchBox() {
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
       const playlistId = matches?.groups?.id!;
-      processPlaylist(playlistId).then((playlist) => {
+      getPlaylist.mutateAsync({ playlistId }).then((playlist) => {
         setPlaylist(playlist);
         setIsImportOpen(true);
         setPlaylists((o) => {

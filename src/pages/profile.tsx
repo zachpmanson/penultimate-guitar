@@ -3,7 +3,6 @@ import ImportPlaylistDialog from "@/components/dialog/importplaylistdialog";
 import LoadingSpinner from "@/components/loadingspinner";
 import PlainButton from "@/components/shared/plainbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import { processPlaylist } from "@/lib/processPlaylist";
 import { Playlist } from "@/models/models";
 import { authOptions } from "@/server/auth";
 import { trpc } from "@/utils/trpc";
@@ -12,13 +11,21 @@ import { getServerSession } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
   const router = useRouter();
   const session = useSession();
 
-  const [playlist, setPlaylist] = useState<Playlist>();
+  // const [playlist, setPlaylist] = useState<Playlist>();
+
+  const [playlistId, setPlaylistId] = useState<string>();
+  const { data: playlist, refetch } = trpc.spotify.getPlaylist.useQuery(
+    { playlistId: playlistId ?? "" },
+    {
+      enabled: !!playlistId,
+    }
+  );
   const [isImportOpen, setIsImportOpen] = useState(false);
   const { setPlaylists, searchText } = useGlobal();
 
@@ -37,16 +44,33 @@ export default function Profile() {
       /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
     );
     const playlistId = matches?.groups?.id!;
-    processPlaylist(playlistId).then((playlist) => {
-      setPlaylist(playlist);
+    setPlaylistId(playlistId);
+    // processPlaylist(playlistId).then((playlist) => {
+    //   setPlaylist(playlist);
+    //   setIsImportOpen(true);
+    //   setPlaylists((o) => {
+    //     let n = { ...o };
+    //     if (playlistId) n[playlist.name] = playlistId;
+    //     return n;
+    //   });
+    // });
+  };
+
+  useEffect(() => {
+    if (playlistId) {
       setIsImportOpen(true);
+    }
+  }, [playlistId]);
+
+  useEffect(() => {
+    if (playlist) {
       setPlaylists((o) => {
         let n = { ...o };
         if (playlistId) n[playlist.name] = playlistId;
         return n;
       });
-    });
-  };
+    }
+  }, [playlist]);
 
   return (
     <>
@@ -109,14 +133,13 @@ export default function Profile() {
                   </div>
                 </PlainButton>
               ))}
-          {!isFetching && hasNextPage && (
+          {hasNextPage && (
             <PlainButton onClick={fetchNextPage}>
-              <div className="w-full h-full flex items-center justify-center">
-                Load more
+              <div className="w-full h-full flex items-center justify-center sm:h-32">
+                {isFetching ? <LoadingSpinner /> : "Load more"}
               </div>
             </PlainButton>
           )}
-          {isFetching && <LoadingSpinner />}
         </div>
         {isImportOpen && playlist && (
           <ImportPlaylistDialog

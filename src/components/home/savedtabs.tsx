@@ -99,7 +99,7 @@ function FolderMenu({ folder }: { folder: string }) {
   const { playlists } = useGlobal();
   const { savedTabs, removeSavedTab } = useSavedTabs();
 
-  const { data, refetch } = trpc.getPlaylists.useQuery(
+  const { data, refetch } = trpc.spotify.getPlaylist.useQuery(
     { playlistId: playlists[folder] },
     {
       enabled: false,

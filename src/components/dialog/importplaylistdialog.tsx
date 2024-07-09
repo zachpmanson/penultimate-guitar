@@ -10,7 +10,7 @@ import { trpc } from "@/utils/trpc";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import DialogButton from "./dialogbutton";
 
 function getTabLinkIfExists(results: SearchResult[]): TabLinkDto | undefined {
@@ -52,49 +52,58 @@ export default function ImportPlaylistDialog({
   const { mutateAsync: search } = trpc.tab.searchTabsLazy.useMutation();
   const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
+  const alreadySearching = useRef(false);
   const [playlistTabs, setPlaylistTabs] = useState<TabLinkDto[]>([]);
   const [attemptCount, setAttemptCount] = useState(0);
 
   useEffect(() => {
     const getSearch = async (searchString: string) => {
-      try {
-        const res = await search({
-          value: searchString,
-          search_type: "title",
-          cursor: 1,
+      await search({
+        value: searchString,
+        search_type: "title",
+        cursor: 1,
+      })
+        .then((res) => {
+          const newTab = getTabLinkIfExists(res.items);
+          if (newTab) {
+            setPlaylistTabs((old) => [...old, newTab]);
+            addSavedTab({ ...newTab, folder: playlist.name });
+
+            console.log(
+              "Found",
+              `${searchString}`,
+              `${res.items.length} results`
+            );
+          } else {
+            console.log("Couldn't find", `${searchString}`, res);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
         });
-
-        const newTab = getTabLinkIfExists(res.items);
-        if (newTab !== undefined) {
-          setPlaylistTabs((old) => [...old, newTab]);
-          addSavedTab({ ...newTab, folder: playlist.name });
-
-          console.log(
-            "Found",
-            `${searchString}`,
-            `${res.items.length} results`
-          );
-        } else {
-          console.log("Couldn't find", `${searchString}`, res);
-        }
-      } catch (e) {
-        console.log(e);
-      }
     };
 
-    const getTabs = async () => {
-      for (let track of playlist.tracks) {
-        if (isOpen) {
-          setCurrentlyFinding(track);
-          await getSearch(`${track.name} ${track.artists}`);
-          setAttemptCount((old) => old + 1);
-        }
+    const getTabs = async (currentPlaylist: Playlist) => {
+      alreadySearching.current = true;
+      for (let track of currentPlaylist.tracks) {
+        setCurrentlyFinding(track);
+        await getSearch(`${track.name} ${track.artists}`);
+        setAttemptCount((old) => old + 1);
       }
       setCurrentlyFinding(undefined);
     };
 
-    getTabs().catch();
-  }, [addSavedTab, search, isOpen, playlist]);
+    if (isOpen && playlist && !currentlyFinding && !alreadySearching.current) {
+      getTabs(playlist).catch();
+    }
+  }, [
+    addSavedTab,
+    search,
+    isOpen,
+    playlist,
+    currentlyFinding,
+    alreadySearching,
+  ]);
 
   return (
     <Dialog
@@ -153,7 +162,7 @@ export default function ImportPlaylistDialog({
               </span>
             </div>
           )}
-          {attemptCount === playlist.tracks.length && (
+          {attemptCount >= playlist.tracks.length && (
             <div className="flex justify-end mt-4">
               <DialogButton
                 onClick={() => {

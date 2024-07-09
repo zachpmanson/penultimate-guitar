@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { publicProcedure, createRouter } from "../trpc";
-import { userRouter } from "./user";
+import { createRouter, publicProcedure } from "../trpc";
+import { spotifyRouter } from "./spotify";
 import { tabRouter } from "./tab";
-import { SpotifyAdapter } from "../spotify-interface/spotify-interface";
+import { userRouter } from "./user";
 
 export const appRouter = createRouter({
   hello: publicProcedure
@@ -14,16 +14,7 @@ export const appRouter = createRouter({
     }),
   user: userRouter,
   tab: tabRouter,
-
-  getPlaylists: publicProcedure
-    .input(
-      z.object({
-        playlistId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      return await SpotifyAdapter.getPlaylist(input.playlistId);
-    }),
+  spotify: spotifyRouter,
 });
 
 // export type definition of API
