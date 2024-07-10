@@ -135,9 +135,7 @@ export default function ImportPlaylistDialog({
               </div>
             </div>
           </Dialog.Title>
-          <Dialog.Description>
-            <div className="font-bold"></div>
-          </Dialog.Description>
+          <Dialog.Description></Dialog.Description>
           <hr className="m-4" />
           <div className="flex justify-between">
             <div>Found {playlistTabs.length}</div>

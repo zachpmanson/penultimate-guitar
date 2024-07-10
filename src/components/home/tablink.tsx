@@ -37,7 +37,8 @@ export default function TabLink({
           prefetch={false}
         >
           <PlainButton>
-            <span className="font-bold">{tablink.name}</span> - {tablink.artist}
+            <span className="font-bold text-sm">{tablink.name}</span> -{" "}
+            {tablink.artist}
             {tablink.version && (
               <span className="font-light text-xs">
                 {" "}

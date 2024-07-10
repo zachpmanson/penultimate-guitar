@@ -31,7 +31,7 @@ export default function Profile() {
   const { setPlaylists } = useGlobal();
   const { searchText } = useSearchStore();
 
-  const { data, isFetching, hasNextPage, fetchNextPage } =
+  const { data, isFetching, isLoading, hasNextPage, fetchNextPage } =
     trpc.user.getPlaylists.useInfiniteQuery(
       {},
       {
@@ -93,7 +93,7 @@ export default function Profile() {
         </div>
         Select a playlist to import:
         <div
-          className="gap-2 grid"
+          className="gap-1 grid"
           style={{
             gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
           }}
@@ -136,13 +136,18 @@ export default function Profile() {
                 </PlainButton>
               ))}
           {hasNextPage && (
-            <PlainButton onClick={fetchNextPage}>
+            <PlainButton onClick={fetchNextPage} disabled={isFetching}>
               <div className="w-full h-full flex items-center justify-center sm:h-32">
-                {isFetching ? <LoadingSpinner /> : "Load more"}
+                {isFetching ? <LoadingSpinner className="h-8" /> : "Load more"}
               </div>
             </PlainButton>
           )}
         </div>
+        {isLoading && (
+          <div className="w-full flex items-center justify-center">
+            <LoadingSpinner className="h-8" />
+          </div>
+        )}
         {isImportOpen && playlist && (
           <ImportPlaylistDialog
             playlist={playlist}

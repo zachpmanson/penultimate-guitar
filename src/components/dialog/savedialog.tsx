@@ -102,6 +102,7 @@ export default function SaveDialog({
         <Dialog.Panel className="w-full max-w-xs rounded bg-white p-4">
           <Dialog.Title>Save tab to folder</Dialog.Title>
           <Dialog.Description></Dialog.Description>
+          <hr />
           <div className="flex flex-col">
             {folders.map((f, i) => (
               <label key={i} className="w-full text-lg">

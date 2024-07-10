@@ -30,7 +30,7 @@ export default function RecentTabs() {
       {Object.keys(recents).length > 0 ? (
         <details open>
           <summary>
-            <h1 className="text-center text-2xl my-4">Recent Tabs</h1>
+            <h1 className="text-center text-xl my-4">Recent Tabs</h1>
           </summary>
           <div className="flex flex-col gap-1 mt-2">
             {recents

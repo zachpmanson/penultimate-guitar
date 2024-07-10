@@ -31,11 +31,11 @@ export default function SavedTabs() {
         <div>
           <details open>
             <summary>
-              <h1 className="text-center text-2xl my-4">Favourites</h1>
+              <h1 className="text-center text-xl my-4">Favourites</h1>
             </summary>
             <div className="flex flex-col gap-1 mt-2">
               {isLoadingTabs && !savedTabs ? (
-                <LoadingSpinner />
+                <LoadingSpinner className="h-8" />
               ) : (
                 Object.keys(folders).map((folder, i) =>
                   folder === "Favourites" ? (
@@ -78,7 +78,7 @@ function Folder({
       onMouseOver={() => setHovering(true)}
       onMouseOut={() => setHovering(false)}
     >
-      <summary className="p-3">
+      <summary className="p-2">
         <h2 className="text-lg">{folder}</h2>
       </summary>
 

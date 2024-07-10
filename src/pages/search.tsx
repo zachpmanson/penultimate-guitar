@@ -62,7 +62,7 @@ export default function Tab() {
       <p className="text-center text-gray-400 mb-4 font-extralight">
         Only the highest rated versions of each are shown.
       </p>
-      <div className="max-w-xl mx-auto flex flex-col gap-2">
+      <div className="max-w-xl mx-auto flex flex-col gap-1">
         {allItems.length === 0 ? (
           <></>
         ) : data && !isLoading ? (
@@ -72,10 +72,14 @@ export default function Tab() {
             ))}
             {
               <div className="m-auto w-fit">
-                {hasNextPage && !isFetching && (
+                {hasNextPage && (
                   <PlainButton onClick={loadPage}>
-                    <div className="flex items-center justify-center">
-                      Load More
+                    <div className="flex items-center justify-center h-8 w-20">
+                      {isFetching ? (
+                        <LoadingSpinner className="h-8" />
+                      ) : (
+                        "Load More"
+                      )}
                     </div>
                   </PlainButton>
                 )}
@@ -85,7 +89,11 @@ export default function Tab() {
         ) : (
           <p className="text-center">No results found</p>
         )}
-        {isFetching && <LoadingSpinner />}
+        {isLoading && (
+          <div className="flex items-center justify-center w-full">
+            <LoadingSpinner className="h-8" />
+          </div>
+        )}
       </div>
     </>
   );

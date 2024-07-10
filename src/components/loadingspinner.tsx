@@ -1,9 +1,9 @@
 import { SunIcon } from "@heroicons/react/24/solid";
 
-export default function LoadingSpinner() {
+export default function LoadingSpinner({ className }: { className?: string }) {
   return (
-    <div className="m-auto w-12 h-12" role="status">
-      <SunIcon className="animate-spin fill-blue-600" />
+    <div className={className}>
+      <SunIcon className="animate-spin fill-blue-600 w-full h-full" />
       <span className="sr-only">Loading...</span>
     </div>
   );

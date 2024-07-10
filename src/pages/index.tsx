@@ -7,6 +7,7 @@ import { useConfigStore } from "@/state/config";
 import { useSearchStore } from "@/state/search";
 import Head from "next/head";
 import type { NextPageWithLayout } from "./_app";
+import { useEffect } from "react";
 
 const Page: NextPageWithLayout = () => {
   const { searchText } = useSearchStore();
@@ -23,6 +24,12 @@ const Page: NextPageWithLayout = () => {
       return true;
     }
   };
+
+  const { setSearchText } = useSearchStore();
+
+  useEffect(() => {
+    setSearchText("");
+  }, []);
 
   return (
     <>
