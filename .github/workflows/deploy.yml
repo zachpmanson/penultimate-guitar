@@ -11,8 +11,8 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
+      - run: pnpm install
       - name: Run migrations on prod
-        run: npm run migrate
+        run: pnpm migrate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
