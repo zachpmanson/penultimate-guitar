@@ -7,5 +7,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 To run it locally run:
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 ```
