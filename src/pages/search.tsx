@@ -2,9 +2,11 @@ import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
 import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
+import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import Head from "next/head";
 import { useQueryState } from "nuqs";
+import { useEffect } from "react";
 
 function collapseResults(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
@@ -26,8 +28,9 @@ function collapseResults(results: SearchResult[]) {
   return colRes;
 }
 
-export default function Tab() {
+export default function Search() {
   const [q] = useQueryState("q");
+  const { setSearchText } = useSearchStore();
 
   const { fetchNextPage, hasNextPage, data, isFetching, isLoading } =
     trpc.tab.searchTabs.useInfiniteQuery(
@@ -49,6 +52,12 @@ export default function Tab() {
   const allItems = data
     ? collapseResults(data.pages.map((p) => p.items).flat())
     : [];
+
+  useEffect(() => {
+    if (q) {
+      setSearchText(q);
+    }
+  }, [q, setSearchText]);
 
   return (
     <>
@@ -93,12 +102,12 @@ export default function Tab() {
           ) : (
             <p className="text-center">No results found</p>
           )}
-          {isLoading && (
-            <div className="flex items-center justify-center w-full">
-              <LoadingSpinner className="h-8" />
-            </div>
-          )}
         </div>
+        {isLoading && (
+          <div className="flex items-center justify-center w-full">
+            <LoadingSpinner className="h-8" />
+          </div>
+        )}
       </div>
     </>
   );
