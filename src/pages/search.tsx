@@ -1,12 +1,10 @@
 import LoadingSpinner from "@/components/loadingspinner";
-import PlainButton from "@/components/shared/plainbutton";
 import SearchLink from "@/components/search/searchlink";
+import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { trpc } from "@/utils/trpc";
-import { parseAsString, useQueryState } from "nuqs";
+import Head from "next/head";
+import { useQueryState } from "nuqs";
 
 function collapseResults(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
@@ -29,8 +27,7 @@ function collapseResults(results: SearchResult[]) {
 }
 
 export default function Tab() {
-  const router = useRouter();
-  const [q, setQ] = useQueryState("q", parseAsString);
+  const [q] = useQueryState("q");
 
   const { fetchNextPage, hasNextPage, data, isFetching, isLoading } =
     trpc.tab.searchTabs.useInfiniteQuery(
@@ -58,42 +55,45 @@ export default function Tab() {
       <Head>
         <title>Search</title>
       </Head>
-      <h1 className="text-center text-2xl">Search Results</h1>
-      <p className="text-center text-gray-400 mb-4 font-extralight">
-        Only the highest rated versions of each are shown.
-      </p>
-      <div className="max-w-xl mx-auto flex flex-col gap-1">
-        {allItems.length === 0 ? (
-          <></>
-        ) : data && !isLoading ? (
-          <>
-            {allItems.map((r, i) => (
-              <SearchLink {...r} key={i} />
-            ))}
-            {
-              <div className="m-auto w-fit">
-                {hasNextPage && (
-                  <PlainButton onClick={loadPage}>
-                    <div className="flex items-center justify-center h-8 w-20">
+      <div className="max-w-lg w-full m-auto">
+        <h1 className="text-lg">Search Results</h1>
+        <p className="text-gray-400 mb-4 font-extralight">
+          Only the highest rated versions of each are shown.
+        </p>
+        <div className="mx-auto flex flex-col gap-1 w-full">
+          {allItems.length === 0 ? (
+            <></>
+          ) : data && !isLoading ? (
+            <>
+              {allItems.map((r, i) => (
+                <SearchLink {...r} key={i} />
+              ))}
+              {
+                <div className="w-full flex items-center justify-center">
+                  {hasNextPage && (
+                    <PlainButton
+                      onClick={loadPage}
+                      className="h-12 w-full flex items-center justify-center"
+                    >
                       {isFetching ? (
                         <LoadingSpinner className="h-8" />
                       ) : (
-                        "Load More"
+                        <div className="w-fit">Load More</div>
                       )}
-                    </div>
-                  </PlainButton>
-                )}
-              </div>
-            }
-          </>
-        ) : (
-          <p className="text-center">No results found</p>
-        )}
-        {isLoading && (
-          <div className="flex items-center justify-center w-full">
-            <LoadingSpinner className="h-8" />
-          </div>
-        )}
+                    </PlainButton>
+                  )}
+                </div>
+              }
+            </>
+          ) : (
+            <p className="text-center">No results found</p>
+          )}
+          {isLoading && (
+            <div className="flex items-center justify-center w-full">
+              <LoadingSpinner className="h-8" />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

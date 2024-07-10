@@ -27,8 +27,8 @@ export default function SearchLink({
             <div className="">{artist_name}</div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <div className="text-right">{type}</div>
+          <div className="flex flex-col gap-1 text-right">
+            <div>{type}</div>
             <div className="text-gray-400">
               {!Math.round(rating) ||
                 `${Math.round(rating * 100) / 100} / 5.00`}
