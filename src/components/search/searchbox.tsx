@@ -21,17 +21,16 @@ export default function SearchBox() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const search: string = event.target.url.value;
 
-    if (search.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
-      router.push(`/tab/${search.slice(37)}`);
-    } else if (search.startsWith("https://open.spotify.com/playlist/")) {
+    if (searchText.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
+      router.push(`/tab/${searchText.slice(37)}`);
+    } else if (searchText.startsWith("https://open.spotify.com/playlist/")) {
       setButtonText("Loading...");
-      const matches = search.match(
+      const matches = searchText.match(
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
       const playlistId = matches?.groups?.id!;
-      getPlaylist.mutateAsync({ playlistId }).then((playlist) => {
+      getPlaylist.mutateAsync({ playlistId }).then((playlist: Playlist) => {
         setPlaylist(playlist);
         setIsImportOpen(true);
         setPlaylists((o) => {
@@ -43,7 +42,7 @@ export default function SearchBox() {
         setButtonText("Search");
       });
     } else {
-      router.push(`/search?q=${encodeURIComponent(event.target.url.value)}`);
+      router.push(`/search?q=${encodeURIComponent(searchText)}`);
     }
   };
 
@@ -84,6 +83,11 @@ export default function SearchBox() {
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit(e);
+              }
             }}
           />
           <div className="absolute right-2.5 bottom-2.5 flex gap-4 items-center">
