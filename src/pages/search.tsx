@@ -55,12 +55,17 @@ export default function Tab() {
       <Head>
         <title>Search</title>
       </Head>
-      <div className="max-w-lg w-full m-auto">
+      <div className="max-w-[80ch] w-full m-auto">
         <h1 className="text-lg">Search Results</h1>
         <p className="text-gray-400 mb-4 font-extralight">
           Only the highest rated versions of each are shown.
         </p>
-        <div className="mx-auto flex flex-col gap-1 w-full">
+        <div
+          className="mx-auto grid gap-1 w-full"
+          style={{
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          }}
+        >
           {allItems.length === 0 ? (
             <></>
           ) : data && !isLoading ? (
@@ -68,22 +73,22 @@ export default function Tab() {
               {allItems.map((r, i) => (
                 <SearchLink {...r} key={i} />
               ))}
-              {
-                <div className="w-full flex items-center justify-center">
-                  {hasNextPage && (
-                    <PlainButton
-                      onClick={loadPage}
-                      className="h-12 w-full flex items-center justify-center"
-                    >
-                      {isFetching ? (
-                        <LoadingSpinner className="h-8" />
-                      ) : (
-                        <div className="w-fit">Load More</div>
-                      )}
-                    </PlainButton>
-                  )}
-                </div>
-              }
+              <div className="w-full flex flex-col items-center justify-start">
+                {hasNextPage && (
+                  <PlainButton
+                    onClick={loadPage}
+                    className="flex-grow w-full flex items-center justify-center"
+                  >
+                    {isFetching ? (
+                      <LoadingSpinner className="h-8" />
+                    ) : (
+                      <div className="w-fit h-8 flex items-center justify-center">
+                        Load More
+                      </div>
+                    )}
+                  </PlainButton>
+                )}
+              </div>
             </>
           ) : (
             <p className="text-center">No results found</p>
