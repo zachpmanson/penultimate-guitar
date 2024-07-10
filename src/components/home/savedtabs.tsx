@@ -34,7 +34,7 @@ export default function SavedTabs() {
               <h1 className="text-center text-2xl my-4">Favourites</h1>
             </summary>
             <div className="flex flex-col gap-1 mt-2">
-              {isLoadingTabs ? (
+              {isLoadingTabs && !savedTabs ? (
                 <LoadingSpinner />
               ) : (
                 Object.keys(folders).map((folder, i) =>
