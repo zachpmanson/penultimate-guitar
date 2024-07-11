@@ -4,6 +4,7 @@ import ToolbarButton, {
   getToolbarButtonStyle,
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
+import useChords from "@/hooks/useChords";
 import { TabLinkDto } from "@/models/models";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
@@ -13,6 +14,7 @@ import { convertToTabLink } from "@/utils/conversion";
 import { tabCompareFn } from "@/utils/sort";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
+import { BookmarkIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import _ from "lodash";
 import { GetStaticProps } from "next";
@@ -20,13 +22,22 @@ import Head from "next/head";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
-import { BookmarkIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import useChords from "@/hooks/useChords";
+import { useWakeLock } from "react-screen-wake-lock";
 
 const scrollMs = 100;
 
 export default function Tab({ id }: { trpcState: any; id: string }) {
+  const {
+    isSupported,
+    released,
+    request: requestWakeLock,
+    release: releaseWakeLock,
+  } = useWakeLock({
+    onRequest: () => alert("Screen Wake Lock: requested!"),
+    onError: () => alert("An error happened 💥"),
+    onRelease: () => alert("Screen Wake Lock: released!"),
+  });
+
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
 
@@ -147,10 +158,13 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 
     window.addEventListener("keydown", keyDownHandler);
 
+    requestWakeLock();
+
     return () => {
       window.removeEventListener("touchstart", onTouch);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", keyDownHandler);
+      releaseWakeLock();
     };
   }, []);
 
