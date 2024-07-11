@@ -33,9 +33,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
     request: requestWakeLock,
     release: releaseWakeLock,
   } = useWakeLock({
-    onRequest: () => alert("Screen Wake Lock: requested!"),
-    onError: () => alert("An error happened 💥"),
-    onRelease: () => alert("Screen Wake Lock: released!"),
+    onRequest: () => console.log("Screen Wake Lock: requested!"),
+    onError: (e) => console.log("An error happened", e),
+    onRelease: () => console.log("Screen Wake Lock: released!"),
   });
 
   const { data, status } = trpc.tab.getTab.useQuery(id);
