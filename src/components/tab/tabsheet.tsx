@@ -24,7 +24,7 @@ export default function TabSheet({
   const { chords, transposedChords } = useChords(plainTab, transposition);
 
   let chordElements: Map<string, JSX.Element> = new Map();
-  for (let chord of Object.keys(inversions).toSorted()) {
+  for (let chord of Object.keys(inversions).sort()) {
     chordElements.set(
       chord,
       <ChordText
