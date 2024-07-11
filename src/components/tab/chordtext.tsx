@@ -1,38 +1,7 @@
 import { useConfigStore } from "@/state/config";
+import { TransposedChord } from "@/types/tab";
 import Chord from "@tombatossals/react-chords/lib/Chord";
-import { LegacyRef, useRef } from "react";
-
-type ChordProps = {
-  chord: string;
-  transposition: number;
-  fontSize: number;
-  inversion: number;
-};
-
-/**
- * For chords that shouldn't exist but somehow do
- */
-const GODS_MISTAKES = ["H"];
-
-const KEY_MAP: { [key: string]: string } = {
-  A: "A",
-  "A#": "Bb",
-  Bb: "Bb",
-  B: "B",
-  H: "B", // exists in some German songs, see tab/1684995
-  C: "C",
-  "C#": "C#",
-  Db: "C#",
-  D: "D",
-  "D#": "Eb",
-  E: "E",
-  F: "F",
-  "F#": "F#",
-  Gb: "F#",
-  G: "G",
-  "G#": "Ab",
-  Ab: "Ab",
-};
+import { useRef } from "react";
 
 const instrument = {
   strings: 6,
@@ -45,62 +14,26 @@ const instrument = {
 };
 
 export default function ChordText({
-  chord,
-  transposition,
+  transposedChord,
   fontSize,
   inversion,
-}: ChordProps) {
+}: {
+  transposedChord: TransposedChord;
+  fontSize: number;
+  inversion: number;
+}) {
   const { guitarChords: chordsDB } = useConfigStore();
-  let keys = chordsDB?.keys;
 
-  let matches = chord.match(/^[A-Z][#b]?/);
-  let key = matches ? matches[0] : "N/A";
-  let suffix = chord.replace(/^[A-Z][#b]?/g, "");
-
-  let transposedKey = key;
-
-  // tranpose the key
-  if (keys && transposition !== 0 && chord !== "N.C.") {
-    key = KEY_MAP[key];
-    if (transposition < 0) {
-      transposition = keys.length - (Math.abs(transposition) % keys.length);
-    }
-    let keyIndex = keys.findIndex((i) => i === key);
-    transposedKey = keys[(keyIndex + transposition) % keys.length];
-  }
-
-  let [simpleSuffix, bassNote] = suffix.split("/");
-  let transposedBassNote = bassNote;
-
-  // if transpose the bass note
-  if (keys && bassNote && transposition !== 0) {
-    bassNote = KEY_MAP[bassNote];
-
-    let bassIndex = keys.findIndex((i) => i === bassNote);
-    transposedBassNote = keys[(bassIndex + transposition) % keys.length];
-  }
-
-  let chordSuffix = chordsDB?.suffixes
-    ? getSuffix(simpleSuffix, chordsDB?.suffixes)
-    : "major";
-
-  if (GODS_MISTAKES.includes(transposedKey)) {
-    transposedKey = KEY_MAP[transposedKey];
-  }
-
-  let chordsDBConvertedKey = KEY_MAP[transposedKey] ?? transposedKey;
   let positions = chordsDB?.chords[
-    chordsDBConvertedKey.replace("#", "sharp")
-  ]?.find((c) => c.suffix === chordSuffix)?.positions;
+    transposedChord.chordDbChord.replace("#", "sharp")
+  ]?.find((c) => c.suffix === transposedChord.fullSuffix)?.positions;
+
   let chordObj = positions
     ? positions[inversion % positions.length]
     : undefined;
 
+  const fullTransposedChord = transposedChord.fullChord;
   const size = fontSize * 12;
-
-  const fullTransposedChord = `${transposedKey}${simpleSuffix}${
-    bassNote?.length > 0 ? `/${transposedBassNote}` : ""
-  }`;
 
   const inputRef = useRef<HTMLElement>(null);
 
@@ -125,7 +58,7 @@ export default function ChordText({
         >
           <div className="text-center chord">
             <span className="font-bold mr-2">
-              {`${transposedKey}${simpleSuffix}`}
+              {`${transposedChord.key}${transposedChord.simpleSuffix}`}
             </span>
             <span>
               ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
@@ -136,31 +69,4 @@ export default function ChordText({
       )}
     </span>
   );
-}
-
-const SUBS = {
-  "": "major",
-  m: "minor",
-  sus: "sus4",
-};
-
-/**
- * @param chordSuffix
- * @param SUFFIXES list of proper suffixes
- * @returns the proper suffix of the chord
- */
-function getSuffix(chordSuffix: string, SUFFIXES: string[]) {
-  let FULL_SUFFIX_MAP: { [key: string]: string } = {
-    ...SUBS,
-  };
-  for (let suffix of SUFFIXES) {
-    FULL_SUFFIX_MAP[suffix] = suffix;
-  }
-  chordSuffix = FULL_SUFFIX_MAP[chordSuffix];
-  for (let suffix of Object.values(FULL_SUFFIX_MAP)) {
-    if (suffix === chordSuffix) {
-      return suffix;
-    }
-  }
-  return "major";
 }

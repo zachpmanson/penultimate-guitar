@@ -1,8 +1,9 @@
 import ChordText from "@/components/tab/chordtext";
 import useWindowDimensions from "@/hooks/useWindowDimensions";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import reactStringReplace from "react-string-replace";
 import { isMobile } from "react-device-detect";
+import useChords from "@/hooks/useChords";
 
 type TabSheetProps = {
   plainTab: string;
@@ -17,14 +18,17 @@ export default function TabSheet({
 }: TabSheetProps) {
   const { width } = useWindowDimensions();
   const [formattedTab, setFormattedTab] = useState("");
+
   const [inversions, setInversions] = useState<{ [key: string]: number }>({});
 
-  let chordElements: { [key: string]: JSX.Element } = {};
-  for (let chord of Object.keys(inversions)) {
-    chordElements[chord] = (
+  const { chords, transposedChords } = useChords(plainTab, transposition);
+
+  let chordElements: Map<string, JSX.Element> = new Map();
+  for (let chord of Object.keys(inversions).toSorted()) {
+    chordElements.set(
+      chord,
       <ChordText
-        chord={chord}
-        transposition={transposition}
+        transposedChord={transposedChords[chord]}
         fontSize={fontSize}
         inversion={inversions[chord] ?? 0}
       />
@@ -51,18 +55,12 @@ export default function TabSheet({
   }, [width, fontSize]);
 
   useEffect(() => {
-    const allChords = plainTab.match(/\[ch\](.*?)\[\/ch\]/gm);
-    const allUniqueChords = [
-      ...new Set(
-        allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", ""))
-      ),
-    ];
     setInversions(() => {
       let newValue = {};
-      Object.assign(newValue, ...allUniqueChords.map((k) => ({ [k]: 0 })));
+      Object.assign(newValue, ...chords.map((k) => ({ [k]: 0 })));
       return newValue;
     });
-  }, [plainTab, transposition]);
+  }, [chords, transposition]);
 
   useEffect(() => {
     setFormattedTab(
@@ -115,17 +113,37 @@ export default function TabSheet({
   }, [lineCutoff, plainTab]);
 
   return (
-    <div className="tab m-auto w-fit max-w-[100%]">
-      <pre
-        className="max-w-[100%] whitespace-pre-wrap"
-        style={{ fontSize: `${fontSize}px` }}
-      >
-        {reactStringReplace(formattedTab, /\[ch\](.+?)\[\/ch\]/gm, (match) => (
-          <span onClick={() => increaseInversion(match)}>
-            {chordElements[match]}
-          </span>
-        ))}
-      </pre>
+    <div className="flex flex-col gap-4 w-full">
+      {/* {[...chordElements.keys()].length > 0 && (
+        <div className="flex p-3 border border-gray-200 rounded-xl">
+          <div
+            className="flex-grow w-0 flex flex-wrap gap-2"
+            style={{ fontSize: `${fontSize}px` }}
+          >
+            {[...chordElements.entries()].map(([chord, element]) => (
+              <pre>
+                <span onClick={() => increaseInversion(chord)}>{element}</span>
+              </pre>
+            ))}
+          </div>
+        </div>
+      )} */}
+      <div className="w-fit">
+        <pre
+          className="whitespace-pre-wrap"
+          style={{ fontSize: `${fontSize}px` }}
+        >
+          {reactStringReplace(
+            formattedTab,
+            /\[ch\](.+?)\[\/ch\]/gm,
+            (chord) => (
+              <span onClick={() => increaseInversion(chord)}>
+                {chordElements.get(chord)}
+              </span>
+            )
+          )}
+        </pre>
+      </div>
     </div>
   );
 }

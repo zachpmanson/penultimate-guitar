@@ -22,6 +22,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 import { BookmarkIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
+import useChords from "@/hooks/useChords";
 
 const scrollMs = 100;
 
@@ -43,6 +44,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 
   const plainTab = tabDetails?.tab ?? "";
   const tabLink = convertToTabLink(tabDetails);
+  const { transposedChords } = useChords(plainTab, tranposition);
 
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");

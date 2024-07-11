@@ -11,3 +11,11 @@ export const DEFAULT_TAB: TabDto = {
   rating: 0,
   type: "Tab",
 };
+
+export type TransposedChord = {
+  fullChord: string;
+  chordDbChord: string;
+  simpleSuffix: string;
+  fullSuffix: string;
+  key: string;
+};

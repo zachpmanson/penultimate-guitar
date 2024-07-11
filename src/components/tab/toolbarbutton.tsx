@@ -21,7 +21,7 @@ export default function ToolbarButton({
 }
 
 export const getToolbarButtonStyle = (disabled: boolean) => `
-  border-gray-200 border-2 rounded-xl transition ease-in-out
+  border-gray-200 border rounded-xl transition duration-75
   flex items-center justify-center w-10 h-10 text-md text-lg 
   ${
     disabled
