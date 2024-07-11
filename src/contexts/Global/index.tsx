@@ -19,7 +19,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (userId) setUserId(userId);
     else setUserId(undefined);
-  }, [userId]);
+  }, [userId, setUserId]);
 
   useEffect(() => {
     // put old saved tabs into new format and remove old format
@@ -32,7 +32,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setUserAllTabLinks(parsedTabs["@localStorage"], "@localStorage");
       localStorage.removeItem("savedUserTabs");
     }
-  }, []);
+  }, [setUserAllTabLinks, userId]);
 
   useEffect(() => {
     if (!guitarChords) {
@@ -45,7 +45,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
         });
     }
     getPlaylists();
-  }, []);
+  }, [guitarChords, setGuitarChords]);
 
   useEffect(() => {
     updatePlaylists(playlists);

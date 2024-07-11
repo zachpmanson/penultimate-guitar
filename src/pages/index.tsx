@@ -29,7 +29,7 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     setSearchText("");
-  }, []);
+  }, [setSearchText]);
 
   return (
     <>

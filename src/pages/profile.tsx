@@ -72,7 +72,7 @@ export default function Profile() {
         return n;
       });
     }
-  }, [playlist]);
+  }, [playlist, playlistId, setPlaylists]);
 
   return (
     <>

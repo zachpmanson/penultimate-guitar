@@ -32,7 +32,7 @@ export default function useSavedTabs() {
 
   useEffect(() => {
     if (tablinks && userId) setUserAllTabLinks(tablinks, userId);
-  }, [userId, tablinks]);
+  }, [userId, tablinks, setUserAllTabLinks]);
 
   const setTabFolders = useCallback(
     (tabLink: TabLinkDto, folders: string[]) => {
@@ -49,7 +49,7 @@ export default function useSavedTabs() {
 
       setTabFoldersLocal(tabLink, folders, userId);
     },
-    [session, addTabLinkApi, refetchTabs, setTabFoldersLocal]
+    [session, refetchTabs, setTabFoldersLocal, setTabLinksApi]
   );
 
   const addSavedTab = useCallback(
@@ -65,7 +65,7 @@ export default function useSavedTabs() {
 
       addTabLinkLocal(newTab, userId);
     },
-    [userId, addTabLinkApi, addTabLinkLocal]
+    [userId, addTabLinkApi, addTabLinkLocal, refetchTabs]
   );
 
   const removeSavedTab = useCallback(
@@ -85,7 +85,7 @@ export default function useSavedTabs() {
       );
       return existingIndex !== -1;
     },
-    [savedTabs]
+    [savedTabs, userKey]
   );
 
   return {
