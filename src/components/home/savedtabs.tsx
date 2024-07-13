@@ -79,7 +79,16 @@ function Folder({
       onMouseOut={() => setHovering(false)}
     >
       <summary className="p-2">
-        <h2 className="text-lg">{folder}</h2>
+        <div className="flex justify-between">
+          <h2 className="text-lg">{folder}</h2>
+
+          {folders[folder][0].imageUrl && (
+            <img
+              src={folders[folder][0].imageUrl ?? undefined}
+              className="w-8 h-8 rounded"
+            />
+          )}
+        </div>
       </summary>
 
       <div className="flex flex-col gap-1 m-4 mt-0">

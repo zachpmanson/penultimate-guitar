@@ -12,6 +12,5 @@ export type DeleteSchema = z.infer<typeof TabSchema>;
 
 export const NewTabSchema = z.object({
   newTab: TabSchema,
-  folders: z.array(z.string()),
 });
 export type PostSchema = z.infer<typeof NewTabSchema>;

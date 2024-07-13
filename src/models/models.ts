@@ -61,6 +61,8 @@ export type TabLinkDto = {
   version?: number | null;
   folder?: string;
   type?: TabType | null;
+  imageUrl?: string | null;
+  playlistUrl?: string | null;
 };
 
 export type SavedUserTabLinks = {

@@ -2,7 +2,7 @@ import { TabLinkDto } from "@/models/models";
 import { useSavedTabsStore } from "@/state/savedTabs";
 import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 export default function useSavedTabs() {
   const session = useSession();
@@ -17,15 +17,25 @@ export default function useSavedTabs() {
   const userId = session?.data?.user?.id;
   const userKey = userId ?? "@localStorage";
 
-  const notInitialRender = useRef(false);
-
   const {
-    data: tablinks,
+    data: tablinksAndFolders,
     isLoading: isLoadingTabs,
     refetch: refetchTabs,
   } = trpc.user.getTabLinks.useQuery(undefined, {
     enabled: !!userId,
   });
+  const tablinks = useMemo(
+    () =>
+      tablinksAndFolders?.map((tab) => ({
+        ...tab,
+        folder: tab.folder.name,
+        folderId: undefined,
+        imageUrl: tab.folder.imageUrl,
+        playlistUrl: tab.folder.playlistUrl,
+      })),
+    [tablinksAndFolders]
+  );
+
   const addTabLinkApi = trpc.user.addTabLink.useMutation();
   const deleteTabLinkApi = trpc.user.deleteTabLink.useMutation();
   const setTabLinksApi = trpc.user.setTabLinks.useMutation();
@@ -58,7 +68,6 @@ export default function useSavedTabs() {
         addTabLinkApi
           .mutateAsync({
             newTab: newTab,
-            folders: [newTab.folder ?? "Favourites"],
           })
           .then(() => refetchTabs());
       }
