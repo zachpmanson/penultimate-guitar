@@ -5,6 +5,7 @@ import ToolbarButton, {
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
 import useChords from "@/hooks/useChords";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { TabLinkDto } from "@/models/models";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
@@ -20,10 +21,9 @@ import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
-import "react-tooltip/dist/react-tooltip.css";
+import { Fragment, LegacyRef, useEffect, useRef, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
-import useWindowDimensions from "@/hooks/useWindowDimensions";
+import "react-tooltip/dist/react-tooltip.css";
 
 const scrollMs = 100;
 
@@ -37,7 +37,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
 
-  const element = useRef<HTMLElement>(null);
+  const element = useRef<LegacyRef<HTMLDivElement>>(null);
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
