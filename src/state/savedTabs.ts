@@ -1,9 +1,10 @@
 import { SavedUserTabLinks, TabLinkDto } from "@/models/models";
+import { Folder } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type SavedTabsState = {
-  savedTabs: { [key: string]: TabLinkDto[] };
+  savedTabs: { [key: string]: Folder[] };
 };
 
 type SavedTabsActions = {

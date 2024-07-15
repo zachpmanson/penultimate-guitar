@@ -5,14 +5,12 @@ import { authProcedure, createRouter } from "../trpc";
 
 export const userRouter = createRouter({
   getTabLinks: authProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.userTablink.findMany({
+    return await ctx.prisma.folder.findMany({
       where: {
-        folder: {
-          spotifyUserId: ctx.session.user.id,
-        },
+        spotifyUserId: ctx.session.user.id,
       },
       include: {
-        folder: true,
+        tabs: true,
       },
     });
   }),

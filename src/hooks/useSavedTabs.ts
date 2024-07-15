@@ -24,17 +24,6 @@ export default function useSavedTabs() {
   } = trpc.user.getTabLinks.useQuery(undefined, {
     enabled: !!userId,
   });
-  const tablinks = useMemo(
-    () =>
-      tablinksAndFolders?.map((tab) => ({
-        ...tab,
-        folder: tab.folder.name,
-        folderId: undefined,
-        imageUrl: tab.folder.imageUrl,
-        playlistUrl: tab.folder.playlistUrl,
-      })),
-    [tablinksAndFolders]
-  );
 
   const addTabLinkApi = trpc.user.addTabLink.useMutation();
   const deleteTabLinkApi = trpc.user.deleteTabLink.useMutation();
