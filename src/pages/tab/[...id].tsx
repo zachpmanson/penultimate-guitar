@@ -23,16 +23,12 @@ import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 import { useWakeLock } from "react-screen-wake-lock";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 
 const scrollMs = 100;
 
 export default function Tab({ id }: { trpcState: any; id: string }) {
-  const {
-    isSupported,
-    released,
-    request: requestWakeLock,
-    release: releaseWakeLock,
-  } = useWakeLock({
+  const { request: requestWakeLock, release: releaseWakeLock } = useWakeLock({
     onRequest: () => console.log("Screen Wake Lock: requested!"),
     onError: (e) => console.log("An error happened", e),
     onRelease: () => console.log("Screen Wake Lock: released!"),
@@ -41,7 +37,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
 
-  const element = useRef<any>(null);
+  const element = useRef<HTMLElement>(null);
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
@@ -56,6 +52,8 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const plainTab = tabDetails?.tab ?? "";
   const tabLink = convertToTabLink(tabDetails);
   const { transposedChords } = useChords(plainTab, tranposition);
+
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
@@ -114,12 +112,25 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             behavior: "smooth",
           });
         }
+        if (element.current)
+          console.log(
+            `(${window.innerHeight + window.scrollY}) >= ${
+              document.body.scrollHeight - 5
+            }`
+          );
+        if (
+          window.innerHeight + window.scrollY >=
+          document.body.scrollHeight - 5
+        ) {
+          setScrollSpeed(0);
+          clearInterval(scrollinterval.current);
+        }
       }, scrollMs);
     }
     return () => {
       clearInterval(scrollinterval.current);
     };
-  }, [scrollSpeed]);
+  }, [scrollSpeed, element.current]);
 
   useEffect(() => {
     if (tranposition !== -5) setMode("default");
