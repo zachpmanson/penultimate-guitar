@@ -37,7 +37,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
 
-  const element = useRef<LegacyRef<HTMLDivElement>>(null);
+  const element = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
