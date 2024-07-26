@@ -1,11 +1,11 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models/models";
+import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { useSearchStore } from "@/state/search";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function SearchBox() {
   const router = useRouter();
