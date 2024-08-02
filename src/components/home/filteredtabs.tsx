@@ -11,11 +11,13 @@ export default function FilteredSavedTabs() {
 
   const lowerSearchText = searchText.toLowerCase();
   const filteredTabs = _.uniqBy(
-    savedTabs.filter(
-      (t) =>
-        t.name?.toLowerCase().includes(lowerSearchText) ||
-        t.artist?.toLowerCase().includes(lowerSearchText)
-    ),
+    savedTabs
+      .flatMap((f) => f.tabs)
+      .filter(
+        (t) =>
+          t.name?.toLowerCase().includes(lowerSearchText) ||
+          t.artist?.toLowerCase().includes(lowerSearchText)
+      ),
     (t: TabLinkDto) => t.taburl
   );
 

@@ -10,7 +10,7 @@ import { useSavedTabsStore } from "@/state/savedTabs";
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
   const { guitarChords, setGuitarChords } = useConfigStore();
-  const { setUserAllTabLinks } = useSavedTabsStore();
+  const { setUserAllFolders: setUserAllTabLinks } = useSavedTabsStore();
 
   const session = useSession();
   const userId = session?.data?.user?.id;
