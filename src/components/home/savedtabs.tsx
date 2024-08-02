@@ -8,6 +8,12 @@ import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
+import { Folder } from "@/types/user";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/solid";
 
 function savedTabToFolders(savedTabs: TabLinkDto[]) {
   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
@@ -24,7 +30,7 @@ function savedTabToFolders(savedTabs: TabLinkDto[]) {
 
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
-  const folders = !!savedTabs ? savedTabToFolders(savedTabs) : {};
+  const folders = Object.fromEntries(savedTabs.map((f) => [f.name, f.tabs]));
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -37,16 +43,16 @@ export default function SavedTabs() {
               {isLoadingTabs && !savedTabs ? (
                 <LoadingSpinner className="h-8" />
               ) : (
-                Object.keys(folders).map((folder, i) =>
-                  folder === "Favourites" ? (
-                    <div key={i} className="flex flex-col gap-2">
-                      {folders[folder].map((t, j) => (
+                savedTabs.map((folder, i) =>
+                  folder.name === "Favourites" ? (
+                    <div key={i} className="flex flex-col gap-1">
+                      {savedTabs[i].tabs.map((t, j) => (
                         <TabLink key={j} tablink={{ ...t, saved: true }} />
                       ))}
                     </div>
                   ) : (
                     <div key={i}>
-                      <Folder folders={folders} folder={folder} />
+                      <FolderPanel folder={folder} />
                     </div>
                   )
                 )
@@ -59,57 +65,63 @@ export default function SavedTabs() {
   );
 }
 
-function Folder({
-  folders,
-  folder,
-}: {
-  folders: {
-    [key: string]: TabLinkDto[];
-  };
-  folder: string;
-}) {
+function FolderPanel({ folder }: { folder: Folder }) {
   const [hovering, setHovering] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <details
+    <div
       className={
-        "bg-gray-200 rounded-xl  border transition duration-75" +
+        "bg-gray-200 rounded-xl border transition duration-75" +
         (hovering ? " hover:border-gray-400" : "")
       }
       onMouseOver={() => setHovering(true)}
       onMouseOut={() => setHovering(false)}
     >
-      <summary className="p-2">
-        <div className="flex justify-between">
-          <h2 className="text-lg">{folder}</h2>
-
-          {folders[folder][0].imageUrl && (
-            <img
-              src={folders[folder][0].imageUrl ?? undefined}
-              className="w-8 h-8 rounded"
-            />
+      <div
+        className="flex justify-between p-2 px-3 items-center"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h2 className="text-lg">{folder.name}</h2>
+        <div className="flex justify-between gap-2 items-center">
+          {folder.imageUrl && (
+            <Link
+              href={`https://open.spotify.com/playlist/${folder.playlistUrl}`}
+              target="_blank"
+            >
+              <img
+                src={folder.imageUrl ?? undefined}
+                className="w-8 h-8 rounded"
+              />
+            </Link>
+          )}
+          {isOpen ? (
+            <ChevronDownIcon className="w-4 h-4" />
+          ) : (
+            <ChevronLeftIcon className="w-4 h-4" />
           )}
         </div>
-      </summary>
-
-      <div className="flex flex-col gap-1 m-4 mt-0">
-        {folders[folder].map((t, j) => (
-          <TabLink key={j} tablink={{ ...t, saved: true }} />
-        ))}
-        <div className="flex justify-between items-middle">
-          <div className="ml-2">{folders[folder].length} items</div>
-          <FolderMenu folder={folder} />
-        </div>
       </div>
-    </details>
+
+      {isOpen && (
+        <div className="flex flex-col gap-1 p-2 pt-0 mt-0">
+          {folder.tabs.map((t, j) => (
+            <TabLink key={j} tablink={{ ...t, saved: true }} />
+          ))}
+          <div className="flex justify-between items-middle">
+            <div className="ml-2">{folder.tabs.length} items</div>
+            <FolderMenu folder={folder} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
-function FolderMenu({ folder }: { folder: string }) {
-  const { playlists } = useGlobal();
-  const { savedTabs, removeSavedTab } = useSavedTabs();
+function FolderMenu({ folder }: { folder: Folder }) {
+  const { removeFolder } = useSavedTabs();
 
   const { data, refetch } = trpc.spotify.getPlaylist.useQuery(
-    { playlistId: playlists[folder] },
+    { playlistId: folder.playlistUrl ?? "" },
     {
       enabled: false,
     }
@@ -118,24 +130,14 @@ function FolderMenu({ folder }: { folder: string }) {
   const [playlist, setPlaylist] = useState<Playlist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
-  const folders = savedTabToFolders(savedTabs);
-
-  const refreshPlaylist = async (folderName: string) => {
+  const refreshPlaylist = async () => {
     await refetch();
     setIsImportOpen(true);
     setPlaylist(data);
   };
 
-  const deleteFolder = (folder: string) => {
-    for (let tablink of savedTabs) {
-      if (tablink.folder === folder) {
-        removeSavedTab(tablink);
-      }
-    }
-  };
-
-  const scrapeAll = async (folder: string) => {
-    for (let tabLink of folders[folder]) {
+  const scrapeAll = async () => {
+    for (let tabLink of folder.tabs) {
       getTab.mutate(tabLink.taburl);
       await new Promise((r) => setTimeout(r, 8000));
     }
@@ -166,12 +168,13 @@ function FolderMenu({ folder }: { folder: string }) {
         >
           <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
             <div className="px-1 py-1 ">
-              {playlists[folder] && (
+              {folder.playlistUrl && (
                 <>
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        href={`https://open.spotify.com/playlist/${playlists[folder]}`}
+                        href={`https://open.spotify.com/playlist/${folder.playlistUrl}`}
+                        target="_blank"
                         className={`${
                           active ? "bg-blue-700 text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline`}
@@ -183,7 +186,7 @@ function FolderMenu({ folder }: { folder: string }) {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => refreshPlaylist(folder)}
+                        onClick={() => refreshPlaylist()}
                         className={`${
                           active ? "bg-blue-700 text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -195,7 +198,7 @@ function FolderMenu({ folder }: { folder: string }) {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => scrapeAll(folder)}
+                        onClick={() => scrapeAll()}
                         className={`${
                           active ? "bg-blue-700 text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
@@ -209,7 +212,7 @@ function FolderMenu({ folder }: { folder: string }) {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    onClick={() => deleteFolder(folder)}
+                    onClick={() => removeFolder(folder.name)}
                     className={`${
                       active ? "bg-blue-700 text-white" : "text-gray-900"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}

@@ -121,6 +121,7 @@ export const userRouter = createRouter({
             name: folder,
             spotifyUserId: ctx.session.user.id,
           })),
+          skipDuplicates: true,
         });
 
         // remove tablinks that aren't in these folders
@@ -153,6 +154,7 @@ export const userRouter = createRouter({
             version: input.tab.version,
             folderId: folder.id,
           })),
+          skipDuplicates: true,
         });
         return { count: newTabs.count };
       });
