@@ -219,14 +219,16 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
               {({ active }) => (
                 <button
                   onClick={() => toggleMode()}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900 dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   {mode === "default" ? (
@@ -250,7 +252,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
                 <button
                   onClick={() => print()}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Print
@@ -262,7 +266,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
                 <Link
                   href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline hover:text-white`}
                 >
                   View on Ultimate Guitar

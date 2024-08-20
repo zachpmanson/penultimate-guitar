@@ -40,7 +40,7 @@ export default function ChordText({
   return (
     <span className="group w-max" ref={inputRef}>
       <span
-        className={`bg-gray-200 font-bold chord z-10 relative ${
+        className={`bg-gray-200 dark:bg-gray-600 font-bold rounded-md chord z-10 relative ${
           chordObj && "cursor-pointer"
         }`}
       >
@@ -54,7 +54,7 @@ export default function ChordText({
             left: `50%`,
             transform: `translateX(-50%)`,
           }}
-          className="pointer-events-none absolute z-50 bg-white opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
+          className="pointer-events-none absolute z-50 bg-white dark:bg-gray-400 opacity-0 transition-opacity group-hover:opacity-95 border-black border-2 rounded"
         >
           <div className="text-center chord">
             <span className="font-bold mr-2">

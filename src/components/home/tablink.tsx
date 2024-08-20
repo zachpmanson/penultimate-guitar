@@ -33,7 +33,7 @@ export default function TabLink({
       >
         <Link
           href={`/tab/${tablink.taburl}`}
-          className="w-full text-black no-underline hover:no-underline active:text-black"
+          className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
           prefetch={false}
         >
           <PlainButton>
@@ -48,7 +48,7 @@ export default function TabLink({
           </PlainButton>
         </Link>
         <PlainButton onClick={handleSave}>
-          <div className="flex items-center h-full w-4">
+          <div className="flex items-center h-full w-4 text-gray-800 dark:text-gray-200">
             {recent ? (
               <BookmarkIcon className="w-full h-full" />
             ) : (
