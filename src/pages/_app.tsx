@@ -82,7 +82,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <SessionProvider session={pageProps.session}>
       <GlobalProvider>
-        <ThemeProvider defaultTheme="system" attribute="class">
+        <ThemeProvider defaultTheme="light" attribute="class">
           {layout}
         </ThemeProvider>
       </GlobalProvider>
