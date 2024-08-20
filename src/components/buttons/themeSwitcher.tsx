@@ -18,7 +18,7 @@ const ThemeSwitcher = () => {
     // If we haven't mounted yet, return a placeholder icon
     return (
       <PlainButton
-        onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
+        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         className="pl-2 pr-2"
       >
         <LoadingSpinner className="w-4 h-4" />
@@ -26,10 +26,10 @@ const ThemeSwitcher = () => {
     );
   }
 
-  const ModeIcon = theme == "dark" ? SunIcon : MoonIcon;
+  const ModeIcon = theme === "dark" ? SunIcon : MoonIcon;
   return (
     <PlainButton
-      onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="pl-2 pr-2"
     >
       <ModeIcon className="w-4" />

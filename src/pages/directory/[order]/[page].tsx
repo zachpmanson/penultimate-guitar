@@ -169,7 +169,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   orderBy = [
     {
-      timestamp: order == "new" ? "desc" : "asc",
+      timestamp: order === "new" ? "desc" : "asc",
     },
   ];
 
