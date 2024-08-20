@@ -48,7 +48,7 @@ export default function SavedTabs() {
                     <div key={i}>
                       <Folder folders={folders} folder={folder} />
                     </div>
-                  )
+                  ),
                 )
               )}
             </div>
@@ -72,7 +72,7 @@ function Folder({
   return (
     <details
       className={
-        "bg-gray-200 rounded-xl  border transition duration-75" +
+        "bg-gray-200 dark:bg-gray-800 rounded-xl  border transition duration-75" +
         (hovering ? " hover:border-gray-400" : "")
       }
       onMouseOver={() => setHovering(true)}
@@ -139,7 +139,7 @@ function FolderMenu({ folder }: { folder: string }) {
           <Menu.Button
             className={`
   border-gray-200 border rounded-xl transition ease-in-out
-  flex items-center justify-center text-md text-lg  bg-white px-4 hover:border-gray-400
+  flex items-center justify-center text-md text-lg bg-white dark:bg-gray-800 px-4 hover:border-gray-400
 `}
           >
             <div className="w-4">▼</div>
