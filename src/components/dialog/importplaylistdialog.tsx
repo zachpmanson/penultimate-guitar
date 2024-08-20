@@ -136,7 +136,8 @@ export default function ImportPlaylistDialog({
             </div>
           </Dialog.Title>
           <Dialog.Description></Dialog.Description>
-          <hr className="m-4" />
+          <hr className="m-4 dark:border-gray-600" />
+
           <div className="flex justify-between">
             <div>Found {playlistTabs.length}</div>
             <div>Couldn&apos;t find {attemptCount - playlistTabs.length}</div>

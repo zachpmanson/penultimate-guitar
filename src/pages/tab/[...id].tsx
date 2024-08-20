@@ -337,7 +337,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             </div>
           )}
         </div>
-        <hr className="my-4 no-print" />
+        <hr className="my-4 no-print dark:border-gray-600" />
 
         <div className="w-fit m-auto">
           {tabDetails?.tab && (
@@ -420,7 +420,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
           </div>
         </div>
 
-        <hr className="my-4 no-print" />
+        <hr className="my-4 no-print dark:border-gray-600" />
         <div className="max-w-lg mx-auto my-4 no-print flex">
           <div>
             {!!tabDetails?.contributors?.length && (

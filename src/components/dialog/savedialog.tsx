@@ -39,7 +39,7 @@ export default function SaveDialog({
         new Set([
           "Favourites",
           ...savedTabs.map((t) => t.folder ?? "Favourites"),
-        ]),
+        ])
       ),
     ];
     setFolders(folderNames);
@@ -76,7 +76,7 @@ export default function SaveDialog({
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
-    event: KeyboardEvent<HTMLInputElement>,
+    event: KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") addNew();
   };
@@ -102,7 +102,7 @@ export default function SaveDialog({
         <Dialog.Panel className="w-full max-w-xs rounded bg-white dark:bg-gray-800 p-4">
           <Dialog.Title>Save tab to folder</Dialog.Title>
           <Dialog.Description></Dialog.Description>
-          <hr />
+          <hr className="dark:border-gray-600" />
           <div className="flex flex-col">
             {folders.map((f, i) => (
               <label key={i} className="w-full text-lg">

@@ -20,7 +20,7 @@ export default function PlainButton(props: {
   return (
     <div
       className={
-        "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border py-2 px-3 rounded-xl transition duration-75 " +
+        "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border py-2 px-3 rounded-xl transition duration-75 dark:border-gray-600" +
         (props.disabled ? "" : " hover:border-gray-400 active:bg-gray-400 ") +
         props.className
       }
