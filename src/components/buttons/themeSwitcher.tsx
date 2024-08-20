@@ -2,9 +2,8 @@ import React from "react";
 import { useTheme } from "next-themes";
 
 import PlainButton from "../shared/plainbutton";
-import IconDarkMode from "../icons/IconDarkMode";
-import IconLightMode from "../icons/IconLightMode";
 import LoadingSpinner from "../loadingspinner";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = React.useState(false);
@@ -27,16 +26,13 @@ const ThemeSwitcher = () => {
     );
   }
 
-  const DarkLightIcon = theme == "dark" ? IconDarkMode : IconLightMode;
+  const ModeIcon = theme == "dark" ? SunIcon : MoonIcon;
   return (
     <PlainButton
       onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
       className="pl-2 pr-2"
     >
-      <DarkLightIcon
-        className="w-4 h-4"
-        color={theme == "dark" ? "white" : "black"}
-      />
+      <ModeIcon className="w-4" />
     </PlainButton>
   );
 };
