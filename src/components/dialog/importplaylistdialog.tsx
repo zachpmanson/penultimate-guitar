@@ -113,7 +113,7 @@ export default function ImportPlaylistDialog({
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="w-full max-w-xs rounded bg-white p-4">
+        <Dialog.Panel className="w-full max-w-xs rounded bg-white dark:bg-gray-800 p-4">
           <Dialog.Title>
             <div className="flex flex-col gap-2">
               <div className="text-lg font-bold">{playlist.name}</div>

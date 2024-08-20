@@ -72,7 +72,7 @@ function Folder({
   return (
     <details
       className={
-        "bg-gray-200 rounded-xl  border transition duration-75" +
+        "bg-gray-200 dark:bg-gray-800 rounded-xl  border transition duration-75" +
         (hovering ? " hover:border-gray-400" : "")
       }
       onMouseOver={() => setHovering(true)}
