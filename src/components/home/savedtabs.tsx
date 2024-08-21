@@ -10,19 +10,6 @@ import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
 
-// function savedTabToFolders(savedTabs: TabLinkDto[]) {
-//   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
-//   for (let tab of savedTabs) {
-//     const folderName = tab.folder ?? "Favourites";
-//     if (folders[folderName]) {
-//       folders[folderName].push(tab);
-//     } else {
-//       folders[folderName] = [tab];
-//     }
-//   }
-//   return folders;
-// }
-
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
 
@@ -60,7 +47,6 @@ export default function SavedTabs() {
           </details>
         </div>
       )}
-      {/* <pre>{JSON.stringify(savedTabs, null, 2)}</pre> */}
     </div>
   );
 }
@@ -94,11 +80,9 @@ function FolderPanel({ folder }: { folder: Folder }) {
               />
             </Link>
           )}
-          {isOpen ? (
-            <ChevronDownIcon className="w-4 h-4" />
-          ) : (
-            <ChevronLeftIcon className="w-4 h-4" />
-          )}
+          <ChevronLeftIcon
+            className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")}
+          />
         </div>
       </div>
 
