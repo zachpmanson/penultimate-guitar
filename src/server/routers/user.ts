@@ -1,5 +1,5 @@
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
-import { NewTabSchema, TabSchema } from "@/types/user";
+import { DeleteTabLinkSchema, NewTabSchema, TabSchema } from "@/types/user";
 import { z } from "zod";
 import { authProcedure, createRouter } from "../trpc";
 
@@ -70,15 +70,30 @@ export const userRouter = createRouter({
     }),
 
   deleteTabLink: authProcedure
-    .input(TabSchema)
+    .input(DeleteTabLinkSchema)
     .mutation(async ({ ctx, input }) => {
-      const { taburl, folder } = input;
+      const { taburl, folderName } = input;
 
       const result = await ctx.prisma.userTablink.deleteMany({
         where: {
           taburl,
           folder: {
-            name: folder,
+            name: folderName,
+            spotifyUserId: ctx.session.user.id,
+          },
+        },
+      });
+      return result;
+    }),
+
+  deleteFolder: authProcedure
+    .input(z.object({ folderName: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { folderName } = input;
+      const result = await ctx.prisma.folder.delete({
+        where: {
+          name_spotifyUserId: {
+            name: folderName,
             spotifyUserId: ctx.session.user.id,
           },
         },

@@ -424,11 +424,13 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             )}
           </div>
         </div>
-        <SaveDialog
-          isOpen={saveDialogActive}
-          setIsOpen={setSaveDialogActive}
-          tab={tabLink}
-        />
+        {saveDialogActive && (
+          <SaveDialog
+            isOpen={saveDialogActive}
+            setIsOpen={setSaveDialogActive}
+            tab={tabLink}
+          />
+        )}
       </>
     </div>
   );

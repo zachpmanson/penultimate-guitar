@@ -61,7 +61,6 @@ export type TabLinkDto = {
   artist: string | null;
   saved?: boolean | null;
   version?: number | null;
-  folder?: string;
   type?: TabType | null;
   imageUrl?: string | null;
   playlistUrl?: string | null;

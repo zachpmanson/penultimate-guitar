@@ -8,12 +8,17 @@ export const TabSchema = z.object({
   version: z.number().optional().nullable(),
   folder: z.string().optional(),
 });
-export type DeleteSchema = z.infer<typeof TabSchema>;
 
 export const NewTabSchema = z.object({
   newTab: TabSchema,
 });
 export type PostSchema = z.infer<typeof NewTabSchema>;
+
+export const DeleteTabLinkSchema = z.object({
+  taburl: z.string(),
+  folderName: z.string(),
+});
+export type DeleteTabLinkSchema = z.infer<typeof DeleteTabLinkSchema>;
 
 type TabLink = {
   taburl: string;

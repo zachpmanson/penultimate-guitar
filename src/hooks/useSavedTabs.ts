@@ -30,6 +30,7 @@ export default function useSavedTabs() {
   const addTabLinkApi = trpc.user.addTabLink.useMutation();
   const deleteTabLinkApi = trpc.user.deleteTabLink.useMutation();
   const setTabLinksApi = trpc.user.setTabLinks.useMutation();
+  const removeFolderApi = trpc.user.deleteFolder.useMutation();
 
   useEffect(() => {
     if (tablinksAndFolders && userId)
@@ -39,56 +40,66 @@ export default function useSavedTabs() {
   const setTabFolders = useCallback(
     (tablink: TabLinkDto, folders: string[]) => {
       const userId = session?.data?.user?.id;
-      const cleanFolders = folders.filter((f) => !!f); // for some reason empty slots make it into here
 
-      console.log({ tablink, cleanFolders });
+      // unpack here because empty slots somehow end up in the folders array without
 
       if (userId) {
         setTabLinksApi
           .mutateAsync({
             tab: tablink,
-            folders: cleanFolders,
+            // unpack here because empty slots somehow end up in the folders array without
+            folders: [...folders],
           })
           .then(() => refetchTabs());
+        // local storage will get updated on the refetch
+      } else {
+        console.log("setTabFoldersLocal", { tablink, folders, userId });
+        setTabFoldersLocal(tablink, [...folders], userKey);
       }
-
-      setTabFoldersLocal(tablink, cleanFolders, userId);
     },
     [session, refetchTabs, setTabFoldersLocal, setTabLinksApi]
   );
 
   const addSavedTab = useCallback(
-    (newTab: TabLinkDto) => {
+    (newTab: TabLinkDto, folderName: string) => {
       if (userId) {
         addTabLinkApi
           .mutateAsync({
             newTab: newTab,
           })
           .then(() => refetchTabs());
+      } else {
+        addTabLinkLocal(newTab, userKey, folderName);
       }
-
-      addTabLinkLocal(newTab, userId);
     },
     [userId, addTabLinkApi, addTabLinkLocal, refetchTabs]
   );
 
   const removeSavedTab = useCallback(
-    (tab: TabLinkDto) => {
+    (tab: TabLinkDto, folder: string) => {
       if (userId) {
-        deleteTabLinkApi.mutateAsync(tab).then(() => refetchTabs());
+        deleteTabLinkApi
+          .mutateAsync({
+            taburl: tab.taburl,
+            folderName: folder,
+          })
+          .then(() => refetchTabs());
+      } else {
+        removeSavedTabLocal(tab, userKey, folder);
       }
-      removeSavedTabLocal(tab, userId);
     },
     [userId, deleteTabLinkApi, refetchTabs, removeSavedTabLocal]
   );
 
   const removeFolder = useCallback(
     (folder: string) => {
-      // if (userId) {
-      //   deleteFolderApi.mutateAsync(folder).then(() => refetchTabs());
-      // }
-      // TODO add api
-      removeFolderLocal(folder, userId);
+      if (userId) {
+        removeFolderApi
+          .mutateAsync({ folderName: folder })
+          .then(() => refetchTabs());
+      } else {
+        removeFolderLocal(folder, userId);
+      }
     },
     [userId, refetchTabs, removeFolderLocal]
   );

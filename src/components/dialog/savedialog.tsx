@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import DialogButton from "./dialogbutton";
+import { dedupe } from "@/utils/dedupe";
 
 type SaveDialogProps = {
   isOpen: boolean;
@@ -39,7 +40,7 @@ export default function SaveDialog({
     setFolders(folderNames);
 
     let currentFolderNames = savedTabs
-      .filter((f) => f.tabs.map((t) => t.taburl).includes(tab.taburl))
+      .filter((f) => f.tabs?.map((t) => t.taburl).includes(tab.taburl))
       .map((f) => f.name);
 
     let actualFolderNames: string[] = [];
@@ -57,6 +58,7 @@ export default function SaveDialog({
   }, [currentFolders]);
 
   const save = () => {
+    console.log("save", { tab, currentFolders });
     setTabFolders(tab, currentFolders);
     setIsOpen(false);
   };
@@ -83,8 +85,8 @@ export default function SaveDialog({
   const addNew = () => {
     let trimmedName = newFolder.trim();
     if (!!trimmedName && trimmedName.length < 20) {
-      setFolders((old) => [...old, trimmedName]);
-      setCurrentFolders((old) => [...old, trimmedName]);
+      setFolders(dedupe<string>([...folders, trimmedName]));
+      setCurrentFolders(dedupe<string>([...currentFolders, trimmedName]));
     }
     setAddingNew(false);
   };

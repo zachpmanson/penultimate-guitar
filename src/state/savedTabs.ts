@@ -8,9 +8,13 @@ type SavedTabsState = {
 };
 
 type SavedTabsActions = {
-  addTabLink: (newTab: TabLinkDto, userId?: string) => void;
-  removeSavedTab: (tab: TabLinkDto, userId?: string) => void;
-  setTabFolders: (tab: TabLinkDto, folders: string[], userId?: string) => void;
+  addTabLink: (newTab: TabLinkDto, userId: string, folderName: string) => void;
+  removeSavedTab: (
+    newTab: TabLinkDto,
+    userId: string,
+    folderName: string
+  ) => void;
+  setTabFolders: (tab: TabLinkDto, folders: string[], userId: string) => void;
   removeFolder: (folder: string, userId?: string) => void;
   setUserAllFolders: (tab: Folder[], userId: string) => void;
   setAllSavedTabs: (newValue: SavedUserTabLinks) => void;
@@ -21,12 +25,9 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
     (set) => ({
       savedTabs: { "@localStorage": [] },
 
-      addTabLink: (tab: TabLinkDto, userId?: string) => {
-        const userKey = userId ?? "@localStorage";
-        const folderName = tab.folder ?? "Favourites";
-
+      addTabLink: (tab: TabLinkDto, userId: string, folderName: string) => {
         set((old) => {
-          let folderIndex = old.savedTabs[userKey]?.findIndex(
+          let folderIndex = old.savedTabs[userId]?.findIndex(
             (f) => f.name === folderName
           );
 
@@ -34,10 +35,10 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
 
           if (folderIndex === -1) {
             // create new folder and add tab to it
-            n.savedTabs[userKey].push({
+            n.savedTabs[userId].push({
               name: folderName,
               id: "",
-              spotifyUserId: userKey,
+              spotifyUserId: userId,
               tabs: [
                 {
                   taburl: tab.taburl,
@@ -51,13 +52,13 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               imageUrl: null,
             });
           } else {
-            const tabIndex = old.savedTabs[userKey][folderIndex].tabs.findIndex(
+            const tabIndex = old.savedTabs[userId][folderIndex].tabs.findIndex(
               (t) => t.taburl === tab.taburl
             );
 
             if (tabIndex === -1) {
               // add tab to folder
-              n.savedTabs[userKey][folderIndex].tabs.push({
+              n.savedTabs[userId][folderIndex].tabs.push({
                 taburl: tab.taburl,
                 name: tab.name,
                 artist: tab.artist,
@@ -66,7 +67,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               });
             } else {
               // update tab in folder
-              n.savedTabs[userKey][folderIndex].tabs[tabIndex] = {
+              n.savedTabs[userId][folderIndex].tabs[tabIndex] = {
                 taburl: tab.taburl,
                 name: tab.name,
                 artist: tab.artist,
@@ -80,18 +81,16 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
           return n;
         });
       },
-      removeSavedTab: (tab: TabLinkDto, userId?: string) => {
-        const userKey = userId ?? "@localStorage";
-        const folderName = tab.folder ?? "Favourites";
+      removeSavedTab: (tab: TabLinkDto, userId: string, folderName: string) => {
         set((old) => {
           let n = { ...old };
-          let folderIndex = n.savedTabs[userKey]?.findIndex(
+          let folderIndex = n.savedTabs[userId]?.findIndex(
             (f) => f.name === folderName
           );
 
           if (folderIndex === -1) return old;
 
-          n.savedTabs[userKey][folderIndex].tabs = n.savedTabs[userKey][
+          n.savedTabs[userId][folderIndex].tabs = n.savedTabs[userId][
             folderIndex
           ].tabs.filter((t) => !(t.taburl === tab.taburl));
 
@@ -101,13 +100,13 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
       setTabFolders: (
         tab: TabLinkDto,
         desiredFolders: string[],
-        userId?: string
+        userId: string
       ) => {
-        const userKey = userId ?? "@localStorage";
+        console.log("setTabFolders", { tab, desiredFolders, userId });
         set((old) => {
           let n = { ...old };
-
-          for (let [i, folder] of n.savedTabs[userKey].entries()) {
+          console.log({ n });
+          for (let [i, folder] of n.savedTabs[userId].entries()) {
             const tabIndex = folder.tabs.findIndex(
               (t) => t.taburl === tab.taburl
             );
@@ -129,19 +128,24 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               folder.tabs = folder.tabs.filter((t) => t.taburl !== tab.taburl);
             }
 
-            n.savedTabs[userKey][i] = folder;
+            n.savedTabs[userId][i] = folder;
 
             if (weWantItInFolder) {
-              delete desiredFolders[positionInDesiredFolders];
+              console.log("splicing", {
+                desiredFolders,
+                positionInDesiredFolders,
+              });
+              // delete desiredFolders[positionInDesiredFolders];
+              desiredFolders.splice(positionInDesiredFolders, 1);
             }
           }
           console.log({ desiredFolders });
 
           for (let folder of desiredFolders) {
-            n.savedTabs[userKey].push({
+            n.savedTabs[userId].push({
               name: folder,
               id: "",
-              spotifyUserId: userKey,
+              spotifyUserId: userId,
               tabs: [
                 {
                   taburl: tab.taburl,
@@ -155,7 +159,6 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               imageUrl: null,
             });
           }
-          console.log("setTabFolders", { n });
 
           return n;
         });

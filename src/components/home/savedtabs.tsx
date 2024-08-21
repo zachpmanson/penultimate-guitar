@@ -1,36 +1,31 @@
-import { useGlobal } from "@/contexts/Global/context";
 import useSavedTabs from "@/hooks/useSavedTabs";
-import { Playlist, TabLinkDto } from "@/models/models";
+import { Playlist } from "@/models/models";
+import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
-import { Folder } from "@/types/user";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/solid";
 
-function savedTabToFolders(savedTabs: TabLinkDto[]) {
-  const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
-  for (let tab of savedTabs) {
-    const folderName = tab.folder ?? "Favourites";
-    if (folders[folderName]) {
-      folders[folderName].push(tab);
-    } else {
-      folders[folderName] = [tab];
-    }
-  }
-  return folders;
-}
+// function savedTabToFolders(savedTabs: TabLinkDto[]) {
+//   const folders: { [key: string]: TabLinkDto[] } = { Favourites: [] };
+//   for (let tab of savedTabs) {
+//     const folderName = tab.folder ?? "Favourites";
+//     if (folders[folderName]) {
+//       folders[folderName].push(tab);
+//     } else {
+//       folders[folderName] = [tab];
+//     }
+//   }
+//   return folders;
+// }
 
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
-  const folders = Object.fromEntries(savedTabs.map((f) => [f.name, f.tabs]));
+
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -47,7 +42,11 @@ export default function SavedTabs() {
                   folder.name === "Favourites" ? (
                     <div key={i} className="flex flex-col gap-1">
                       {savedTabs[i].tabs.map((t, j) => (
-                        <TabLink key={j} tablink={{ ...t, saved: true }} />
+                        <TabLink
+                          key={j}
+                          tablink={{ ...t, saved: true }}
+                          folder={folder.name}
+                        />
                       ))}
                     </div>
                   ) : (
@@ -61,6 +60,7 @@ export default function SavedTabs() {
           </details>
         </div>
       )}
+      {/* <pre>{JSON.stringify(savedTabs, null, 2)}</pre> */}
     </div>
   );
 }
@@ -104,11 +104,15 @@ function FolderPanel({ folder }: { folder: Folder }) {
 
       {isOpen && (
         <div className="flex flex-col gap-1 p-2 pt-0 mt-0">
-          {folder.tabs.map((t, j) => (
-            <TabLink key={j} tablink={{ ...t, saved: true }} />
+          {folder.tabs?.map((t, j) => (
+            <TabLink
+              key={j}
+              tablink={{ ...t, saved: true }}
+              folder={folder.name}
+            />
           ))}
           <div className="flex justify-between items-middle">
-            <div className="ml-2">{folder.tabs.length} items</div>
+            <div className="ml-2">{folder.tabs?.length} items</div>
             <FolderMenu folder={folder} />
           </div>
         </div>
