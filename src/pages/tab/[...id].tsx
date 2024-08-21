@@ -5,6 +5,7 @@ import ToolbarButton, {
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
 import useChords from "@/hooks/useChords";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { TabLinkDto } from "@/models/models";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
@@ -20,19 +21,14 @@ import _ from "lodash";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
-import "react-tooltip/dist/react-tooltip.css";
+import { Fragment, LegacyRef, useEffect, useRef, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
+import "react-tooltip/dist/react-tooltip.css";
 
 const scrollMs = 100;
 
 export default function Tab({ id }: { trpcState: any; id: string }) {
-  const {
-    isSupported,
-    released,
-    request: requestWakeLock,
-    release: releaseWakeLock,
-  } = useWakeLock({
+  const { request: requestWakeLock, release: releaseWakeLock } = useWakeLock({
     onRequest: () => console.log("Screen Wake Lock: requested!"),
     onError: (e) => console.log("An error happened", e),
     onRelease: () => console.log("Screen Wake Lock: released!"),
@@ -41,7 +37,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
   const tabDetails = data ?? DEFAULT_TAB;
 
-  const element = useRef<any>(null);
+  const element = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
@@ -56,6 +52,8 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const plainTab = tabDetails?.tab ?? "";
   const tabLink = convertToTabLink(tabDetails);
   const { transposedChords } = useChords(plainTab, tranposition);
+
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
     const recents: any = JSON.parse(localStorage?.getItem("recents") || "{}");
@@ -114,12 +112,25 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             behavior: "smooth",
           });
         }
+        if (element.current)
+          console.log(
+            `(${window.innerHeight + window.scrollY}) >= ${
+              document.body.scrollHeight - 5
+            }`
+          );
+        if (
+          window.innerHeight + window.scrollY >=
+          document.body.scrollHeight - 5
+        ) {
+          setScrollSpeed(0);
+          clearInterval(scrollinterval.current);
+        }
       }, scrollMs);
     }
     return () => {
       clearInterval(scrollinterval.current);
     };
-  }, [scrollSpeed]);
+  }, [scrollSpeed, element.current]);
 
   useEffect(() => {
     if (tranposition !== -5) setMode("default");
@@ -208,14 +219,16 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
               {({ active }) => (
                 <button
                   onClick={() => toggleMode()}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900 dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   {mode === "default" ? (
@@ -239,7 +252,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
                 <button
                   onClick={() => print()}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Print
@@ -251,7 +266,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
                 <Link
                   href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
                   className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900"
+                    active
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline hover:text-white`}
                 >
                   View on Ultimate Guitar
@@ -320,7 +337,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             </div>
           )}
         </div>
-        <hr className="my-4 no-print" />
+        <hr className="my-4 no-print dark:border-gray-600" />
 
         <div className="w-fit m-auto">
           {tabDetails?.tab && (
@@ -403,7 +420,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
           </div>
         </div>
 
-        <hr className="my-4 no-print" />
+        <hr className="my-4 no-print dark:border-gray-600" />
         <div className="max-w-lg mx-auto my-4 no-print flex">
           <div>
             {!!tabDetails?.contributors?.length && (

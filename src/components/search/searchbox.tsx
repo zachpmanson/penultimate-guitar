@@ -1,11 +1,11 @@
 import { useGlobal } from "@/contexts/Global/context";
 import { Playlist } from "@/models/models";
+import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { useSearchStore } from "@/state/search";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function SearchBox() {
       <form onSubmit={handleSubmit}>
         <label
           htmlFor="default-search"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-200"
         >
           Search
         </label>
@@ -77,7 +77,7 @@ export default function SearchBox() {
             type="search"
             id="default-search"
             name="url"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+            className="block w-full p-4 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:text-gray-200 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
             value={searchText}
@@ -99,7 +99,7 @@ export default function SearchBox() {
             <button
               disabled={buttonText !== "Search"}
               type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
+              className="text-white dark:text-black bg-blue-700 dark:bg-blue-300 hover:bg-blue-800 dark:hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 "
             >
               {buttonText}
             </button>

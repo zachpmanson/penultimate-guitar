@@ -12,6 +12,7 @@ import { ReactElement, ReactNode, useEffect } from "react";
 import "../styles/nprogress.css";
 import { trpc } from "../utils/trpc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -53,30 +54,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
           name="description"
           content="Find the cheapest drinks, per standard"
         />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/icons/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/icons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/icons/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/icons/site.webmanifest" />
-        <link
-          rel="mask-icon"
-          href="/icons/safari-saved-tab.svg"
-          color="#bd93f9"
-        />
-        <link rel="shortcut icon" href="/icons/favicon.ico" />
+        <link rel="icon" href="/icons/guitar-icon.svg" type="image/svg+xml" />
+
         <meta name="msapplication-TileColor" content="#603cba" />
         <meta name="msapplication-config" content="/icons/browserconfig.xml" />
         <meta name="theme-color" content="#282A36" />
@@ -98,11 +77,15 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       gtag('config', 'G-2Q5B9DT8HJ');
     `}
       </Script>
-    </Layout>
+    </Layout>,
   );
   return (
     <SessionProvider session={pageProps.session}>
-      <GlobalProvider>{layout}</GlobalProvider>
+      <GlobalProvider>
+        <ThemeProvider defaultTheme="light" attribute="class">
+          {layout}
+        </ThemeProvider>
+      </GlobalProvider>
     </SessionProvider>
   );
 }

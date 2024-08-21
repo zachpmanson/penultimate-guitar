@@ -71,8 +71,8 @@ function FolderPanel({ folder }: { folder: Folder }) {
   return (
     <div
       className={
-        "bg-gray-200 rounded-xl border transition duration-75" +
-        (hovering ? " hover:border-gray-400" : "")
+        "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl  border transition duration-75" +
+        (hovering ? " hover:border-gray-400 dark:hover:border-gray-700" : "")
       }
       onMouseOver={() => setHovering(true)}
       onMouseOut={() => setHovering(false)}
@@ -154,7 +154,7 @@ function FolderMenu({ folder }: { folder: Folder }) {
           <Menu.Button
             className={`
   border-gray-200 border rounded-xl transition ease-in-out
-  flex items-center justify-center text-md text-lg  bg-white px-4 hover:border-gray-400
+  flex items-center justify-center text-md text-lg bg-white dark:bg-gray-900 px-4 hover:border-gray-400 dark:border-gray-600 dark:hover:bg-gray-700
 `}
           >
             <div className="w-4">▼</div>

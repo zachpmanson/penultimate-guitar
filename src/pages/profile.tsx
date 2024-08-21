@@ -113,7 +113,7 @@ export default function Profile() {
                     >
                       {playlist.name}
                     </div>
-                    <div className="flex gap-2 justify-between border-gray-200 w-full border-t-[1px] pt-2">
+                    <div className="flex gap-2 justify-between border-gray-200 dark:border-gray-600 w-full border-t-[1px] pt-2">
                       <div className="">
                         {playlist.images?.[1] && (
                           <img

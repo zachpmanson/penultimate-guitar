@@ -25,14 +25,17 @@ export default function TabSheet({
 
   let chordElements: Map<string, JSX.Element> = new Map();
   for (let chord of Object.keys(inversions).sort()) {
-    chordElements.set(
-      chord,
-      <ChordText
-        transposedChord={transposedChords[chord]}
-        fontSize={fontSize}
-        inversion={inversions[chord] ?? 0}
-      />
-    );
+    // check chord exists, when switching between versions of the same song some renders might not have all chords
+    if (transposedChords[chord]) {
+      chordElements.set(
+        chord,
+        <ChordText
+          transposedChord={transposedChords[chord]}
+          fontSize={fontSize}
+          inversion={inversions[chord] ?? 0}
+        />
+      );
+    }
   }
 
   const increaseInversion = (chord: string) => {

@@ -17,7 +17,7 @@ export default function SearchLink({
   return (
     <Link
       href={`/tab/${tab_url}`}
-      className="w-full text-black no-underline hover:no-underline active:text-black"
+      className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
       prefetch={false}
     >
       <PlainButton>

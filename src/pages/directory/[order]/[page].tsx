@@ -125,7 +125,7 @@ export default function Directory({
             {pageDropdrown}
           </div>
         </div>
-        <hr className="m-2" />
+        <hr className="m-2 dark:border-gray-600" />
 
         <div className="mx-8">
           <ol className="max-w-xl" start={(pageNum - 1) * PAGE_SIZE + 1}>
@@ -169,7 +169,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   orderBy = [
     {
-      timestamp: order == "new" ? "desc" : "asc",
+      timestamp: order === "new" ? "desc" : "asc",
     },
   ];
 
