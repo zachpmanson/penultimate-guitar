@@ -67,7 +67,7 @@ export default function ImportPlaylistDialog({
           const newTab = getTabLinkIfExists(res.items);
           if (newTab) {
             setPlaylistTabs((old) => [...old, newTab]);
-            addSavedTab({ ...newTab, folder: playlist.name });
+            addSavedTab(newTab, playlist.name);
 
             console.log(
               "Found",
@@ -125,6 +125,7 @@ export default function ImportPlaylistDialog({
                     alt="Playlist image"
                     width={60}
                     height={60}
+                    title="Go to"
                     className="rounded-md"
                   />
                 )}

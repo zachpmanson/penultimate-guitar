@@ -13,14 +13,14 @@ export default function TabLink({
   recent,
 }: {
   tablink: TabLinkDto;
-  folder: string;
+  folder?: string;
   recent?: boolean;
 }) {
   const { removeSavedTab, isSaved } = useSavedTabs();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const handleSave = () => {
-    if (!recent && isSaved(tablink)) {
+    if (folder && !recent && isSaved(tablink)) {
       removeSavedTab(tablink, folder);
     } else {
       setSaveDialogActive(true);
@@ -51,7 +51,7 @@ export default function TabLink({
         </Link>
         <PlainButton onClick={handleSave}>
           <div className="flex items-center h-full w-4">
-            {recent ? (
+            {recent || !folder ? (
               <BookmarkIcon className="w-full h-full" />
             ) : (
               <XMarkIcon className="w-full h-full" />
