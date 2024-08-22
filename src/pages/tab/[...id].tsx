@@ -341,7 +341,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 
         <div className="w-fit m-auto">
           {tabDetails?.tab && (
-            <div className="bg-white/50 dark:bg-[#1c1b22]/50 w-full sticky top-0 top-toolbar dark:top-toolbar no-print z-40">
+            <div className="bg-white/50 dark:bg-default-dark/50 w-full sticky top-0 top-toolbar dark:top-toolbar no-print z-40">
               <div className="flex lg:float-right flex-row lg:flex-col justify-between max-w-lg mx-auto my-4 gap-2 text-sm flex-wrap relative">
                 <div className="flex-1 flex-col text-center">
                   <p className="text-xs whitespace-nowrap">

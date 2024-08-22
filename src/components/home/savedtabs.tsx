@@ -37,9 +37,7 @@ export default function SavedTabs() {
                       ))}
                     </div>
                   ) : (
-                    <div key={i}>
-                      <FolderPanel folder={folder} />
-                    </div>
+                    <FolderPanel folder={folder} key={i} />
                   )
                 )
               )}
@@ -57,7 +55,7 @@ function FolderPanel({ folder }: { folder: Folder }) {
   return (
     <div
       className={
-        "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl  border transition duration-75" +
+        "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl border transition-transform duration-75 max-h-fit " +
         (hovering ? " hover:border-gray-400 dark:hover:border-gray-700" : "")
       }
       onMouseOver={() => setHovering(true)}
@@ -85,9 +83,11 @@ function FolderPanel({ folder }: { folder: Folder }) {
           />
         </div>
       </div>
-
       {isOpen && (
-        <div className="flex flex-col gap-1 p-2 pt-0 mt-0">
+        <div
+          className={"flex flex-col gap-1 p-2 pt-0 mt-0 "}
+          style={{ transition: "max-height 1s ease-in-out" }}
+        >
           {folder.tabs?.map((t, j) => (
             <TabLink
               key={j}
@@ -95,7 +95,7 @@ function FolderPanel({ folder }: { folder: Folder }) {
               folder={folder.name}
             />
           ))}
-          <div className="flex justify-between items-middle">
+          <div className={"flex justify-between items-middle "}>
             <div className="ml-2">{folder.tabs?.length} items</div>
             <FolderMenu folder={folder} />
           </div>
