@@ -1,9 +1,8 @@
 import { TabLinkDto } from "@/models/models";
 import { useSavedTabsStore } from "@/state/savedTabs";
 import { trpc } from "@/utils/trpc";
-import { flatMap } from "lodash";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function useSavedTabs() {
   const session = useSession();
