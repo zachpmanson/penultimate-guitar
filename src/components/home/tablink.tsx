@@ -9,17 +9,19 @@ import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function TabLink({
   tablink,
+  folder,
   recent,
 }: {
   tablink: TabLinkDto;
+  folder?: string;
   recent?: boolean;
 }) {
   const { removeSavedTab, isSaved } = useSavedTabs();
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const handleSave = () => {
-    if (!recent && isSaved(tablink)) {
-      removeSavedTab(tablink);
+    if (folder && !recent && isSaved(tablink)) {
+      removeSavedTab(tablink, folder);
     } else {
       setSaveDialogActive(true);
     }
@@ -49,7 +51,7 @@ export default function TabLink({
         </Link>
         <PlainButton onClick={handleSave}>
           <div className="flex items-center h-full w-4 text-gray-800 dark:text-gray-200">
-            {recent ? (
+            {recent || !folder ? (
               <BookmarkIcon className="w-full h-full" />
             ) : (
               <XMarkIcon className="w-full h-full" />
@@ -57,11 +59,13 @@ export default function TabLink({
           </div>
         </PlainButton>
       </div>
-      <SaveDialog
-        isOpen={saveDialogActive}
-        setIsOpen={setSaveDialogActive}
-        tab={tablink}
-      />
+      {saveDialogActive && (
+        <SaveDialog
+          isOpen={saveDialogActive}
+          setIsOpen={setSaveDialogActive}
+          tab={tablink}
+        />
+      )}
     </>
   );
 }

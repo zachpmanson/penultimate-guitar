@@ -1,3 +1,5 @@
+import { Folder } from "@/types/user";
+
 // switched to string because I don't know all the different forms that Tab parts can come in
 export type TabType = string;
 // export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
@@ -59,12 +61,13 @@ export type TabLinkDto = {
   artist: string | null;
   saved?: boolean | null;
   version?: number | null;
-  folder?: string;
   type?: TabType | null;
+  imageUrl?: string | null;
+  playlistUrl?: string | null;
 };
 
 export type SavedUserTabLinks = {
-  [userId: string]: TabLinkDto[];
+  [userId: string]: Folder[];
 };
 
 export type SearchResult = {

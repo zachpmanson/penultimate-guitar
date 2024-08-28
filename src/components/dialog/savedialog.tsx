@@ -1,17 +1,17 @@
-import { useGlobal } from "@/contexts/Global/context";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
 import { Dialog } from "@headlessui/react";
 import {
   ChangeEvent,
   Dispatch,
+  KeyboardEvent,
   KeyboardEventHandler,
   SetStateAction,
   useEffect,
   useState,
-  KeyboardEvent,
 } from "react";
 import DialogButton from "./dialogbutton";
-import useSavedTabs from "@/hooks/useSavedTabs";
+import { dedupe } from "@/utils/dedupe";
 
 type SaveDialogProps = {
   isOpen: boolean;
@@ -35,18 +35,13 @@ export default function SaveDialog({
 
   useEffect(() => {
     const folderNames = [
-      ...Array.from(
-        new Set([
-          "Favourites",
-          ...savedTabs.map((t) => t.folder ?? "Favourites"),
-        ])
-      ),
+      ...Array.from(new Set(["Favourites", ...savedTabs.map((f) => f.name)])),
     ];
     setFolders(folderNames);
 
     let currentFolderNames = savedTabs
-      .filter((t) => t.taburl === tab.taburl)
-      .map((t) => t.folder);
+      .filter((f) => f.tabs?.map((t) => t.taburl).includes(tab.taburl))
+      .map((f) => f.name);
 
     let actualFolderNames: string[] = [];
     for (let name of currentFolderNames) {
@@ -58,15 +53,21 @@ export default function SaveDialog({
     setCurrentFolders(actualFolderNames);
   }, [savedTabs, tab.taburl]);
 
+  useEffect(() => {
+    console.log({ currentFolders });
+  }, [currentFolders]);
+
   const save = () => {
+    console.log("save", { tab, currentFolders });
     setTabFolders(tab, currentFolders);
     setIsOpen(false);
   };
 
   const handleFolderChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("handleFolderChange", event.target.value);
     if (currentFolders.includes(event.target.value)) {
       setCurrentFolders((old) => old.filter((f) => f !== event.target.value));
-    } else {
+    } else if (event.target.value) {
       setCurrentFolders((old) => [...old, event.target.value]);
     }
   };
@@ -84,8 +85,8 @@ export default function SaveDialog({
   const addNew = () => {
     let trimmedName = newFolder.trim();
     if (!!trimmedName && trimmedName.length < 20) {
-      setFolders((old) => [...old, trimmedName]);
-      setCurrentFolders((old) => [...old, trimmedName]);
+      setFolders(dedupe<string>([...folders, trimmedName]));
+      setCurrentFolders(dedupe<string>([...currentFolders, trimmedName]));
     }
     setAddingNew(false);
   };
@@ -142,7 +143,7 @@ export default function SaveDialog({
                     </DialogButton>
                   </div>
                   <div className="flex gap-4">
-                    <DialogButton onClick={save} disabled={false}>
+                    <DialogButton onClick={() => save()} disabled={false}>
                       Save
                     </DialogButton>
                   </div>

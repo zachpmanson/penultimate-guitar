@@ -10,7 +10,30 @@ export const spotifyRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await SpotifyAdapter.getPlaylist(input.playlistId);
+      const playlist = await SpotifyAdapter.getPlaylist(input.playlistId);
+      if (ctx.session?.user?.id) {
+        ctx.prisma.folder
+          .upsert({
+            create: {
+              name: playlist.name,
+              spotifyUserId: ctx.session.user.id,
+              playlistUrl: input.playlistId,
+              imageUrl: playlist.image,
+            },
+            update: {
+              playlistUrl: input.playlistId,
+              imageUrl: playlist.image,
+            },
+            where: {
+              name_spotifyUserId: {
+                name: playlist.name,
+                spotifyUserId: ctx.session.user.id,
+              },
+            },
+          })
+          .then(() => {});
+      }
+      return playlist;
     }),
   getPlaylistLazy: publicProcedure
     .input(

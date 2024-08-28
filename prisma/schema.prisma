@@ -26,7 +26,7 @@ model Tab {
 }
 
 model Song {
-  id     Int    @id
+  id     Int    @id @default(autoincrement())
   name   String
   artist String
   Tab    Tab[]
@@ -35,22 +35,35 @@ model Song {
 model User {
   id            String        @id @default(cuid())
   spotifyUserId String        @unique
-  UserTablink   UserTablink[]
+
+  folders Folder[]
 
   @@index([spotifyUserId])
 }
 
 model UserTablink {
   id            String  @id @default(cuid())
-  spotifyUserId String
   taburl        String
-  folder        String
   name          String?
   artist        String?
   type          String?
   version       Int?
 
-  // removed because tablink can exist before tab is added to db
-  // tab           Tab    @relation(fields: [taburl], references: [taburl])
+  folderId Int
+
+  folder Folder @relation(fields: [folderId], references: [id])
+  @@unique([taburl, folderId])
+}
+
+model Folder {
+  id            Int    @id @default(autoincrement())
+  name          String
+  spotifyUserId String
+  playlistUrl   String? // only present if playlist was used to create folder
+  imageUrl      String?
+
   user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
+  tabs UserTablink[]
+
+  @@unique([name, spotifyUserId])
 }

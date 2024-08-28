@@ -54,9 +54,9 @@ export default function ChordText({
             left: `50%`,
             transform: `translateX(-50%)`,
           }}
-          className="pointer-events-none absolute z-50 bg-white dark:bg-gray-400 opacity-0 transition-opacity group-hover:opacity-95 border-black border-2 rounded"
+          className="pointer-events-none absolute z-50 bg-white  opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
         >
-          <div className="text-center chord">
+          <div className="text-center chord text-black">
             <span className="font-bold mr-2">
               {`${transposedChord.key}${transposedChord.simpleSuffix}`}
             </span>

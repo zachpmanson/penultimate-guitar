@@ -1,13 +1,16 @@
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
-import { NewTabSchema, TabSchema } from "@/types/user";
+import { DeleteTabLinkSchema, NewTabSchema, TabSchema } from "@/types/user";
 import { z } from "zod";
 import { authProcedure, createRouter } from "../trpc";
 
 export const userRouter = createRouter({
   getTabLinks: authProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.userTablink.findMany({
+    return await ctx.prisma.folder.findMany({
       where: {
         spotifyUserId: ctx.session.user.id,
+      },
+      include: {
+        tabs: true,
       },
     });
   }),
@@ -16,45 +19,49 @@ export const userRouter = createRouter({
     .input(NewTabSchema)
     .mutation(async ({ ctx, input }) => {
       const {
-        newTab: { taburl, name, artist, type, version },
-        folders,
+        newTab: { taburl, name, artist, type, version, folder },
       } = input;
 
-      for (const folder of folders) {
-        await ctx.prisma.userTablink.upsert({
-          create: {
-            id: `${ctx.session.user.id}-${taburl}-${folder}`,
-            spotifyUserId: ctx.session.user.id,
-            taburl,
-            folder,
-            name,
-            artist,
-            type,
-            version,
-          },
-          update: {
-            spotifyUserId: ctx.session.user.id,
-            taburl,
-            folder,
-            name,
-            artist,
-            type,
-            version,
-          },
-          where: {
-            id: `${ctx.session.user.id}-${taburl}-${folder}`,
-          },
-        });
-      }
-
-      const result = await ctx.prisma.userTablink.deleteMany({
-        where: {
+      // create folder if it doesn't exist
+      const folderName = folder ?? "Favourites";
+      const folderRow = await ctx.prisma.folder.upsert({
+        create: {
+          name: folderName,
           spotifyUserId: ctx.session.user.id,
+        },
+        update: {},
+        where: {
+          name_spotifyUserId: {
+            name: folderName,
+            spotifyUserId: ctx.session.user.id,
+          },
+        },
+      });
+
+      const result = await ctx.prisma.userTablink.upsert({
+        create: {
+          // spotifyUserId: ctx.session.user.id,
           taburl,
-          NOT: {
-            folder: {
-              in: folders,
-            },
+          folderId: folderRow.id,
+          name,
+          artist,
+          type,
+          version,
+        },
+        update: {
+          // spotifyUserId: ctx.session.user.id,
+          taburl,
+          folderId: folderRow.id,
+          name,
+          artist,
+          type,
+          version,
+        },
+        where: {
+          // spotifyUserId: ctx.session.user.id,
+          taburl_folderId: {
+            taburl,
+            folderId: folderRow.id,
           },
         },
       });
@@ -63,15 +70,32 @@ export const userRouter = createRouter({
     }),
 
   deleteTabLink: authProcedure
-    .input(TabSchema)
+    .input(DeleteTabLinkSchema)
     .mutation(async ({ ctx, input }) => {
-      const { taburl, folder } = input;
+      const { taburl, folderName } = input;
 
       const result = await ctx.prisma.userTablink.deleteMany({
         where: {
-          spotifyUserId: ctx.session.user.id,
           taburl,
-          folder,
+          folder: {
+            name: folderName,
+            spotifyUserId: ctx.session.user.id,
+          },
+        },
+      });
+      return result;
+    }),
+
+  deleteFolder: authProcedure
+    .input(z.object({ folderName: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { folderName } = input;
+      const result = await ctx.prisma.folder.delete({
+        where: {
+          name_spotifyUserId: {
+            name: folderName,
+            spotifyUserId: ctx.session.user.id,
+          },
         },
       });
       return result;
@@ -85,26 +109,71 @@ export const userRouter = createRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.userTablink.deleteMany({
-        where: {
-          spotifyUserId: ctx.session.user.id,
-          taburl: input.tab.taburl,
-        },
-      });
+      const count = ctx.prisma.$transaction(async (tx) => {
+        const existingFolders = await tx.folder.findMany({
+          where: {
+            name: { in: input.folders },
+            spotifyUserId: ctx.session.user.id,
+          },
+        });
 
-      const newTabs = await ctx.prisma.userTablink.createMany({
-        data: input.folders.map((folder) => ({
-          id: `${ctx.session.user.id}-${input.tab.taburl}-${folder}`,
-          spotifyUserId: ctx.session.user.id,
-          taburl: input.tab.taburl,
-          folder,
-          name: input.tab.name,
-          artist: input.tab.artist,
-          type: input.tab.type,
-          version: input.tab.version,
-        })),
+        const missingFolders: Set<string> = (
+          new Set(
+            existingFolders.map((folder) => folder.name)
+          ) as Set<string> & {
+            symmetricDifference: (s: Set<string>) => Set<string>; // hopefully can remove this
+          }
+        ).symmetricDifference(new Set([...input.folders]));
+
+        console.log({
+          existingFolders: existingFolders.map((folder) => folder.name),
+          missingFolders,
+          folders: input.folders,
+        });
+        // create missing folders
+        await tx.folder.createMany({
+          data: [...missingFolders].map((folder) => ({
+            name: folder,
+            spotifyUserId: ctx.session.user.id,
+          })),
+          skipDuplicates: true,
+        });
+
+        // remove tablinks that aren't in these folders
+        const result = await tx.userTablink.deleteMany({
+          where: {
+            taburl: input.tab.taburl,
+            folder: {
+              spotifyUserId: ctx.session.user.id,
+              NOT: {
+                name: { in: input.folders },
+              },
+            },
+          },
+        });
+
+        const allFolders = await tx.folder.findMany({
+          where: {
+            name: { in: input.folders },
+            spotifyUserId: ctx.session.user.id,
+          },
+        });
+        console.log({ allFolders });
+        // create tablinks in the new folders
+        const newTabs = await tx.userTablink.createMany({
+          data: allFolders.map((folder) => ({
+            taburl: input.tab.taburl,
+            name: input.tab.name,
+            artist: input.tab.artist,
+            type: input.tab.type,
+            version: input.tab.version,
+            folderId: folder.id,
+          })),
+          skipDuplicates: true,
+        });
+        return { count: newTabs.count };
       });
-      return newTabs;
+      return count;
     }),
 
   getPlaylists: authProcedure
