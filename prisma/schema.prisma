@@ -44,7 +44,6 @@ model User {
 model UserTablink {
   id            String  @id @default(cuid())
   taburl        String
-  folderName    String
   name          String?
   artist        String?
   type          String?

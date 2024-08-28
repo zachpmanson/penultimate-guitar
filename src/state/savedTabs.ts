@@ -37,7 +37,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
             // create new folder and add tab to it
             n.savedTabs[userId].push({
               name: folderName,
-              id: "",
+              id: 0,
               spotifyUserId: userId,
               tabs: [
                 {
@@ -144,7 +144,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
           for (let folder of desiredFolders) {
             n.savedTabs[userId].push({
               name: folder,
-              id: "",
+              id: 0,
               spotifyUserId: userId,
               tabs: [
                 {

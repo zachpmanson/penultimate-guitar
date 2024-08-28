@@ -30,7 +30,7 @@ type TabLink = {
 
 export type Folder = {
   name: string;
-  id: string;
+  id: number;
   spotifyUserId: string;
   playlistUrl: string | null;
   imageUrl: string | null;
