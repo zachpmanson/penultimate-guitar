@@ -2,15 +2,14 @@
   Warnings:
 
   - A unique constraint covering the columns `[taburl,folderId]` on the table `UserTablink` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `folderId` to the `UserTablink` table without a default value. This is not possible if the table is not empty.
 
 */
 -- AlterTable
-ALTER TABLE "UserTablink" ADD COLUMN     "folderId" TEXT NOT NULL;
+ALTER TABLE "UserTablink" ADD COLUMN     "folderId" INTEGER;
 
 -- CreateTable
 CREATE TABLE "Folder" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "spotifyUserId" TEXT NOT NULL,
     "playlistUrl" TEXT,
@@ -26,15 +25,17 @@ CREATE UNIQUE INDEX "Folder_name_spotifyUserId_key" ON "Folder"("name", "spotify
 CREATE UNIQUE INDEX "UserTablink_taburl_folderId_key" ON "UserTablink"("taburl", "folderId");
 
 -- AddForeignKey
-ALTER TABLE "UserTablink" ADD CONSTRAINT "UserTablink_folderId_fkey" FOREIGN KEY ("folderId") REFERENCES "Folder"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserTablink" ADD CONSTRAINT "UserTablink_folderId_fkey" FOREIGN KEY ("folderId") REFERENCES "Folder"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Folder" ADD CONSTRAINT "Folder_spotifyUserId_fkey" FOREIGN KEY ("spotifyUserId") REFERENCES "User"("spotifyUserId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 INSERT INTO "Folder" ("name", "spotifyUserId")
-SELECT "UserTablink"."folderName", "UserTablink"."spotifyUserId" 
-FROM "UserTablink" 
+SELECT DISTINCT "UserTablink"."folderName", "UserTablink"."spotifyUserId"
+FROM "UserTablink";
 
 update "UserTablink" 
-set "UserTablink"."folderId" = "Folder"."id" 
-from "Folder" inner join "UserTablink" on ("Folder"."spotifyUserId"="UserTablink"."spotifyUserId" and "Folder"."name" = "UserTablink"."folderName")
+set "folderId" = "Folder"."id" 
+from "Folder" inner join "UserTablink" utl on "Folder"."spotifyUserId" = utl."spotifyUserId" and "Folder"."name" = utl."folderName"
+where "Folder"."spotifyUserId" = "UserTablink"."spotifyUserId"  and "UserTablink"."folderName" = "Folder"."name";
+

@@ -52,9 +52,9 @@ model UserTablink {
   type          String?
   version       Int?
 
-  folderId String
+  folderId Int?
 
-  folder Folder @relation(fields: [folderId], references: [id])
+  folder Folder? @relation(fields: [folderId], references: [id])
   @@unique([taburl, folderId])
 
 
@@ -64,7 +64,7 @@ model UserTablink {
 }
 
 model Folder {
-  id            String @id @default(cuid())
+  id            Int    @id @default(autoincrement())
   name          String
   spotifyUserId String
   playlistUrl   String? // only present if playlist was used to create folder
