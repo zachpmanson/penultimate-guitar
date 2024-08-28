@@ -26,7 +26,7 @@ model Tab {
 }
 
 model Song {
-  id     Int    @id @default(autoincrement()) // why is this different to the others
+  id     Int    @id @default(autoincrement())
   name   String
   artist String
   Tab    Tab[]
@@ -35,27 +35,32 @@ model Song {
 model User {
   id            String        @id @default(cuid())
   spotifyUserId String        @unique
-  Folder        Folder[]
+  UserTablink   UserTablink[]
+
+  folders Folder[]
 
   @@index([spotifyUserId])
 }
 
 model UserTablink {
   id            String  @id @default(cuid())
-  // spotifyUserId String
+  spotifyUserId String
   taburl        String
-  folderId        String
+  folderName    String
   name          String?
   artist        String?
   type          String?
   version       Int?
 
-  // removed because tablink can exist before tab is added to db
-  // tab           Tab    @relation(fields: [taburl], references: [taburl])
-  // user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
- 
+  folderId String
+
   folder Folder @relation(fields: [folderId], references: [id])
   @@unique([taburl, folderId])
+
+
+  // removed because tablink can exist before tab is added to db
+  // tab           Tab    @relation(fields: [taburl], references: [taburl])
+  user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
 }
 
 model Folder {
