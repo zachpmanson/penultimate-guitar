@@ -3,7 +3,7 @@ import { Playlist } from "@/models/models";
 import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
-import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
@@ -12,7 +12,7 @@ import TabLink from "./tablink";
 
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
-
+  const favourites = savedTabs.find((f) => f.name === "Favourites");
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
@@ -25,21 +25,25 @@ export default function SavedTabs() {
               {isLoadingTabs && !savedTabs ? (
                 <LoadingSpinner className="h-8" />
               ) : (
-                savedTabs.map((folder, i) =>
-                  folder.name === "Favourites" ? (
-                    <div key={i} className="flex flex-col gap-1">
-                      {savedTabs[i].tabs.map((t, j) => (
+                <>
+                  {favourites && (
+                    <div className="flex flex-col gap-1">
+                      {favourites.tabs.map((t, j) => (
                         <TabLink
                           key={j}
                           tablink={{ ...t, saved: true }}
-                          folder={folder.name}
+                          folder={favourites.name}
                         />
                       ))}
                     </div>
-                  ) : (
-                    <FolderPanel folder={folder} key={i} />
-                  )
-                )
+                  )}
+                  {savedTabs.map(
+                    (folder, i) =>
+                      folder.name !== "Favourites" && (
+                        <FolderPanel folder={folder} key={i} />
+                      )
+                  )}
+                </>
               )}
             </div>
           </details>

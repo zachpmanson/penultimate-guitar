@@ -64,7 +64,7 @@ export default function useSavedTabs() {
       if (userId) {
         addTabLinkApi
           .mutateAsync({
-            newTab: newTab,
+            newTab: { ...newTab, folder: folderName },
           })
           .then(() => refetchTabs());
       } else {
