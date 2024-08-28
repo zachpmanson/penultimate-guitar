@@ -51,7 +51,7 @@ model UserTablink {
 
   folderId Int
 
-  folder Folder @relation(fields: [folderId], references: [id])
+  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
   @@unique([taburl, folderId])
 }
 
