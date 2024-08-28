@@ -35,7 +35,6 @@ model Song {
 model User {
   id            String        @id @default(cuid())
   spotifyUserId String        @unique
-  UserTablink   UserTablink[]
 
   folders Folder[]
 
@@ -44,7 +43,6 @@ model User {
 
 model UserTablink {
   id            String  @id @default(cuid())
-  spotifyUserId String
   taburl        String
   folderName    String
   name          String?
@@ -52,15 +50,10 @@ model UserTablink {
   type          String?
   version       Int?
 
-  folderId Int?
+  folderId Int
 
-  folder Folder? @relation(fields: [folderId], references: [id])
+  folder Folder @relation(fields: [folderId], references: [id])
   @@unique([taburl, folderId])
-
-
-  // removed because tablink can exist before tab is added to db
-  // tab           Tab    @relation(fields: [taburl], references: [taburl])
-  user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
 }
 
 model Folder {
