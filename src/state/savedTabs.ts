@@ -188,6 +188,58 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
     }),
     {
       name: "saved-tabs-storage",
+      version: 1, // a migration will be triggered if the version in the storage mismatches this one
+      migrate: (persistedState: any, version): SavedTabsState => {
+        if (version === 0) {
+          type v0 = {
+            savedTabs: {
+              [key: string]: {
+                id: string;
+                taburl: string;
+                folder: string;
+                name: string;
+                artist: string;
+                type: string;
+                version: number;
+                spotifyUserId?: string;
+                saved?: boolean;
+              }[];
+            };
+          };
+          const v0PersistedState = persistedState as v0;
+
+          for (const [key, value] of Object.entries(
+            v0PersistedState.savedTabs
+          )) {
+            let folders: Record<string, Folder> = {};
+            for (const tablink of value) {
+              folders[tablink.folder ?? "Favourites"] = {
+                name: tablink.folder ?? "Favourites",
+                id: -1, // does this matter in local?
+                spotifyUserId: tablink.spotifyUserId ?? "@localStorage",
+                imageUrl: null,
+                playlistUrl: null,
+                tabs: [],
+              };
+            }
+
+            for (const tablink of value) {
+              folders[tablink.folder ?? "Favourites"].tabs.push({
+                taburl: tablink.taburl,
+                name: tablink.name ?? null,
+                artist: tablink.artist ?? null,
+                type: tablink.type ?? null,
+                version: tablink.version ?? null,
+              });
+            }
+
+            persistedState.savedTabs[key] = Object.values(folders);
+          }
+          // if the stored value is in version 0, we rename the field to the new name
+        }
+
+        return persistedState;
+      },
     }
   )
 );
