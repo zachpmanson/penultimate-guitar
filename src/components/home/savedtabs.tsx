@@ -1,5 +1,5 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
-import { Playlist } from "@/models/models";
+import { Playlist, TabLinkDto } from "@/models/models";
 import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
@@ -9,6 +9,10 @@ import { Fragment, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
+
+function sortByName(s1: string, s2: string) {
+  return s1 > s2 ? 1 : -1;
+}
 
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
@@ -28,21 +32,25 @@ export default function SavedTabs() {
                 <>
                   {favourites && (
                     <div className="flex flex-col gap-1">
-                      {favourites.tabs.map((t, j) => (
-                        <TabLink
-                          key={j}
-                          tablink={{ ...t, saved: true }}
-                          folder={favourites.name}
-                        />
-                      ))}
+                      {favourites.tabs
+                        .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
+                        .map((t, j) => (
+                          <TabLink
+                            key={j}
+                            tablink={{ ...t, saved: true }}
+                            folder={favourites.name}
+                          />
+                        ))}
                     </div>
                   )}
-                  {savedTabs.map(
-                    (folder, i) =>
-                      folder.name !== "Favourites" && (
-                        <FolderPanel folder={folder} key={i} />
-                      )
-                  )}
+                  {savedTabs
+                    .sort((a, b) => sortByName(a.name, b.name))
+                    .map(
+                      (folder, i) =>
+                        folder.name !== "Favourites" && (
+                          <FolderPanel folder={folder} key={i} />
+                        )
+                    )}
                 </>
               )}
             </div>
@@ -92,13 +100,15 @@ function FolderPanel({ folder }: { folder: Folder }) {
           className={"flex flex-col gap-1 p-2 pt-0 mt-0 "}
           style={{ transition: "max-height 1s ease-in-out" }}
         >
-          {folder.tabs?.map((t, j) => (
-            <TabLink
-              key={j}
-              tablink={{ ...t, saved: true }}
-              folder={folder.name}
-            />
-          ))}
+          {folder.tabs
+            .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
+            .map((t, j) => (
+              <TabLink
+                key={j}
+                tablink={{ ...t, saved: true }}
+                folder={folder.name}
+              />
+            ))}
           <div className={"flex justify-between items-middle "}>
             <div className="ml-2">{folder.tabs?.length} items</div>
             <FolderMenu folder={folder} />

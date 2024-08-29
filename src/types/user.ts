@@ -19,7 +19,6 @@ export const DeleteTabLinkSchema = z.object({
   folderName: z.string(),
 });
 export type DeleteTabLinkSchema = z.infer<typeof DeleteTabLinkSchema>;
-
 type TabLink = {
   taburl: string;
   name: string | null;
