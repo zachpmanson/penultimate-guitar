@@ -56,6 +56,10 @@ export namespace SpotifyAdapter {
       }
     ).then((res) => res.json());
 
+    console.log(
+      `Pulling playlist ${playlistId} playlistPayload`,
+      playlistPayload
+    );
     let playlist: Playlist = {
       name: playlistPayload.name,
       image:
@@ -63,7 +67,7 @@ export namespace SpotifyAdapter {
           ? playlistPayload.images[0].url
           : undefined,
       tracks: [],
-      owner: playlistPayload.owner?.display_name,
+      owner: playlistPayload.owner.display_name,
       description: playlistPayload.description,
     };
 

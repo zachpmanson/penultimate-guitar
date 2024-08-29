@@ -98,7 +98,7 @@ export type Track = { name: string; artists: string[] };
 export type Playlist = {
   name: string;
   image?: string;
-  owner?: string;
+  owner: string;
   tracks: Track[];
   description: "";
 };
