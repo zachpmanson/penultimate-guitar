@@ -9,7 +9,7 @@ export default function Layout({ children }: any) {
         <main>{children}</main>
         <footer>
           <div className="flex gap-8 justify-center">
-            <Link prefetch={false} href="/directory/artist/1">
+            <Link prefetch={false} href="/directory/new/1">
               <span className="m-auto w-fit">Song Directory</span>
             </Link>
 
