@@ -63,7 +63,7 @@ export namespace SpotifyAdapter {
           ? playlistPayload.images[0].url
           : undefined,
       tracks: [],
-      owner: playlistPayload.owner.display_name,
+      owner: playlistPayload.owner?.display_name,
       description: playlistPayload.description,
     };
 
