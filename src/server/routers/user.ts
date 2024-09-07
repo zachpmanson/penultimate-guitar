@@ -117,13 +117,23 @@ export const userRouter = createRouter({
           },
         });
 
-        const missingFolders: Set<string> = (
-          new Set(
-            existingFolders.map((folder) => folder.name)
-          ) as Set<string> & {
-            symmetricDifference: (s: Set<string>) => Set<string>; // hopefully can remove this
-          }
-        ).symmetricDifference(new Set([...input.folders]));
+        // Only works in Node v22
+        // const missingFolders: Set<string> = (
+        //   new Set(
+        //     existingFolders.map((folder) => folder.name)
+        //   ) as Set<string> & {
+        //     symmetricDifference: (s: Set<string>) => Set<string>; // hopefully can remove this
+        //   }
+        // ).symmetricDifference(new Set([...input.folders]));
+
+        let a = new Set(existingFolders.map((folder) => folder.name));
+        let b = new Set(input.folders);
+
+        let a_minus_b = new Set([...a].filter((x) => !b.has(x)));
+        let b_minus_a = new Set([...b].filter((x) => !a.has(x)));
+
+        const a_outersect_b = new Set([...a_minus_b, ...b_minus_a]);
+        const missingFolders = a_outersect_b;
 
         console.log({
           existingFolders: existingFolders.map((folder) => folder.name),
