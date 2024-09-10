@@ -1,6 +1,5 @@
 import { TabLinkDto } from "@/models/models";
 import { useEffect, useState } from "react";
-import TabLink from "./tablink";
 import TablinkList from "./tablinklist";
 
 export default function RecentTabs() {
@@ -27,15 +26,12 @@ export default function RecentTabs() {
   }, []);
 
   return (
-    <div>
-      {Object.keys(recents).length > 0 ? (
-        <TablinkList
-          tablinks={recents.slice(0, 10).filter((r) => r.name && r.artist)}
-          title="Recent Tabs"
-        />
-      ) : (
-        <p className="text-center">Saved and recent tabs will show up here!</p>
-      )}
-    </div>
+    <TablinkList
+      tablinks={recents.slice(0, 10).filter((r) => r.name && r.artist)}
+      title="Recent Tabs"
+      emptyMessage={
+        <p className="text-center">Recently viewed tabs will show up here!</p>
+      }
+    />
   );
 }
