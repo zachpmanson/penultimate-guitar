@@ -1,6 +1,7 @@
 import { TabLinkDto } from "@/models/models";
 import { useEffect, useState } from "react";
 import TabLink from "./tablink";
+import TablinkList from "./tablinklist";
 
 export default function RecentTabs() {
   const [recents, setRecents] = useState<TabLinkDto[]>([]);
@@ -28,23 +29,10 @@ export default function RecentTabs() {
   return (
     <div>
       {Object.keys(recents).length > 0 ? (
-        <details open>
-          <summary>
-            <h1 className="text-center text-xl my-4">Recent Tabs</h1>
-          </summary>
-          <div className="flex flex-col gap-1 mt-2">
-            {recents
-              .slice(0, 10)
-              .filter((r) => r.name && r.artist)
-              .map((r: TabLinkDto, i) => (
-                <TabLink
-                  key={i}
-                  tablink={{ ...r, saved: true }}
-                  recent={true}
-                />
-              ))}
-          </div>
-        </details>
+        <TablinkList
+          tablinks={recents.slice(0, 10).filter((r) => r.name && r.artist)}
+          title="Recent Tabs"
+        />
       ) : (
         <p className="text-center">Saved and recent tabs will show up here!</p>
       )}

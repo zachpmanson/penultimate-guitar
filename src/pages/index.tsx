@@ -14,6 +14,7 @@ import type { NextPageWithLayout } from "./_app";
 import { GetStaticProps } from "next";
 import { trpc } from "@/utils/trpc";
 import TabLink from "@/components/home/tablink";
+import TablinkList from "@/components/home/tablinklist";
 
 const Page: NextPageWithLayout = () => {
   const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
@@ -52,25 +53,14 @@ const Page: NextPageWithLayout = () => {
             <SavedTabs />
             <RecentTabs />
             {recentTabs && recentTabs.length > 0 && (
-              <details open>
-                <summary>
-                  <h1 className="text-center text-xl my-4">
-                    Other Users Are Playing
-                  </h1>
-                </summary>
-                <div className="flex flex-col gap-1 mt-2">
-                  {recentTabs.map((t) => (
-                    <TabLink
-                      tablink={{
-                        ...t,
-                        name: t.song.name,
-                        artist: t.song.artist,
-                      }}
-                      recent={true}
-                    />
-                  ))}
-                </div>
-              </details>
+              <TablinkList
+                title="Other Users Are Playing"
+                tablinks={recentTabs.map((t) => ({
+                  ...t,
+                  name: t.song.name,
+                  artist: t.song.artist,
+                }))}
+              />
             )}
           </>
         )}
