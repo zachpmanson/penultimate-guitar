@@ -16,6 +16,7 @@ export default function PlainButton(props: {
   onClick?: (e: any) => void;
   disabled?: boolean;
   className?: string;
+  title?: string;
 }) {
   return (
     <div
@@ -25,6 +26,7 @@ export default function PlainButton(props: {
         props.className
       }
       onClick={props.disabled ? undefined : props.onClick}
+      title={props.title}
     >
       {props.children}
     </div>

@@ -38,7 +38,9 @@ export default function SavedTabs() {
                       allSaved[Math.floor(Math.random() * allSaved.length)]
                   );
                 }}
+                disabled={allSaved.length === 0}
                 className="pl-2 pr-2 inline-block float-right"
+                title="Random saved tab"
               >
                 <IconShuffle className="w-4 h-4" />
               </PlainButton>
