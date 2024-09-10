@@ -51,12 +51,14 @@ const Page: NextPageWithLayout = () => {
             <FilteredSavedTabs />
           ) : (
             <>
-              {
+              {allSaved.length > 0 && (
                 <div className="min-w-80 max-w-[50ch] flex-1">
                   <SavedTabs />
                 </div>
-              }
+              )}
+
               <div className="min-w-80 max-w-[50ch] flex-1">
+                {allSaved.length === 0 && <SavedTabs />}
                 <RecentTabs />
                 {recentTabs && recentTabs.length > 0 && (
                   <TablinkList
