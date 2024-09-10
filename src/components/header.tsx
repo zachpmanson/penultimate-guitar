@@ -6,8 +6,11 @@ import PlainButton from "./shared/plainbutton";
 import useSavedTabs from "@/hooks/useSavedTabs";
 import { useRouter } from "next/router";
 import IconShuffle from "./icons/IconShuffle";
+import { useTheme } from "next-themes";
 
 export default function Header() {
+  const { theme } = useTheme();
+
   const router = useRouter();
   const session = useSession();
   const { savedTabs } = useSavedTabs();
@@ -40,7 +43,10 @@ export default function Header() {
                   : "Random saved tab"
               }
             >
-              <IconShuffle className="w-4 h-4" />
+              <IconShuffle
+                className="w-4 h-4"
+                color={theme === "dark" ? "white" : "black"}
+              />
             </PlainButton>
             <ThemeSwitcher />
           </div>
