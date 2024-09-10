@@ -90,7 +90,7 @@ export default function SearchBox() {
               }
             }}
           />
-          <div className="absolute right-2.5 bottom-2.5 flex gap-4 items-center">
+          <div className="absolute right-2.5 bottom-2 flex gap-4 items-center">
             {searchText !== "" && (
               <button onClick={() => setSearchText("")}>
                 <XMarkIcon className="w-4 h-4" />
