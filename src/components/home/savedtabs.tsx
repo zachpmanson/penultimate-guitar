@@ -8,9 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import IconShuffle from "../icons/IconShuffle";
 import LoadingSpinner from "../loadingspinner";
-import PlainButton from "../shared/plainbutton";
 import TabLink from "./tablink";
 
 function sortByName(s1: string, s2: string) {
@@ -18,9 +16,7 @@ function sortByName(s1: string, s2: string) {
 }
 
 export default function SavedTabs() {
-  const router = useRouter();
   const { savedTabs, isLoadingTabs } = useSavedTabs();
-  const allSaved = savedTabs.flatMap((f) => f.tabs).map((t) => t.taburl);
 
   const favourites = savedTabs.find((f) => f.name === "Favourites");
   return (
@@ -30,20 +26,6 @@ export default function SavedTabs() {
           <details open>
             <summary className="justify-between items-center">
               <h1 className="text-center text-xl inline-block">Favourites</h1>
-              <PlainButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(
-                    "/tab/" +
-                      allSaved[Math.floor(Math.random() * allSaved.length)]
-                  );
-                }}
-                disabled={allSaved.length === 0}
-                className="pl-2 pr-2 inline-block float-right"
-                title="Random saved tab"
-              >
-                <IconShuffle className="w-4 h-4" />
-              </PlainButton>
             </summary>
             <div className="flex flex-col gap-1 mt-2">
               {isLoadingTabs && !savedTabs ? (
