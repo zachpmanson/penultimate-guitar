@@ -23,40 +23,38 @@ export default function SavedTabs() {
     <div>
       {Object.keys(savedTabs).length === 0 || (
         <div>
-          <details open>
-            <summary className="justify-between items-center">
-              <h1 className="text-center text-xl inline-block">Favourites</h1>
-            </summary>
-            <div className="flex flex-col gap-1 mt-2">
-              {isLoadingTabs && !savedTabs ? (
-                <LoadingSpinner className="h-8" />
-              ) : (
-                <>
-                  {favourites && (
-                    <div className="flex flex-col gap-1">
-                      {favourites.tabs
-                        .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
-                        .map((t, j) => (
-                          <TabLink
-                            key={j}
-                            tablink={{ ...t, saved: true }}
-                            folder={favourites.name}
-                          />
-                        ))}
-                    </div>
+          <div>
+            <h1 className="text-left text-xl my-4">Favourites</h1>
+          </div>
+          <div className="flex flex-col gap-1 mt-2">
+            {isLoadingTabs && !savedTabs ? (
+              <LoadingSpinner className="h-8" />
+            ) : (
+              <>
+                {favourites && (
+                  <div className="flex flex-col gap-1">
+                    {favourites.tabs
+                      .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
+                      .map((t, j) => (
+                        <TabLink
+                          key={j}
+                          tablink={{ ...t, saved: true }}
+                          folder={favourites.name}
+                        />
+                      ))}
+                  </div>
+                )}
+                {savedTabs
+                  .sort((a, b) => sortByName(a.name, b.name))
+                  .map(
+                    (folder, i) =>
+                      folder.name !== "Favourites" && (
+                        <FolderPanel folder={folder} key={i} />
+                      )
                   )}
-                  {savedTabs
-                    .sort((a, b) => sortByName(a.name, b.name))
-                    .map(
-                      (folder, i) =>
-                        folder.name !== "Favourites" && (
-                          <FolderPanel folder={folder} key={i} />
-                        )
-                    )}
-                </>
-              )}
-            </div>
-          </details>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
