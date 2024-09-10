@@ -42,6 +42,19 @@ export const tabRouter = createRouter({
         input.cursor
       );
     }),
+  getRecentTabs: publicProcedure
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.tab.findMany({
+        orderBy: {
+          timestamp: "desc",
+        },
+        take: input,
+        include: {
+          song: true,
+        },
+      });
+    }),
 });
 
 export type TabRouter = typeof tabRouter;

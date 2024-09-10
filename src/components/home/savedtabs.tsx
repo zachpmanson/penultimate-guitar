@@ -5,10 +5,11 @@ import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
+import { useRouter } from "next/router";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
@@ -62,59 +63,76 @@ export default function SavedTabs() {
 }
 
 function FolderPanel({ folder }: { folder: Folder }) {
+  const router = useRouter();
   const [hovering, setHovering] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const divRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div
-      className={
-        "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl border transition-transform duration-75 max-h-fit " +
-        (hovering ? " hover:border-gray-400 dark:hover:border-gray-700" : "")
-      }
-      onMouseOver={() => setHovering(true)}
-      onMouseOut={() => setHovering(false)}
-    >
+    <div>
+      <div className="" ref={divRef}></div>
       <div
-        className="flex justify-between p-2 px-3 items-center"
-        onClick={() => setIsOpen(!isOpen)}
+        className={
+          "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl border transition-transform duration-75 max-h-fit " +
+          (hovering ? " hover:border-gray-400 dark:hover:border-gray-700" : "")
+        }
+        id={`folder-${folder.id}`}
+        onMouseOver={() => setHovering(true)}
+        onMouseOut={() => setHovering(false)}
       >
-        <h2 className="text-lg">{folder.name}</h2>
-        <div className="flex justify-between gap-2 items-center">
-          {folder.imageUrl && (
-            <Link
-              href={`https://open.spotify.com/playlist/${folder.playlistUrl}`}
-              target="_blank"
-            >
-              <img
-                src={folder.imageUrl ?? undefined}
-                className="w-8 h-8 rounded"
-              />
-            </Link>
-          )}
-          <ChevronLeftIcon
-            className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")}
-          />
-        </div>
-      </div>
-      {isOpen && (
         <div
-          className={"flex flex-col gap-1 p-2 pt-0 mt-0 "}
-          style={{ transition: "max-height 1s ease-in-out" }}
+          className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl"
+          onClick={() => {
+            if (
+              isOpen &&
+              divRef.current &&
+              divRef.current.offsetTop > window.innerHeight
+            ) {
+              divRef.current?.scrollIntoView({ behavior: "smooth" });
+            }
+            setIsOpen(!isOpen);
+          }}
         >
-          {folder.tabs
-            .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
-            .map((t, j) => (
-              <TabLink
-                key={j}
-                tablink={{ ...t, saved: true }}
-                folder={folder.name}
-              />
-            ))}
-          <div className={"flex justify-between items-middle "}>
-            <div className="ml-2">{folder.tabs?.length} items</div>
-            <FolderMenu folder={folder} />
+          <h2 className="text-lg">{folder.name}</h2>
+          <div className="flex justify-between gap-2 items-center">
+            {folder.imageUrl && (
+              <Link
+                href={`https://open.spotify.com/playlist/${folder.playlistUrl}`}
+                target="_blank"
+              >
+                <img
+                  src={folder.imageUrl ?? undefined}
+                  className="w-8 h-8 rounded"
+                />
+              </Link>
+            )}
+            <ChevronLeftIcon
+              className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")}
+            />
           </div>
         </div>
-      )}
+        {isOpen && (
+          <div
+            className={"flex flex-col gap-1 p-2 pt-0 mt-0 "}
+            style={{ transition: "max-height 1s ease-in-out" }}
+          >
+            {folder.tabs
+              .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
+              .map((t, j) => (
+                <TabLink
+                  key={j}
+                  tablink={{ ...t, saved: true }}
+                  folder={folder.name}
+                />
+              ))}
+            <div className={"flex justify-between items-middle "}>
+              <div className="ml-2">{folder.tabs?.length} items</div>
+              <FolderMenu folder={folder} />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

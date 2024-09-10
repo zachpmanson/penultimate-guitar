@@ -476,7 +476,6 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log("getStaticProps", params);
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),

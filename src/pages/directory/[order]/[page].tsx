@@ -1,4 +1,3 @@
-import { useGlobal } from "@/contexts/Global/context";
 import prisma from "@/server/prisma";
 import { useSearchStore } from "@/state/search";
 import { Song } from "@prisma/client";

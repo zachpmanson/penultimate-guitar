@@ -3,13 +3,21 @@ import RecentTabs from "@/components/home/recenttabs";
 import SavedTabs from "@/components/home/savedtabs";
 import { GuitaleleStyle } from "@/constants";
 import useSavedTabs from "@/hooks/useSavedTabs";
+import { createContextInner } from "@/server/context";
+import { appRouter } from "@/server/routers/_app";
 import { useConfigStore } from "@/state/config";
 import { useSearchStore } from "@/state/search";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 import Head from "next/head";
-import type { NextPageWithLayout } from "./_app";
 import { useEffect } from "react";
+import type { NextPageWithLayout } from "./_app";
+import { GetStaticProps } from "next";
+import { trpc } from "@/utils/trpc";
+import TabLink from "@/components/home/tablink";
 
 const Page: NextPageWithLayout = () => {
+  const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
+
   const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
   const { savedTabs } = useSavedTabs();
@@ -43,6 +51,27 @@ const Page: NextPageWithLayout = () => {
           <>
             <SavedTabs />
             <RecentTabs />
+            {recentTabs && recentTabs.length > 0 && (
+              <details open>
+                <summary>
+                  <h1 className="text-center text-xl my-4">
+                    Other Users Are Playing
+                  </h1>
+                </summary>
+                <div className="flex flex-col gap-1 mt-2">
+                  {recentTabs.map((t) => (
+                    <TabLink
+                      tablink={{
+                        ...t,
+                        name: t.song.name,
+                        artist: t.song.artist,
+                      }}
+                      recent={true}
+                    />
+                  ))}
+                </div>
+              </details>
+            )}
           </>
         )}
         {mode === "guitalele" && (
@@ -56,3 +85,20 @@ const Page: NextPageWithLayout = () => {
 };
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const helpers = createServerSideHelpers({
+    router: appRouter,
+    ctx: await createContextInner(),
+    // transformer: superjson, // optional - adds superjson serialization
+  });
+
+  await helpers.tab.getRecentTabs.prefetch(10);
+
+  return {
+    props: {
+      trpcState: helpers.dehydrate(),
+    },
+    revalidate: 60,
+  };
+};
