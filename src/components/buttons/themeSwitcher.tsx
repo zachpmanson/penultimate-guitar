@@ -19,7 +19,8 @@ const ThemeSwitcher = () => {
     return (
       <PlainButton
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="p-2"
+        noPadding
+        className="flex items-center justify-center w-8 h-8"
       >
         <LoadingSpinner className="w-4 h-4" />
       </PlainButton>
@@ -30,7 +31,8 @@ const ThemeSwitcher = () => {
   return (
     <PlainButton
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="pl-2 pr-2"
+      noPadding
+      className="flex items-center justify-center w-8 h-8"
     >
       <ModeIcon className="w-4" />
     </PlainButton>

@@ -32,7 +32,8 @@ export default function Header() {
                 );
               }}
               disabled={allSaved.length === 0}
-              className="flex items-center justify-center w-8 h-8 p-2"
+              className="flex items-center justify-center w-8 h-8"
+              noPadding
               title={
                 allSaved.length === 0
                   ? "Save some tabs to shuffle!"
