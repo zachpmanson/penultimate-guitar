@@ -17,15 +17,20 @@ function sortByName(s1: string, s2: string) {
 
 export default function SavedTabs() {
   const { savedTabs, isLoadingTabs } = useSavedTabs();
+  const allSaved = savedTabs.flatMap((f) => f.tabs).map((t) => t.taburl);
 
   const favourites = savedTabs.find((f) => f.name === "Favourites");
   return (
     <div>
-      {Object.keys(savedTabs).length === 0 || (
+      <div>
         <div>
-          <div>
-            <h1 className="text-left text-xl my-4">Favourites</h1>
+          <h1 className="text-left text-xl my-4">Favourites</h1>
+        </div>
+        {allSaved.length === 0 ? (
+          <div className="flex flex-col gap-1 mt-2">
+            <p className="text-center">You have no saved tabs yet!</p>
           </div>
+        ) : (
           <div className="flex flex-col gap-1 mt-2">
             {isLoadingTabs && !savedTabs ? (
               <LoadingSpinner className="h-8" />
@@ -55,8 +60,8 @@ export default function SavedTabs() {
               </>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

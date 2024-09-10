@@ -1,31 +1,9 @@
-import React from "react";
-import { useTheme } from "next-themes";
-
-import PlainButton from "../shared/plainbutton";
-import LoadingSpinner from "../loadingspinner";
+import useThemeOnMount from "@/hooks/useThemeOnMount";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import PlainButton from "../shared/plainbutton";
 
 const ThemeSwitcher = () => {
-  const [mounted, setMounted] = React.useState(false);
-  const { theme, setTheme } = useTheme();
-
-  // Using useEffect to not run into layout issues
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    // If we haven't mounted yet, return a placeholder icon
-    return (
-      <PlainButton
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        noPadding
-        className="flex items-center justify-center w-8 h-8"
-      >
-        <LoadingSpinner className="w-4 h-4" />
-      </PlainButton>
-    );
-  }
+  const { theme, setTheme } = useThemeOnMount();
 
   const ModeIcon = theme === "dark" ? SunIcon : MoonIcon;
   return (

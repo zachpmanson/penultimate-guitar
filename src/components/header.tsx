@@ -1,15 +1,15 @@
+import useSavedTabs from "@/hooks/useSavedTabs";
+import useThemeOnMount from "@/hooks/useThemeOnMount";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import SearchBox from "./search/searchbox";
-import ThemeSwitcher from "./buttons/themeSwitcher";
-import PlainButton from "./shared/plainbutton";
-import useSavedTabs from "@/hooks/useSavedTabs";
 import { useRouter } from "next/router";
+import ThemeSwitcher from "./buttons/themeSwitcher";
 import IconShuffle from "./icons/IconShuffle";
-import { useTheme } from "next-themes";
+import SearchBox from "./search/searchbox";
+import PlainButton from "./shared/plainbutton";
 
 export default function Header() {
-  const { theme } = useTheme();
+  const { theme } = useThemeOnMount();
 
   const router = useRouter();
   const session = useSession();
