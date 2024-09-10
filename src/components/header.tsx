@@ -32,7 +32,7 @@ export default function Header() {
                 );
               }}
               disabled={allSaved.length === 0}
-              className="pl-2 pr-2 inline-block float-right"
+              className="flex items-center justify-center w-8 h-8 p-2"
               title={
                 allSaved.length === 0
                   ? "Save some tabs to shuffle!"

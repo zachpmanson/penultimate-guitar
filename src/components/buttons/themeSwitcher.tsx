@@ -19,7 +19,7 @@ const ThemeSwitcher = () => {
     return (
       <PlainButton
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="pl-2 pr-2"
+        className="p-2"
       >
         <LoadingSpinner className="w-4 h-4" />
       </PlainButton>
