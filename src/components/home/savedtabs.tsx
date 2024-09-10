@@ -10,6 +10,7 @@ import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
+import { BookmarkIcon } from "@heroicons/react/24/outline";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
@@ -28,7 +29,10 @@ export default function SavedTabs() {
         </div>
         {allSaved.length === 0 ? (
           <div className="flex flex-col gap-1 mt-2">
-            <p className="text-center">You have no saved tabs yet!</p>
+            <p className="text-center">
+              You have no saved tabs yet! Press{" "}
+              <BookmarkIcon className="h-[1em] inline-block" /> to save a tab.
+            </p>
           </div>
         ) : (
           <div className="flex flex-col gap-1 mt-2">
