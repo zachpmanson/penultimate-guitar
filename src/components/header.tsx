@@ -21,25 +21,29 @@ export default function Header() {
             <h1 className="m-auto w-fit font-bold">Penultimate Guitar</h1>
           </Link>
         </div>
-        <div className="flex gap-6 items-center">
-          <PlainButton
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(
-                "/tab/" + allSaved[Math.floor(Math.random() * allSaved.length)]
-              );
-            }}
-            disabled={allSaved.length === 0}
-            className="pl-2 pr-2 inline-block float-right"
-            title={
-              allSaved.length === 0
-                ? "Save some tabs to shuffle!"
-                : "Random saved tab"
-            }
-          >
-            <IconShuffle className="w-4 h-4" />
-          </PlainButton>
-          <ThemeSwitcher />
+        <div className="flex gap-4 items-center">
+          <div className="flex gap-2 items-center">
+            <PlainButton
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(
+                  "/tab/" +
+                    allSaved[Math.floor(Math.random() * allSaved.length)]
+                );
+              }}
+              disabled={allSaved.length === 0}
+              className="pl-2 pr-2 inline-block float-right"
+              title={
+                allSaved.length === 0
+                  ? "Save some tabs to shuffle!"
+                  : "Random saved tab"
+              }
+            >
+              <IconShuffle className="w-4 h-4" />
+            </PlainButton>
+            <ThemeSwitcher />
+          </div>
+
           {session.status === "authenticated" ? (
             <Link prefetch={false} href="/profile">
               <span className="m-auto w-fit">{session.data.user?.name}</span>
