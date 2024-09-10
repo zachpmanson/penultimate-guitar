@@ -13,7 +13,7 @@ export default function PlainButton(props: {
     | ReactElement<any, string | JSXElementConstructor<any>>
     | ReactFragment
     | ReactPortal;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   disabled?: boolean;
   className?: string;
 }) {

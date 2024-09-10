@@ -1,30 +1,47 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
-import { Playlist, TabLinkDto } from "@/models/models";
+import { Playlist } from "@/models/models";
 import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
+import IconShuffle from "../icons/IconShuffle";
 import LoadingSpinner from "../loadingspinner";
+import PlainButton from "../shared/plainbutton";
 import TabLink from "./tablink";
-import { useRouter } from "next/router";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
 }
 
 export default function SavedTabs() {
+  const router = useRouter();
   const { savedTabs, isLoadingTabs } = useSavedTabs();
+  const allSaved = savedTabs.flatMap((f) => f.tabs).map((t) => t.taburl);
+
   const favourites = savedTabs.find((f) => f.name === "Favourites");
   return (
     <div>
       {Object.keys(savedTabs).length === 0 || (
         <div>
           <details open>
-            <summary>
-              <h1 className="text-center text-xl my-4">Favourites</h1>
+            <summary className="justify-between items-center">
+              <h1 className="text-center text-xl inline-block">Favourites</h1>
+              <PlainButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(
+                    "/tab/" +
+                      allSaved[Math.floor(Math.random() * allSaved.length)]
+                  );
+                }}
+                className="pl-2 pr-2 inline-block float-right"
+              >
+                <IconShuffle className="w-4 h-4" />
+              </PlainButton>
             </summary>
             <div className="flex flex-col gap-1 mt-2">
               {isLoadingTabs && !savedTabs ? (
