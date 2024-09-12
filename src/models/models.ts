@@ -92,6 +92,8 @@ export type SearchResult = {
   recording: {};
   artist_url: string;
   tab_url: string;
+
+  internal: boolean;
 };
 
 export type Track = { name: string; artists: string[] };

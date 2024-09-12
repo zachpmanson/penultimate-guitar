@@ -7,12 +7,14 @@ export default function SearchLink({
   artist_name,
   rating,
   type,
+  internal,
 }: {
   tab_url: string;
   song_name: string;
   artist_name: string;
   rating: number;
   type: string;
+  internal: boolean;
 }) {
   return (
     <Link
@@ -21,7 +23,11 @@ export default function SearchLink({
       prefetch={false}
     >
       <PlainButton>
-        <div className="flex justify-between">
+        <div
+          className={
+            "flex justify-between " + (internal ? "text-blue-500" : "")
+          }
+        >
           <div className="flex flex-col">
             <div className="font-bold">{song_name}</div>
             <div className="">{artist_name}</div>

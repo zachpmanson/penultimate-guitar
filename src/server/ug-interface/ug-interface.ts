@@ -132,7 +132,7 @@ export namespace UGAdapter {
       .sort((a: SearchResult, b: SearchResult) => b.rating - a.rating);
     console.log(`Search '${cleanSearch}' found ${results.length}`);
     return {
-      items: results,
+      items: results.map((i) => ({ ...i, internal: false })),
       nextCursor: results.length > 25 ? page + 1 : undefined,
     };
   }
