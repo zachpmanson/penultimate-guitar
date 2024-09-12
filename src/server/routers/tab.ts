@@ -2,7 +2,6 @@ import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
 import { createRouter, publicProcedure } from "../trpc";
 import { getTab } from "../ug-interface/get-tab";
-import { sqltag } from "@prisma/client/runtime/library";
 
 export const tabRouter = createRouter({
   getTab: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -52,7 +51,7 @@ export const tabRouter = createRouter({
           rating: "desc",
         },
         take: 10,
-        skip: input.cursor,
+        skip: (input.cursor - 1) * 10,
       });
       console.log(items.map((i) => i.taburl));
       return {
