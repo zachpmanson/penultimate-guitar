@@ -30,6 +30,9 @@ model Song {
   name   String
   artist String
   Tab    Tab[]
+
+  @@index([name])
+  @@index([artist])
 }
 
 model User {
