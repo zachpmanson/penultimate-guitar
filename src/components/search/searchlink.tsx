@@ -23,11 +23,7 @@ export default function SearchLink({
       prefetch={false}
     >
       <PlainButton>
-        <div
-          className={
-            "flex justify-between " + (internal ? "text-blue-500" : "")
-          }
-        >
+        <div className={"flex justify-between " + (internal ? "" : "italic")}>
           <div className="flex flex-col">
             <div className="font-bold">{song_name}</div>
             <div className="">{artist_name}</div>

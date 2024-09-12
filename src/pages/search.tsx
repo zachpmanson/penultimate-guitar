@@ -144,8 +144,8 @@ export default function Search() {
         <p className="text-gray-400 mb-4 font-extralight">
           Only the highest rated versions of each are shown.
         </p>
-        {allItemsInternal.length} + {allItemsExternal.length} ={" "}
-        {mergedResults.length}
+        {/* {allItemsInternal.length} + {allItemsExternal.length} ={" "}
+        {mergedResults.length} */}
         <div
           className="mx-auto grid gap-1 w-full"
           style={{
@@ -181,11 +181,11 @@ export default function Search() {
             <p className="text-center">No results found</p>
           )}
         </div>
-        <pre>
+        {/* <pre>
           {allItemsInternal.map((i) => i.tab_url).join("\n")}
           <hr />
           {allItemsExternal.map((i) => i.tab_url).join("\n")}
-        </pre>
+        </pre> */}
         {isLoading && (
           <div className="flex items-center justify-center w-full">
             <LoadingSpinner className="h-8" />
