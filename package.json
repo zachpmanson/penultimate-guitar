@@ -10,7 +10,7 @@
     "generate": "prisma generate",
     "migrate": "prisma migrate deploy",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "pm generate"
+    "postinstall": "pn generate"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
