@@ -69,6 +69,14 @@ export const tabRouter = createRouter({
           },
         },
       });
+
+      // sort by songId position in tabIdRows
+      // TODO theres gotta be a more efficient way of doing this
+      items.sort((a, b) => {
+        const aPos = tabIdRows.findIndex((i) => i.id === a.songId);
+        const bPos = tabIdRows.findIndex((i) => i.id === b.songId);
+        return aPos - bPos;
+      });
       return {
         items: items.map((i) => ({ ...i, internal: true, tab: undefined })),
         nextCursor: items.length >= PAGE_SIZE ? input.cursor + 1 : undefined,
