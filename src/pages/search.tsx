@@ -1,6 +1,4 @@
-import LoadingSpinner from "@/components/loadingspinner";
-import SearchLink from "@/components/search/searchlink";
-import PlainButton from "@/components/shared/plainbutton";
+import SearchResults from "@/components/search/searchresults";
 import { SearchResult } from "@/models/models";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
@@ -23,24 +21,26 @@ const searchResultPlaceholder = {
   artist_url: "r.artistUrl",
 };
 
-function mergeInternalExternal(
-  internal: SearchResult[],
-  external: SearchResult[]
-) {
-  let o = Object.fromEntries(internal.map((e) => [e.tab_url, e]));
+function dedupSearchResults(res: SearchResult[]) {
+  let o = new Map<string, SearchResult>();
 
-  for (let e of external) {
-    if (o[e.tab_url]) {
-      o[e.tab_url].rating = e.rating; // internal rating might be out of date
+  for (let next of res) {
+    const existing = o.get(next.tab_url);
+    if (existing) {
+      o.set(next.tab_url, {
+        ...existing,
+        rating: !next.internal ? next.rating : existing.rating, // internal rating might be out of date
+        internal: existing.internal || next.internal,
+      });
     } else {
-      o[e.tab_url] = e;
+      o.set(next.tab_url, next);
     }
   }
-  return Object.values(o);
+  return Array.from(o.values());
 }
 
 /** Merge versions of the same tab, prefer higher rating */
-function collapseResults(results: SearchResult[]) {
+function preferHigherRatings(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
   for (let r of results) {
     const existing = colRes.findIndex(
@@ -67,9 +67,9 @@ export default function Search() {
   const {
     fetchNextPage: fetchNextPageExternal,
     hasNextPage: hasNextPageExternal,
-    data,
-    isFetching,
-    isLoading,
+    data: dataExternal,
+    isFetching: isFetchingExternal,
+    isLoading: isLoadingExternal,
   } = trpc.tab.searchTabsExternal.useInfiniteQuery(
     {
       value: q ?? "",
@@ -83,9 +83,11 @@ export default function Search() {
   );
 
   const {
-    data: searchTabsInternal,
+    data: dataInternal,
     fetchNextPage: fetchNextPageInternal,
     hasNextPage: hasNextPageInternal,
+    isLoading: isLoadingInternal,
+    isFetching: isFetchingInternal,
   } = trpc.tab.searchTabsInternal.useInfiniteQuery(
     {
       value: q ?? "",
@@ -103,13 +105,40 @@ export default function Search() {
     if (hasNextPageExternal) fetchNextPageExternal();
   };
 
-  const allItemsExternal = data ? data.pages.map((p) => p.items).flat() : [];
+  // const allItemsInternal = dataInternal
+  //   ? dataInternal.pages
+  //       .map((p) => p.items)
+  //       .flat()
+  //       .map((r, i) => ({
+  //         id: i,
+  //         song_id: r.songId,
+  //         song_name: r.song.name,
+  //         artist_name: r.song.artist,
+  //         type: r.type,
+  //         version: r.version,
+  //         rating: r.rating,
+  //         date: r.timestamp ?? "",
+  //         tab_url: r.taburl,
+  //         internal: true,
+  //         ...searchResultPlaceholder,
+  //       }))
+  //   : [];
 
-  const allItemsInternal = searchTabsInternal
-    ? searchTabsInternal.pages
-        .map((p) => p.items)
-        .flat()
-        .map((r, i) => ({
+  // const allItemsExternal = dataExternal
+  //   ? dataExternal.pages.map((p) => p.items).flat()
+  //   : [];
+
+  const maxPageNums = Math.max(
+    dataInternal?.pages.length ?? 0,
+    dataExternal?.pages.length ?? 0
+  );
+
+  let resultsInPageOrder: SearchResult[] = [];
+  for (let i = 0; i < maxPageNums; i++) {
+    if (dataInternal && dataInternal.pages.length > i) {
+      resultsInPageOrder = resultsInPageOrder.concat(
+        dataInternal.pages[i].items.map((r, i) => ({
+          ...searchResultPlaceholder,
           id: i,
           song_id: r.songId,
           song_name: r.song.name,
@@ -120,12 +149,19 @@ export default function Search() {
           date: r.timestamp ?? "",
           tab_url: r.taburl,
           internal: true,
-          ...searchResultPlaceholder,
         }))
-    : [];
+      );
+    }
 
-  const mergedResults = collapseResults(
-    mergeInternalExternal(allItemsInternal, allItemsExternal)
+    if (dataExternal && dataExternal.pages.length > i) {
+      resultsInPageOrder = resultsInPageOrder.concat(
+        dataExternal.pages[i].items.map((r) => r)
+      );
+    }
+  }
+
+  const mergedResults = preferHigherRatings(
+    dedupSearchResults(resultsInPageOrder)
   );
 
   useEffect(() => {
@@ -146,51 +182,13 @@ export default function Search() {
         </p>
         {/* {allItemsInternal.length} + {allItemsExternal.length} ={" "}
         {mergedResults.length} */}
-        <div
-          className="mx-auto grid gap-1 w-full"
-          style={{
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-          }}
-        >
-          {mergedResults.length === 0 ? (
-            <></>
-          ) : data && !isLoading ? (
-            <>
-              {mergedResults.map((r, i) => (
-                <SearchLink {...r} key={i} />
-              ))}
-
-              <div className="w-full flex flex-col items-center justify-start">
-                {(hasNextPageExternal || hasNextPageInternal) && (
-                  <PlainButton
-                    onClick={loadPage}
-                    className="flex-grow w-full flex items-center justify-center"
-                  >
-                    {isFetching ? (
-                      <LoadingSpinner className="h-8" />
-                    ) : (
-                      <div className="w-fit h-8 flex items-center justify-center">
-                        Load More
-                      </div>
-                    )}
-                  </PlainButton>
-                )}
-              </div>
-            </>
-          ) : (
-            <p className="text-center">No results found</p>
-          )}
-        </div>
-        {/* <pre>
-          {allItemsInternal.map((i) => i.tab_url).join("\n")}
-          <hr />
-          {allItemsExternal.map((i) => i.tab_url).join("\n")}
-        </pre> */}
-        {isLoading && (
-          <div className="flex items-center justify-center w-full">
-            <LoadingSpinner className="h-8" />
-          </div>
-        )}
+        <SearchResults
+          results={mergedResults}
+          isLoading={isLoadingExternal || isLoadingInternal}
+          isFetching={isFetchingExternal || isFetchingInternal}
+          hasNextPage={hasNextPageExternal || hasNextPageInternal}
+          loadNextPage={loadPage}
+        />
       </div>
     </>
   );

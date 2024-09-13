@@ -12,6 +12,64 @@ export const tabRouter = createRouter({
     .mutation(async ({ ctx, input }) => {
       return await getTab(input);
     }),
+
+  searchTabsInternalFuzzy: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        search_type: z.string(),
+        cursor: z.number().gt(0),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const tabIdRows: {
+        id: number;
+        name: string;
+        artist: string;
+        sm1: number;
+        sm2: number;
+        sm3: number;
+      }[] = await ctx.prisma.$queryRawUnsafe(
+        `
+        SELECT 
+          s."id", 
+          s."name",
+          s."artist",
+          -- get similarity based on whole search term
+          similarity(s."name", $1) AS sml1, 
+          similarity(s."artist", $1) AS sml2,
+          -- merge similarity to rank on
+          similarity(s."name", $1) + similarity(s."artist", $1) AS sm3
+        FROM public."Tab" t INNER JOIN public."Song" s ON t."songId" = s."id"
+        WHERE
+          -- filter out anything where there is no word overlap
+          word_similarity(s."name", $1) > 0.3
+          OR word_similarity(s."artist", $1) > 0.3
+        ORDER by
+          sm3 DESC,
+          t.rating DESC
+        LIMIT 30 OFFSET $2;
+      `,
+        input.value,
+        (input.cursor - 1) * 10
+      );
+
+      const items = await ctx.prisma.tab.findMany({
+        include: {
+          song: true,
+        },
+        where: {
+          songId: {
+            in: tabIdRows.map((i) => i.id),
+          },
+        },
+      });
+      return {
+        items: items.map((i) => ({ ...i, internal: true, tab: undefined })),
+        nextCursor: items.length === 10 ? input.cursor + 1 : undefined,
+      };
+    }),
+
   searchTabsInternal: publicProcedure
     .input(
       z.object({
@@ -21,8 +79,6 @@ export const tabRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      console.log(input.cursor - 1 * 10);
-
       const items = await ctx.prisma.tab.findMany({
         include: {
           song: true,
@@ -53,24 +109,13 @@ export const tabRouter = createRouter({
         take: 10,
         skip: (input.cursor - 1) * 10,
       });
-      console.log(items.map((i) => i.taburl));
+
       return {
-        items: items.map((i) => ({ ...i, internal: true })),
+        items: items.map((i) => ({ ...i, internal: true, tab: undefined })),
         nextCursor: items.length === 10 ? input.cursor + 1 : undefined,
       };
-      // return await ctx.prisma.$queryRaw`
-      //   SELECT *
-      //   FROM public."Tab" t JOIN public."Song" s
-      //     ON t."songId" = s."id"
-      //   WHERE
-      //     s."name" ILIKE '%${input.value}%'`;
     }),
-  // LIMIT 10 OFFSET ${input.cursor - 1 * 10};`;
-  // -- similarity(s."name", ${input.value}) > 0.45
-  // -- ORDER BY
-  // -- similarity(s.name, ${input.value}) DESC,
-  // --   public.Tab.rating DESC,
-  // --   public.Tab.timestamp DESC
+
   searchTabsExternal: publicProcedure
     .input(
       z.object({
@@ -86,6 +131,7 @@ export const tabRouter = createRouter({
         input.cursor
       );
     }),
+
   searchTabsLazy: publicProcedure
     .input(
       z.object({
