@@ -1,5 +1,5 @@
 import { getHighestRatedTab } from "@/server/ug-interface/get-tab";
-import { GetStaticProps } from "next";
+import { GetStaticPropsContext } from "next";
 import "react-tooltip/dist/react-tooltip.css";
 
 export default function Tab() {
@@ -10,7 +10,7 @@ export async function getStaticPaths() {
   return { paths: [], fallback: "blocking" };
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   if (params === undefined) {
     return {
       notFound: true,
@@ -28,6 +28,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     redirect: {
       destination: "/tab/" + (await getHighestRatedTab(url)),
     },
-    notFound: true,
   };
 };
