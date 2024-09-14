@@ -42,7 +42,13 @@ export default function SearchBox() {
         setButtonText("Search");
       });
     } else {
-      router.push(`/search?q=${encodeURIComponent(searchText)}`);
+      if (router.pathname === "/search-internal") {
+        router.push(`/search-internal?q=${encodeURIComponent(searchText)}`);
+      } else if (router.pathname === "/search-external") {
+        router.push(`/search-external?q=${encodeURIComponent(searchText)}`);
+      } else {
+        router.push(`/search?q=${encodeURIComponent(searchText)}`);
+      }
     }
   };
 
