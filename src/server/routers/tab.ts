@@ -32,7 +32,7 @@ export const tabRouter = createRouter({
         taburl: string; // but which one
       };
 
-      const PAGE_SIZE = 10;
+      const PAGE_SIZE = 20;
       const songRows: {
         name: string;
         artist: string;
