@@ -42,7 +42,7 @@ model PossibleSong {
   id     Int    @id @default(autoincrement())
   name   String
   artist String
-  taburl String
+  taburl String @unique
   type   String
   
   songId Int?

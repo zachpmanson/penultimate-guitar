@@ -9,12 +9,14 @@ export default function SearchResults({
   isFetching,
   hasNextPage,
   loadNextPage,
+  best = false,
 }: {
   results: SearchResult[];
   isLoading: boolean;
   isFetching: boolean;
   hasNextPage: boolean;
   loadNextPage: () => void;
+  best?: boolean;
 }) {
   return (
     <>
@@ -29,7 +31,7 @@ export default function SearchResults({
         ) : !isLoading ? (
           <>
             {results.map((r, i) => (
-              <SearchLink {...r} key={i} />
+              <SearchLink {...r} key={i} best={best} />
             ))}
 
             <div className="w-full flex flex-col items-center justify-start">

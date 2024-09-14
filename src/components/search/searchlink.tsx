@@ -8,6 +8,7 @@ export default function SearchLink({
   rating,
   type,
   internal,
+  best,
 }: {
   tab_url: string;
   song_name: string;
@@ -15,10 +16,11 @@ export default function SearchLink({
   rating: number;
   type: string;
   internal: boolean;
+  best?: boolean;
 }) {
   return (
     <Link
-      href={`/tab/${tab_url}`}
+      href={`/${best ? "best" : "tab"}/${tab_url}`}
       className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
       prefetch={false}
     >

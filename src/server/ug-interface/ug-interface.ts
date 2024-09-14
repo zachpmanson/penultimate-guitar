@@ -6,7 +6,7 @@ import { SearchResult } from "@/models/models";
 
 export namespace UGAdapter {
   export async function getTab(
-    URL: string
+    taburl: string
   ): Promise<[Song, NewTab, AltVersion[]]> {
     let songData: Song = {
       id: 0,
@@ -15,7 +15,7 @@ export namespace UGAdapter {
     };
 
     let tabData: NewTab = {
-      taburl: "",
+      taburl: taburl,
       songId: 0,
       contributors: [],
       capo: 0,
@@ -27,8 +27,8 @@ export namespace UGAdapter {
 
     let altVersions: AltVersion[] = [];
 
-    console.log("Fetching", URL);
-    await fetch(URL)
+    console.log("Fetching", `https://tabs.ultimate-guitar.com/tab/${taburl}`);
+    await fetch(`https://tabs.ultimate-guitar.com/tab/${taburl}`)
       .then((response) => response.text())
       .then((html) => {
         const dom = new JSDOM(html);
@@ -72,7 +72,17 @@ export namespace UGAdapter {
             (c: Contributor) => c.username
           ) ?? []),
         ];
-
+        console.log(
+          dataContent?.store?.page?.data?.tab_view?.versions
+            .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
+            .map((v: AltVersion) => ({
+              version: v.version,
+              taburl: v.tab_url?.replace(
+                "https://tabs.ultimate-guitar.com/tab/",
+                "URL missing"
+              ),
+            }))
+        );
         altVersions = dataContent?.store?.page?.data?.tab_view?.versions
           .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
           .map((v: AltVersion) => ({

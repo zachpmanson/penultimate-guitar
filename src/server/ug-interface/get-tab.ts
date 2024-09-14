@@ -1,8 +1,8 @@
 import { TabDto, TabType } from "@/models/models";
 import { DEFAULT_TAB } from "@/types/tab";
 import { TRPCError } from "@trpc/server";
-import { insertTab } from "./insert-tab";
 import prisma from "../prisma";
+import { insertTab } from "./insert-tab";
 import { UGAdapter } from "./ug-interface";
 
 export async function getTab(taburl: string) {
@@ -40,9 +40,7 @@ export async function getTab(taburl: string) {
       tuning: JSON.parse(savedTab.tuning ?? "{}"),
     };
   } else {
-    const fullurl = `https://tabs.ultimate-guitar.com/tab/${taburl}`;
-
-    const [song, tab, altVersions] = await UGAdapter.getTab(fullurl);
+    const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
     if (tab.songId === undefined) {
       throw new TRPCError({
         code: "NOT_FOUND",
@@ -60,5 +58,22 @@ export async function getTab(taburl: string) {
       console.error("Database error occured for", tab.taburl)
     );
   }
+  console.log(props);
   return props;
+}
+
+export async function getHighestRatedTab(taburl: string) {
+  // TODO use internal ratings if they exist
+
+  const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
+  insertTab(song, tab, altVersions).catch(() =>
+    console.error("Database error occured for", tab.taburl)
+  );
+  console.log(altVersions);
+  const rankings = [
+    { taburl: tab.taburl, rating: tab.rating },
+    ...altVersions.map((v) => ({ taburl: v.taburl, rating: v.rating })),
+  ].sort((a, b) => b.rating - a.rating);
+  console.log(rankings);
+  return rankings[0].taburl;
 }

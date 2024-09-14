@@ -1,4 +1,7 @@
+import LoadingSpinner from "@/components/loadingspinner";
+import SearchLink from "@/components/search/searchlink";
 import SearchResults from "@/components/search/searchresults";
+import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
@@ -44,55 +47,30 @@ function collapseResults(results: SearchResult[]) {
 
 export default function Search() {
   const [q] = useQueryState("q");
+
   const { setSearchText } = useSearchStore();
 
-  const {
-    data: dataInternal,
-    fetchNextPage: fetchNextPageInternal,
-    hasNextPage: hasNextPageInternal,
-    isLoading: isLoadingInternal,
-    isFetching: isFetchingInternal,
-  } = trpc.tab.searchTabsExternalFuzzy.useInfiniteQuery(
-    {
-      value: q ?? "",
-      search_type: "title",
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialCursor: 1,
-      enabled: !!q,
-    }
-  );
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
+    trpc.tab.searchTabsExternalFuzzy.useInfiniteQuery(
+      {
+        value: q ?? "",
+        search_type: "title",
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        initialCursor: 1,
+        enabled: !!q,
+      }
+    );
+
+  const results = data?.pages.map((p) => p.items).flat() ?? [];
 
   const loadPage = () => {
-    if (hasNextPageInternal) fetchNextPageInternal();
+    if (hasNextPage) fetchNextPage();
   };
 
-  const allItemsInternal = dataInternal
-    ? dataInternal.pages
-        .map((p) => p.items)
-        .flat()
-        .map((r, i) => ({
-          id: i,
-          song_id: 0,
-          song_name: r.name,
-          artist_name: r.artist,
-          type: r.type,
-          version: -1,
-          rating: -1,
-          date: "",
-          tab_url: r.taburl,
-          internal: true,
-          ...searchResultPlaceholder,
-        }))
-    : [];
-
-  const mergedResults = collapseResults(allItemsInternal);
-
   useEffect(() => {
-    if (q) {
-      setSearchText(q);
-    }
+    if (q) setSearchText(q);
   }, [q, setSearchText]);
 
   return (
@@ -106,13 +84,62 @@ export default function Search() {
           Only the highest rated versions of each are shown. This is in testing,
           search is fuzzy but it might be inaccurate.
         </p>
-        <SearchResults
-          results={mergedResults}
-          isLoading={isLoadingInternal}
-          isFetching={isFetchingInternal}
-          hasNextPage={hasNextPageInternal}
-          loadNextPage={loadPage}
-        />
+        <>
+          <div
+            className="mx-auto grid gap-1 w-full"
+            style={{
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            }}
+          >
+            {results.length === 0 ? (
+              <></>
+            ) : !isLoading ? (
+              <>
+                {results.map((r, i) => (
+                  <>
+                    {/* {r.name} - {r.artist} */}
+                    {r.tabs.map((t, i) => (
+                      <SearchLink
+                        key={i}
+                        best
+                        tab_url={t.taburl}
+                        song_name={r.name}
+                        artist_name={r.artist}
+                        rating={0}
+                        type={t.type}
+                        internal={false}
+                      />
+                    ))}
+                  </>
+                ))}
+
+                <div className="w-full flex flex-col items-center justify-start">
+                  {hasNextPage && (
+                    <PlainButton
+                      onClick={loadPage}
+                      className="flex-grow w-full flex items-center justify-center"
+                    >
+                      {isFetching ? (
+                        <LoadingSpinner className="h-8" />
+                      ) : (
+                        <div className="w-fit h-8 flex items-center justify-center">
+                          Load More
+                        </div>
+                      )}
+                    </PlainButton>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="text-center">No results found</p>
+            )}
+          </div>
+          {isLoading && (
+            <div className="flex items-center justify-center w-full">
+              <LoadingSpinner className="h-8" />
+            </div>
+          )}
+        </>
       </div>
     </>
   );
