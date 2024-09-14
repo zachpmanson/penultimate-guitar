@@ -1,6 +1,5 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
-import SearchResults from "@/components/search/searchresults";
 import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
 import { useSearchStore } from "@/state/search";

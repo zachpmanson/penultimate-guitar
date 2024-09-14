@@ -26,12 +26,6 @@ export const tabRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      type WhatWeNeed = {
-        name: string;
-        artist: string;
-        taburl: string; // but which one
-      };
-
       const PAGE_SIZE = 20;
       const songRows: {
         name: string;
