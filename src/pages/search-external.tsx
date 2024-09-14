@@ -97,7 +97,6 @@ export default function Search() {
               <>
                 {results.map((r, i) => (
                   <>
-                    {/* {r.name} - {r.artist} */}
                     {r.tabs.map((t, i) => (
                       <SearchLink
                         key={i}
@@ -107,7 +106,7 @@ export default function Search() {
                         artist_name={r.artist}
                         rating={0}
                         type={t.type}
-                        internal={false}
+                        internal={!!t.tabId}
                       />
                     ))}
                   </>

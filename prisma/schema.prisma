@@ -49,6 +49,7 @@ model PossibleSong {
 
   song Song? @relation(fields: [songId], references: [id])
 
+  @@index([taburl])
   @@index([name])
   @@index([artist])
 }

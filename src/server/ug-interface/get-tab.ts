@@ -64,16 +64,52 @@ export async function getTab(taburl: string) {
 
 export async function getHighestRatedTab(taburl: string) {
   // TODO use internal ratings if they exist
+  let savedTab: any;
+  try {
+    savedTab = await prisma.tab.findUnique({
+      where: {
+        taburl: taburl,
+      },
+      include: {
+        song: {
+          include: {
+            Tab: {
+              select: {
+                taburl: true,
+                version: true,
+                rating: true,
+                type: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (e) {
+    console.error("Find unique failed", e);
+  }
 
-  const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
-  insertTab(song, tab, altVersions).catch(() =>
-    console.error("Database error occured for", tab.taburl)
-  );
-  console.log(altVersions);
-  const rankings = [
-    { taburl: tab.taburl, rating: tab.rating },
-    ...altVersions.map((v) => ({ taburl: v.taburl, rating: v.rating })),
-  ].sort((a, b) => b.rating - a.rating);
-  console.log(rankings);
-  return rankings[0].taburl;
+  if (savedTab) {
+    const rankings = [
+      { taburl: savedTab.taburl, rating: savedTab.rating },
+      ...savedTab.song.Tab.map((v: any) => ({
+        taburl: v.taburl,
+        rating: v.rating,
+      })),
+    ].sort((a, b) => b.rating - a.rating);
+
+    return rankings[0].taburl;
+  } else {
+    const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
+    insertTab(song, tab, altVersions).catch(() =>
+      console.error("Database error occured for", tab.taburl)
+    );
+
+    const rankings = [
+      { taburl: tab.taburl, rating: tab.rating },
+      ...altVersions.map((v) => ({ taburl: v.taburl, rating: v.rating })),
+    ].sort((a, b) => b.rating - a.rating);
+
+    return rankings[0].taburl;
+  }
 }

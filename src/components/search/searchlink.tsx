@@ -32,7 +32,7 @@ export default function SearchLink({
           </div>
 
           <div className="flex flex-col gap-1 text-right">
-            <div>{type}</div>
+            <div>{type[0].toUpperCase() + type.slice(1)}</div>
             <div className="text-gray-400">
               {!Math.round(rating) ||
                 `${Math.round(rating * 100) / 100} / 5.00`}

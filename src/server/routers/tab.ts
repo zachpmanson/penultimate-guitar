@@ -32,11 +32,12 @@ export const tabRouter = createRouter({
         taburl: string; // but which one
       };
 
-      const PAGE_SIZE = 50;
+      const PAGE_SIZE = 10;
       const songRows: {
         name: string;
         artist: string;
         taburl: string[];
+        tabid: number[];
         type: string[];
         sml1: number;
         sml2: number;
@@ -45,28 +46,46 @@ export const tabRouter = createRouter({
         sml3: number;
       }[] = await ctx.prisma.$queryRawUnsafe(
         `
-          SELECT 
-            s."name",
-            s."artist",
-            array_agg(s."taburl") as taburl, 
-            array_agg(s."type") as type,
-            -- get similarity based on whole search term
-            similarity(s."name", $1) AS sml1, 
-            similarity(s."artist", $1) AS sml2,
-            word_similarity(s."name", $1) AS w_sml1,
-            word_similarity(s."artist", $1) AS w_sml2,
-            -- merge similarity to rank on
-            similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
-          FROM public."PossibleSong" s
+         with CloseSongs as (
+          select 
+                s."name",
+                s."artist",
+                s."taburl",
+                s."type",
+                -- get similarity based on whole search term
+                similarity(s."name", $1) AS sml1, 
+                similarity(s."artist", $1) AS sml2,
+                word_similarity(s."name", $1) AS w_sml1,
+                word_similarity(s."artist", $1) AS w_sml2,
+                -- merge similarity to rank on
+                similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
+          from public."PossibleSong" s
           WHERE
-            -- filter out anything where there is no word overlap
-            word_similarity(s."name", $1) > 0.3
-            OR word_similarity(s."artist", $1) > 0.3
-          group by 
-            (s."name", s."artist")
-          ORDER by
-            sml3 DESC
-          LIMIT ${PAGE_SIZE} OFFSET $2;
+                -- filter out anything where there is no word overlap
+                word_similarity(s."name", $1) > 0.3
+                OR word_similarity(s."artist", $1) > 0.3
+        )
+
+        SELECT 
+          s."name",
+          s."artist",
+          array_agg(s."taburl") as taburl, 
+          array_agg(ut."id") as tabId,
+          array_agg(s."type") as type,
+          -- get similarity based on whole search term
+          similarity(s."name", $1) AS sml1, 
+          similarity(s."artist", $1) AS sml2,
+          word_similarity(s."name", $1) AS w_sml1,
+          word_similarity(s."artist", $1) AS w_sml2,
+          -- merge similarity to rank on
+          similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
+        FROM CloseSongs s
+        left join public."Tab" ut on s."taburl" = ut."taburl"
+        group by 
+          (s."name", s."artist")
+        ORDER by
+          sml3 DESC
+        LIMIT ${PAGE_SIZE} OFFSET $2;
         `,
         input.value,
         (input.cursor - 1) * PAGE_SIZE
@@ -105,6 +124,7 @@ export const tabRouter = createRouter({
           types.push({
             type: t.type[i],
             taburl: t.taburl[i],
+            tabId: t.tabid?.[i],
           });
         }
         let index = t.type.findIndex((t) => t === "chords");
