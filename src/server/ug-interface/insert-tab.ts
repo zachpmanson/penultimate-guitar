@@ -76,26 +76,25 @@ export async function insertTab(
             console.error(`Error upserting alt '${altVersion.taburl}':`, e)
           );
       }
-
-      const taburls = [
-        tab.taburl,
-        ...altVersions.map((altVersion) => altVersion.taburl),
-      ];
-      prisma.possibleSong
-        .updateMany({
-          where: {
-            taburl: {
-              in: taburls,
-            },
-          },
-          data: {
-            songId: song.id,
-          },
-        })
-        .catch((e) => {
-          console.error("Error updating possibleSong", e);
-        });
     }
+    const taburls = [
+      tab.taburl,
+      ...altVersions.map((altVersion) => altVersion.taburl),
+    ];
+    prisma.possibleSong
+      .updateMany({
+        where: {
+          taburl: {
+            in: taburls,
+          },
+        },
+        data: {
+          songId: song.id,
+        },
+      })
+      .catch((e) => {
+        console.error("Error updating possibleSong", e);
+      });
   } catch (err) {
     console.warn("Insertion failed.", err);
   }
