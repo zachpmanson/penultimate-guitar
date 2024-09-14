@@ -13,6 +13,58 @@ export const tabRouter = createRouter({
       return await getTab(input);
     }),
 
+  searchTabsExternalFuzzy: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        search_type: z.string(),
+        cursor: z.number().gt(0),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const PAGE_SIZE = 50;
+      const tabIdRows: {
+        taburl: string;
+        name: string;
+        artist: string;
+        type: string;
+        sml1: number;
+        sml2: number;
+        w_sm1: number;
+        w_sm2: number;
+        sml3: number;
+      }[] = await ctx.prisma.$queryRawUnsafe(
+        `SELECT 
+      s."taburl", 
+      s."name",
+      s."artist",
+      s."type",
+      -- get similarity based on whole search term
+      similarity(s."name", $1) AS sml1, 
+      similarity(s."artist", $1) AS sml2,
+      word_similarity(s."name", $1) AS w_sml1,
+      word_similarity(s."artist", $1) AS w_sml2,
+      -- merge similarity to rank on
+      similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
+    FROM public."PossibleSong" s
+    WHERE
+      -- filter out anything where there is no word overlap
+      word_similarity(s."name", $1) > 0.3
+      OR word_similarity(s."artist", $1) > 0.3
+    ORDER by
+      sml3 DESC
+    LIMIT ${PAGE_SIZE} OFFSET $2;`,
+        input.value,
+        (input.cursor - 1) * PAGE_SIZE
+      );
+
+      console.log(tabIdRows);
+      return {
+        items: tabIdRows.map((i) => ({ ...i, internal: true, tab: undefined })),
+        nextCursor:
+          tabIdRows.length >= PAGE_SIZE ? input.cursor + 1 : undefined,
+      };
+    }),
   searchTabsInternalFuzzy: publicProcedure
     .input(
       z.object({

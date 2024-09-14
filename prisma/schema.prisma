@@ -28,10 +28,26 @@ model Tab {
 }
 
 model Song {
-  id     Int    @id @default(autoincrement())
+  id     Int    @id @default(autoincrement()) // autoincrement is dangerous here since we are using original song IDs
   name   String
   artist String
   Tab    Tab[]
+  possibleSongs PossibleSong[]
+
+  @@index([name])
+  @@index([artist])
+}
+
+model PossibleSong {
+  id     Int    @id @default(autoincrement())
+  name   String
+  artist String
+  taburl String
+  type   String
+  
+  songId Int?
+
+  song Song? @relation(fields: [songId], references: [id])
 
   @@index([name])
   @@index([artist])
