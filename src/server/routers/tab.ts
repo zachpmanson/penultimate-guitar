@@ -39,7 +39,7 @@ export const tabRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const strippedValue = input.value.replace(/\W/g, "");
+      const strippedValue = input.value.replace(/[^0-9a-z ]/g, "");
 
       const songRows: {
         name: string;
@@ -57,7 +57,7 @@ export const tabRouter = createRouter({
         strippedValue,
         input.page_size,
         (input.cursor - 1) * input.page_size,
-        strippedValue.slice(0, 5)
+        strippedValue.slice(0, 4)
       );
 
       console.log(songRows);

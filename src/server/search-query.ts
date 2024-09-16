@@ -5,7 +5,10 @@ export function getSearchQuery(tabType: SearchTabType) {
     return `
 -- stupid heuristic to cut the search space down. word_similarity is very expensive
 with PrefixFiltered as (
-	select * from public."PossibleSong" ps where ps."name" ilike concat('%',$4,'%') OR  ps."artist" ilike concat('%',$4,'%')
+	select * from public."PossibleSong" ps
+	where
+		(ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
+		and (length(ps."name") + length(ps."artist") + 1) >= length($1)
 ),
 CloseSongs as (
   select 
@@ -39,8 +42,9 @@ LIMIT $2 OFFSET $3;
     return `
 with PrefixFiltered as (
 	select * from public."PossibleSong" ps where 
-  (ps."name" ilike concat('%',$4,'%') OR  ps."artist" ilike concat('%',$4,'%'))
-  and ps."type" = '${tabType}'
+		(ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
+		and (length(ps."name") + length(ps."artist") + 1) >= length($1)
+    and ps."type" = '${tabType}'
 ),
 CloseSongs as (
   select 
