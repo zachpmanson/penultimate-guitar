@@ -7,7 +7,8 @@ set -e
 function read_children() {
     while read p; do
         echo "$p"
-        curl -s "$p" > "autorefresh/$(date -I)-$(grep -e "sitemap[0-9]" -e "sitemap_ukulele" -o <<< "$p").xml"
+        curl -s "$p" > "autorefresh/$(grep -e "sitemap[0-9]" -e "sitemap_ukulele" -o <<< "$p").xml"
+        # curl -s "$p" > "autorefresh/$(date -I)-$(grep -e "sitemap[0-9]" -e "sitemap_ukulele" -o <<< "$p").xml"
         sleep 10 
     done <sitemaps/sitemaps.txt
 }
