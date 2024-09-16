@@ -178,9 +178,10 @@ export const tabRouter = createRouter({
           OR word_similarity(s."artist", $1) > 0.3
         ORDER by
           sml3 DESC
-        LIMIT ${PAGE_SIZE} OFFSET $2;
+        LIMIT $2 OFFSET $3;
       `,
         input.value,
+        PAGE_SIZE,
         (input.cursor - 1) * PAGE_SIZE
       );
       console.log(tabIdRows);
