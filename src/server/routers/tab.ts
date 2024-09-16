@@ -39,6 +39,8 @@ export const tabRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
+      const strippedValue = input.value.replace(/\W/g, "");
+
       const songRows: {
         name: string;
         artist: string;
@@ -52,9 +54,10 @@ export const tabRouter = createRouter({
         sml3: number;
       }[] = await ctx.prisma.$queryRawUnsafe(
         getSearchQuery(input.tab_type),
-        input.value,
+        strippedValue,
         input.page_size,
-        (input.cursor - 1) * input.page_size
+        (input.cursor - 1) * input.page_size,
+        strippedValue.slice(0, 5)
       );
 
       console.log(songRows);

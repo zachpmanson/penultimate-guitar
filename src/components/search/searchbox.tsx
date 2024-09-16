@@ -42,9 +42,10 @@ export default function SearchBox() {
         setButtonText("Search");
       });
     } else {
-      if (router.pathname === "/search-internal") {
+      console.log(router.pathname);
+      if (router.pathname.startsWith("/search/internal")) {
         router.push(`/search/internal?q=${encodeURIComponent(searchText)}`);
-      } else if (router.pathname === "/search-external") {
+      } else if (router.pathname.startsWith("/search/external")) {
         router.push(`/search/external?q=${encodeURIComponent(searchText)}`);
       } else {
         router.push(`/search?q=${encodeURIComponent(searchText)}`);
@@ -54,7 +55,7 @@ export default function SearchBox() {
 
   const handleContextMenu = (e: any) => {
     e.preventDefault();
-    router.push(`/search-internal?q=${encodeURIComponent(searchText)}`);
+    router.push(`/search/internal?q=${encodeURIComponent(searchText)}`);
   };
 
   return (
