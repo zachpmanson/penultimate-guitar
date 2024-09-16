@@ -10,10 +10,10 @@ export function getSearchQuery(tabType: SearchTabType) {
                     s."taburl",
                     s."type",
                     -- get similarity based on whole search term
-                    similarity(s."name", $1) AS sml1, 
-                    similarity(s."artist", $1) AS sml2,
-                    word_similarity(s."name", $1) AS w_sml1,
-                    word_similarity(s."artist", $1) AS w_sml2,
+                    --similarity(s."name", $1) AS sml1, 
+                    --similarity(s."artist", $1) AS sml2,
+                    --word_similarity(s."name", $1) AS w_sml1,
+                    --word_similarity(s."artist", $1) AS w_sml2,
                     -- merge similarity to rank on
                     similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
               from public."PossibleSong" s
@@ -54,10 +54,10 @@ export function getSearchQuery(tabType: SearchTabType) {
                     s."taburl",
                     s."type",
                     -- get similarity based on whole search term
-                    similarity(s."name", $1) AS sml1, 
-                    similarity(s."artist", $1) AS sml2,
-                    word_similarity(s."name", $1) AS w_sml1,
-                    word_similarity(s."artist", $1) AS w_sml2,
+                    --similarity(s."name", $1) AS sml1, 
+                    --similarity(s."artist", $1) AS sml2,
+                    --word_similarity(s."name", $1) AS w_sml1,
+                    --word_similarity(s."artist", $1) AS w_sml2,
                     -- merge similarity to rank on
                     similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
               from public."PossibleSong" s
