@@ -75,10 +75,10 @@ export default function Search() {
   return (
     <>
       <Head>
-        <title>Search External Results</title>
+        <title>Search Results</title>
       </Head>
       <div className="max-w-[80ch] w-full m-auto">
-        <h1 className="text-lg">Search External Results</h1>
+        <h1 className="text-lg">Search Results</h1>
         <p className="text-gray-400 mb-4 font-extralight">
           Only the highest rated versions of each are shown. This is in testing,
           search is fuzzy but it might be inaccurate.
