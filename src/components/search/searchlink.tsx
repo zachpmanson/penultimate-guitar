@@ -35,13 +35,13 @@ export default function SearchLink({
           <div className="flex flex-col gap-1 items-end justify-between">
             <div
               className={
-                `w-fit rounded px-1 text-white ` +
+                `w-fit rounded px-1 opacity-70 text-white ` +
                 {
-                  ukulele: "bg-purple-300",
-                  chords: "bg-blue-300",
-                  tabs: "bg-emerald-300",
-                  bass: "bg-purple-300",
-                  drums: "bg-yellow-300",
+                  ukulele: "bg-purple-700",
+                  chords: "bg-blue-700",
+                  tabs: "bg-green-700",
+                  bass: "bg-red-700",
+                  drums: "bg-yellow-700",
                 }[type]
               }
             >
