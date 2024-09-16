@@ -18,7 +18,7 @@ mkdir autorefresh
 
 
 echo Pulling root sitemap
-time curl -s https://tab.ultimate-guitar.com/sitemap.xml \
+time curl -s -f https://tab.ultimate-guitar.com/sitemap.xml \
     | grep ".com/sitemap" \
     | sed -E 's/.*<loc>https:\/\/([^<]*)<\/loc>.*/https:\/\/\1/' \
     | grep -e "sitemap[0-9]" -e "sitemap_ukulele" \
