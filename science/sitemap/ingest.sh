@@ -10,7 +10,7 @@ function read_children() {
         curl -s "$p" > "autorefresh/$(grep -e "sitemap[0-9]" -e "sitemap_ukulele" -o <<< "$p").xml"
         # curl -s "$p" > "autorefresh/$(date -I)-$(grep -e "sitemap[0-9]" -e "sitemap_ukulele" -o <<< "$p").xml"
         sleep 10 
-    done <sitemaps/sitemaps.txt
+    done <autorefresh/sitemaps.txt
 }
 
 rm -rf autorefresh
