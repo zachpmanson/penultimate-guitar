@@ -2,6 +2,17 @@ import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
 import { createRouter, publicProcedure } from "../trpc";
 import { getHighestRatedTab, getTab } from "../ug-interface/get-tab";
+import { getSearchQuery } from "../search-query";
+
+const searchTabType = z.enum([
+  "chords",
+  "tabs",
+  "ukulele",
+  "bass",
+  "drums",
+  "all",
+]);
+export type SearchTabType = z.infer<typeof searchTabType>;
 
 export const tabRouter = createRouter({
   getTab: publicProcedure.input(z.string()).query(async ({ input }) => {
@@ -22,6 +33,7 @@ export const tabRouter = createRouter({
       z.object({
         value: z.string(),
         search_type: z.string(),
+        tab_type: searchTabType,
         cursor: z.number().gt(0),
       })
     )
@@ -39,49 +51,7 @@ export const tabRouter = createRouter({
         w_sm2: number;
         sml3: number;
       }[] = await ctx.prisma.$queryRawUnsafe(
-        `
-         with CloseSongs as (
-          select 
-                s."name",
-                s."artist",
-                s."taburl",
-                s."type",
-                -- get similarity based on whole search term
-                similarity(s."name", $1) AS sml1, 
-                similarity(s."artist", $1) AS sml2,
-                word_similarity(s."name", $1) AS w_sml1,
-                word_similarity(s."artist", $1) AS w_sml2,
-                -- merge similarity to rank on
-                similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
-          from public."PossibleSong" s
-          WHERE
-                -- filter out anything where there is no word overlap
-                word_similarity(s."name", $1) > 0.3
-                OR word_similarity(s."artist", $1) > 0.3
-        )
-
-        SELECT 
-          s."name",
-          s."artist",
-          array_agg(s."taburl") as taburl, 
-          array_agg(ut."id") as tabId,
-          array_agg(s."type") as type,
-          -- get similarity based on whole search term
-          similarity(s."name", $1) AS sml1, 
-          similarity(s."artist", $1) AS sml2,
-          word_similarity(s."name", $1) AS w_sml1,
-          word_similarity(s."artist", $1) AS w_sml2,
-          -- merge similarity to rank on
-          similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
-        FROM CloseSongs s
-        left join public."Tab" ut on s."taburl" = ut."taburl"
-        -- TODO add a join to Song to get the real name and artist, prefer over the PossibleSong values
-        group by 
-          (s."name", s."artist")
-        ORDER by
-          sml3 DESC
-        LIMIT $2 OFFSET $3;
-        `,
+        getSearchQuery(input.tab_type),
         input.value,
         PAGE_SIZE,
         (input.cursor - 1) * PAGE_SIZE

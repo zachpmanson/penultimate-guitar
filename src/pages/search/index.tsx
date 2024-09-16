@@ -2,11 +2,12 @@ import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
 import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
+import { SearchTabType } from "@/server/routers/tab";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import Head from "next/head";
 import { useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const searchResultPlaceholder = {
   artist_id: 0,
@@ -23,37 +24,19 @@ const searchResultPlaceholder = {
   artist_url: "r.artistUrl",
 };
 
-/** Merge versions of the same tab, prefer higher rating */
-function collapseResults(results: SearchResult[]) {
-  let colRes: SearchResult[] = [];
-  for (let r of results) {
-    const existing = colRes.findIndex(
-      (c) =>
-        c.song_name === r.song_name &&
-        c.artist_name === r.artist_name &&
-        c.type === r.type
-    );
-    if (existing === -1) {
-      colRes.push(r);
-    } else {
-      if (r.rating > colRes[existing].rating) {
-        colRes[existing] = r;
-      }
-    }
-  }
-  return colRes;
-}
-
 export default function Search() {
   const [q] = useQueryState("q");
 
   const { setSearchText } = useSearchStore();
+
+  const [tabType, setTabType] = useState<SearchTabType>("all");
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
     trpc.tab.searchTabsExternalFuzzy.useInfiniteQuery(
       {
         value: q ?? "",
         search_type: "title",
+        tab_type: tabType,
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -78,7 +61,19 @@ export default function Search() {
         <title>Search Results</title>
       </Head>
       <div className="max-w-[80ch] w-full m-auto">
-        <h1 className="text-lg">Search Results</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-lg">Search Results</h1>
+          <select
+            className="p-2 rounded"
+            onChange={(e) => setTabType(e.target.value as SearchTabType)}
+          >
+            <option value="all">All</option>
+            <option value="tabs">Tabs</option>
+            <option value="chords">Chords</option>
+            <option value="ukulele">Ukulele</option>
+            <option value="bass">Bass</option>
+          </select>
+        </div>
         <p className="text-gray-400 mb-4 font-extralight">
           Only the highest rated versions of each are shown. This is in testing,
           search is fuzzy but it might be inaccurate.
