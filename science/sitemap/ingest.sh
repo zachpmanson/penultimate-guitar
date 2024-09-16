@@ -42,4 +42,4 @@ time sort autorefresh/clean-locations.txt | uniq > autorefresh/clean-locations-s
 echo Extracting names and artists into CSV
 time python3 taburl_to_song.py autorefresh/clean-locations-sorted.txt autorefresh/tab-urls.csv > /dev/null
 
-time psql -Atx $DATABASE_URL -f update_possible_songs.sql
+time psql $DATABASE_URL -f update_possible_songs.sql
