@@ -75,6 +75,7 @@ export const tabRouter = createRouter({
           similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
         FROM CloseSongs s
         left join public."Tab" ut on s."taburl" = ut."taburl"
+        -- TODO add a join to Song to get the real name and artist, prefer over the PossibleSong values
         group by 
           (s."name", s."artist")
         ORDER by

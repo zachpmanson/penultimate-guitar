@@ -1,6 +1,14 @@
 import Link from "next/link";
 import PlainButton from "../shared/plainbutton";
 
+function normalizedName(str: string) {
+  str = str.toLowerCase();
+  if (str === "bass tabs") {
+    return "bass";
+  }
+  return str;
+}
+
 export default function SearchLink({
   tab_url,
   song_name,
@@ -35,19 +43,19 @@ export default function SearchLink({
           <div className="flex flex-col gap-1 items-end justify-between">
             <div
               className={
-                `w-fit rounded px-1 opacity-70 text-white ` +
+                `w-fit rounded-lg px-2 py-1 opacity-70 text-white uppercase text-xs ` +
                 {
                   ukulele: "bg-purple-700",
                   chords: "bg-blue-700",
                   tabs: "bg-green-700",
                   bass: "bg-red-700",
                   drums: "bg-yellow-700",
-                }[type]
+                }[normalizedName(type)]
               }
             >
-              {type[0].toUpperCase() + type.slice(1)}
+              {normalizedName(type)}
             </div>
-            <div className="text-gray-400 min-w-20">
+            <div className="text-gray-400 min-w-20 text-right">
               {!Math.round(rating) || `${Math.round(rating * 100) / 100} / 5`}
             </div>
           </div>

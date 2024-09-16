@@ -43,9 +43,9 @@ export default function SearchBox() {
       });
     } else {
       if (router.pathname === "/search-internal") {
-        router.push(`/search-internal?q=${encodeURIComponent(searchText)}`);
+        router.push(`/search/internal?q=${encodeURIComponent(searchText)}`);
       } else if (router.pathname === "/search-external") {
-        router.push(`/search-external?q=${encodeURIComponent(searchText)}`);
+        router.push(`/search/external?q=${encodeURIComponent(searchText)}`);
       } else {
         router.push(`/search?q=${encodeURIComponent(searchText)}`);
       }
