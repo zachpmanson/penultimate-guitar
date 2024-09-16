@@ -1,6 +1,7 @@
 
 import csv
 import sys
+from typing import final
 
 
 
@@ -20,7 +21,7 @@ with open(input_file, mode='r') as input_file:
             if "/" in (row):
                 artist,slug = row.split("/")
                 if artist == "":
-                    # see taburl=//camera-phone-chords-4954027
+                    # see taburl=tab//camera-phone-chords-4954027
                     continue
                 # print(artist,slug)
                 slug_words = slug.split("-")
@@ -47,7 +48,9 @@ with open(input_file, mode='r') as input_file:
                         final_artist_words.append(word[0].upper() + word[1:])
                 final_artist = " ".join(final_artist_words)
 
-                
+                if final_title == "" or final_artist == "":
+                    # see taburl tab/arctic-monkeys/--chords-2473050
+                    continue
                 print(final_title, final_artist, row, suffix)
                 writer.writerow([final_title, final_artist, row, suffix])
 
