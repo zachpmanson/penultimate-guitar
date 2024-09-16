@@ -34,11 +34,11 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         tab_type: searchTabType,
+        page_size: z.number().gt(0).lte(100),
         cursor: z.number().gt(0),
       })
     )
     .query(async ({ ctx, input }) => {
-      const PAGE_SIZE = 20;
       const songRows: {
         name: string;
         artist: string;
@@ -53,8 +53,8 @@ export const tabRouter = createRouter({
       }[] = await ctx.prisma.$queryRawUnsafe(
         getSearchQuery(input.tab_type),
         input.value,
-        PAGE_SIZE,
-        (input.cursor - 1) * PAGE_SIZE
+        input.page_size,
+        (input.cursor - 1) * input.page_size
       );
 
       console.log(songRows);
@@ -105,7 +105,8 @@ export const tabRouter = createRouter({
 
       return {
         items: a,
-        nextCursor: songRows.length >= PAGE_SIZE ? input.cursor + 1 : undefined,
+        nextCursor:
+          songRows.length >= input.page_size ? input.cursor + 1 : undefined,
       };
     }),
 

@@ -37,6 +37,7 @@ export default function Search() {
         value: q ?? "",
         search_type: "title",
         tab_type: tabType,
+        page_size: 20,
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
