@@ -6,7 +6,7 @@ set -e
 
 function read_children() {
     while read p; do
-        OUTFILE="autorefresh/$(grep -E "sitemap[0-9]+" -E "sitemap_ukulele" -o <<< "$p").xml"
+        OUTFILE="autorefresh/$(grep -E "sitemap[0-9]+|sitemap_ukulele" -o <<< "$p").xml"
         echo "$p" ">" "$OUTFILE"
         curl -s "$p" > "$(echo $OUTFILE)"
         sleep 10 
