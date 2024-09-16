@@ -19,6 +19,9 @@ with open(input_file, mode='r') as input_file:
             row = row.strip()
             if "/" in (row):
                 artist,slug = row.split("/")
+                if artist == "":
+                    # see taburl=//camera-phone-chords-4954027
+                    continue
                 # print(artist,slug)
                 slug_words = slug.split("-")
                 slug_artist = artist.split("-")
