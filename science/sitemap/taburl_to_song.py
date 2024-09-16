@@ -20,17 +20,13 @@ with open(input_file, mode='r') as input_file:
             row = row.strip()
             if "/" in (row):
                 artist,slug = row.split("/")
-                if artist == "":
-                    # see taburl=tab//camera-phone-chords-4954027
-                    continue
-                # print(artist,slug)
+     
                 slug_words = slug.split("-")
                 slug_artist = artist.split("-")
                 
                 title_words = slug_words[:-2]
                 artist_words= slug_artist
 
-                # print(title_words)
                 suffix = slug_words[-2]
                 suffixes.add(suffix)
                 if suffix not in valid_suffixes:
