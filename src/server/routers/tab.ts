@@ -1,8 +1,8 @@
 import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
+import { querySitemap } from "../search-query";
 import { createRouter, publicProcedure } from "../trpc";
 import { getHighestRatedTab, getTab } from "../ug-interface/get-tab";
-import { getSearchQuery } from "../search-query";
 
 const searchTabType = z.enum([
   "chords",
@@ -28,7 +28,7 @@ export const tabRouter = createRouter({
       return await getHighestRatedTab(input);
     }),
 
-  searchTabsExternalFuzzy: publicProcedure
+  querySitemap: publicProcedure
     .input(
       z.object({
         value: z.string(),
@@ -38,79 +38,30 @@ export const tabRouter = createRouter({
         cursor: z.number().gt(0),
       })
     )
-    .query(async ({ ctx, input }) => {
-      const strippedValue = input.value.replace(/[^0-9a-z ]/g, "");
-
-      const songRows: {
-        name: string;
-        artist: string;
-        taburl: string[];
-        tabid: number[];
-        type: string[];
-        sml1: number;
-        sml2: number;
-        w_sm1: number;
-        w_sm2: number;
-        sml3: number;
-      }[] = await ctx.prisma.$queryRawUnsafe(
-        getSearchQuery(input.tab_type),
-        strippedValue,
-        input.page_size,
-        (input.cursor - 1) * input.page_size,
-        strippedValue.slice(0, 4)
+    .query(async ({ input }) => {
+      return await querySitemap(
+        input.value,
+        input.tab_type,
+        input.cursor,
+        input.page_size
       );
-
-      console.log(songRows);
-      const a = songRows.map((t) => {
-        let types = [];
-        let hasTypes = {
-          chords: false,
-          tab: false,
-          ukulele: false,
-          bass: false,
-        };
-        for (let i = 0; i < t.taburl.length; i++) {
-          if (t.type[i] === "chords") {
-            if (hasTypes.chords) continue;
-            hasTypes.chords = true;
-          }
-
-          if (t.type[i] === "tabs") {
-            if (hasTypes.tab) continue;
-            hasTypes.tab = true;
-          }
-
-          if (t.type[i] === "ukulele") {
-            if (hasTypes.ukulele) continue;
-            hasTypes.ukulele = true;
-          }
-
-          if (t.type[i] === "bass") {
-            if (hasTypes.bass) continue;
-            hasTypes.bass = true;
-          }
-
-          types.push({
-            type: t.type[i],
-            taburl: t.taburl[i],
-            tabId: t.tabid?.[i],
-          });
-        }
-        let index = t.type.findIndex((t) => t === "chords");
-        if (index === -1) index = t.type.findIndex((t) => t === "tab");
-        if (index === -1) index = 0;
-        return {
-          name: t.name,
-          artist: t.artist,
-          tabs: types,
-        };
-      });
-
-      return {
-        items: a,
-        nextCursor:
-          songRows.length >= input.page_size ? input.cursor + 1 : undefined,
-      };
+    }),
+  querySitemapLazy: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        tab_type: searchTabType,
+        cursor: z.number().gt(0),
+        page_size: z.number().gt(0).lte(100),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return await querySitemap(
+        input.value,
+        input.tab_type,
+        input.cursor,
+        input.page_size
+      );
     }),
 
   searchTabsInternalFuzzy: publicProcedure
@@ -247,7 +198,7 @@ export const tabRouter = createRouter({
       );
     }),
 
-  searchTabsLazy: publicProcedure
+  searchTabsExternalLazy: publicProcedure
     .input(
       z.object({
         value: z.string(),

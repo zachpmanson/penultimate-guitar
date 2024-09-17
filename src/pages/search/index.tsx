@@ -32,7 +32,7 @@ export default function Search() {
   const [tabType, setTabType] = useState<SearchTabType>("all");
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
-    trpc.tab.searchTabsExternalFuzzy.useInfiniteQuery(
+    trpc.tab.querySitemap.useInfiniteQuery(
       {
         value: q ?? "",
         search_type: "title",

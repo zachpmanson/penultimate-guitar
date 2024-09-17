@@ -49,7 +49,7 @@ export default function ImportPlaylistDialog({
   navigateOnComplete?: string;
 }) {
   const router = useRouter();
-  const { mutateAsync: search } = trpc.tab.searchTabsLazy.useMutation();
+  const { mutateAsync: search } = trpc.tab.querySitemapLazy.useMutation();
   const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
   const alreadySearching = useRef(false);
@@ -60,11 +60,13 @@ export default function ImportPlaylistDialog({
     const getSearch = async (searchString: string) => {
       await search({
         value: searchString,
-        search_type: "title",
+        // search_type: "title",
+        tab_type: "chords",
         cursor: 1,
+        page_size: 1,
       })
         .then((res) => {
-          const newTab = getTabLinkIfExists(res.items);
+          const newTab = res.items?.[0];
           if (newTab) {
             setPlaylistTabs((old) => [...old, newTab]);
             addSavedTab(newTab, playlist.name);
