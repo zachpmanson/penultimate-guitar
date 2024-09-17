@@ -161,21 +161,21 @@ export default function Directory({
 const PAGE_SIZE = 100;
 
 export async function getStaticPaths() {
-  let songCount = await prisma.song.aggregate({
-    _count: {
-      id: true,
-    },
-  });
+  // let songCount = await prisma.song.aggregate({
+  //   _count: {
+  //     id: true,
+  //   },
+  // });
 
-  const songPages = Math.ceil(songCount._count.id / PAGE_SIZE);
+  // const songPages = Math.ceil(songCount._count.id / PAGE_SIZE);
 
-  const artistPaths = Array.from(Array(songPages).keys()).map((num) => ({
-    params: { order: "artist", page: (num + 1).toString() },
-  }));
+  // const artistPaths = Array.from(Array(songPages).keys()).map((num) => ({
+  //   params: { order: "artist", page: (num + 1).toString() },
+  // }));
 
-  const paths = [...artistPaths];
+  // const paths = [...artistPaths];
 
-  return { paths, fallback: "blocking" };
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

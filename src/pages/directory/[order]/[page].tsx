@@ -140,24 +140,24 @@ export default function Directory({
 const PAGE_SIZE = 100;
 
 export async function getStaticPaths() {
-  let tabCount = await prisma.tab.aggregate({
-    _count: {
-      taburl: true,
-    },
-  });
+  // let tabCount = await prisma.tab.aggregate({
+  //   _count: {
+  //     taburl: true,
+  //   },
+  // });
 
-  const tabPages = Math.ceil(tabCount._count.taburl / PAGE_SIZE);
+  // const tabPages = Math.ceil(tabCount._count.taburl / PAGE_SIZE);
 
-  const newPaths = Array.from(Array(tabPages).keys()).map((num) => ({
-    params: { order: "new", page: (num + 1).toString() },
-  }));
-  const oldPaths = Array.from(Array(tabPages).keys()).map((num) => ({
-    params: { order: "old", page: (num + 1).toString() },
-  }));
+  // const newPaths = Array.from(Array(tabPages).keys()).map((num) => ({
+  //   params: { order: "new", page: (num + 1).toString() },
+  // }));
+  // const oldPaths = Array.from(Array(tabPages).keys()).map((num) => ({
+  //   params: { order: "old", page: (num + 1).toString() },
+  // }));
 
-  const paths = [...newPaths, ...oldPaths];
+  // const paths = [...newPaths, ...oldPaths];
 
-  return { paths, fallback: "blocking" };
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
