@@ -37,6 +37,7 @@ export const tabRouter = createRouter({
     .input(
       z.object({
         value: z.string(),
+        artist: z.string().optional(),
         search_type: z.string(),
         tab_type: searchTabType,
         page_size: z.number().gt(0).lte(100),
@@ -46,6 +47,7 @@ export const tabRouter = createRouter({
     .query(async ({ input }) => {
       return await querySitemap(
         input.value,
+        input.artist,
         input.tab_type,
         input.cursor,
         input.page_size
@@ -55,6 +57,7 @@ export const tabRouter = createRouter({
     .input(
       z.object({
         value: z.string(),
+        artist: z.string().optional(),
         tab_type: searchTabType,
         cursor: z.number().gt(0),
         page_size: z.number().gt(0).lte(100),
@@ -63,6 +66,7 @@ export const tabRouter = createRouter({
     .mutation(async ({ input }) => {
       return await querySitemap(
         input.value,
+        input.artist,
         input.tab_type,
         input.cursor,
         input.page_size

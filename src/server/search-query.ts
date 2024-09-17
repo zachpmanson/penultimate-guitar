@@ -1,15 +1,44 @@
 import prisma from "./prisma";
 import { SearchTabType } from "./routers/tab";
 
-function getSearchQuery(tabType: SearchTabType) {
-  if (tabType === "all") {
-    return `
+function getSearchQuery(tabType: SearchTabType, includeArtist: boolean) {
+  const heuristic = includeArtist
+    ? `
+    ps."name" ilike concat('%',$4,'%')
+    and ps."artist" ilike concat('%',$6,'%')
+  `
+    : `
+  (ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
+		and (length(ps."name") + length(ps."artist") + 4) >= length($1)
+  `;
+
+  const tabTypeFilter = tabType === "all" ? "" : `and ps."type" = '${tabType}'`;
+
+  const wordSimilarityFilter = includeArtist
+    ? `
+    word_similarity(s."name", $1) > 0.5
+    or word_similarity(s."artist", $5) > 0.5
+  `
+    : `
+    word_similarity(s."name", $1) > 0.5
+    OR word_similarity(s."artist", $1) > 0.5
+  `;
+
+  const similarityRank = includeArtist
+    ? `
+    similarity(s."name", $1) + similarity(s."artist", $5) AS sml3
+  `
+    : `
+    similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
+  `;
+
+  return `
 -- stupid heuristic to cut the search space down. word_similarity is very expensive
 with PrefixFiltered as (
 	select * from public."PossibleSong" ps
 	where
-		(ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
-		and (length(ps."name") + length(ps."artist") + 4) >= length($1)
+		${heuristic}
+    ${tabTypeFilter}
 ),
 CloseSongs as (
   select 
@@ -20,8 +49,7 @@ CloseSongs as (
   from PrefixFiltered s
   WHERE
         -- filter out anything where there is no word overlap
-        word_similarity(s."name", $1) > 0.5
-        OR word_similarity(s."artist", $1) > 0.5
+        ${wordSimilarityFilter}
 )
 SELECT 
   s."name",
@@ -29,7 +57,7 @@ SELECT
   array_agg(s."taburl") as taburl, 
   array_agg(ut."id") as tabId,
   array_agg(s."type") as type,
-  similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
+  ${similarityRank}
 FROM CloseSongs s
 left join public."Tab" ut on s."taburl" = ut."taburl"
 -- TODO add a join to Song to get the real name and artist, prefer over the PossibleSong values
@@ -39,47 +67,11 @@ ORDER by
   sml3 DESC
 LIMIT $2 OFFSET $3;
 `;
-  } else {
-    return `
-with PrefixFiltered as (
-	select * from public."PossibleSong" ps where 
-		(ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
-		and (length(ps."name") + length(ps."artist") + 4) >= length($1)
-    and ps."type" = '${tabType}'
-),
-CloseSongs as (
-  select 
-        s."name",
-        s."artist",
-        s."taburl",
-        s."type"
-  from PrefixFiltered s
-  WHERE
-        -- filter out anything where there is no word overlap
-        word_similarity(s."name", $1) > 0.5
-        OR word_similarity(s."artist", $1) > 0.5
-)
-SELECT 
-  s."name",
-  s."artist",
-  array_agg(s."taburl") as taburl, 
-  array_agg(ut."id") as tabId,
-  array_agg(s."type") as type,
-  similarity(s."name", $1) + similarity(s."artist", $1) AS sml3
-FROM CloseSongs s
-left join public."Tab" ut on s."taburl" = ut."taburl"
--- TODO add a join to Song to get the real name and artist, prefer over the PossibleSong values
-group by 
-  (s."name", s."artist")
-ORDER by
-  sml3 DESC
-LIMIT $2 OFFSET $3;
-`;
-  }
 }
 
 export async function querySitemap(
   value: string,
+  artist: string | undefined,
   tab_type: SearchTabType,
   cursor: number,
   page_size: number
@@ -97,11 +89,13 @@ export async function querySitemap(
     type: SearchTabType[];
     sml3: number;
   }[] = await prisma.$queryRawUnsafe(
-    getSearchQuery(tab_type),
+    getSearchQuery(tab_type, !!artist),
     strippedValue,
     page_size,
     (cursor - 1) * page_size,
-    strippedValue.slice(0, 4)
+    strippedValue.slice(0, 4),
+    artist ?? "",
+    artist?.slice(0, 4) ?? ""
   );
 
   const a = songRows.map((t) => {

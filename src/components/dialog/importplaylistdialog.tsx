@@ -57,10 +57,10 @@ export default function ImportPlaylistDialog({
   const [attemptCount, setAttemptCount] = useState(0);
 
   useEffect(() => {
-    const getSearch = async (searchString: string) => {
+    const getSearch = async (searchString: string, artist: string) => {
       await search({
         value: searchString,
-        // search_type: "title",
+        artist: artist,
         tab_type: "chords",
         cursor: 1,
         page_size: 1,
@@ -100,7 +100,7 @@ export default function ImportPlaylistDialog({
       for (let track of currentPlaylist.tracks) {
         setCurrentlyFinding(track);
 
-        await getSearch(`${track.name} ${track.artists[0]}`);
+        await getSearch(track.name, track.artists.join(" "));
         setAttemptCount((old) => old + 1);
       }
       setCurrentlyFinding(undefined);
