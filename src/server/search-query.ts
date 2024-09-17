@@ -44,7 +44,7 @@ LIMIT $2 OFFSET $3;
 with PrefixFiltered as (
 	select * from public."PossibleSong" ps where 
 		(ps."name" ilike concat('%',$4,'%') or ps."artist" ilike concat('%',$4,'%'))
-		and (length(ps."name") + length(ps."artist") + 1) >= length($1)
+		and (length(ps."name") + length(ps."artist") + 4) >= length($1)
     and ps."type" = '${tabType}'
 ),
 CloseSongs as (
