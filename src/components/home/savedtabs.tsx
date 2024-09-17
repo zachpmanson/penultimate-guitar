@@ -18,7 +18,7 @@ function sortByName(s1: string, s2: string) {
 
 export default function SavedTabs() {
   const session = useSession();
-  const { savedTabs, flatTabs } = useSavedTabs();
+  const { savedTabs, flatTabs, isLoadingTabs } = useSavedTabs();
   const allSaved = flatTabs.map((t) => t.taburl);
 
   const favourites = savedTabs.find((f) => f.name === "Favourites");
@@ -28,7 +28,7 @@ export default function SavedTabs() {
         <div>
           <h1 className="text-left text-xl my-4">Favourites</h1>
         </div>
-        {session.status === "loading" ? (
+        {isLoadingTabs ? (
           <LoadingSpinner className="h-8" />
         ) : allSaved.length === 0 ? (
           <div className="flex flex-col gap-1 mt-2">
@@ -55,15 +55,10 @@ export default function SavedTabs() {
               )}
               {savedTabs
                 .sort((a, b) => sortByName(a.name, b.name))
-                .map(
-                  (folder, i) =>
-                    folder.name !== "Favourites" && (
-                      <FolderPanel
-                        folder={folder}
-                        key={`${i}-${folder.name}`}
-                      />
-                    )
-                )}
+                .filter((f) => f.name !== "Favourites")
+                .map((folder, i) => (
+                  <FolderPanel folder={folder} key={`${i}-${folder.name}`} />
+                ))}
             </>
           </div>
         )}

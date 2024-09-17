@@ -131,10 +131,7 @@ export default function useSavedTabs() {
     [savedTabs, userKey]
   );
 
-  const flatTabs = useMemo(
-    () => savedTabs[userKey]?.flatMap((f) => f.tabs) ?? [],
-    [savedTabs, userKey]
-  );
+  const flatTabs = savedTabs[userKey]?.flatMap((f) => f.tabs) ?? [];
 
   return {
     savedTabs: savedTabs[userKey] ?? [],
