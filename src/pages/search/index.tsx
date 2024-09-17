@@ -92,7 +92,7 @@ export default function Search() {
             ) : !isLoading ? (
               <>
                 {results.map((r, i) => (
-                  <SongItem song={r} />
+                  <SongItem song={r} key={i} />
                 ))}
               </>
             ) : (
