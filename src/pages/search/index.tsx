@@ -1,5 +1,6 @@
 import LoadingSpinner from "@/components/loadingspinner";
 import SearchLink from "@/components/search/searchlink";
+import SongItem from "@/components/search/songitem";
 import PlainButton from "@/components/shared/plainbutton";
 import { SearchResult } from "@/models/models";
 import { SearchTabType } from "@/server/routers/tab";
@@ -79,9 +80,9 @@ export default function Search() {
           Only the highest rated versions of each are shown. This is in testing,
           search is fuzzy but it might be inaccurate.
         </p>
-        <>
+        <div className="flex flex-col gap-2 justify-center items-center">
           <div
-            className="mx-auto grid gap-1 w-full"
+            className="mx-auto grid gap-5 w-full"
             style={{
               gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
             }}
@@ -91,41 +92,27 @@ export default function Search() {
             ) : !isLoading ? (
               <>
                 {results.map((r, i) => (
-                  <>
-                    {r.tabs.map((t, i) => (
-                      <SearchLink
-                        key={i}
-                        best
-                        tab_url={t.taburl}
-                        song_name={r.name}
-                        artist_name={r.artist}
-                        rating={0}
-                        type={t.type}
-                        internal={!!t.tabId}
-                      />
-                    ))}
-                  </>
+                  <SongItem song={r} />
                 ))}
-
-                <div className="w-full flex flex-col items-center justify-start">
-                  {hasNextPage && (
-                    <PlainButton
-                      onClick={loadPage}
-                      className="flex-grow w-full flex items-center justify-center"
-                    >
-                      {isFetching ? (
-                        <LoadingSpinner className="h-8" />
-                      ) : (
-                        <div className="w-fit h-8 flex items-center justify-center">
-                          Load More
-                        </div>
-                      )}
-                    </PlainButton>
-                  )}
-                </div>
               </>
             ) : (
               <p className="text-center">No results found</p>
+            )}
+          </div>
+          <div className="flex flex-col w-64 items-center justify-start">
+            {hasNextPage && (
+              <PlainButton
+                onClick={loadPage}
+                className="flex-grow w-full flex items-center justify-center"
+              >
+                {isFetching ? (
+                  <LoadingSpinner className="h-8" />
+                ) : (
+                  <div className="w-fit h-8 flex items-center justify-center">
+                    Load More
+                  </div>
+                )}
+              </PlainButton>
             )}
           </div>
           {isLoading && (
@@ -133,7 +120,7 @@ export default function Search() {
               <LoadingSpinner className="h-8" />
             </div>
           )}
-        </>
+        </div>
       </div>
     </>
   );

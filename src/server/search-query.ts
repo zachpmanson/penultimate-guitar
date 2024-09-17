@@ -69,13 +69,23 @@ LIMIT $2 OFFSET $3;
 `;
 }
 
+export type SitemapSearchResult = {
+  tabs: {
+    type: "chords" | "tabs" | "ukulele" | "bass" | "drums" | "all";
+    taburl: string;
+    tabId: number | null;
+  }[];
+  name: string;
+  artist: string;
+};
+
 export async function querySitemap(
   value: string,
   artist: string | undefined,
   tab_type: SearchTabType,
   cursor: number,
   page_size: number
-) {
+): Promise<{ items: SitemapSearchResult[]; nextCursor?: number }> {
   const strippedValue = value
     .toLowerCase()
     .replace(/[^0-9a-z ]/g, "")
