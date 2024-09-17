@@ -56,7 +56,10 @@ export default function SavedTabs() {
                 .map(
                   (folder, i) =>
                     folder.name !== "Favourites" && (
-                      <FolderPanel folder={folder} key={i} />
+                      <FolderPanel
+                        folder={folder}
+                        key={`${i}-${folder.name}`}
+                      />
                     )
                 )}
             </>

@@ -85,9 +85,9 @@ export async function querySitemap(
   page_size: number
 ) {
   const strippedValue = value
-    .replace(/[^0-9a-zA-Z ]/g, "")
-    .replace(/ +/g, " ")
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/[^0-9a-z ]/g, "")
+    .replace(/ +/g, " ");
   console.log("Searching", strippedValue);
   const songRows: {
     name: string;
