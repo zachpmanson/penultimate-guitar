@@ -109,6 +109,7 @@ export async function querySitemap(
       all: false, // never used
     };
     for (let i = 0; i < t.taburl.length; i++) {
+      console.log(hasTypes);
       if (hasTypes[t.type[i]]) continue;
 
       types.push({
@@ -116,6 +117,7 @@ export async function querySitemap(
         taburl: t.taburl[i],
         tabId: t.tabid?.[i],
       });
+      hasTypes[t.type[i]] = true;
     }
     let index = t.type.findIndex((t) => t === "chords");
     if (index === -1) index = t.type.findIndex((t) => t === "tabs");
