@@ -22,6 +22,7 @@ export default function useSavedTabs() {
   const {
     data: tablinksAndFolders,
     isLoading: isLoadingTabs,
+    isFetching: isFetchingTabs,
     refetch: refetchTabs,
   } = trpc.user.getTabLinks.useQuery(undefined, {
     enabled: !!userId,
@@ -136,7 +137,8 @@ export default function useSavedTabs() {
   return {
     savedTabs: savedTabs[userKey] ?? [],
     flatTabs,
-    isLoadingTabs: !!userId && isLoadingTabs,
+    isLoadingTabs: !!userId && isLoadingTabs && !savedTabs[userKey],
+    isFetchingTabs: !!userId && isFetchingTabs,
     setTabFolders,
     addSavedTab,
     removeSavedTab,
