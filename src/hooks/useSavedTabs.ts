@@ -115,7 +115,7 @@ export default function useSavedTabs() {
 
   return {
     savedTabs: savedTabs[userKey] ?? [],
-    isLoadingTabs: !!userId && isLoadingTabs,
+    isLoadingTabs: (!!userId && isLoadingTabs) || session.status === "loading",
     setTabFolders,
     addSavedTab,
     removeSavedTab,

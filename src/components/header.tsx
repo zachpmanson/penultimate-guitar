@@ -57,7 +57,9 @@ export default function Header() {
             </Link>
           ) : (
             <Link prefetch={false} href="/login">
-              <span className="m-auto w-fit">Login</span>
+              <span className="m-auto w-fit">
+                {session.status === "loading" ? "Loading..." : "Login"}
+              </span>
             </Link>
           )}
         </div>

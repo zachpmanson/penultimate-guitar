@@ -3,14 +3,13 @@ import { Playlist } from "@/models/models";
 import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
 import { Menu, Transition } from "@headlessui/react";
+import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
-import { BookmarkIcon } from "@heroicons/react/24/outline";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
@@ -27,7 +26,9 @@ export default function SavedTabs() {
         <div>
           <h1 className="text-left text-xl my-4">Favourites</h1>
         </div>
-        {allSaved.length === 0 ? (
+        {isLoadingTabs ? (
+          <LoadingSpinner className="h-8" />
+        ) : allSaved.length === 0 ? (
           <div className="flex flex-col gap-1 mt-2">
             <p className="text-center">
               You have no saved tabs yet! Press{" "}
@@ -36,33 +37,29 @@ export default function SavedTabs() {
           </div>
         ) : (
           <div className="flex flex-col gap-1 mt-2">
-            {isLoadingTabs && !savedTabs ? (
-              <LoadingSpinner className="h-8" />
-            ) : (
-              <>
-                {favourites && (
-                  <div className="flex flex-col gap-1">
-                    {favourites.tabs
-                      .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
-                      .map((t, j) => (
-                        <TabLink
-                          key={j}
-                          tablink={{ ...t, saved: true }}
-                          folder={favourites.name}
-                        />
-                      ))}
-                  </div>
+            <>
+              {favourites && (
+                <div className="flex flex-col gap-1">
+                  {favourites.tabs
+                    .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
+                    .map((t, j) => (
+                      <TabLink
+                        key={j}
+                        tablink={{ ...t, saved: true }}
+                        folder={favourites.name}
+                      />
+                    ))}
+                </div>
+              )}
+              {savedTabs
+                .sort((a, b) => sortByName(a.name, b.name))
+                .map(
+                  (folder, i) =>
+                    folder.name !== "Favourites" && (
+                      <FolderPanel folder={folder} key={i} />
+                    )
                 )}
-                {savedTabs
-                  .sort((a, b) => sortByName(a.name, b.name))
-                  .map(
-                    (folder, i) =>
-                      folder.name !== "Favourites" && (
-                        <FolderPanel folder={folder} key={i} />
-                      )
-                  )}
-              </>
-            )}
+            </>
           </div>
         )}
       </div>
@@ -71,7 +68,6 @@ export default function SavedTabs() {
 }
 
 function FolderPanel({ folder }: { folder: Folder }) {
-  const router = useRouter();
   const [hovering, setHovering] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 

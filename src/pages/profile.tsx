@@ -3,7 +3,6 @@ import ImportPlaylistDialog from "@/components/dialog/importplaylistdialog";
 import LoadingSpinner from "@/components/loadingspinner";
 import PlainButton from "@/components/shared/plainbutton";
 import { useGlobal } from "@/contexts/Global/context";
-import { Playlist } from "@/models/models";
 import { authOptions } from "@/server/auth";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
@@ -11,11 +10,9 @@ import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const router = useRouter();
   const session = useSession();
 
   // const [playlist, setPlaylist] = useState<Playlist>();
