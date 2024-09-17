@@ -27,6 +27,11 @@ export const tabRouter = createRouter({
     .query(async ({ input }) => {
       return await getHighestRatedTab(input);
     }),
+  getHighestRatedTabLazy: publicProcedure
+    .input(z.string())
+    .mutation(async ({ input }) => {
+      return await getHighestRatedTab(input);
+    }),
 
   querySitemap: publicProcedure
     .input(

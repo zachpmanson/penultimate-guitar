@@ -1,4 +1,4 @@
-import { SavedUserTabLinks, TabLinkDto } from "@/models/models";
+import { AltVersion, SavedUserTabLinks, TabLinkDto } from "@/models/models";
 import { Folder } from "@/types/user";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -18,6 +18,7 @@ type SavedTabsActions = {
   removeFolder: (folder: string, userId?: string) => void;
   setUserAllFolders: (tab: Folder[], userId: string) => void;
   setAllSavedTabs: (newValue: SavedUserTabLinks) => void;
+  setBestTab: (userId: string, oldTaburl: string, newTab: AltVersion) => void;
 };
 
 export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
@@ -46,6 +47,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                   artist: tab.artist,
                   type: tab.type ?? null,
                   version: tab.version ?? null,
+                  loadBest: tab.loadBest ?? null,
                 },
               ],
               playlistUrl: null,
@@ -64,6 +66,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                 artist: tab.artist,
                 type: tab.type ?? null,
                 version: tab.version ?? null,
+                loadBest: tab.loadBest ?? null,
               });
             } else {
               // update tab in folder
@@ -73,6 +76,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                 artist: tab.artist,
                 type: tab.type ?? null,
                 version: tab.version ?? null,
+                loadBest: tab.loadBest ?? null,
               };
             }
           }
@@ -123,6 +127,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                 artist: tab.artist,
                 type: tab.type ?? null,
                 version: tab.version ?? null,
+                loadBest: tab.loadBest ?? null,
               });
             } else if (existsInFolder && !weWantItInFolder) {
               folder.tabs = folder.tabs.filter((t) => t.taburl !== tab.taburl);
@@ -153,6 +158,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                   artist: tab.artist,
                   type: tab.type ?? null,
                   version: tab.version ?? null,
+                  loadBest: tab.loadBest ?? null,
                 },
               ],
               playlistUrl: null,
@@ -184,6 +190,24 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
       },
       setAllSavedTabs: (newValue: SavedUserTabLinks) => {
         set({ savedTabs: newValue });
+      },
+
+      setBestTab: (userId: string, oldTaburl: string, newTab: AltVersion) => {
+        set((old) => {
+          let n = { ...old };
+          for (let [i, folder] of n.savedTabs[userId].entries()) {
+            for (let [j, tab] of folder.tabs.entries()) {
+              if (tab.taburl === oldTaburl && tab.loadBest) {
+                n.savedTabs[userId][i].tabs[j] = {
+                  ...tab,
+                  ...newTab,
+                  loadBest: false,
+                };
+              }
+            }
+          }
+          return n;
+        });
       },
     }),
     {
@@ -230,6 +254,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
                 artist: tablink.artist ?? null,
                 type: tablink.type ?? null,
                 version: tablink.version ?? null,
+                loadBest: null,
               });
             }
 

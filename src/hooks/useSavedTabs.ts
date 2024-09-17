@@ -1,4 +1,4 @@
-import { TabLinkDto } from "@/models/models";
+import { AltVersion, TabLinkDto } from "@/models/models";
 import { useSavedTabsStore } from "@/state/savedTabs";
 import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
@@ -13,6 +13,7 @@ export default function useSavedTabs() {
     setTabFolders: setTabFoldersLocal,
     removeFolder: removeFolderLocal,
     setUserAllFolders: setUserAllTabLinks,
+    setBestTab: setBestTabLocal,
   } = useSavedTabsStore();
 
   const userId = session?.data?.user?.id;
@@ -30,6 +31,7 @@ export default function useSavedTabs() {
   const deleteTabLinkApi = trpc.user.deleteTabLink.useMutation();
   const setTabLinksApi = trpc.user.setTabLinks.useMutation();
   const removeFolderApi = trpc.user.deleteFolder.useMutation();
+  const setBestTabApi = trpc.user.setBestTab.useMutation();
 
   useEffect(() => {
     if (tablinksAndFolders && userId)
@@ -103,6 +105,22 @@ export default function useSavedTabs() {
     [userId, refetchTabs, removeFolderLocal]
   );
 
+  const setBestTab = useCallback(
+    (oldTaburl: string, newTab: AltVersion) => {
+      if (userId) {
+        setBestTabApi
+          .mutateAsync({
+            oldTaburl,
+            newTab,
+          })
+          .then(() => refetchTabs());
+      } else {
+        setBestTabLocal(userKey, oldTaburl, newTab);
+      }
+    },
+    [userId, setBestTabLocal]
+  );
+
   const isSaved = useCallback(
     (newTab: TabLinkDto) => {
       let existingIndex = savedTabs[userKey]
@@ -121,5 +139,6 @@ export default function useSavedTabs() {
     removeSavedTab,
     isSaved,
     removeFolder,
+    setBestTab,
   };
 }

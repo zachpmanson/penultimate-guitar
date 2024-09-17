@@ -19,7 +19,7 @@ export const userRouter = createRouter({
     .input(NewTabSchema)
     .mutation(async ({ ctx, input }) => {
       const {
-        newTab: { taburl, name, artist, type, version, folder },
+        newTab: { taburl, name, artist, type, version, folder, loadBest },
       } = input;
 
       // create folder if it doesn't exist
@@ -47,6 +47,7 @@ export const userRouter = createRouter({
           artist,
           type,
           version,
+          loadBest,
         },
         update: {
           // spotifyUserId: ctx.session.user.id,
@@ -56,6 +57,7 @@ export const userRouter = createRouter({
           artist,
           type,
           version,
+          loadBest,
         },
         where: {
           // spotifyUserId: ctx.session.user.id,
@@ -184,6 +186,36 @@ export const userRouter = createRouter({
         return { count: newTabs.count };
       });
       return count;
+    }),
+
+  // Currently this uses the client input to set the best tab
+  // Because of this, only update where usertablink belongs to authed user
+  setBestTab: authProcedure
+    .input(
+      z.object({
+        oldTaburl: z.string(),
+        newTab: z.object({
+          taburl: z.string(),
+          type: z.string(),
+          version: z.number(),
+        }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const u = await ctx.prisma.userTablink.updateMany({
+        where: {
+          loadBest: true,
+          taburl: input.oldTaburl,
+          folder: { spotifyUserId: ctx.session.user.id },
+        },
+        data: {
+          loadBest: false,
+          taburl: input.newTab.taburl,
+          type: input.newTab.type,
+          version: input.newTab.version,
+        },
+      });
+      return u.count;
     }),
 
   getPlaylists: authProcedure

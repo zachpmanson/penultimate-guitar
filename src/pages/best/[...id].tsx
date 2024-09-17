@@ -26,7 +26,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const url = params.id.join("/");
   return {
     redirect: {
-      destination: "/tab/" + (await getHighestRatedTab(url)),
+      destination: "/tab/" + (await getHighestRatedTab(url))[0].taburl,
     },
   };
 };

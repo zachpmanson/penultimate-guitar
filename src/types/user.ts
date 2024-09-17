@@ -7,6 +7,7 @@ export const TabSchema = z.object({
   type: z.string().optional().nullable(),
   version: z.number().optional().nullable(),
   folder: z.string().optional(),
+  loadBest: z.boolean().optional().nullable(),
 });
 
 export const NewTabSchema = z.object({
@@ -25,6 +26,7 @@ type TabLink = {
   artist: string | null;
   type: string | null;
   version: number | null;
+  loadBest?: boolean | null;
 };
 
 export type Folder = {

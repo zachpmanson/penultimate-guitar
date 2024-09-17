@@ -72,17 +72,7 @@ export namespace UGAdapter {
             (c: Contributor) => c.username
           ) ?? []),
         ];
-        console.log(
-          dataContent?.store?.page?.data?.tab_view?.versions
-            .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
-            .map((v: AltVersion) => ({
-              version: v.version,
-              taburl: v.tab_url?.replace(
-                "https://tabs.ultimate-guitar.com/tab/",
-                "URL missing"
-              ),
-            }))
-        );
+
         altVersions = dataContent?.store?.page?.data?.tab_view?.versions
           .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
           .map((v: AltVersion) => ({
@@ -94,6 +84,7 @@ export namespace UGAdapter {
             ),
             type: v.type,
           }));
+        console.log(altVersions);
       })
       .catch((err) => {
         console.warn("Something went wrong.", err);

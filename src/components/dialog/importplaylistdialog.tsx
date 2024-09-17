@@ -53,7 +53,7 @@ export default function ImportPlaylistDialog({
   const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
   const alreadySearching = useRef(false);
-  const [playlistTabs, setPlaylistTabs] = useState<TabLinkDto[]>([]);
+  const [nFound, setPlaylistTabs] = useState(0);
   const [attemptCount, setAttemptCount] = useState(0);
 
   useEffect(() => {
@@ -68,8 +68,18 @@ export default function ImportPlaylistDialog({
         .then((res) => {
           const newTab = res.items?.[0];
           if (newTab) {
-            setPlaylistTabs((old) => [...old, newTab]);
-            addSavedTab(newTab, playlist.name);
+            setPlaylistTabs((o) => o + 1);
+            addSavedTab(
+              {
+                artist: newTab.artist,
+                name: newTab.name,
+                type: newTab.tabs[0].type,
+                taburl: newTab.tabs[0].taburl,
+                saved: true,
+                loadBest: true,
+              },
+              playlist.name
+            );
 
             console.log(
               "Found",
@@ -142,8 +152,8 @@ export default function ImportPlaylistDialog({
           <hr className="m-4 dark:border-gray-600" />
 
           <div className="flex justify-between">
-            <div>Found {playlistTabs.length}</div>
-            <div>Couldn&apos;t find {attemptCount - playlistTabs.length}</div>
+            <div>Found {nFound}</div>
+            <div>Couldn&apos;t find {attemptCount - nFound}</div>
           </div>
           <div className="my-2 w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-200">
             <div

@@ -1,5 +1,6 @@
 import {
   JSXElementConstructor,
+  MouseEventHandler,
   ReactElement,
   ReactFragment,
   ReactPortal,
@@ -16,7 +17,7 @@ export default function PlainButton({
     | ReactElement<any, string | JSXElementConstructor<any>>
     | ReactFragment
     | ReactPortal;
-  onClick?: (e: any) => void;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   disabled?: boolean;
   className?: string;
   title?: string;

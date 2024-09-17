@@ -133,7 +133,7 @@ export default function Profile() {
                 </PlainButton>
               ))}
           {hasNextPage && (
-            <PlainButton onClick={fetchNextPage} disabled={isFetching}>
+            <PlainButton onClick={() => fetchNextPage()} disabled={isFetching}>
               <div className="w-full h-full flex items-center justify-center sm:h-32">
                 {isFetching ? <LoadingSpinner className="h-8" /> : "Load more"}
               </div>

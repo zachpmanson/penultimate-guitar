@@ -84,13 +84,13 @@ export async function querySitemap(
   cursor: number,
   page_size: number
 ) {
-  const strippedValue = value.replace(/[^0-9a-z ]/g, "");
-
+  const strippedValue = value.replace(/[^0-9a-zA-Z ]/g, "").toLowerCase();
+  console.log("Searching", strippedValue);
   const songRows: {
     name: string;
     artist: string;
     taburl: string[];
-    tabid: number[];
+    tabid: (number | null)[];
     type: SearchTabType[];
     sml3: number;
   }[] = await prisma.$queryRawUnsafe(

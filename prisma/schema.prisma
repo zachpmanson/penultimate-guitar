@@ -70,6 +70,7 @@ model UserTablink {
   artist        String?
   type          String?
   version       Int?
+  loadBest      Boolean?
 
   folderId Int
 

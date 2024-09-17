@@ -1,4 +1,4 @@
-import { TabDto, TabType } from "@/models/models";
+import { AltVersion, TabDto, TabType } from "@/models/models";
 import { DEFAULT_TAB } from "@/types/tab";
 import { TRPCError } from "@trpc/server";
 import prisma from "../prisma";
@@ -90,26 +90,38 @@ export async function getHighestRatedTab(taburl: string) {
   }
 
   if (savedTab) {
-    const rankings = [
-      { taburl: savedTab.taburl, rating: savedTab.rating },
+    const rankings: AltVersion[] = [
+      {
+        taburl: savedTab.taburl,
+        rating: savedTab.rating,
+        type: savedTab.type,
+        version: savedTab.version,
+      },
       ...savedTab.song.Tab.map((v: any) => ({
         taburl: v.taburl,
         rating: v.rating,
+        type: v.type,
+        version: v.version,
       })),
     ].sort((a, b) => b.rating - a.rating);
 
-    return rankings[0].taburl;
+    return rankings;
   } else {
     const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
     insertTab(song, tab, altVersions).catch(() =>
       console.error("Database error occured for", tab.taburl)
     );
 
-    const rankings = [
-      { taburl: tab.taburl, rating: tab.rating },
-      ...altVersions.map((v) => ({ taburl: v.taburl, rating: v.rating })),
+    const rankings: AltVersion[] = [
+      {
+        taburl: tab.taburl,
+        rating: tab.rating,
+        type: tab.type,
+        version: tab.version,
+      },
+      ...altVersions,
     ].sort((a, b) => b.rating - a.rating);
 
-    return rankings[0].taburl;
+    return rankings;
   }
 }
