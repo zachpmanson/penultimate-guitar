@@ -99,7 +99,8 @@ export default function ImportPlaylistDialog({
       alreadySearching.current = true;
       for (let track of currentPlaylist.tracks) {
         setCurrentlyFinding(track);
-        await getSearch(`${track.name} ${track.artists}`);
+
+        await getSearch(`${track.name} ${track.artists[0]}`);
         setAttemptCount((old) => old + 1);
       }
       setCurrentlyFinding(undefined);
