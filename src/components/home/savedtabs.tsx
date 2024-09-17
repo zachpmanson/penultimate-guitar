@@ -10,14 +10,16 @@ import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
+import { useSession } from "next-auth/react";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
 }
 
 export default function SavedTabs() {
-  const { savedTabs, isLoadingTabs } = useSavedTabs();
-  const allSaved = savedTabs.flatMap((f) => f.tabs).map((t) => t.taburl);
+  const session = useSession();
+  const { savedTabs, flatTabs } = useSavedTabs();
+  const allSaved = flatTabs.map((t) => t.taburl);
 
   const favourites = savedTabs.find((f) => f.name === "Favourites");
   return (
@@ -26,7 +28,7 @@ export default function SavedTabs() {
         <div>
           <h1 className="text-left text-xl my-4">Favourites</h1>
         </div>
-        {isLoadingTabs ? (
+        {session.status === "loading" ? (
           <LoadingSpinner className="h-8" />
         ) : allSaved.length === 0 ? (
           <div className="flex flex-col gap-1 mt-2">

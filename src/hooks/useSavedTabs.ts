@@ -2,7 +2,7 @@ import { AltVersion, TabLinkDto } from "@/models/models";
 import { useSavedTabsStore } from "@/state/savedTabs";
 import { trpc } from "@/utils/trpc";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 export default function useSavedTabs() {
   const session = useSession();
@@ -131,9 +131,15 @@ export default function useSavedTabs() {
     [savedTabs, userKey]
   );
 
+  const flatTabs = useMemo(
+    () => savedTabs[userKey]?.flatMap((f) => f.tabs) ?? [],
+    [savedTabs, userKey]
+  );
+
   return {
     savedTabs: savedTabs[userKey] ?? [],
-    isLoadingTabs: (!!userId && isLoadingTabs) || session.status === "loading",
+    flatTabs,
+    isLoadingTabs: !!userId && isLoadingTabs,
     setTabFolders,
     addSavedTab,
     removeSavedTab,

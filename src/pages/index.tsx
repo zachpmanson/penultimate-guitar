@@ -20,11 +20,11 @@ const Page: NextPageWithLayout = () => {
 
   const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
-  const { savedTabs } = useSavedTabs();
-  const allSaved = savedTabs.flatMap((f) => f.tabs);
+  const { flatTabs } = useSavedTabs();
+  const allSaved = flatTabs;
 
   const isFilter = (text: string) => {
-    if (savedTabs.length === 0) return false;
+    if (flatTabs.length === 0) return false;
     if (text.trim() === "") return false;
     if (text.length < 3) return false;
     try {

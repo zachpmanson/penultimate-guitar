@@ -7,17 +7,15 @@ import TabLink from "./tablink";
 
 export default function FilteredSavedTabs() {
   const { searchText } = useSearchStore();
-  const { savedTabs } = useSavedTabs();
+  const { flatTabs } = useSavedTabs();
 
   const lowerSearchText = searchText.toLowerCase();
   const filteredTabs = _.uniqBy(
-    savedTabs
-      .flatMap((f) => f.tabs)
-      .filter(
-        (t) =>
-          t.name?.toLowerCase().includes(lowerSearchText) ||
-          t.artist?.toLowerCase().includes(lowerSearchText)
-      ),
+    flatTabs.filter(
+      (t) =>
+        t.name?.toLowerCase().includes(lowerSearchText) ||
+        t.artist?.toLowerCase().includes(lowerSearchText)
+    ),
     (t: TabLinkDto) => t.taburl
   );
 

@@ -1,4 +1,5 @@
 import SpotifyButton from "@/components/buttons/spotifybutton";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,9 +7,14 @@ import { useRouter } from "next/router";
 export default function Login() {
   const session = useSession();
   const router = useRouter();
+  const { flatTabs } = useSavedTabs();
 
   if (session.status === "authenticated") {
-    router.push("/profile");
+    if (flatTabs.length === 0) {
+      router.push("/profile");
+    } else {
+      router.push("/");
+    }
   }
 
   return (

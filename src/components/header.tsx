@@ -13,8 +13,8 @@ export default function Header() {
 
   const router = useRouter();
   const session = useSession();
-  const { savedTabs } = useSavedTabs();
-  const allSaved = savedTabs.flatMap((f) => f.tabs).map((t) => t.taburl);
+  const { savedTabs, flatTabs } = useSavedTabs();
+  const allSaved = flatTabs.map((t) => t.taburl);
 
   return (
     <div className="no-print">
