@@ -13,7 +13,7 @@ export default function Header() {
 
   const router = useRouter();
   const session = useSession();
-  const { savedTabs, flatTabs } = useSavedTabs();
+  const { flatTabs } = useSavedTabs();
   const allSaved = flatTabs.map((t) => t.taburl);
 
   return (
