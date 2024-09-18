@@ -11,13 +11,13 @@ import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
 import { useSession } from "next-auth/react";
+import PlainButton from "../shared/plainbutton";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
 }
 
 export default function SavedTabs() {
-  const session = useSession();
   const { savedTabs, flatTabs, isLoadingTabs } = useSavedTabs();
   const allSaved = flatTabs.map((t) => t.taburl);
 
@@ -171,13 +171,12 @@ function FolderMenu({ folder }: { folder: Folder }) {
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button
-            className={`
-  border-gray-200 border rounded-xl transition ease-in-out
-  flex items-center justify-center text-md text-lg bg-white dark:bg-gray-900 px-4 hover:border-gray-400 dark:border-gray-600 dark:hover:bg-gray-700
-`}
-          >
-            <div className="w-4">▼</div>
+          <Menu.Button>
+            <PlainButton noPadding>
+              <div className="px-4 w-10 flex justify-center items-center">
+                ▼
+              </div>
+            </PlainButton>
           </Menu.Button>
         </div>
 
