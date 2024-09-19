@@ -27,8 +27,8 @@ export default function Playlists() {
   return (
     <div>
       <div>
-        <div className="flex justify-between items-center">
-          <h1 className="text-left text-xl my-4">Playlists</h1>
+        <div className="flex justify-between items-center pt-4">
+          <h1 className="text-left text-xl">Playlists</h1>
           <div className="text-sm text-red-700">BETA</div>
         </div>
         {isLoading ? (

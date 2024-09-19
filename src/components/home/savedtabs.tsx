@@ -25,8 +25,8 @@ export default function SavedTabs() {
   return (
     <div>
       <div>
-        <div>
-          <h1 className="text-left text-xl my-4">Favourites</h1>
+        <div className="pt-4">
+          <h1 className="text-left text-xl">Favourites</h1>
         </div>
         {isLoadingTabs ? (
           <LoadingSpinner className="h-8" />

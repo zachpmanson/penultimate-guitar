@@ -29,8 +29,8 @@ export default function FilteredSavedTabs() {
         </>
       ) : (
         <div>
-          <div>
-            <h1 className="text-center text-xl my-4">
+          <div className="pt-4">
+            <h1 className="text-left text-xl">
               Favourites containing &quot;{searchText}&quot;
             </h1>
           </div>
