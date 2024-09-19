@@ -97,8 +97,9 @@ export type SearchResult = {
   internal: boolean;
 };
 
-export type Track = { name: string; artists: string[] };
-export type Playlist = {
+export type Track = { name: string; artists: string[]; trackId: string };
+export type IndividualPlaylist = {
+  playlistId: string;
   name: string;
   image?: string;
   owner: string;

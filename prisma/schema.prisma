@@ -54,6 +54,15 @@ model PossibleSong {
   @@index([artist])
 }
 
+model TrackTab {
+  id Int @id @default(autoincrement())
+  spotifyTrackId String
+  taburl String
+  lastUpdated DateTime @default(now())
+
+  @@unique([spotifyTrackId])
+}
+
 model User {
   id            String        @id @default(cuid())
   spotifyUserId String        @unique

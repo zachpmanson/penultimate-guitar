@@ -14,9 +14,12 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { useEffect } from "react";
 import type { NextPageWithLayout } from "./_app";
+import Playlists from "@/components/home/playlists";
+import { useSession } from "next-auth/react";
 
 const Page: NextPageWithLayout = () => {
   const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
+  const session = useSession();
 
   const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
@@ -47,15 +50,18 @@ const Page: NextPageWithLayout = () => {
       </Head>
       <div className="mx-auto max-w-[100ch] flex flex-col gap-4">
         <div className="flex flex-wrap gap-4 justify-center">
-          {allSaved.length > 5 && (
-            <div className="min-w-80 max-w-[50ch] flex-1">
-              {isFilter(searchText) ? <FilteredSavedTabs /> : <SavedTabs />}
-            </div>
-          )}
+          <div className="min-w-80 max-w-[50ch] flex-1">
+            {isFilter(searchText) ? (
+              <FilteredSavedTabs />
+            ) : (
+              <>
+                <SavedTabs />
+                {session.status === "authenticated" && <Playlists />}
+              </>
+            )}
+          </div>
 
           <div className="min-w-80 max-w-[50ch] flex-1">
-            {allSaved.length <= 5 &&
-              (isFilter(searchText) ? <FilteredSavedTabs /> : <SavedTabs />)}
             <RecentTabs />
             {recentTabs && recentTabs.length > 0 && (
               <TablinkList

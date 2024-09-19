@@ -1,6 +1,6 @@
 import { AccessReponse } from "./models";
 import memoryCache from "memory-cache";
-import { Playlist, Track } from "@/models/models";
+import { IndividualPlaylist, Track } from "@/models/models";
 import _ from "lodash";
 import { SpotifyPlaylistResponse } from "@/types/spotify";
 export namespace SpotifyAdapter {
@@ -43,13 +43,15 @@ export namespace SpotifyAdapter {
     return token;
   }
 
-  export async function getPlaylist(playlistId: string): Promise<Playlist> {
+  export async function getPlaylist(
+    playlistId: string
+  ): Promise<IndividualPlaylist> {
     const token = await getToken();
     const authHeader: HeadersInit = {
       Authorization: `Bearer ${token}`,
     };
     let playlistPayload = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}`,
+      `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,images,owner,description,tracks(total,items(track.name, track.artists(name), track.uri),limit,href,next)`,
       {
         method: "GET",
         headers: authHeader,
@@ -58,13 +60,14 @@ export namespace SpotifyAdapter {
 
     console.log(
       `Pulling playlist ${playlistId} playlistPayload`,
-      playlistPayload
+      JSON.stringify(playlistPayload, null, 2)
     );
-    let playlist: Playlist = {
+    let playlist: IndividualPlaylist = {
+      playlistId: playlistId,
       name: playlistPayload.name,
       image:
         playlistPayload?.images?.length > 0
-          ? playlistPayload.images[0].url
+          ? playlistPayload.images.at(-1).url
           : undefined,
       tracks: [],
       owner: playlistPayload.owner.display_name,
@@ -75,6 +78,7 @@ export namespace SpotifyAdapter {
     let tracks: Track[] = playlistPayload.tracks.items.map((i: any) => ({
       name: i.track.name,
       artists: i.track.artists.map((a: any) => a.name),
+      trackId: i.track.uri.split(":").at(-1),
     }));
 
     if (playlistPayload.tracks.total > 100) {
@@ -95,6 +99,7 @@ export namespace SpotifyAdapter {
               tracks.push(
                 ...data.items.map((i: any) => ({
                   name: i?.track?.name,
+                  trackId: i?.track?.uri.split(":").at(-1),
                   artists: i?.track?.artists.map((a: any) => a.name),
                 }))
               );
@@ -109,7 +114,8 @@ export namespace SpotifyAdapter {
 
   export async function getUserPlaylists(
     userId: string,
-    page: number
+    page: number,
+    pageSize: number = PLAYLISTS_PAGESIZE
   ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
     console.log("getUserPlaylists", userId, page);
     const token = await getToken();
@@ -117,8 +123,8 @@ export namespace SpotifyAdapter {
       Authorization: `Bearer ${token}`,
     };
     let payload = (await fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${PLAYLISTS_PAGESIZE}&offset=${
-        (page - 1) * PLAYLISTS_PAGESIZE
+      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${pageSize}&offset=${
+        (page - 1) * pageSize
       }`,
       {
         method: "GET",
@@ -128,8 +134,26 @@ export namespace SpotifyAdapter {
     // console.log(userId, page, payload);
     return {
       ...payload,
-      nextCursor:
-        payload.total > PLAYLISTS_PAGESIZE * page ? page + 1 : undefined,
+      nextCursor: payload.total > pageSize * page ? page + 1 : undefined,
+    };
+  }
+
+  export async function getTrack(trackId: string): Promise<Track> {
+    const token = await getToken();
+    const authHeader: HeadersInit = {
+      Authorization: `Bearer ${token}`,
+    };
+    let trackPayload = await fetch(
+      `https://api.spotify.com/v1/tracks/${trackId}`,
+      {
+        method: "GET",
+        headers: authHeader,
+      }
+    ).then((res) => res.json());
+    return {
+      name: trackPayload.name,
+      artists: trackPayload.artists.map((a: any) => a.name),
+      trackId: trackPayload.id,
     };
   }
 }

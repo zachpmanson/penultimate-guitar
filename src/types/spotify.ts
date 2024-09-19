@@ -8,7 +8,7 @@ export type SpotifyPlaylistResponse = {
   items: Playlist[];
 };
 
-type Playlist = {
+export type Playlist = {
   collaborative: boolean;
   description: string;
   external_urls: ExternalUrls;

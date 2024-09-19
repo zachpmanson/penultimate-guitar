@@ -1,6 +1,6 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
 import {
-  Playlist,
+  IndividualPlaylist,
   SearchResult,
   TabLinkDto,
   TabType,
@@ -43,7 +43,7 @@ export default function ImportPlaylistDialog({
   setIsOpen,
   navigateOnComplete,
 }: {
-  playlist: Playlist;
+  playlist: IndividualPlaylist;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   navigateOnComplete?: string;
@@ -95,7 +95,7 @@ export default function ImportPlaylistDialog({
         });
     };
 
-    const getTabs = async (currentPlaylist: Playlist) => {
+    const getTabs = async (currentPlaylist: IndividualPlaylist) => {
       alreadySearching.current = true;
       for (let track of currentPlaylist.tracks) {
         setCurrentlyFinding(track);

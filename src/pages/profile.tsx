@@ -19,7 +19,7 @@ export default function Profile() {
 
   const [playlistId, setPlaylistId] = useState<string>();
   const { data: playlist, refetch } = trpc.spotify.getPlaylist.useQuery(
-    { playlistId: playlistId ?? "" },
+    { playlistId: playlistId ?? "", save: true },
     {
       enabled: !!playlistId,
     }

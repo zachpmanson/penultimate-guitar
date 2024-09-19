@@ -222,12 +222,14 @@ export const userRouter = createRouter({
     .input(
       z.object({
         cursor: z.number(),
+        pageSize: z.number().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       return await SpotifyAdapter.getUserPlaylists(
         ctx.session.user.id,
-        input.cursor
+        input.cursor,
+        input.pageSize
       );
     }),
 });

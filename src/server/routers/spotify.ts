@@ -7,11 +7,13 @@ export const spotifyRouter = createRouter({
     .input(
       z.object({
         playlistId: z.string(),
+        save: z.boolean().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
+      console.log(input);
       const playlist = await SpotifyAdapter.getPlaylist(input.playlistId);
-      if (ctx.session?.user?.id) {
+      if (ctx.session?.user?.id && input.save) {
         ctx.prisma.folder
           .upsert({
             create: {

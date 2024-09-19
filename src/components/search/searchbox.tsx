@@ -1,5 +1,5 @@
 import { useGlobal } from "@/contexts/Global/context";
-import { Playlist } from "@/models/models";
+import { IndividualPlaylist } from "@/models/models";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -16,7 +16,7 @@ export default function SearchBox() {
   const { setPlaylists } = useGlobal();
   const { setSearchText, searchText } = useSearchStore();
 
-  const [playlist, setPlaylist] = useState<Playlist>();
+  const [playlist, setPlaylist] = useState<IndividualPlaylist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   const handleSubmit = async (event: any) => {
@@ -30,17 +30,19 @@ export default function SearchBox() {
         /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
       const playlistId = matches?.groups?.id!;
-      getPlaylist.mutateAsync({ playlistId }).then((playlist: Playlist) => {
-        setPlaylist(playlist);
-        setIsImportOpen(true);
-        setPlaylists((o) => {
-          let n = { ...o };
-          if (playlistId) n[playlist.name] = playlistId;
-          return n;
-        });
+      getPlaylist
+        .mutateAsync({ playlistId })
+        .then((playlist: IndividualPlaylist) => {
+          setPlaylist(playlist);
+          setIsImportOpen(true);
+          setPlaylists((o) => {
+            let n = { ...o };
+            if (playlistId) n[playlist.name] = playlistId;
+            return n;
+          });
 
-        setButtonText("Search");
-      });
+          setButtonText("Search");
+        });
     } else {
       console.log(router.pathname);
       if (router.pathname.startsWith("/search/internal")) {
