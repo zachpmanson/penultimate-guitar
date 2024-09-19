@@ -106,6 +106,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
               <Link
                 href={`https://open.spotify.com/playlist/${playlist.uri}`}
                 target="_blank"
+                prefetch={false}
               >
                 <img
                   src={playlist.images?.[0].url ?? undefined}
@@ -127,6 +128,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
                     href={`/track/${t.trackId?.split(":").at(-1)}`}
                     key={j}
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
+                    prefetch={false}
                   >
                     <PlainButton>
                       <span className="font-bold text-sm">{t.name}</span> -{" "}
@@ -210,6 +212,7 @@ function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
                       <Link
                         href={`https://open.spotify.com/playlist/${playlist.playlistId}`}
                         target="_blank"
+                        prefetch={false}
                         className={`${
                           active
                             ? "bg-blue-700 text-white"
