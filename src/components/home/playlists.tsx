@@ -91,13 +91,13 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         <div
           className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl"
           onClick={() => {
-            // if (
-            //   isOpen &&
-            //   divRef.current &&
-            //   divRef.current.offsetTop < window.innerHeight
-            // ) {
-            //   divRef.current?.scrollIntoView({ behavior: "smooth" });
-            // }
+            if (
+              isOpen &&
+              divRef.current &&
+              window.scrollY > divRef.current.offsetTop
+            ) {
+              divRef.current.scrollIntoView({ behavior: "smooth" });
+            }
             setIsOpen(!isOpen);
           }}
         >

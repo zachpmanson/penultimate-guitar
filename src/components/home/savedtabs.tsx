@@ -91,9 +91,9 @@ function FolderPanel({ folder }: { folder: Folder }) {
             if (
               isOpen &&
               divRef.current &&
-              divRef.current.offsetTop > window.innerHeight
+              window.scrollY > divRef.current.offsetTop
             ) {
-              divRef.current?.scrollIntoView({ behavior: "smooth" });
+              divRef.current.scrollIntoView({ behavior: "smooth" });
             }
             setIsOpen(!isOpen);
           }}
