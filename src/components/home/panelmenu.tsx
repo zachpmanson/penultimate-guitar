@@ -32,9 +32,9 @@ export default function PanelMenu({
         >
           <Menu.Items className="z-10 absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-left">
             <div className="px-1 py-1 ">
-              {menuItems.map((item) =>
+              {menuItems.map((item, i) =>
                 item.href ? (
-                  <Menu.Item>
+                  <Menu.Item key={i}>
                     {({ active }) => (
                       <Link
                         href={item.href ?? ""}
@@ -51,7 +51,7 @@ export default function PanelMenu({
                     )}
                   </Menu.Item>
                 ) : (
-                  <Menu.Item>
+                  <Menu.Item key={i}>
                     {({ active }) => (
                       <button
                         onClick={item.onClick}
