@@ -12,6 +12,7 @@ import LoadingSpinner from "../loadingspinner";
 import TabLink from "./tablink";
 import { useSession } from "next-auth/react";
 import PlainButton from "../shared/plainbutton";
+import PanelMenu from "./panelmenu";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;
@@ -73,6 +74,31 @@ function FolderPanel({ folder }: { folder: Folder }) {
 
   const divRef = useRef<HTMLDivElement>(null);
 
+  const { removeFolder } = useSavedTabs();
+
+  const { data, refetch } = trpc.spotify.getPlaylist.useQuery(
+    { playlistId: folder.playlistUrl ?? "", save: true },
+    {
+      enabled: false,
+    }
+  );
+  const getTab = trpc.tab.getTabLazy.useMutation();
+  const [playlist, setPlaylist] = useState<IndividualPlaylist>();
+  const [isImportOpen, setIsImportOpen] = useState(false);
+
+  const refreshPlaylist = async () => {
+    await refetch();
+    setIsImportOpen(true);
+    setPlaylist(data);
+  };
+
+  const scrapeAll = async () => {
+    for (let tabLink of folder.tabs) {
+      getTab.mutate(tabLink.taburl);
+      await new Promise((r) => setTimeout(r, 8000));
+    }
+  };
+
   return (
     <div>
       <div className="" ref={divRef}></div>
@@ -132,135 +158,37 @@ function FolderPanel({ folder }: { folder: Folder }) {
               ))}
             <div className={"flex justify-between items-middle "}>
               <div className="ml-2">{folder.tabs?.length} items</div>
-              <FolderMenu folder={folder} />
+              <PanelMenu
+                menuItems={[
+                  {
+                    text: "View playlist on Spotify",
+                    href: `https://open.spotify.com/playlist/${folder.playlistUrl}`,
+                  },
+                  {
+                    text: "Refresh playlist",
+                    onClick: () => refreshPlaylist(),
+                  },
+                  {
+                    text: "Delete",
+                    onClick: () => removeFolder(folder.name),
+                  },
+                  {
+                    text: "Pull all tracks",
+                    onClick: () => scrapeAll(),
+                  },
+                ]}
+              />
+              {isImportOpen && playlist && (
+                <ImportPlaylistDialog
+                  playlist={playlist}
+                  isOpen={isImportOpen}
+                  setIsOpen={setIsImportOpen}
+                />
+              )}
             </div>
           </div>
         )}
       </div>
     </div>
-  );
-}
-
-function FolderMenu({ folder }: { folder: Folder }) {
-  const { removeFolder } = useSavedTabs();
-
-  const { data, refetch } = trpc.spotify.getPlaylist.useQuery(
-    { playlistId: folder.playlistUrl ?? "", save: true },
-    {
-      enabled: false,
-    }
-  );
-  const getTab = trpc.tab.getTabLazy.useMutation();
-  const [playlist, setPlaylist] = useState<IndividualPlaylist>();
-  const [isImportOpen, setIsImportOpen] = useState(false);
-
-  const refreshPlaylist = async () => {
-    await refetch();
-    setIsImportOpen(true);
-    setPlaylist(data);
-  };
-
-  const scrapeAll = async () => {
-    for (let tabLink of folder.tabs) {
-      getTab.mutate(tabLink.taburl);
-      await new Promise((r) => setTimeout(r, 8000));
-    }
-  };
-
-  return (
-    <>
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button>
-            <PlainButton noPadding>
-              <div className="px-4 w-10 flex justify-center items-center">
-                ▼
-              </div>
-            </PlainButton>
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="z-10 absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-left">
-            <div className="px-1 py-1 ">
-              {folder.playlistUrl && (
-                <>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        href={`https://open.spotify.com/playlist/${folder.playlistUrl}`}
-                        target="_blank"
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline`}
-                      >
-                        View playlist on Spotify
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => refreshPlaylist()}
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      >
-                        Refresh playlist
-                      </button>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => scrapeAll()}
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      >
-                        Pull all tracks
-                      </button>
-                    )}
-                  </Menu.Item>
-                </>
-              )}
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={() => removeFolder(folder.name)}
-                    className={`${
-                      active ? "bg-blue-700 text-white" : "text-gray-900"
-                    } group dark:text-white flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    Delete
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      {isImportOpen && playlist && (
-        <ImportPlaylistDialog
-          playlist={playlist}
-          isOpen={isImportOpen}
-          setIsOpen={setIsImportOpen}
-        />
-      )}
-    </>
   );
 }

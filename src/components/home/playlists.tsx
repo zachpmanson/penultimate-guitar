@@ -9,6 +9,7 @@ import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
+import PanelMenu from "./panelmenu";
 
 export default function Playlists() {
   const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
@@ -69,6 +70,40 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
 
   const divRef = useRef<HTMLDivElement>(null);
 
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
+  const [pulling, setPulling] = useState(false);
+  // const _d = trpc.spotify.getPlaylist.useInfiniteQuery(
+  //   { playlistId: playlist.playlistId ?? "", save: true },
+  //   {
+  //     enabled: isImportOpen,
+  //     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  //     initialCursor: 0,
+  //   }
+  // );
+
+  const importPlaylist = async () => {
+    await getPlaylist.mutateAsync({
+      playlistId: playlist.id,
+    });
+
+    setIsImportOpen(true);
+  };
+
+  const scrapeAll = async () => {
+    if (!data) return;
+
+    setPulling(true);
+    for (let track of data.tracks) {
+      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
+        console.log("Couldn't find track", track)
+      );
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+
+    setPulling(false);
+  };
+
   const { data, isLoading } = trpc.spotify.getPlaylist.useQuery(
     { playlistId: playlist.uri.split(":").at(-1) ?? "", save: false },
     {
@@ -84,7 +119,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
           "bg-gray-200 dark:bg-gray-800 dark:border-gray-600 rounded-xl border transition-transform duration-75 max-h-fit " +
           (hovering ? " hover:border-gray-400 dark:hover:border-gray-700" : "")
         }
-        id={`folder-${playlist.uri}`}
+        id={`folder-${playlist.id}`}
         onMouseOver={() => setHovering(true)}
         onMouseOut={() => setHovering(false)}
       >
@@ -105,7 +140,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
           <div className="flex justify-between gap-2 items-center">
             {playlist.images?.at(-1)?.url && (
               <Link
-                href={`https://open.spotify.com/playlist/${playlist.uri}`}
+                href={`https://open.spotify.com/playlist/${playlist.id}`}
                 target="_blank"
                 prefetch={false}
               >
@@ -145,143 +180,35 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
             )}
             <div className={"flex justify-between items-middle "}>
               <div className="ml-2">{playlist.tracks.total} items</div>
-              {data && <PlaylistMenu playlist={data} />}
+              {data && (
+                <PanelMenu
+                  menuItems={[
+                    {
+                      text: "View playlist on Spotify",
+                      href: `https://open.spotify.com/playlist/${playlist.id}`,
+                    },
+                    {
+                      text: "Import playlist",
+                      onClick: () => importPlaylist(),
+                    },
+                    {
+                      text: "Pull all tracks",
+                      onClick: () => scrapeAll(),
+                    },
+                  ]}
+                />
+              )}
             </div>
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
-  const { removeFolder } = useSavedTabs();
-  const [isImportOpen, setIsImportOpen] = useState(false);
-  const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
-  const [pulling, setPulling] = useState(false);
-  // const _d = trpc.spotify.getPlaylist.useInfiniteQuery(
-  //   { playlistId: playlist.playlistId ?? "", save: true },
-  //   {
-  //     enabled: isImportOpen,
-  //     getNextPageParam: (lastPage) => lastPage.nextCursor,
-  //     initialCursor: 0,
-  //   }
-  // );
-
-  const importPlaylist = async () => {
-    await getPlaylist.mutateAsync({ playlistId: playlist.playlistId });
-
-    setIsImportOpen(true);
-  };
-
-  const scrapeAll = async () => {
-    setPulling(true);
-    for (let track of playlist.tracks) {
-      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
-        console.log("Couldn't find track", track)
-      );
-      await new Promise((r) => setTimeout(r, 2000));
-    }
-    setPulling(false);
-  };
-
-  return (
-    <>
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button>
-            <PlainButton noPadding>
-              <div className="px-4 w-10 flex justify-center items-center">
-                ▼
-              </div>
-            </PlainButton>
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="z-10 absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-left">
-            <div className="px-1 py-1 ">
-              {playlist.playlistId && (
-                <>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        href={`https://open.spotify.com/playlist/${playlist.playlistId}`}
-                        target="_blank"
-                        prefetch={false}
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline`}
-                      >
-                        View playlist on Spotify
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => importPlaylist()}
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      >
-                        Import playlist
-                      </button>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => scrapeAll()}
-                        className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                      >
-                        {pulling
-                          ? "Currently pulling all tracks"
-                          : "Pull all tracks"}
-                      </button>
-                    )}
-                  </Menu.Item>
-                </>
-              )}
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    onClick={() => removeFolder(playlist.name)}
-                    className={`${
-                      active ? "bg-blue-700 text-white" : "text-gray-900"
-                    } group dark:text-white flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  >
-                    Delete
-                  </button>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-      {isImportOpen && playlist && (
+      {isImportOpen && data && (
         <ImportPlaylistDialog
-          playlist={playlist}
+          playlist={data}
           isOpen={isImportOpen}
           setIsOpen={setIsImportOpen}
         />
       )}
-    </>
+    </div>
   );
 }
