@@ -158,6 +158,7 @@ function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
   const { removeFolder } = useSavedTabs();
   const [isImportOpen, setIsImportOpen] = useState(false);
   const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
+  const [pulling, setPulling] = useState(false);
   // const _d = trpc.spotify.getPlaylist.useInfiniteQuery(
   //   { playlistId: playlist.playlistId ?? "", save: true },
   //   {
@@ -174,12 +175,14 @@ function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
   };
 
   const scrapeAll = async () => {
+    setPulling(true);
     for (let track of playlist.tracks) {
       await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
         console.log("Couldn't find track", track)
       );
       await new Promise((r) => setTimeout(r, 2000));
     }
+    setPulling(false);
   };
 
   return (
@@ -204,7 +207,7 @@ function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="z-10 absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="z-10 absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-left">
             <div className="px-1 py-1 ">
               {playlist.playlistId && (
                 <>
@@ -248,7 +251,9 @@ function PlaylistMenu({ playlist }: { playlist: IndividualPlaylist }) {
                             : "text-gray-900  dark:text-gray-200"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
-                        Pull all tracks
+                        {pulling
+                          ? "Currently pulling all tracks"
+                          : "Pull all tracks"}
                       </button>
                     )}
                   </Menu.Item>
