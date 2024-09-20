@@ -20,6 +20,7 @@ function ActiveButton({
   return (
     <Link
       href={href}
+      prefetch={false}
       className="text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
     >
       <PlainButton className={"flex gap-2 items-center justify-center"}>
