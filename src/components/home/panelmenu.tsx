@@ -44,7 +44,7 @@ export default function PanelMenu({
                           active
                             ? "bg-blue-700 text-white"
                             : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline`}
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline text-left`}
                       >
                         {item.text}
                       </Link>
@@ -59,7 +59,7 @@ export default function PanelMenu({
                           active
                             ? "bg-blue-700 text-white"
                             : "text-gray-900  dark:text-gray-200"
-                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm text-left`}
                       >
                         {item.text}
                       </button>
