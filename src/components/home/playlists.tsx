@@ -72,7 +72,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
 
   const [isImportOpen, setIsImportOpen] = useState(false);
   const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
-  const [pulling, setPulling] = useState(false);
+  const [pulling, setPulling] = useState<string | null>(null);
   // const _d = trpc.spotify.getPlaylist.useInfiniteQuery(
   //   { playlistId: playlist.playlistId ?? "", save: true },
   //   {
@@ -93,15 +93,15 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
   const scrapeAll = async () => {
     if (!data) return;
 
-    setPulling(true);
     for (let track of data.tracks) {
+      setPulling(track.name);
       await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
         console.log("Couldn't find track", track)
       );
       await new Promise((r) => setTimeout(r, 2000));
     }
 
-    setPulling(false);
+    setPulling(null);
   };
 
   const { data, isLoading } = trpc.spotify.getPlaylist.useQuery(
@@ -178,8 +178,13 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
                 <LoadingSpinner className="h-full" />
               </div>
             )}
-            <div className={"flex justify-between items-middle "}>
+            <div className={"flex justify-between items-middle gap-2"}>
               <div className="ml-2">{playlist.tracks.total} items</div>
+              {pulling && (
+                <div className="flex flex-1 gap-1 items-center justify-end">
+                  Pulling {pulling} <LoadingSpinner className="h-[1em]" />
+                </div>
+              )}
               {data && (
                 <PanelMenu
                   menuItems={[
