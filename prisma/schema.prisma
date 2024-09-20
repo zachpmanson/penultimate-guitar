@@ -45,6 +45,8 @@ model PossibleSong {
   taburl String @unique
   type   String
   
+  createdOn DateTime @default(now())
+  
   songId Int?
 
   song Song? @relation(fields: [songId], references: [id])
