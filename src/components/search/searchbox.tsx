@@ -4,7 +4,7 @@ import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 
 export default function SearchBox() {
@@ -19,8 +19,11 @@ export default function SearchBox() {
   const [playlist, setPlaylist] = useState<IndividualPlaylist>();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    inputRef.current?.blur();
 
     if (searchText.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
       router.push(`/tab/${searchText.slice(37)}`);
@@ -95,6 +98,7 @@ export default function SearchBox() {
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
             value={searchText}
+            ref={inputRef}
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
