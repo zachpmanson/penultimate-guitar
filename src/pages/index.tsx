@@ -48,20 +48,25 @@ const Page: NextPageWithLayout = () => {
       <Head>
         <title>Penultimate Guitar</title>
       </Head>
-      <div className="mx-auto max-w-[100ch] flex flex-col gap-4">
+      <div className="mx-auto max-w-[150ch] flex flex-col gap-4">
         <div className="flex flex-wrap gap-4 justify-center">
-          <div className="min-w-80 max-w-[50ch] flex-1">
-            {isFilter(searchText) ? (
-              <FilteredSavedTabs />
-            ) : (
-              <>
+          {isFilter(searchText) ? (
+            <FilteredSavedTabs />
+          ) : (
+            <>
+              <div className="min-w-80 flex-1">
                 <SavedTabs />
-                {session.status === "authenticated" && <Playlists />}
-              </>
-            )}
-          </div>
+              </div>
 
-          <div className="min-w-80 max-w-[50ch] flex-1">
+              {session.status === "authenticated" && (
+                <div className="min-w-80 flex-1">
+                  <Playlists />
+                </div>
+              )}
+            </>
+          )}
+
+          <div className="flex-1 min-w-80 ">
             <RecentTabs />
             {recentTabs && recentTabs.length > 0 && (
               <TablinkList
