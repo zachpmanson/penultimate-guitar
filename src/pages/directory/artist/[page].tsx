@@ -1,3 +1,4 @@
+import PageDropdown from "@/components/directory/pagedropdown";
 import { useGlobal } from "@/contexts/Global/context";
 import prisma from "@/server/prisma";
 import { useSearchStore } from "@/state/search";
@@ -22,17 +23,15 @@ type SongMetadata = {
   Tab: TabMetadata[];
 };
 
-type ListProps = {
-  allSongs: SongMetadata[];
-  totalSongs: number;
-  totalTabs: number;
-};
-
 export default function Directory({
   allSongs,
   totalSongs,
   totalTabs,
-}: ListProps) {
+}: {
+  allSongs: SongMetadata[];
+  totalSongs: number;
+  totalTabs: number;
+}) {
   const router = useRouter();
   const { page } = router.query;
   const pageNum = +(page ?? 1);
@@ -94,26 +93,6 @@ export default function Directory({
     </>
   );
 
-  const pageDropdrown = (
-    <div>
-      Page{" "}
-      <select
-        className="p-2 rounded-md"
-        name="order"
-        id="order"
-        value={pageNum}
-        onChange={(e) => router.push(`/directory/artist/${e.target.value}`)}
-      >
-        {Array.from(Array(pageCount).keys()).map((n) => (
-          <option key={n + 1} value={n + 1}>
-            {n + 1}
-          </option>
-        ))}
-      </select>
-      /{pageCount}
-    </div>
-  );
-
   return (
     <>
       <Head>
@@ -142,7 +121,11 @@ export default function Directory({
                 By oldest
               </option>
             </select>
-            {pageDropdrown}
+            <PageDropdown
+              pageNum={pageNum}
+              pageCount={pageCount}
+              order={"artist"}
+            />
           </div>
         </div>
         <hr className="m-2 no-print dark:border-gray-600" />
@@ -151,7 +134,14 @@ export default function Directory({
           <ol className="max-w-xl" start={(pageNum - 1) * PAGE_SIZE + 1}>
             {tabList}
           </ol>
-          {pageDropdrown}
+          <div className="w-full flex justify-center">
+            <PageDropdown
+              pageNum={pageNum}
+              pageCount={pageCount}
+              order={"artist"}
+              withButtons
+            />
+          </div>
         </div>
       </div>
     </>

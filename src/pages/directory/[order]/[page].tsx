@@ -1,3 +1,4 @@
+import PageDropdown from "@/components/directory/pagedropdown";
 import prisma from "@/server/prisma";
 import { useSearchStore } from "@/state/search";
 import { Song } from "@prisma/client";
@@ -29,7 +30,8 @@ export default function Directory({
 }: ListProps) {
   const router = useRouter();
   const { page, order } = router.query;
-  let orderName = order ?? "new";
+
+  let orderName = (order as string) ?? "new";
   const pageNum = +(page ?? 1);
   const { searchText, setSearchText } = useSearchStore();
 
@@ -71,28 +73,6 @@ export default function Directory({
     </>
   );
 
-  const pageDropdrown = (
-    <div>
-      Page{" "}
-      <select
-        className="p-2 rounded-md"
-        name="order"
-        id="order"
-        value={pageNum}
-        onChange={(e) =>
-          router.push(`/directory/${orderName}/${e.target.value}`)
-        }
-      >
-        {Array.from(Array(pageCount).keys()).map((n) => (
-          <option key={n + 1} value={n + 1}>
-            {n + 1}
-          </option>
-        ))}
-      </select>
-      /{pageCount}
-    </div>
-  );
-
   return (
     <>
       <Head>
@@ -121,7 +101,11 @@ export default function Directory({
                 By oldest
               </option>
             </select>
-            {pageDropdrown}
+            <PageDropdown
+              pageNum={pageNum}
+              pageCount={pageCount}
+              order={orderName}
+            />
           </div>
         </div>
         <hr className="m-2 dark:border-gray-600" />
@@ -130,7 +114,14 @@ export default function Directory({
           <ol className="max-w-xl" start={(pageNum - 1) * PAGE_SIZE + 1}>
             {tabList}
           </ol>
-          {pageDropdrown}
+          <div className="flex justify-center">
+            <PageDropdown
+              pageNum={pageNum}
+              pageCount={pageCount}
+              order={orderName}
+              withButtons
+            />
+          </div>
         </div>
       </div>
     </>
