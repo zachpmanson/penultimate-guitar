@@ -17,26 +17,29 @@ export default function TabSheet({
   transposition,
 }: TabSheetProps) {
   const { width } = useWindowDimensions();
-  const [formattedTab, setFormattedTab] = useState("");
+  // const [formattedTab, setFormattedTab] = useState("");
 
   const [inversions, setInversions] = useState<{ [key: string]: number }>({});
 
   const { chords, transposedChords } = useChords(plainTab, transposition);
 
-  let chordElements: Map<string, JSX.Element> = new Map();
-  for (let chord of Object.keys(inversions).sort()) {
-    // check chord exists, when switching between versions of the same song some renders might not have all chords
-    if (transposedChords[chord]) {
-      chordElements.set(
-        chord,
-        <ChordText
-          transposedChord={transposedChords[chord]}
-          fontSize={fontSize}
-          inversion={inversions[chord] ?? 0}
-        />
-      );
+  const chordElements = useMemo(() => {
+    let ce: Map<string, JSX.Element> = new Map();
+    for (let chord of Object.keys(inversions).sort()) {
+      // check chord exists, when switching between versions of the same song some renders might not have all chords
+      if (transposedChords[chord]) {
+        ce.set(
+          chord,
+          <ChordText
+            transposedChord={transposedChords[chord]}
+            fontSize={fontSize}
+            inversion={inversions[chord] ?? 0}
+          />
+        );
+      }
     }
-  }
+    return ce;
+  }, [transposedChords, inversions, fontSize]);
 
   const increaseInversion = (chord: string) => {
     if (!isMobile) {
@@ -48,13 +51,17 @@ export default function TabSheet({
     }
   };
 
+  /** Inserts chord tag `[ch]$1[/ch]` around non-whitespace chars */
   const insertChordTags = (line: string): string => {
-    return line.replace(/\b([^ \n]+)/g, "[ch]$1[/ch]");
+    return line.replace(/\b([^ \n\.]+)/g, "[ch]$1[/ch]");
   };
 
-  const [lineCutoff, setLineCutoff] = useState(40);
-  useEffect(() => {
-    setLineCutoff(Math.floor((width + 16) / (fontSize * 0.67)));
+  const stripChordTags = (line: string): string => {
+    return line.replace(/\[ch\]/g, "").replace(/\[\/ch\]/g, "");
+  };
+
+  const lineCutoff = useMemo(() => {
+    return Math.floor((width + 16) / (fontSize * 0.67));
   }, [width, fontSize]);
 
   useEffect(() => {
@@ -65,12 +72,20 @@ export default function TabSheet({
     });
   }, [chords, transposition]);
 
-  useEffect(() => {
-    setFormattedTab(
-      plainTab.replace(
-        /\[tab\]([\s\S]+?)\[\/tab\]/g,
-        (_match, fencedTab: string) => {
+  const formattedTab = useMemo(() => {
+    return (
+      plainTab
+        .replace(/\[tab\]([\s\S]+?)\[\/tab\]/g, (_match, fencedTab: string) => {
           let lines = fencedTab.split("\n");
+          let strippedLines = lines.map(stripChordTags);
+          const lineLengths = strippedLines.map((line) => line.length);
+          const longestLineLength = Math.max(...lineLengths);
+
+          lines = lines.map((line, i) => {
+            const isChordLine = line.length !== strippedLines[i].length;
+            return line.padEnd(longestLineLength, isChordLine ? " " : ".");
+          }); // pad lines to longest line length
+
           let repeatTruncate = true;
           // keep truncating lines until all lines are below the cutoff
           while (repeatTruncate) {
@@ -78,12 +93,9 @@ export default function TabSheet({
             repeatTruncate = false;
 
             lines = lines.map((line: string) => {
-              let chordline = line.includes("[ch]") || line.includes("[/ch]");
-
-              // working line excludes chord tags
-              let workingLine = line
-                .replace(/\[ch\]/g, "")
-                .replace(/\[\/ch\]/g, "");
+              /** Working line excludes chord tags */
+              let workingLine = stripChordTags(line);
+              let chordline = line.length !== workingLine.length;
 
               const postCutoff = workingLine.slice(lineCutoff);
               if (postCutoff) {
@@ -106,12 +118,32 @@ export default function TabSheet({
             });
 
             if (truncatedLines.length > 0) {
-              lines = [...lines, "", ...truncatedLines];
+              lines = [...lines, ...truncatedLines];
             }
           }
+
           return lines.join("\n");
-        }
-      )
+        })
+
+        // wrap remaining lines naively
+        .split("\n")
+        .map((line) => {
+          let lines = [line];
+          // keep truncating lines until all lines are below the cutoff
+          let strippedLastLine = stripChordTags(lines.at(-1) ?? "");
+          while (strippedLastLine.length > lineCutoff) {
+            const lastLine = lines.pop();
+            strippedLastLine = stripChordTags(lastLine ?? "");
+
+            const preCutoff = strippedLastLine.slice(0, lineCutoff);
+            const postCutoff = strippedLastLine.slice(lineCutoff);
+
+            lines.push(preCutoff, postCutoff);
+            strippedLastLine = lines.at(-1) ?? "";
+          }
+          return lines.join("\n");
+        })
+        .join("\n")
     );
   }, [lineCutoff, plainTab]);
 
@@ -131,6 +163,7 @@ export default function TabSheet({
           </div>
         </div>
       )} */}
+      {/* <pre>{plainTab}</pre> */}
       <div className="w-fit">
         <pre
           className="whitespace-pre-wrap"
