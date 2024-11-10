@@ -1,4 +1,4 @@
-import { getHighestRatedTab } from "@/server/ug-interface/get-tab";
+import { getTabFromOriginalId } from "@/server/services/get-taburl-from-originalid";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -15,17 +15,25 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       notFound: true,
     };
   }
-
+  console.log(params);
   if (typeof params.id !== "object") {
     return {
       notFound: true,
     };
   }
 
-  const url = params.id.join("/");
+  const originalId = params.id.join("/");
+
+  const tab = await getTabFromOriginalId(parseInt(originalId));
+  if (!tab) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     redirect: {
-      destination: "/tab/" + (await getHighestRatedTab(url))[0].taburl,
+      destination: "/best/" + tab.taburl,
     },
   };
 };

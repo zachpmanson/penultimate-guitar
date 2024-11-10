@@ -15,17 +15,18 @@ output_file = sys.argv[2]
 with open(input_file, mode='r') as input_file:
     with open(output_file, mode='w', newline='') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow(["name","artist","taburl","type"])
+        writer.writerow(["name","artist","taburl","type","originalId"])
         for row in input_file:
             row = row.strip()
             if "/" in (row):
                 artist,slug = row.split("/")
      
                 slug_words = slug.split("-")
-                slug_artist = artist.split("-")
+                artist_words = artist.split("-")
                 
+                original_id = slug_words[-1]
                 title_words = slug_words[:-2]
-                artist_words= slug_artist
+                artist_words = artist_words
 
                 suffix = slug_words[-2]
                 suffixes.add(suffix)
@@ -47,7 +48,7 @@ with open(input_file, mode='r') as input_file:
                 if final_title == "" or final_artist == "":
                     # see taburl tab/arctic-monkeys/--chords-2473050
                     continue
-                print(final_title, final_artist, row, suffix)
-                writer.writerow([final_title, final_artist, row, suffix])
+                print(final_title, final_artist, row, suffix, original_id)
+                writer.writerow([final_title, final_artist, row, suffix, original_id])
 
 print(suffixes)

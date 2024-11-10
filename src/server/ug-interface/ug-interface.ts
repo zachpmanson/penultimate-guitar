@@ -3,6 +3,7 @@ import { AltVersion, NewTab, Song } from "@/models/models";
 import { JSDOM } from "jsdom";
 import { Contributor } from "./models";
 import { SearchResult } from "@/models/models";
+import crypto from "crypto";
 
 export namespace UGAdapter {
   export async function getTab(

@@ -1,8 +1,7 @@
 import prisma from "@/server/prisma";
-import { querySitemap } from "@/server/search-query";
+import { querySitemap } from "@/server/services/search-query";
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
 import { GetStaticPropsContext } from "next";
-import "react-tooltip/dist/react-tooltip.css";
 
 export default function Tab() {
   return <></>;

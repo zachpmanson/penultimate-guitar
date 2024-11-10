@@ -1,5 +1,5 @@
-import prisma from "./prisma";
-import { SearchTabType } from "./routers/tab";
+import { SearchTabType } from "@/models/models";
+import prisma from "../prisma";
 
 function getSearchQuery(tabType: SearchTabType, includeArtist: boolean) {
   const heuristic = includeArtist
@@ -119,7 +119,7 @@ export async function querySitemap(
       all: false, // never used
     };
     for (let i = 0; i < t.taburl.length; i++) {
-      console.log(hasTypes);
+      // console.log(hasTypes);
       if (hasTypes[t.type[i]]) continue;
 
       types.push({

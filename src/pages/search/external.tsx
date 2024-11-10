@@ -137,7 +137,7 @@ export default function Search() {
   for (let i = 0; i < maxPageNums; i++) {
     if (dataInternal && dataInternal.pages.length > i) {
       resultsInPageOrder = resultsInPageOrder.concat(
-        dataInternal.pages[i].items.map((r, i) => ({
+        dataInternal.pages[i].items.map((r) => ({
           ...searchResultPlaceholder,
           id: i,
           song_id: r.songId,

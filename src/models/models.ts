@@ -3,6 +3,22 @@ import { Folder } from "@/types/user";
 // switched to string because I don't know all the different forms that Tab parts can come in
 export type TabType = string;
 // export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
+export const TAB_TYPES = [
+  "chords",
+  "tabs",
+  "ukulele",
+  "bass",
+  "drums",
+  "all",
+] as const;
+
+export type SearchTabType =
+  | "chords"
+  | "tabs"
+  | "ukulele"
+  | "bass"
+  | "drums"
+  | "all";
 
 export type Mode = "default" | "guitalele";
 
@@ -95,6 +111,28 @@ export type SearchResult = {
   tab_url: string;
 
   internal: boolean;
+};
+
+export type ApiSearchResult = {
+  id: number;
+  song_id: number;
+  song_name: string;
+  artist_id: number;
+  artist_name: string;
+  type: string;
+  part: string;
+  version: number;
+  votes: number;
+  rating: number;
+  date: string;
+  status: string;
+  preset_id: number;
+  tab_access_type: string;
+  tp_version: number;
+  tonality_name: string;
+  version_description: string;
+  verified: number;
+  recording: {};
 };
 
 export type Track = { name: string; artists: string[]; trackId: string };
