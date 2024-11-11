@@ -5,21 +5,21 @@ meta {
 }
 
 get {
-  url: https://api.ultimate-guitar.com/api/v1/tab/search?title=peach&page=1
+  url: https://api.ultimate-guitar.com/api/v1/tab/info?tab_id=1364104&tab_access_type=public
   body: none
   auth: none
 }
 
 params:query {
-  title: peach
-  page: 1
+  tab_id: 1364104
+  tab_access_type: public
   ~type[]: 300
   ~display_songs: 1
 }
 
 headers {
   Accept: application/json
-  x-ug-client-id: 1aa11111aa111111
+  x-ug-client-id: {{cid}}
   User-Agent: UG_ANDROID/7.0.7 (Pixel; Android 11)
-  x-ug-api-key: c6c22bb98c49b091d88762974ac3cfeb
+  x-ug-api-key: {{key}}
 }

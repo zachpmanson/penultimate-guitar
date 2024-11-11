@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: https://api.ultimate-guitar.com/api/v1/tab/search?title=peach&page=1&type[]=300&official[]=0
+  url: https://api.ultimate-guitar.com/api/v1/tab/search?title=peach&page=1
   body: none
   auth: none
 }
@@ -13,14 +13,13 @@ get {
 params:query {
   title: peach
   page: 1
-  type[]: 300
-  official[]: 0
+  ~type[]: 300
+  ~display_songs: 1
 }
 
 headers {
   Accept: application/json
-  x-ug-client-id: 1111111111111111
+  x-ug-client-id: {{cid}}
   User-Agent: UG_ANDROID/7.0.7 (Pixel; Android 11)
-  x-ug-api-key: c0133b149c6ac650f2e0a0e7eb7b78d0
-  
+  x-ug-api-key: {{key}}
 }
