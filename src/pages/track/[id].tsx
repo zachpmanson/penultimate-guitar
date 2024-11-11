@@ -1,6 +1,7 @@
 import prisma from "@/server/prisma";
 import { querySitemap } from "@/server/services/search-query";
 import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
+import { UGApi } from "@/server/ug-interface/ug-api";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -18,55 +19,45 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     };
   }
   console.log(params);
-  if (typeof params.id !== "object") {
+  if (typeof params.id !== "string") {
     return {
       notFound: true,
     };
   }
 
-  const trackId = params.id.join("/");
+  const trackId = params.id;
 
   const track = await prisma.trackTab.findFirst({
     where: {
       spotifyTrackId: trackId,
     },
   });
-  console.log(track);
+
   let taburl: string;
   if (track) {
     taburl = track.taburl;
+    return {
+      redirect: {
+        destination: "/best/" + taburl,
+      },
+    };
   } else {
-    // search and insert results
     const song = await SpotifyAdapter.getTrack(trackId);
-    console.log(song);
-    const topTab = await querySitemap(
-      song.name,
-      song.artists.join(" "),
-      "chords",
-      1,
-      1
-    );
-    if (topTab.items.length === 0) {
+    const topTab = await UGApi.getSearch({
+      title: `${song.name} ${song.artists[0]}`,
+      page: 1,
+      type: 300,
+    });
+    if (topTab.length === 0) {
       return {
         notFound: true,
       };
     }
 
-    taburl = topTab.items[0].tabs[0].taburl;
-    prisma.trackTab
-      .create({
-        data: {
-          spotifyTrackId: trackId,
-          taburl: taburl,
-        },
-      })
-      .then(() => {})
-      .catch(() => {});
+    return {
+      redirect: {
+        destination: "/original/" + topTab[0].id,
+      },
+    };
   }
-
-  return {
-    redirect: {
-      destination: "/best/" + taburl,
-    },
-  };
 };

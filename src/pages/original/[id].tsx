@@ -1,4 +1,4 @@
-import { getTabFromOriginalId } from "@/server/services/get-taburl-from-originalid";
+import { UGApi } from "@/server/ug-interface/ug-api";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -16,15 +16,18 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     };
   }
   console.log(params);
-  if (typeof params.id !== "object") {
+  if (typeof params.id !== "string") {
     return {
       notFound: true,
     };
   }
 
-  const originalId = params.id.join("/");
+  const originalId = params.id;
 
-  const tab = await getTabFromOriginalId(parseInt(originalId));
+  const tab = await UGApi.getTab({
+    tab_id: parseInt(originalId),
+  });
+  console.log(tab);
   if (!tab) {
     return {
       notFound: true,
@@ -33,7 +36,9 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
   return {
     redirect: {
-      destination: "/best/" + tab.taburl,
+      destination:
+        "/best/" +
+        tab.urlWeb.replace("https://tabs.ultimate-guitar.com/tab/", ""),
     },
   };
 };

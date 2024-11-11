@@ -130,7 +130,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
     return () => {
       clearInterval(scrollinterval.current);
     };
-  }, [scrollSpeed, element.current]);
+  }, [scrollSpeed]);
 
   useEffect(() => {
     if (tranposition !== -5) setMode("default");
@@ -177,7 +177,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
       window.removeEventListener("keydown", keyDownHandler);
       releaseWakeLock();
     };
-  }, []);
+  }, [releaseWakeLock, requestWakeLock, setScrollSpeed]);
 
   const handleSave = () => {
     setSaveDialogActive(true);

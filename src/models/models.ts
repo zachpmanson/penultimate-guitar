@@ -113,28 +113,6 @@ export type SearchResult = {
   internal: boolean;
 };
 
-export type ApiSearchResult = {
-  id: number;
-  song_id: number;
-  song_name: string;
-  artist_id: number;
-  artist_name: string;
-  type: string;
-  part: string;
-  version: number;
-  votes: number;
-  rating: number;
-  date: string;
-  status: string;
-  preset_id: number;
-  tab_access_type: string;
-  tp_version: number;
-  tonality_name: string;
-  version_description: string;
-  verified: number;
-  recording: {};
-};
-
 export type Track = { name: string; artists: string[]; trackId: string };
 export type IndividualPlaylist = {
   playlistId: string;

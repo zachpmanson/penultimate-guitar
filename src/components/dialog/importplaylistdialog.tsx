@@ -135,7 +135,7 @@ export default function ImportPlaylistDialog({
                 {playlist.image && (
                   <Image
                     src={playlist.image}
-                    alt="Playlist image"
+                    alt=""
                     width={60}
                     height={60}
                     title="Go to"

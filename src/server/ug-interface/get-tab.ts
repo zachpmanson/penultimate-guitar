@@ -119,7 +119,7 @@ export async function getHighestRatedTab(taburl: string) {
         type: tab.type,
         version: tab.version,
       },
-      ...altVersions,
+      ...(altVersions ?? []),
     ].sort((a, b) => b.rating - a.rating);
 
     return rankings;

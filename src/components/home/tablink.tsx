@@ -13,10 +13,12 @@ export default function TabLink({
   tablink,
   folder,
   recent,
+  prefetch = false,
 }: {
   tablink: TabLinkDto;
   folder?: string;
   recent?: boolean;
+  prefetch?: boolean;
 }) {
   const { removeSavedTab, isSaved, setBestTab } = useSavedTabs();
   const router = useRouter();
@@ -58,7 +60,7 @@ export default function TabLink({
             }
           }}
           className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
-          prefetch={false}
+          prefetch={prefetch}
         >
           <PlainButton>
             {/* <pre>{JSON.stringify(tablink, null, 2)}</pre> */}

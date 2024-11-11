@@ -40,7 +40,6 @@ export const tabRouter = createRouter({
     .input(
       z.object({
         value: z.string(),
-        page_size: z.number().gt(0).lte(100),
         cursor: z.number().gt(0),
         type: searchTabType,
       })
@@ -52,14 +51,21 @@ export const tabRouter = createRouter({
       if (input.type === "chords") tabType = 300;
       if (input.type === "ukulele") tabType = 800;
       if (input.type === "bass") tabType = 400;
+      try {
+        const items = await UGApi.getSearch({
+          title: input.value,
+          page: input.cursor,
+          type: tabType,
+        });
 
-      const d = await UGApi.getSearch({
-        title: input.value,
-        page: input.cursor,
-        type: tabType,
-      });
-      console.log(d);
-      return { items: d, nextCursor: 1 };
+        return {
+          items,
+          nextCursor: items.length < 5 ? undefined : input.cursor + 1,
+        };
+      } catch (e) {
+        console.error(e);
+        return { items: [], nextCursor: undefined };
+      }
     }),
 
   querySitemap: publicProcedure

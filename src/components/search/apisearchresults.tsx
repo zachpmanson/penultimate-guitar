@@ -1,9 +1,9 @@
-import { SearchResult } from "@/models/models";
+import { UGApi } from "@/server/ug-interface/ug-api";
 import LoadingSpinner from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
 import SearchLink from "./searchlink";
 
-export default function SearchResults({
+export default function ApiSearchResults({
   results,
   isLoading,
   isFetching,
@@ -11,7 +11,7 @@ export default function SearchResults({
   loadNextPage,
   best = false,
 }: {
-  results: SearchResult[];
+  results: UGApi.SearchResult[];
   isLoading: boolean;
   isFetching: boolean;
   hasNextPage: boolean;
@@ -31,7 +31,14 @@ export default function SearchResults({
         ) : !isLoading ? (
           <>
             {results.map((r, i) => (
-              <SearchLink {...r} key={i} prefix="best" id={r.tab_url} />
+              <SearchLink
+                {...r}
+                key={i}
+                id={r.id}
+                prefix={"original"}
+                internal
+                rating={undefined}
+              />
             ))}
 
             <div className="w-full flex flex-col items-center justify-start">
