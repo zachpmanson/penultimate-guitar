@@ -3,7 +3,7 @@ import memoryCache from "memory-cache";
 import { IndividualPlaylist, Track } from "@/models/models";
 import _ from "lodash";
 import { SpotifyPlaylistResponse } from "@/types/spotify";
-export namespace SpotifyAdapter {
+export namespace SpotifyApi {
   async function getToken(): Promise<string> {
     let token = memoryCache.get("spotify-token");
     if (!token) {
@@ -59,8 +59,8 @@ export namespace SpotifyAdapter {
     ).then((res) => res.json());
 
     console.log(
-      `Pulling playlist ${playlistId} playlistPayload`,
-      JSON.stringify(playlistPayload, null, 2)
+      `Pulling playlist ${playlistId} playlistPayload`
+      // JSON.stringify(playlistPayload, null, 2)
     );
     let playlist: IndividualPlaylist = {
       playlistId: playlistId,
@@ -139,6 +139,7 @@ export namespace SpotifyAdapter {
   }
 
   export async function getTrack(trackId: string): Promise<Track> {
+    const start = new Date().getTime();
     const token = await getToken();
     const authHeader: HeadersInit = {
       Authorization: `Bearer ${token}`,
@@ -150,6 +151,9 @@ export namespace SpotifyAdapter {
         headers: authHeader,
       }
     ).then((res) => res.json());
+    // log time
+    console.log("getTrack", new Date().getTime() - start);
+
     return {
       name: trackPayload.name,
       artists: trackPayload.artists.map((a: any) => a.name),

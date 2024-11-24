@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SpotifyAdapter } from "../spotify-interface/spotify-interface";
+import { SpotifyApi } from "../spotify-interface/spotify-api";
 import { createRouter, publicProcedure } from "../trpc";
 
 export const spotifyRouter = createRouter({
@@ -12,7 +12,7 @@ export const spotifyRouter = createRouter({
     )
     .query(async ({ ctx, input }) => {
       console.log(input);
-      const playlist = await SpotifyAdapter.getPlaylist(input.playlistId);
+      const playlist = await SpotifyApi.getPlaylist(input.playlistId);
       if (ctx.session?.user?.id && input.save) {
         ctx.prisma.folder
           .upsert({
@@ -44,7 +44,7 @@ export const spotifyRouter = createRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const playlist = await SpotifyAdapter.getPlaylist(input.playlistId);
+      const playlist = await SpotifyApi.getPlaylist(input.playlistId);
       if (ctx.session?.user?.id) {
         ctx.prisma.folder
           .upsert({

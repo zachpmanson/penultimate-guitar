@@ -1,7 +1,8 @@
 import prisma from "@/server/prisma";
 import { querySitemap } from "@/server/services/search-query";
-import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
+import { SpotifyApi } from "@/server/spotify-interface/spotify-api";
 import { UGApi } from "@/server/ug-interface/ug-api";
+import { cleanUrl } from "@/utils/url";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -42,7 +43,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       },
     };
   } else {
-    const song = await SpotifyAdapter.getTrack(trackId);
+    const song = await SpotifyApi.getTrack(trackId);
     const topTab = await UGApi.getSearch({
       title: `${song.name} ${song.artists[0]}`,
       page: 1,
@@ -53,10 +54,13 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
         notFound: true,
       };
     }
+    const tabdetails = await UGApi.getTab({
+      tab_id: topTab[0].id,
+    });
 
     return {
       redirect: {
-        destination: "/original/" + topTab[0].id,
+        destination: "/best/" + cleanUrl(tabdetails.urlWeb),
       },
     };
   }

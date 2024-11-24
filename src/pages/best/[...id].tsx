@@ -1,4 +1,4 @@
-import { getHighestRatedTab } from "@/server/ug-interface/get-tab";
+import { getHighestRatedTab } from "@/server/services/get-tab";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {

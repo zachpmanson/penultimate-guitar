@@ -49,7 +49,7 @@ export default function ImportPlaylistDialog({
   navigateOnComplete?: string;
 }) {
   const router = useRouter();
-  const { mutateAsync: search } = trpc.tab.querySitemapLazy.useMutation();
+  const { mutateAsync: search } = trpc.tab.searchOneLazy.useMutation();
   const { addSavedTab } = useSavedTabs();
   const [currentlyFinding, setCurrentlyFinding] = useState<Track>();
   const alreadySearching = useRef(false);
@@ -58,41 +58,24 @@ export default function ImportPlaylistDialog({
 
   useEffect(() => {
     const getSearch = async (searchString: string, artist: string) => {
-      await search({
-        value: searchString,
-        artist: artist,
-        tab_type: "chords",
-        cursor: 1,
-        page_size: 1,
-      })
-        .then((res) => {
-          const newTab = res.items?.[0];
-          if (newTab) {
-            setPlaylistTabs((o) => o + 1);
-            addSavedTab(
-              {
-                artist: newTab.artist,
-                name: newTab.name,
-                type: newTab.tabs[0].type,
-                taburl: newTab.tabs[0].taburl,
-                saved: true,
-                loadBest: true,
-              },
-              playlist.name
-            );
-
-            console.log(
-              "Found",
-              `${searchString}`,
-              `${res.items.length} results`
-            );
-          } else {
-            console.log("Couldn't find", `${searchString}`, res);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const topResult = await search({
+        value: `${searchString} ${artist}`,
+        type: "chords",
+      });
+      if (topResult) {
+        setPlaylistTabs((o) => o + 1);
+        addSavedTab(
+          {
+            artist: topResult.artist_name,
+            name: topResult.song_name,
+            type: topResult.type,
+            taburl: topResult.taburl,
+            saved: true,
+            loadBest: true,
+          },
+          playlist.name
+        );
+      }
     };
 
     const getTabs = async (currentPlaylist: IndividualPlaylist) => {
