@@ -1,5 +1,7 @@
 export function cleanUrl(url: string) {
-  return url.split("tabs.ultimate-guitar.com/tab/").at(-1);
+  const taburl = url.split("tabs.ultimate-guitar.com/tab/").at(-1);
+  if (!taburl) throw new Error("Couldn't find taburl");
+  return taburl;
 }
 
 export function toParams(params: Record<string, any>) {
