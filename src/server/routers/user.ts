@@ -1,4 +1,4 @@
-import { SpotifyAdapter } from "@/server/spotify-interface/spotify-interface";
+import { SpotifyApi } from "@/server/spotify-interface/spotify-api";
 import { DeleteTabLinkSchema, NewTabSchema, TabSchema } from "@/types/user";
 import { z } from "zod";
 import { authProcedure, createRouter } from "../trpc";
@@ -226,7 +226,7 @@ export const userRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await SpotifyAdapter.getUserPlaylists(
+      return await SpotifyApi.getUserPlaylists(
         ctx.session.user.id,
         input.cursor,
         input.pageSize

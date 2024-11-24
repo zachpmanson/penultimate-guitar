@@ -115,7 +115,7 @@ export default function Profile() {
                         {playlist.images?.[1] && (
                           <img
                             src={playlist.images[1].url}
-                            alt="Playlist image"
+                            alt=""
                             className="rounded-md h-12 w-12"
                           />
                         )}

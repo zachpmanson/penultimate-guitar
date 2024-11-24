@@ -1,66 +1,82 @@
-import LoadingSpinner from "@/components/loadingspinner";
-import SearchLink from "@/components/search/searchlink";
-import SongItem from "@/components/search/songitem";
-import PlainButton from "@/components/shared/plainbutton";
-import { SearchResult } from "@/models/models";
-import { SearchTabType } from "@/server/routers/tab";
+import ApiSearchResults from "@/components/search/apisearchresults";
+import { SearchTabType, TAB_TYPES } from "@/models/models";
+import { UGApi } from "@/server/ug-interface/ug-api";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import Head from "next/head";
-import { useQueryState } from "nuqs";
-import { useEffect, useState } from "react";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { useEffect } from "react";
 
-const searchResultPlaceholder = {
-  artist_id: 0,
-  part: "r.part",
-  votes: 0,
-  status: "r.status",
-  preset_id: 0,
-  tab_access_type: "r.tabAccessType",
-  tp_version: 0,
-  tonality_name: "r.tonalityName",
-  version_description: "r.versionDescription",
-  verified: 0,
-  recording: "r.recording",
-  artist_url: "r.artistUrl",
-};
+function dedupSearchResults(res: UGApi.SearchResult[]) {
+  let o = new Map<string, UGApi.SearchResult>();
+
+  for (let next of res) {
+    const id = String(next.song_id);
+    const existing = o.get(id);
+    if (existing) {
+      o.set(id, {
+        ...existing,
+      });
+    } else {
+      o.set(id, next);
+    }
+  }
+  return Array.from(o.values());
+}
 
 export default function Search() {
   const [q] = useQueryState("q");
-
   const { setSearchText } = useSearchStore();
+  const [type, setTabType] = useQueryState(
+    "type",
+    parseAsStringLiteral(TAB_TYPES).withDefault("all")
+  );
 
-  const [tabType, setTabType] = useState<SearchTabType>("all");
-
-  const { data, fetchNextPage, hasNextPage, isLoading, isFetching } =
-    trpc.tab.querySitemap.useInfiniteQuery(
-      {
-        value: q ?? "",
-        search_type: "title",
-        tab_type: tabType,
-        page_size: 20,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-        initialCursor: 1,
-        enabled: !!q,
-      }
-    );
-
-  const results = data?.pages.map((p) => p.items).flat() ?? [];
+  const {
+    fetchNextPage: fetchNextPageExternal,
+    hasNextPage: hasNextPageExternal,
+    data: dataExternal,
+    isFetching: isFetchingExternal,
+    isLoading: isLoadingExternal,
+  } = trpc.tab.search.useInfiniteQuery(
+    {
+      value: q ?? "",
+      type: type,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: 1,
+      enabled: !!q,
+    }
+  );
 
   const loadPage = () => {
-    if (hasNextPage) fetchNextPage();
+    if (hasNextPageExternal) fetchNextPageExternal();
   };
 
+  const maxPageNums = Math.max(dataExternal?.pages.length ?? 0);
+
+  let resultsInPageOrder: UGApi.SearchResult[] = [];
+  for (let i = 0; i < maxPageNums; i++) {
+    if (dataExternal && dataExternal.pages.length > i) {
+      resultsInPageOrder = resultsInPageOrder.concat(
+        dataExternal.pages[i].items
+      );
+    }
+  }
+
   useEffect(() => {
-    if (q) setSearchText(q);
+    if (q) {
+      setSearchText(q);
+    }
   }, [q, setSearchText]);
+
+  const mergedResults = dedupSearchResults(resultsInPageOrder);
 
   return (
     <>
       <Head>
-        <title>Search Results</title>
+        <title>Search</title>
       </Head>
       <div className="max-w-[80ch] w-full m-auto">
         <div className="flex justify-between items-center">
@@ -68,6 +84,7 @@ export default function Search() {
           <select
             className="p-2 rounded"
             onChange={(e) => setTabType(e.target.value as SearchTabType)}
+            value={type}
           >
             <option value="all">All</option>
             <option value="tabs">Tabs</option>
@@ -77,50 +94,16 @@ export default function Search() {
           </select>
         </div>
         <p className="text-gray-400 mb-4 font-extralight">
-          Only the highest rated versions of each are shown. This is in testing,
-          search is fuzzy but it might be inaccurate.
+          Only the highest rated versions of each are shown.
         </p>
-        <div className="flex flex-col gap-2 justify-center items-center">
-          <div
-            className="mx-auto grid gap-5 w-full"
-            style={{
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            }}
-          >
-            {results.length === 0 ? (
-              <></>
-            ) : !isLoading ? (
-              <>
-                {results.map((r, i) => (
-                  <SongItem song={r} key={i} />
-                ))}
-              </>
-            ) : (
-              <p className="text-center">No results found</p>
-            )}
-          </div>
-          <div className="flex flex-col w-64 items-center justify-start">
-            {hasNextPage && (
-              <PlainButton
-                onClick={loadPage}
-                className="flex-grow w-full flex items-center justify-center"
-              >
-                {isFetching ? (
-                  <LoadingSpinner className="h-8" />
-                ) : (
-                  <div className="w-fit h-8 flex items-center justify-center">
-                    Load More
-                  </div>
-                )}
-              </PlainButton>
-            )}
-          </div>
-          {isLoading && (
-            <div className="flex items-center justify-center w-full">
-              <LoadingSpinner className="h-8" />
-            </div>
-          )}
-        </div>
+        <ApiSearchResults
+          results={mergedResults}
+          isLoading={isLoadingExternal}
+          isFetching={isFetchingExternal}
+          hasNextPage={hasNextPageExternal}
+          loadNextPage={loadPage}
+        />
+        {/* <pre>{JSON.stringify(dataExternal, null, 2)}</pre> */}
       </div>
     </>
   );

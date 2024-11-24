@@ -2,10 +2,11 @@ import { AltVersion, TabDto, TabType } from "@/models/models";
 import { DEFAULT_TAB } from "@/types/tab";
 import { TRPCError } from "@trpc/server";
 import prisma from "../prisma";
-import { insertTab } from "./insert-tab";
-import { UGAdapter } from "./ug-interface";
+import { insertTab } from "../ug-interface/insert-tab";
+import { UGAdapter } from "../ug-interface/ug-interface";
 
 export async function getTab(taburl: string) {
+  const start = new Date().getTime();
   let props: TabDto = DEFAULT_TAB;
 
   let savedTab: any;
@@ -58,11 +59,15 @@ export async function getTab(taburl: string) {
       console.error("Database error occured for", tab.taburl)
     );
   }
-  console.log(props);
+  // console.log(props);
+
+  console.log("getTab", new Date().getTime() - start);
+
   return props;
 }
 
 export async function getHighestRatedTab(taburl: string) {
+  const start = new Date().getTime();
   // TODO use internal ratings if they exist
   let savedTab: any;
   try {
@@ -119,8 +124,10 @@ export async function getHighestRatedTab(taburl: string) {
         type: tab.type,
         version: tab.version,
       },
-      ...altVersions,
+      ...(altVersions ?? []),
     ].sort((a, b) => b.rating - a.rating);
+
+    console.log("getHighestRatedTab", new Date().getTime() - start);
 
     return rankings;
   }

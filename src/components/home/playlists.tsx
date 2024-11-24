@@ -147,6 +147,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
                 <img
                   src={playlist.images?.[0].url ?? undefined}
                   className="w-8 h-8 rounded"
+                  alt=""
                 />
               </Link>
             )}

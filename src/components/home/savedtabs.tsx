@@ -134,6 +134,7 @@ function FolderPanel({ folder }: { folder: Folder }) {
                 <img
                   src={folder.imageUrl ?? undefined}
                   className="w-8 h-8 rounded"
+                  alt=""
                 />
               </Link>
             )}

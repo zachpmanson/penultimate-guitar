@@ -1,23 +1,28 @@
+import { TAB_TYPES } from "@/models/models";
 import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
-import { querySitemap } from "../search-query";
+import { querySitemap } from "../services/search-query";
 import { createRouter, publicProcedure } from "../trpc";
-import { getHighestRatedTab, getTab } from "../ug-interface/get-tab";
+import { getHighestRatedTab, getTab } from "../services/get-tab";
+import { UGApi } from "../ug-interface/ug-api";
+import { getTabFromOriginalId } from "../services/get-taburl-from-originalid";
+import { TRPCError } from "@trpc/server";
+import { search } from "../services/search";
+import { cleanUrl } from "@/utils/url";
 
-const searchTabType = z.enum([
-  "chords",
-  "tabs",
-  "ukulele",
-  "bass",
-  "drums",
-  "all",
-]);
-export type SearchTabType = z.infer<typeof searchTabType>;
+const searchTabType = z.enum(TAB_TYPES);
 
 export const tabRouter = createRouter({
   getTab: publicProcedure.input(z.string()).query(async ({ input }) => {
     return await getTab(input);
   }),
+  getTabFromOriginalId: publicProcedure
+    .input(z.number())
+    .query(async ({ input }) => {
+      const possibleTab = await getTabFromOriginalId(input);
+      if (!possibleTab) throw new TRPCError({ code: "NOT_FOUND" });
+      return await getTab(possibleTab.taburl);
+    }),
   getTabLazy: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     return await getTab(input);
   }),
@@ -31,6 +36,55 @@ export const tabRouter = createRouter({
     .input(z.string())
     .mutation(async ({ input }) => {
       return await getHighestRatedTab(input);
+    }),
+
+  search: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        cursor: z.number().gt(0),
+        type: searchTabType,
+      })
+    )
+    .query(async ({ input }) => await search(input)),
+
+  searchLazy: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        cursor: z.number().gt(0),
+        type: searchTabType,
+      })
+    )
+    .mutation(async ({ input }) => await search(input)),
+
+  searchOneLazy: publicProcedure
+    .input(
+      z.object({
+        value: z.string(),
+        type: searchTabType,
+      })
+    )
+    .mutation(async ({ input }) => {
+      const searchResult = await search({
+        value: input.value,
+        type: input.type,
+        cursor: 1,
+      });
+
+      if (searchResult.items.length === 0) {
+        return null;
+      }
+
+      const firstResult = searchResult.items[0];
+
+      const tab = await UGApi.getTab({
+        tab_id: firstResult.id,
+      });
+      return {
+        ...firstResult,
+        taburl: cleanUrl(tab.urlWeb),
+      };
     }),
 
   querySitemap: publicProcedure

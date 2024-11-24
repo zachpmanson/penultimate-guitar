@@ -1,4 +1,4 @@
-import { SitemapSearchResult } from "@/server/search-query";
+import { SitemapSearchResult } from "@/server/services/search-query";
 import PlainButton from "../shared/plainbutton";
 import Link from "next/link";
 import { ReactNode } from "react";

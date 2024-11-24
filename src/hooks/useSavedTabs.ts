@@ -59,7 +59,7 @@ export default function useSavedTabs() {
         setTabFoldersLocal(tablink, [...folders], userKey);
       }
     },
-    [session, refetchTabs, setTabFoldersLocal, setTabLinksApi]
+    [session, userKey, refetchTabs, setTabFoldersLocal, setTabLinksApi]
   );
 
   const addSavedTab = useCallback(
@@ -74,7 +74,7 @@ export default function useSavedTabs() {
         addTabLinkLocal(newTab, userKey, folderName);
       }
     },
-    [userId, addTabLinkApi, addTabLinkLocal, refetchTabs]
+    [userId, userKey, addTabLinkApi, addTabLinkLocal, refetchTabs]
   );
 
   const removeSavedTab = useCallback(
@@ -90,7 +90,7 @@ export default function useSavedTabs() {
         removeSavedTabLocal(tab, userKey, folder);
       }
     },
-    [userId, deleteTabLinkApi, refetchTabs, removeSavedTabLocal]
+    [userId, userKey, deleteTabLinkApi, refetchTabs, removeSavedTabLocal]
   );
 
   const removeFolder = useCallback(
@@ -103,7 +103,7 @@ export default function useSavedTabs() {
         removeFolderLocal(folder, userId);
       }
     },
-    [userId, refetchTabs, removeFolderLocal]
+    [userId, removeFolderApi, refetchTabs, removeFolderLocal]
   );
 
   const setBestTab = useCallback(
@@ -119,7 +119,7 @@ export default function useSavedTabs() {
         setBestTabLocal(userKey, oldTaburl, newTab);
       }
     },
-    [userId, setBestTabLocal]
+    [userKey, userId, setBestTabLocal, refetchTabs, setBestTabApi]
   );
 
   const isSaved = useCallback(

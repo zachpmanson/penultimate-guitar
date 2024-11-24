@@ -20,7 +20,7 @@ model Tab {
   rating       Float
   version      Int
   type         String
-  timestamp    String?  @default("2023-05-27T16:51:42.319Z")
+  timestamp    String?  @default("2023-05-27T16:51:42.319Z") // should switch this to be a real datetime
   song         Song     @relation(fields: [songId], references: [id])
 
   @@index([songId])
@@ -44,6 +44,7 @@ model PossibleSong {
   artist String
   taburl String @unique
   type   String
+  originalId Int?
   
   createdOn DateTime @default(now())
   
@@ -54,6 +55,7 @@ model PossibleSong {
   @@index([taburl])
   @@index([name])
   @@index([artist])
+  @@index([originalId])
 }
 
 model TrackTab {
