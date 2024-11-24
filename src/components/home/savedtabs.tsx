@@ -2,17 +2,14 @@ import useSavedTabs from "@/hooks/useSavedTabs";
 import { IndividualPlaylist } from "@/models/models";
 import { Folder } from "@/types/user";
 import { trpc } from "@/utils/trpc";
-import { Menu, Transition } from "@headlessui/react";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner from "../loadingspinner";
-import TabLink from "./tablink";
-import { useSession } from "next-auth/react";
-import PlainButton from "../shared/plainbutton";
 import PanelMenu from "./panelmenu";
+import TabLink from "./tablink";
 
 function sortByName(s1: string, s2: string) {
   return s1 > s2 ? 1 : -1;

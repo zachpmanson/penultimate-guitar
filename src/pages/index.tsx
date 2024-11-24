@@ -51,7 +51,11 @@ const Page: NextPageWithLayout = () => {
       <div className="mx-auto max-w-[150ch] flex flex-col gap-4">
         <div className="flex flex-wrap gap-4 justify-center">
           {isFilter(searchText) ? (
-            <FilteredSavedTabs />
+            <>
+              <div className="max-w-[50ch] flex-1">
+                <FilteredSavedTabs />
+              </div>
+            </>
           ) : (
             <>
               <div className="min-w-80 flex-1">
@@ -63,22 +67,21 @@ const Page: NextPageWithLayout = () => {
                   <Playlists />
                 </div>
               )}
+              <div className="flex-1 min-w-80 ">
+                <RecentTabs />
+                {recentTabs && recentTabs.length > 0 && (
+                  <TablinkList
+                    title="Other Users Are Playing"
+                    tablinks={recentTabs.map((t) => ({
+                      ...t,
+                      name: t.song.name,
+                      artist: t.song.artist,
+                    }))}
+                  />
+                )}
+              </div>
             </>
           )}
-
-          <div className="flex-1 min-w-80 ">
-            <RecentTabs />
-            {recentTabs && recentTabs.length > 0 && (
-              <TablinkList
-                title="Other Users Are Playing"
-                tablinks={recentTabs.map((t) => ({
-                  ...t,
-                  name: t.song.name,
-                  artist: t.song.artist,
-                }))}
-              />
-            )}
-          </div>
 
           {mode === "guitalele" && (
             <p className="text-center">
