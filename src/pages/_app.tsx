@@ -3,7 +3,8 @@ import GlobalProvider from "@/contexts/Global";
 import "@/styles/globals.css";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
-import type { AppProps, AppType } from "next/app";
+import { ThemeProvider } from "next-themes";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -11,8 +12,7 @@ import NProgress from "nprogress";
 import { ReactElement, ReactNode, useEffect } from "react";
 import "../styles/nprogress.css";
 import { trpc } from "../utils/trpc";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "next-themes";
+import { NuqsAdapter } from "nuqs/adapters/next/pages";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -77,13 +77,13 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       gtag('config', 'G-2Q5B9DT8HJ');
     `}
       </Script>
-    </Layout>,
+    </Layout>
   );
   return (
     <SessionProvider session={pageProps.session}>
       <GlobalProvider>
         <ThemeProvider defaultTheme="light" attribute="class">
-          {layout}
+          <NuqsAdapter>{layout}</NuqsAdapter>
         </ThemeProvider>
       </GlobalProvider>
     </SessionProvider>
