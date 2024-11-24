@@ -10,3 +10,7 @@ To run it locally run:
 pnpm install
 pnpm dev
 ```
+
+## Deployment
+
+Migrations are run in GitHub actions on the `main` branch. Rest of the deployment is handled by Vercel.
