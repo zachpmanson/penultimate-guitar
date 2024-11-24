@@ -29,7 +29,7 @@ export default function Search() {
   const { setSearchText } = useSearchStore();
   const [type, setTabType] = useQueryState(
     "type",
-    parseAsStringLiteral(TAB_TYPES).withDefault("all")
+    parseAsStringLiteral(TAB_TYPES).withDefault("all"),
   );
 
   const {
@@ -47,7 +47,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    }
+    },
   );
 
   const loadPage = () => {
@@ -60,7 +60,7 @@ export default function Search() {
   for (let i = 0; i < maxPageNums; i++) {
     if (dataExternal && dataExternal.pages.length > i) {
       resultsInPageOrder = resultsInPageOrder.concat(
-        dataExternal.pages[i].items
+        dataExternal.pages[i].items,
       );
     }
   }

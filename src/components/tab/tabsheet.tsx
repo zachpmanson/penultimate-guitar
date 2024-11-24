@@ -33,7 +33,7 @@ export default function TabSheet({
           transposedChord={transposedChords[chord]}
           fontSize={fontSize}
           inversion={inversions[chord] ?? 0}
-        />
+        />,
       );
     }
   }
@@ -110,8 +110,8 @@ export default function TabSheet({
             }
           }
           return lines.join("\n");
-        }
-      )
+        },
+      ),
     );
   }, [lineCutoff, plainTab]);
 
@@ -143,7 +143,7 @@ export default function TabSheet({
               <span onClick={() => increaseInversion(chord)}>
                 {chordElements.get(chord)}
               </span>
-            )
+            ),
           )}
         </pre>
       </div>

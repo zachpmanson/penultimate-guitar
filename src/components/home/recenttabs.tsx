@@ -7,7 +7,7 @@ export default function RecentTabs() {
 
   useEffect(() => {
     const savedRecents: any = JSON.parse(
-      localStorage?.getItem("recents") || "[]"
+      localStorage?.getItem("recents") || "[]",
     );
     if (Array.isArray(savedRecents)) {
       setRecents(savedRecents);

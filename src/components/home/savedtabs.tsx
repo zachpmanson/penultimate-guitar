@@ -80,7 +80,7 @@ function FolderPanel({ folder }: { folder: Folder }) {
     { playlistId: folder.playlistUrl ?? "", save: true },
     {
       enabled: false,
-    }
+    },
   );
   const getTab = trpc.tab.getTabLazy.useMutation();
   const [playlist, setPlaylist] = useState<IndividualPlaylist>();

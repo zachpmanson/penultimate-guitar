@@ -14,9 +14,9 @@ export default function FilteredSavedTabs() {
     flatTabs.filter(
       (t) =>
         t.name?.toLowerCase().includes(lowerSearchText) ||
-        t.artist?.toLowerCase().includes(lowerSearchText)
+        t.artist?.toLowerCase().includes(lowerSearchText),
     ),
-    (t: TabLinkDto) => t.taburl
+    (t: TabLinkDto) => t.taburl,
   );
 
   return (

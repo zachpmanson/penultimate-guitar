@@ -73,7 +73,7 @@ export default function ImportPlaylistDialog({
             saved: true,
             loadBest: true,
           },
-          playlist.name
+          playlist.name,
         );
       }
     };
@@ -144,7 +144,7 @@ export default function ImportPlaylistDialog({
               className="bg-blue-600 h-2.5 rounded-full"
               style={{
                 width: `${Math.round(
-                  (100 * attemptCount) / playlist.tracks.length
+                  (100 * attemptCount) / playlist.tracks.length,
                 )}%`,
               }}
             ></div>

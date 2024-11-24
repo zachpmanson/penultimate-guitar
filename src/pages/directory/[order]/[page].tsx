@@ -44,7 +44,7 @@ export default function Directory({
     allTabs = allTabs.filter(
       (t) =>
         t.song.name.toLowerCase().includes(lowerSearch) ||
-        t.song.artist.toLowerCase().includes(lowerSearch)
+        t.song.artist.toLowerCase().includes(lowerSearch),
     );
   }
 

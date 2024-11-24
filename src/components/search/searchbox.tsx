@@ -30,7 +30,7 @@ export default function SearchBox() {
     } else if (searchText.startsWith("https://open.spotify.com/playlist/")) {
       setButtonText("Loading...");
       const matches = searchText.match(
-        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
+        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/,
       );
       const playlistId = matches?.groups?.id!;
       getPlaylist

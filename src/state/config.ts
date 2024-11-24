@@ -25,6 +25,6 @@ export const useConfigStore = create<ConfigState & ConfigActions>()(
     }),
     {
       name: "config-storage", // name of the item in the storage (must be unique)
-    }
-  )
+    },
+  ),
 );

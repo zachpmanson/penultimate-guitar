@@ -8,7 +8,7 @@ export const spotifyRouter = createRouter({
       z.object({
         playlistId: z.string(),
         save: z.boolean().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       console.log(input);
@@ -41,7 +41,7 @@ export const spotifyRouter = createRouter({
     .input(
       z.object({
         playlistId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const playlist = await SpotifyApi.getPlaylist(input.playlistId);

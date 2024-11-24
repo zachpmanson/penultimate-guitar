@@ -20,7 +20,7 @@ export default function Playlists() {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
-      }
+      },
     );
 
   const playlists = data?.pages.flatMap((p) => p.items) ?? [];
@@ -96,7 +96,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
     for (let track of data.tracks) {
       setPulling(track.name);
       await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
-        console.log("Couldn't find track", track)
+        console.log("Couldn't find track", track),
       );
       await new Promise((r) => setTimeout(r, 2000));
     }
@@ -108,7 +108,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
     { playlistId: playlist.uri.split(":").at(-1) ?? "", save: false },
     {
       enabled: isOpen,
-    }
+    },
   );
 
   return (

@@ -6,7 +6,7 @@ import { Song } from "@prisma/client";
 export async function insertTab(
   song: Song,
   tab: NewTab,
-  altVersions: AltVersion[]
+  altVersions: AltVersion[],
 ) {
   try {
     // upsert song
@@ -73,7 +73,7 @@ export async function insertTab(
             update: {},
           })
           .catch((e) =>
-            console.error(`Error upserting alt '${altVersion.taburl}':`, e)
+            console.error(`Error upserting alt '${altVersion.taburl}':`, e),
           );
       }
     }

@@ -65,7 +65,7 @@ export default function PanelMenu({
                       </button>
                     )}
                   </Menu.Item>
-                )
+                ),
               )}
             </div>
           </Menu.Items>

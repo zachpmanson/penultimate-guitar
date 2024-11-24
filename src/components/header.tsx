@@ -31,7 +31,7 @@ export default function Header() {
                 e.stopPropagation();
                 router.push(
                   "/tab/" +
-                    allSaved[Math.floor(Math.random() * allSaved.length)]
+                    allSaved[Math.floor(Math.random() * allSaved.length)],
                 );
               }}
               disabled={allSaved.length === 0}

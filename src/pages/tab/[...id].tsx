@@ -41,7 +41,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
-    mode === "guitalele" ? -5 : 0
+    mode === "guitalele" ? -5 : 0,
   );
   const [scrollSpeed, setScrollSpeed] = useState(0);
   const oldScrollSpeed = useRef(1);
@@ -116,7 +116,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
           console.log(
             `(${window.innerHeight + window.scrollY}) >= ${
               document.body.scrollHeight - 5
-            }`
+            }`,
           );
         if (
           window.innerHeight + window.scrollY >=
@@ -187,8 +187,8 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
     return tranposition === 0
       ? ""
       : tranposition < 0
-      ? tranposition.toString()
-      : `+${tranposition}`;
+        ? tranposition.toString()
+        : `+${tranposition}`;
   };
 
   const toggleMode = () => {

@@ -51,7 +51,7 @@ async function getSearch(URL: string): Promise<string> {
       let jsStore = dom.window.document.querySelector(".js-store");
       console.log(jsStore);
       let dataContent = JSON.parse(
-        jsStore.getAttribute("data-content").replace(/&quot;/g, '"')
+        jsStore.getAttribute("data-content").replace(/&quot;/g, '"'),
       );
       results = dataContent["store"]["page"]["data"]["results"];
     })

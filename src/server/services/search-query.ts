@@ -84,7 +84,7 @@ export async function querySitemap(
   artist: string | undefined,
   tab_type: SearchTabType,
   cursor: number,
-  page_size: number
+  page_size: number,
 ): Promise<{ items: SitemapSearchResult[]; nextCursor?: number }> {
   const strippedValue = value
     .toLowerCase()
@@ -105,7 +105,7 @@ export async function querySitemap(
     (cursor - 1) * page_size,
     strippedValue.slice(0, 4),
     artist ?? "",
-    artist?.slice(0, 4) ?? ""
+    artist?.slice(0, 4) ?? "",
   );
 
   const a = songRows.map((t) => {

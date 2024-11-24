@@ -108,7 +108,7 @@ export const userRouter = createRouter({
       z.object({
         tab: TabSchema,
         folders: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const count = ctx.prisma.$transaction(async (tx) => {
@@ -199,7 +199,7 @@ export const userRouter = createRouter({
           type: z.string(),
           version: z.number(),
         }),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const u = await ctx.prisma.userTablink.updateMany({
@@ -223,13 +223,13 @@ export const userRouter = createRouter({
       z.object({
         cursor: z.number(),
         pageSize: z.number().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       return await SpotifyApi.getUserPlaylists(
         ctx.session.user.id,
         input.cursor,
-        input.pageSize
+        input.pageSize,
       );
     }),
 });

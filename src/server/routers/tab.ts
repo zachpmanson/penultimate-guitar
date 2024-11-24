@@ -44,7 +44,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      })
+      }),
     )
     .query(async ({ input }) => await search(input)),
 
@@ -54,7 +54,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      })
+      }),
     )
     .mutation(async ({ input }) => await search(input)),
 
@@ -63,7 +63,7 @@ export const tabRouter = createRouter({
       z.object({
         value: z.string(),
         type: searchTabType,
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       const searchResult = await search({
@@ -96,7 +96,7 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         page_size: z.number().gt(0).lte(100),
         cursor: z.number().gt(0),
-      })
+      }),
     )
     .query(async ({ input }) => {
       return await querySitemap(
@@ -104,7 +104,7 @@ export const tabRouter = createRouter({
         input.artist,
         input.tab_type,
         input.cursor,
-        input.page_size
+        input.page_size,
       );
     }),
   querySitemapLazy: publicProcedure
@@ -115,7 +115,7 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         cursor: z.number().gt(0),
         page_size: z.number().gt(0).lte(100),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       return await querySitemap(
@@ -123,7 +123,7 @@ export const tabRouter = createRouter({
         input.artist,
         input.tab_type,
         input.cursor,
-        input.page_size
+        input.page_size,
       );
     }),
 
@@ -133,7 +133,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -170,7 +170,7 @@ export const tabRouter = createRouter({
       `,
         input.value,
         PAGE_SIZE,
-        (input.cursor - 1) * PAGE_SIZE
+        (input.cursor - 1) * PAGE_SIZE,
       );
       console.log(tabIdRows);
 
@@ -204,7 +204,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -251,13 +251,13 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       return await UGAdapter.getSearch(
         input.value,
         input.search_type,
-        input.cursor
+        input.cursor,
       );
     }),
 
@@ -267,13 +267,13 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       return await UGAdapter.getSearch(
         input.value,
         input.search_type,
-        input.cursor
+        input.cursor,
       );
     }),
   getRecentTabs: publicProcedure

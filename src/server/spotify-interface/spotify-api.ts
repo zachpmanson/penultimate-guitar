@@ -34,7 +34,7 @@ export namespace SpotifyApi {
             memoryCache.put(
               "spotify-token",
               token,
-              accessResponse.expires_in - 100
+              accessResponse.expires_in - 100,
             );
           }
         });
@@ -44,7 +44,7 @@ export namespace SpotifyApi {
   }
 
   export async function getPlaylist(
-    playlistId: string
+    playlistId: string,
   ): Promise<IndividualPlaylist> {
     const token = await getToken();
     const authHeader: HeadersInit = {
@@ -55,11 +55,11 @@ export namespace SpotifyApi {
       {
         method: "GET",
         headers: authHeader,
-      }
+      },
     ).then((res) => res.json());
 
     console.log(
-      `Pulling playlist ${playlistId} playlistPayload`
+      `Pulling playlist ${playlistId} playlistPayload`,
       // JSON.stringify(playlistPayload, null, 2)
     );
     let playlist: IndividualPlaylist = {
@@ -84,7 +84,7 @@ export namespace SpotifyApi {
     if (playlistPayload.tracks.total > 100) {
       let pages = Math.floor(playlistPayload.tracks.total / PAGESIZE);
       let offsets = [...Array(pages).keys()].map(
-        (pageNum) => (pageNum + 1) * PAGESIZE
+        (pageNum) => (pageNum + 1) * PAGESIZE,
       );
 
       await Promise.all(
@@ -101,10 +101,10 @@ export namespace SpotifyApi {
                   name: i?.track?.name,
                   trackId: i?.track?.uri.split(":").at(-1),
                   artists: i?.track?.artists.map((a: any) => a.name),
-                }))
+                })),
               );
             });
-        })
+        }),
       );
     }
 
@@ -115,7 +115,7 @@ export namespace SpotifyApi {
   export async function getUserPlaylists(
     userId: string,
     page: number,
-    pageSize: number = PLAYLISTS_PAGESIZE
+    pageSize: number = PLAYLISTS_PAGESIZE,
   ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
     console.log("getUserPlaylists", userId, page);
     const token = await getToken();
@@ -129,7 +129,7 @@ export namespace SpotifyApi {
       {
         method: "GET",
         headers: authHeader,
-      }
+      },
     ).then((res) => res.json())) as SpotifyPlaylistResponse;
     // console.log(userId, page, payload);
     return {
@@ -149,7 +149,7 @@ export namespace SpotifyApi {
       {
         method: "GET",
         headers: authHeader,
-      }
+      },
     ).then((res) => res.json());
     // log time
     console.log("getTrack", new Date().getTime() - start);

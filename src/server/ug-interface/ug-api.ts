@@ -191,7 +191,7 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/search?${query}`,
       {
         headers,
-      }
+      },
     );
     const status = data.status;
 
@@ -205,7 +205,7 @@ export namespace UGApi {
     console.log("getSearch", new Date().getTime() - start);
 
     return (tabs ?? []).filter(
-      (i) => !["Power", "Official", "Pro"].includes(i.type)
+      (i) => !["Power", "Official", "Pro"].includes(i.type),
     );
   }
 
@@ -218,7 +218,7 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/info?${query}`,
       {
         headers,
-      }
+      },
     ).then((res) => res.json());
 
     const tab = tabInfoSchema.parse(data);

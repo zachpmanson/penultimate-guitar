@@ -77,7 +77,7 @@ export default function SaveDialog({
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
-    event: KeyboardEvent<HTMLInputElement>
+    event: KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.key === "Enter") addNew();
   };

@@ -48,14 +48,14 @@ export default function useChords(plainTab: string, transposition: number = 0) {
   const chords = useMemo(() => {
     return [
       ...new Set(
-        allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", ""))
+        allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", "")),
       ),
     ];
   }, [allChords]);
 
   function transposeChord(
     chord: string,
-    transposition: number
+    transposition: number,
   ): TransposedChord {
     let matches = chord.match(/^[A-Z][#b]?/);
     let key = matches ? matches[0] : "N/A";
@@ -108,7 +108,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
   const transposedChords = useMemo(() => {
     function transposeChord(
       chord: string,
-      transposition: number
+      transposition: number,
     ): TransposedChord {
       let matches = chord.match(/^[A-Z][#b]?/);
       let key = matches ? matches[0] : "N/A";
@@ -159,7 +159,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
     }
 
     return Object.fromEntries(
-      chords.map((chord) => [chord, transposeChord(chord, transposition)])
+      chords.map((chord) => [chord, transposeChord(chord, transposition)]),
     );
   }, [chords, transposition, chordsDB?.suffixes, keys]);
 
