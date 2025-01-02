@@ -361,7 +361,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
           </div>
         )}
 
-        <div className="lg:px-28 w-fit">
+        <div className="lg:px-28 w-full">
           <TabSheet
             plainTab={plainTab}
             fontSize={fontSize}

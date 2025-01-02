@@ -16,23 +16,17 @@ export default function TabSheet({
     fontSize
   );
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="w-fit">
-        <pre
-          className="whitespace-pre-wrap"
-          style={{ fontSize: `${fontSize}px` }}
-        >
-          {reactStringReplace(
-            formattedTab,
-            /\[ch\](.+?)\[\/ch\]/gm,
-            (chord) => (
-              <span onClick={() => cycleInversion(chord)}>
-                {chordElements.get(chord)}
-              </span>
-            )
-          )}
-        </pre>
-      </div>
+    <div className="flex flex-col gap-4 w-full overflow-x-scroll">
+      <pre
+        className="whitespace-pre-wrap"
+        style={{ fontSize: `${fontSize}px` }}
+      >
+        {reactStringReplace(formattedTab, /\[ch\](.+?)\[\/ch\]/gm, (chord) => (
+          <span onClick={() => cycleInversion(chord)}>
+            {chordElements.get(chord)}
+          </span>
+        ))}
+      </pre>
     </div>
   );
 }
