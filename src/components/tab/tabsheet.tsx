@@ -16,7 +16,7 @@ export default function TabSheet({
     fontSize
   );
   return (
-    <div className="flex flex-col gap-4 w-full overflow-x-scroll">
+    <div className="w-fit max-w-full overflow-x-scroll">
       <pre
         className="whitespace-pre-wrap"
         style={{ fontSize: `${fontSize}px` }}

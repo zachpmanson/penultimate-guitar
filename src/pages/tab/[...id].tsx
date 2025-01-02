@@ -234,7 +234,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   );
 
   return (
-    <div ref={element} tabIndex={0}>
+    <>
       <Head>
         <title>
           {tabDetails.song.name
@@ -244,159 +244,174 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
             : "Penultimate Guitar"}
         </title>
       </Head>
-      <h1 className="text-center text-2xl my-4">
-        <span className="font-medium">{tabDetails.song.name}</span>
-        <span className="font-light">{` ${
-          tabDetails.song.artist && "- " + tabDetails.song.artist
-        }`}</span>
-      </h1>
-      <div className="max-w-lg mx-auto my-4">
-        {(tabDetails?.song?.Tab?.length ?? 1) > 1 && (
-          <details className="no-print">
-            <summary>
-              Version {tabDetails?.version} of {tabDetails.song.Tab?.length}
-            </summary>
+      <div
+        ref={element}
+        tabIndex={0}
+        className="flex flex-col align-middle w-full"
+      >
+        <div>
+          <h1 className="text-center text-2xl my-4">
+            <span className="font-medium">{tabDetails.song.name}</span>
+            <span className="font-light">{` ${
+              tabDetails.song.artist && "- " + tabDetails.song.artist
+            }`}</span>
+          </h1>
+          <div className="max-w-lg mx-auto my-4">
+            {(tabDetails?.song?.Tab?.length ?? 1) > 1 && (
+              <details className="no-print">
+                <summary>
+                  Version {tabDetails?.version} of {tabDetails.song.Tab?.length}
+                </summary>
 
-            <ul>
-              {tabDetails.song.Tab?.sort(tabCompareFn).map((t, index) => (
-                <li key={index}>
-                  {t.taburl === tabDetails.taburl || (
-                    <div className="flex justify-between">
-                      <Link href={t.taburl} prefetch={false}>
-                        {tabDetails.song.name}
-                        <span className="font-light text-xs">
-                          {" "}
-                          ({t.type}) (v{t.version}){" "}
-                        </span>
-                      </Link>
-                      <div>
-                        Rating: {Math.round(t.rating * 100) / 100} / 5.00
-                      </div>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
-        {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
-        {!!tabDetails?.tuning?.value && (
-          <div>
-            Tuning: <span className="font-bold">{tabDetails?.tuning.name}</span>
-            , {tabDetails?.tuning.value}
+                <ul>
+                  {tabDetails.song.Tab?.sort(tabCompareFn).map((t, index) => (
+                    <li key={index}>
+                      {t.taburl === tabDetails.taburl || (
+                        <div className="flex justify-between">
+                          <Link href={t.taburl} prefetch={false}>
+                            {tabDetails.song.name}
+                            <span className="font-light text-xs">
+                              {" "}
+                              ({t.type}) (v{t.version}){" "}
+                            </span>
+                          </Link>
+                          <div>
+                            Rating: {Math.round(t.rating * 100) / 100} / 5.00
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+            {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
+            {!!tabDetails?.tuning?.value && (
+              <div>
+                Tuning:{" "}
+                <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
+                {tabDetails?.tuning.value}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <hr className="my-4 no-print dark:border-gray-600" />
+        </div>
 
-      <div className="w-full m-auto">
-        {tabDetails?.tab && (
-          <div className="bg-white/50 dark:bg-default-dark/50 w-full sticky top-0 top-toolbar dark:top-toolbar no-print z-40">
-            <div className="flex lg:float-right flex-row lg:flex-col justify-between max-w-lg mx-auto my-4 gap-2 text-sm flex-wrap relative">
-              <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">
-                  {mode !== "guitalele" ? (
-                    "Transpose"
-                  ) : (
-                    <span className={GuitaleleStyle}>Guitalele Mode!</span>
-                  )}
-                  {mode === "guitalele" ||
-                    tranposition === 0 ||
-                    ` (${formattedTransposition()})`}
-                </p>
-                <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => setTranposition(tranposition - 1)}
-                  >
-                    <MinusIcon className="w-6 h-6" />
-                  </ToolbarButton>
-                  <ToolbarButton
-                    onClick={() => setTranposition(tranposition + 1)}
-                  >
-                    <PlusIcon className="w-6 h-6" />
-                  </ToolbarButton>
-                </div>
-              </div>
+        <hr className="my-4 no-print dark:border-gray-600" />
 
-              <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">
-                  Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}
-                </p>
-                <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => changeScrolling("down")}
-                    disabled={scrollSpeed < 1}
-                  >
-                    <MinusIcon className="w-6 h-6" />
-                  </ToolbarButton>
-                  <ToolbarButton onClick={() => changeScrolling("up")}>
-                    <PlusIcon className="w-6 h-6" />
-                  </ToolbarButton>
-                </div>
-              </div>
-              <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">Font size</p>
-                <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton
-                    onClick={() => setFontSize(fontSize - 2)}
-                    disabled={fontSize < 8}
-                  >
-                    <span className="text-xs">A</span>
-                  </ToolbarButton>
-                  <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
-                    <span className="text-2xl">A</span>
-                  </ToolbarButton>
-                </div>
-              </div>
-              <div className="flex-1 flex-col text-center">
-                <p className="text-xs whitespace-nowrap">Options</p>
-                <div className="flex gap-1 m-auto w-fit">
-                  <ToolbarButton onClick={handleSave}>
-                    <BookmarkIcon className="w-6 h-6" />
-                  </ToolbarButton>
-                  {options}
+        <div className="relative w-fit max-w-full lg:px-24 m-auto z-0">
+          {tabDetails?.tab && (
+            <div className="absolute top-0 lg:right-0 w-full lg:w-fit h-full">
+              <div className="bg-white/50 dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto w-full max-w-lg m-auto">
+                <div className="flex flex-row lg:flex-col justify-between my-4 gap-2 text-sm flex-wrap relative">
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">
+                      {mode !== "guitalele" ? (
+                        "Transpose"
+                      ) : (
+                        <span className={GuitaleleStyle}>Guitalele Mode!</span>
+                      )}
+                      {mode === "guitalele" ||
+                        tranposition === 0 ||
+                        ` (${formattedTransposition()})`}
+                    </p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton
+                        onClick={() => setTranposition(tranposition - 1)}
+                      >
+                        <MinusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      <ToolbarButton
+                        onClick={() => setTranposition(tranposition + 1)}
+                      >
+                        <PlusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">
+                      Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}
+                    </p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton
+                        onClick={() => changeScrolling("down")}
+                        disabled={scrollSpeed < 1}
+                      >
+                        <MinusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      <ToolbarButton onClick={() => changeScrolling("up")}>
+                        <PlusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">Font size</p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton
+                        onClick={() => setFontSize(fontSize - 2)}
+                        disabled={fontSize < 8}
+                      >
+                        <span className="text-xs">A</span>
+                      </ToolbarButton>
+                      <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
+                        <span className="text-2xl">A</span>
+                      </ToolbarButton>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">Options</p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton onClick={handleSave}>
+                        <BookmarkIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      {options}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-
-        <div className="lg:px-28 w-full">
-          <TabSheet
-            plainTab={plainTab}
-            fontSize={fontSize}
-            transposition={tranposition}
-          ></TabSheet>
-        </div>
-      </div>
-
-      <hr className="my-4 no-print dark:border-gray-600" />
-      <div className="max-w-lg mx-auto my-4 no-print flex">
-        <div>
-          {!!tabDetails?.contributors?.length && (
-            <details>
-              <summary>{tabDetails?.contributors?.length} Contributors</summary>
-              <ul>
-                {tabDetails?.contributors?.map((c, index) => (
-                  <li key={index}>
-                    <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
-                      {c}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
           )}
+          <div className="lg:pt-0 pt-24 z-30 relative">
+            <TabSheet
+              plainTab={plainTab}
+              fontSize={fontSize}
+              transposition={tranposition}
+            />
+          </div>
         </div>
+
+        <hr className="my-4 no-print dark:border-gray-600" />
+        <div className="">
+          <div className="max-w-lg mx-auto my-4 no-print flex">
+            <div>
+              {!!tabDetails?.contributors?.length && (
+                <details>
+                  <summary>
+                    {tabDetails?.contributors?.length} Contributors
+                  </summary>
+                  <ul>
+                    {tabDetails?.contributors?.map((c, index) => (
+                      <li key={index}>
+                        <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
+                          {c}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </div>
+          </div>
+        </div>
+        {saveDialogActive && (
+          <SaveDialog
+            isOpen={saveDialogActive}
+            setIsOpen={setSaveDialogActive}
+            tab={tabLink}
+          />
+        )}
       </div>
-      {saveDialogActive && (
-        <SaveDialog
-          isOpen={saveDialogActive}
-          setIsOpen={setSaveDialogActive}
-          tab={tabLink}
-        />
-      )}
-    </div>
+    </>
   );
 }
 
