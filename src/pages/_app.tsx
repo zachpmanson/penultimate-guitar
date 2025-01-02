@@ -11,6 +11,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/pages";
 import { ReactElement, ReactNode } from "react";
 import { trpc } from "../utils/trpc";
 import useRouteProgress from "@/hooks/useRouteProgress";
+import "../styles/nprogress.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
