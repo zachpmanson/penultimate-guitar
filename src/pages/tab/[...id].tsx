@@ -4,6 +4,7 @@ import ToolbarButton, {
   getToolbarButtonStyle,
 } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle } from "@/constants";
+import useAutoscroll from "@/hooks/useAutoscroll";
 import { TabLinkDto } from "@/models/models";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
@@ -23,8 +24,6 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
 import "react-tooltip/dist/react-tooltip.css";
 
-const scrollMs = 100;
-
 export default function Tab({ id }: { trpcState: any; id: string }) {
   const { request: requestWakeLock, release: releaseWakeLock } = useWakeLock({
     onRequest: () => console.log("Screen Wake Lock: requested!"),
@@ -36,15 +35,15 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const tabDetails = data ?? DEFAULT_TAB;
 
   const element = useRef<HTMLDivElement>(null);
+  const { scrollSpeed, changeScrolling, setScrollSpeed, isTouching } =
+    useAutoscroll(element);
+
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
     mode === "guitalele" ? -5 : 0
   );
-  const [scrollSpeed, setScrollSpeed] = useState(0);
   const oldScrollSpeed = useRef(1);
-  const scrollinterval = useRef<NodeJS.Timer>();
-  const isTouching = useRef(false);
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
   const plainTab = tabDetails?.tab ?? "";
@@ -84,48 +83,6 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
       localStorage.setItem("recents", JSON.stringify(uniqRecents));
     }
   }, [id, tabDetails]);
-
-  const changeScrolling = (type: string) => {
-    clearInterval(scrollinterval.current);
-    if (type === "up") {
-      setScrollSpeed(scrollSpeed + 1);
-    } else {
-      if (scrollSpeed > 0) {
-        setScrollSpeed(scrollSpeed - 1);
-      }
-    }
-    if (element?.current?.focus) element.current.focus();
-  };
-
-  useEffect(() => {
-    if (scrollSpeed > 0) {
-      scrollinterval.current = setInterval(() => {
-        if (!isTouching.current) {
-          window.scrollBy({
-            top: scrollSpeed,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
-        if (element.current)
-          console.log(
-            `(${window.innerHeight + window.scrollY}) >= ${
-              document.body.scrollHeight - 5
-            }`
-          );
-        if (
-          window.innerHeight + window.scrollY >=
-          document.body.scrollHeight - 5
-        ) {
-          setScrollSpeed(0);
-          clearInterval(scrollinterval.current);
-        }
-      }, scrollMs);
-    }
-    return () => {
-      clearInterval(scrollinterval.current);
-    };
-  }, [scrollSpeed]);
 
   useEffect(() => {
     if (tranposition !== -5) setMode("default");
