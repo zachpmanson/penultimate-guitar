@@ -1,7 +1,6 @@
 import { SitemapSearchResult } from "@/server/services/search-query";
-import PlainButton from "../shared/plainbutton";
-import Link from "next/link";
 import { ReactNode } from "react";
+import PlainButton from "../shared/plainbutton";
 function normalizedName(str: string) {
   str = str.toLowerCase();
   if (str === "bass tabs") {
@@ -18,15 +17,13 @@ function ActiveButton({
   children: ReactNode;
 }) {
   return (
-    <Link
+    <PlainButton
       href={href}
       prefetch={false}
-      className="text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
+      className="text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex gap-2 items-center justify-center"
     >
-      <PlainButton className={"flex gap-2 items-center justify-center"}>
-        <div className="w-full uppercase text-xs text-center">{children}</div>
-      </PlainButton>
-    </Link>
+      <div className="w-full uppercase text-xs text-center">{children}</div>
+    </PlainButton>
   );
 }
 

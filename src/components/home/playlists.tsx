@@ -161,17 +161,15 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
             {data ? (
               <>
                 {data.tracks.map((t, j) => (
-                  <Link
+                  <PlainButton
                     href={`/track/${t.trackId?.split(":").at(-1)}`}
                     key={j}
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
                     prefetch={false}
                   >
-                    <PlainButton>
-                      <span className="font-bold text-sm">{t.name}</span> -{" "}
-                      {t.artists.join(", ")}
-                    </PlainButton>
-                  </Link>
+                    <span className="font-bold text-sm">{t.name}</span> -{" "}
+                    {t.artists.join(", ")}
+                  </PlainButton>
                 ))}
               </>
             ) : (

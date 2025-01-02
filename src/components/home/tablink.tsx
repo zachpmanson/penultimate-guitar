@@ -40,40 +40,22 @@ export default function TabLink({
         className="w-full flex mx-auto justify-between gap-2"
         onMouseOver={(e) => e.stopPropagation()}
       >
-        <Link
-          // this allows mouse3 to still open the link in a new tab even if mouse1 overrides
+        <PlainButton
           href={`/${tablink.loadBest ? "best" : "tab"}/${tablink.taburl}`}
-          onMouseDown={(e) => {
-            if (e.button === 1 && tablink.loadBest) {
-              getHighestRatedTabLazy(tablink.taburl).then((ranked) => {
-                setBestTab(tablink.taburl, ranked[0]);
-              });
-            }
-          }}
-          onClick={(e) => {
-            if (tablink.loadBest) {
-              e.preventDefault();
-              getHighestRatedTabLazy(tablink.taburl).then((ranked) => {
-                router.push("/tab/" + ranked[0].taburl);
-                setBestTab(tablink.taburl, ranked[0]);
-              });
-            }
-          }}
-          className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
           prefetch={prefetch}
+          className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
         >
-          <PlainButton>
-            {/* <pre>{JSON.stringify(tablink, null, 2)}</pre> */}
-            <span className="font-bold text-sm">{tablink.name}</span> -{" "}
-            {tablink.artist}
-            {tablink.version && (
-              <span className="font-light text-xs">
-                {" "}
-                {tablink.type && `(${tablink.type})`} (v{tablink.version})
-              </span>
-            )}
-          </PlainButton>
-        </Link>
+          {/* <pre>{JSON.stringify(tablink, null, 2)}</pre> */}
+          <span className="font-bold text-sm">{tablink.name}</span> -{" "}
+          {tablink.artist}
+          {tablink.version && (
+            <span className="font-light text-xs">
+              {" "}
+              {tablink.type && `(${tablink.type})`} (v{tablink.version})
+            </span>
+          )}
+        </PlainButton>
+        {/* </Link> */}
         <PlainButton onClick={handleSave}>
           <div className="flex items-center h-full w-4 text-gray-800 dark:text-gray-200">
             {recent || !folder ? (

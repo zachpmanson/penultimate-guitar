@@ -22,7 +22,7 @@ export default function Profile() {
     { playlistId: playlistId ?? "", save: true },
     {
       enabled: !!playlistId,
-    },
+    }
   );
   const [isImportOpen, setIsImportOpen] = useState(false);
   const { setPlaylists } = useGlobal();
@@ -34,13 +34,13 @@ export default function Profile() {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
-      },
+      }
     );
 
   const pullPlaylist = (url: string) => {
     console.log("pulling playlist", url);
     const matches = url.match(
-      /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/,
+      /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
     );
     const playlistId = matches?.groups?.id!;
     setPlaylistId(playlistId);
@@ -104,10 +104,7 @@ export default function Profile() {
                   key={i}
                 >
                   <div className="flex flex-col justify-between sm:h-32 h-fit min-w-20">
-                    <div
-                      className="text-lg font-bold overflow-hidden
-                    "
-                    >
+                    <div className="text-lg font-bold overflow-hidden text-left">
                       {playlist.name}
                     </div>
                     <div className="flex gap-2 justify-between border-gray-200 dark:border-gray-600 w-full border-t-[1px] pt-2">

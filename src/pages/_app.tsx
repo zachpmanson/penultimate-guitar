@@ -56,7 +56,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       gtag('config', 'G-2Q5B9DT8HJ');
     `}
       </Script>
-    </Layout>
+    </Layout>,
   );
   return (
     <SessionProvider session={pageProps.session}>

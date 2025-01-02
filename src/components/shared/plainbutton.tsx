@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   JSXElementConstructor,
   MouseEventHandler,
@@ -22,15 +23,26 @@ export default function PlainButton({
   className?: string;
   title?: string;
   noPadding?: boolean;
+  href?: string;
+  prefetch?: boolean;
 }) {
-  return (
+  const className =
+    "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
+    (props.disabled ? "" : "hover:border-gray-400 active:bg-gray-400 ") +
+    (noPadding ? "" : "py-2 px-3 ") +
+    props.className;
+  return props.href ? (
+    <Link
+      href={props.href}
+      className={className}
+      prefetch={props.prefetch}
+      title={props.title}
+    >
+      {props.children}
+    </Link>
+  ) : (
     <button
-      className={
-        "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
-        (props.disabled ? "" : "hover:border-gray-400 active:bg-gray-400 ") +
-        (noPadding ? "" : "py-2 px-3 ") +
-        props.className
-      }
+      className={className}
       onClick={props.disabled ? undefined : props.onClick}
       title={props.title}
     >

@@ -7,7 +7,7 @@ import useWindowDimensions from "./useWindowDimensions";
 export default function useFormattedTab(
   plainTab: string,
   transposition: number,
-  fontSize: number
+  fontSize: number,
 ) {
   const { chords, transposedChords } = useChords(plainTab, transposition);
 
@@ -51,7 +51,7 @@ export default function useFormattedTab(
           transposedChord={transposedChords[chord]}
           fontSize={fontSize}
           inversion={inversions[chord] ?? 0}
-        />
+        />,
       );
     }
   }
@@ -101,8 +101,8 @@ export default function useFormattedTab(
             }
           }
           return lines.join("\n");
-        }
-      )
+        },
+      ),
     );
   }, [lineCutoff, plainTab]);
 

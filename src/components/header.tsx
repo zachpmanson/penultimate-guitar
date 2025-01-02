@@ -27,13 +27,9 @@ export default function Header() {
         <div className="flex gap-4 items-center">
           <div className="flex gap-2 items-center">
             <PlainButton
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(
-                  "/tab/" +
-                    allSaved[Math.floor(Math.random() * allSaved.length)],
-                );
-              }}
+              href={
+                "/tab/" + allSaved[Math.floor(Math.random() * allSaved.length)]
+              }
               disabled={allSaved.length === 0}
               className="flex items-center justify-center w-8 h-8"
               noPadding

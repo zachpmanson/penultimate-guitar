@@ -41,7 +41,7 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
   const [tranposition, setTranposition] = useState(
-    mode === "guitalele" ? -5 : 0
+    mode === "guitalele" ? -5 : 0,
   );
   const oldScrollSpeed = useRef(1);
   const [saveDialogActive, setSaveDialogActive] = useState(false);
