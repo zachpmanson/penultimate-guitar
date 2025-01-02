@@ -298,9 +298,9 @@ export default function Tab({ id }: { trpcState: any; id: string }) {
 
         <hr className="my-4 no-print dark:border-gray-600" />
 
-        <div className="relative w-fit max-w-full lg:px-24 m-auto z-0">
+        <div className="relative w-fit max-w-full lg:px-24 min-w-96 m-auto z-0">
           {tabDetails?.tab && (
-            <div className="absolute top-0 lg:right-0 w-full lg:w-fit h-full">
+            <div className="absolute top-0 lg:right-0 w-full  lg:w-fit h-full">
               <div className="bg-white/50 dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto w-full max-w-lg m-auto">
                 <div className="flex flex-row lg:flex-col justify-between my-4 gap-2 text-sm flex-wrap relative">
                   <div className="flex-1 flex-col text-center">
