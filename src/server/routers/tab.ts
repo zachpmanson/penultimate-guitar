@@ -3,9 +3,12 @@ import { UGAdapter } from "@/server/ug-interface/ug-interface";
 import { z } from "zod";
 import { querySitemap } from "../services/search-query";
 import { createRouter, publicProcedure } from "../trpc";
-import { getHighestRatedTab, getTab } from "../services/get-tab";
+import { getHighestRatedTabs, getTab } from "../services/get-tab";
 import { UGApi } from "../ug-interface/ug-api";
-import { getTabFromOriginalId } from "../services/get-taburl-from-originalid";
+import {
+  getTabDetailsFromOriginalId,
+  getTabFromOriginalId,
+} from "../services/get-taburl-from-originalid";
 import { TRPCError } from "@trpc/server";
 import { search } from "../services/search";
 import { cleanUrl } from "@/utils/url";
@@ -30,12 +33,12 @@ export const tabRouter = createRouter({
   getHighestRatedTabs: publicProcedure
     .input(z.string())
     .query(async ({ input }) => {
-      return await getHighestRatedTab(input);
+      return await getHighestRatedTabs(input);
     }),
   getHighestRatedTabLazy: publicProcedure
     .input(z.string())
     .mutation(async ({ input }) => {
-      return await getHighestRatedTab(input);
+      return await getHighestRatedTabs(input);
     }),
 
   search: publicProcedure
@@ -44,7 +47,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      }),
+      })
     )
     .query(async ({ input }) => await search(input)),
 
@@ -54,7 +57,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      }),
+      })
     )
     .mutation(async ({ input }) => await search(input)),
 
@@ -63,7 +66,7 @@ export const tabRouter = createRouter({
       z.object({
         value: z.string(),
         type: searchTabType,
-      }),
+      })
     )
     .mutation(async ({ input }) => {
       const searchResult = await search({
@@ -87,6 +90,14 @@ export const tabRouter = createRouter({
       };
     }),
 
+  getTabDataWithoutDatabase: publicProcedure
+    .input(z.number())
+    .query(async ({ input }) => {
+      const possibleTab = getTabDetailsFromOriginalId(input);
+      if (!possibleTab) throw new TRPCError({ code: "NOT_FOUND" });
+      return possibleTab;
+    }),
+
   querySitemap: publicProcedure
     .input(
       z.object({
@@ -96,7 +107,7 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         page_size: z.number().gt(0).lte(100),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ input }) => {
       return await querySitemap(
@@ -104,7 +115,7 @@ export const tabRouter = createRouter({
         input.artist,
         input.tab_type,
         input.cursor,
-        input.page_size,
+        input.page_size
       );
     }),
   querySitemapLazy: publicProcedure
@@ -115,7 +126,7 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         cursor: z.number().gt(0),
         page_size: z.number().gt(0).lte(100),
-      }),
+      })
     )
     .mutation(async ({ input }) => {
       return await querySitemap(
@@ -123,7 +134,7 @@ export const tabRouter = createRouter({
         input.artist,
         input.tab_type,
         input.cursor,
-        input.page_size,
+        input.page_size
       );
     }),
 
@@ -133,7 +144,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -170,7 +181,7 @@ export const tabRouter = createRouter({
       `,
         input.value,
         PAGE_SIZE,
-        (input.cursor - 1) * PAGE_SIZE,
+        (input.cursor - 1) * PAGE_SIZE
       );
       console.log(tabIdRows);
 
@@ -204,7 +215,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -251,13 +262,13 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       return await UGAdapter.getSearch(
         input.value,
         input.search_type,
-        input.cursor,
+        input.cursor
       );
     }),
 
@@ -267,13 +278,13 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       return await UGAdapter.getSearch(
         input.value,
         input.search_type,
-        input.cursor,
+        input.cursor
       );
     }),
   getRecentTabs: publicProcedure

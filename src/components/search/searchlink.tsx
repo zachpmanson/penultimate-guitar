@@ -22,7 +22,7 @@ export default function SearchLink({
   rating?: number;
   type: string;
   internal: boolean;
-  prefix?: "tab" | "best" | "original";
+  prefix?: "tab" | "best/tab" | "id" | "best/id";
 }) {
   // const color: Record<string, string> = ;
   return (

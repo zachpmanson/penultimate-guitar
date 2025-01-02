@@ -24,13 +24,13 @@ export type Mode = "default" | "guitalele";
 
 export type TabDto = {
   rating: number;
-  capo?: number;
+  capo: number;
   tuning?: {
     name: string;
     value: string;
     index: number;
   };
-  contributors?: string[];
+  contributors: string[];
   taburl: string;
   tab: string;
   song: Song;

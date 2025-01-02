@@ -176,6 +176,29 @@ export namespace UGApi {
       username: z.string(),
     }),
     content: z.string(),
+    versions: z.array(
+      z.object({
+        id: z.number(),
+        song_id: z.number(),
+        song_name: z.string(),
+        artist_id: z.number(),
+        artist_name: z.string(),
+        type: z.string(),
+        part: z.string().optional(), // Optional because it can be empty
+        version: z.number(),
+        votes: z.number(),
+        difficulty: z.string().optional(), // Optional because it can be empty
+        rating: z.number(),
+        date: z.string(), // Assuming it's a string (e.g., timestamp)
+        status: z.string(),
+        preset_id: z.number(),
+        tab_access_type: z.string(),
+        tp_version: z.number(),
+        tonality_name: z.string().optional(), // Optional because it can be empty
+        version_description: z.string().nullable(), // Nullable because it can be null
+        verified: z.number(),
+      })
+    ),
   });
   export type TabInfo = z.infer<typeof tabInfoSchema>;
 
@@ -191,11 +214,12 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/search?${query}`,
       {
         headers,
-      },
+      }
     );
     const status = data.status;
 
     const results = await data.json();
+
     console.log("getSearch fetch time", new Date().getTime() - start);
     // console.log(results);
 
@@ -205,7 +229,7 @@ export namespace UGApi {
     console.log("getSearch", new Date().getTime() - start);
 
     return (tabs ?? []).filter(
-      (i) => !["Power", "Official", "Pro"].includes(i.type),
+      (i) => !["Power", "Official", "Pro"].includes(i.type)
     );
   }
 
@@ -218,17 +242,17 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/info?${query}`,
       {
         headers,
-      },
+      }
     );
     const data = await res.json();
-    const status = res.status;
 
-    console.log(data);
+    // console.log(data);
+    console.log(`Fetched ${params.tab_id}`);
 
     const tab = tabInfoSchema.parse(data);
+    tab.content = tab.content.replace(/\r\n/g, "\n");
 
     console.log("getTab", new Date().getTime() - start);
-
     return tab;
   }
 }

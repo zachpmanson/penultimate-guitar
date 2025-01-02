@@ -53,7 +53,9 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
       <div className="flex gap-1">
         <div className="w-1/4">
           {chords ? (
-            <ActiveButton href={`/best/${chords.taburl}`}>Chords</ActiveButton>
+            <ActiveButton href={`/best/tab/${chords.taburl}`}>
+              Chords
+            </ActiveButton>
           ) : (
             <DisabledButton>Chords</DisabledButton>
           )}
@@ -61,7 +63,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {tabs ? (
-            <ActiveButton href={`/best/${tabs.taburl}`}>Tabs</ActiveButton>
+            <ActiveButton href={`/best/tab/${tabs.taburl}`}>Tabs</ActiveButton>
           ) : (
             <DisabledButton>Tabs</DisabledButton>
           )}
@@ -69,7 +71,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {bass ? (
-            <ActiveButton href={`/best/${bass.taburl}`}>Bass</ActiveButton>
+            <ActiveButton href={`/best/tab/${bass.taburl}`}>Bass</ActiveButton>
           ) : (
             <DisabledButton>Bass</DisabledButton>
           )}
@@ -77,7 +79,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {ukulele ? (
-            <ActiveButton href={`/best/${ukulele.taburl}`}>
+            <ActiveButton href={`/best/tab/${ukulele.taburl}`}>
               Ukulele
             </ActiveButton>
           ) : (

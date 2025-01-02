@@ -61,15 +61,19 @@ export namespace UGAdapter {
           type: dataContent?.store?.page?.data?.tab?.part
             ? `${tabData.type} ${dataContent?.store?.page?.data?.tab?.part}`
             : dataContent?.store?.page?.data?.tab?.type,
-          contributors:
-            (dataContent?.store?.page?.data?.tab?.username
-              ? [dataContent?.store?.page?.data?.tab?.username]
-              : []) +
-            (dataContent?.store?.page?.data?.tab_view?.contributors?.map(
+          contributors: (dataContent?.store?.page?.data?.tab?.username
+            ? [dataContent?.store?.page?.data?.tab?.username]
+            : []
+          ).concat(
+            dataContent?.store?.page?.data?.tab_view?.contributors?.map(
               (c: Contributor) => c.username
-            ) ?? []),
+            ) ?? []
+          ),
         };
-
+        console.log(
+          "dataContent?.store?.page?.data?.tab_view?.versions",
+          dataContent?.store?.page?.data?.tab_view?.versions
+        );
         altVersions = dataContent?.store?.page?.data?.tab_view?.versions
           .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
           .map((v: AltVersion) => ({

@@ -35,7 +35,7 @@ export default function ApiSearchResults({
                 {...r}
                 key={i}
                 id={r.id}
-                prefix={"original"}
+                prefix={"best/id"}
                 internal
                 rating={undefined}
               />

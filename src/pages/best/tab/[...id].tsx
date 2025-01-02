@@ -1,5 +1,4 @@
-import { UGApi } from "@/server/ug-interface/ug-api";
-import { cleanUrl } from "@/utils/url";
+import { getHighestRatedTabs } from "@/server/services/get-tab";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -16,27 +15,17 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       notFound: true,
     };
   }
-  console.log(params);
-  if (typeof params.id !== "string") {
+
+  if (typeof params.id !== "object") {
     return {
       notFound: true,
     };
   }
 
-  const originalId = params.id;
-
-  const tab = await UGApi.getTab({
-    tab_id: parseInt(originalId),
-  });
-  if (!tab) {
-    return {
-      notFound: true,
-    };
-  }
-
+  const url = params.id.join("/");
   return {
     redirect: {
-      destination: "/best/" + cleanUrl(tab.urlWeb),
+      destination: "/tab/" + (await getHighestRatedTabs(url))[0].taburl,
     },
   };
 };

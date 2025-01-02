@@ -13,7 +13,7 @@ export default function TabSheet({
   const { formattedTab, chordElements, cycleInversion } = useFormattedTab(
     plainTab,
     transposition,
-    fontSize,
+    fontSize
   );
   return (
     <div className="w-fit max-w-full overflow-x-scroll">
