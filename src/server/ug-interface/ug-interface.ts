@@ -5,7 +5,7 @@ import { Contributor } from "./models";
 
 export namespace UGAdapter {
   export async function getTab(
-    taburl: string,
+    taburl: string
   ): Promise<[Song, NewTab, AltVersion[]]> {
     let songData: Song = {
       id: 0,
@@ -33,44 +33,42 @@ export namespace UGAdapter {
         const dom = new JSDOM(html);
         let jsStore = dom.window.document.querySelector(".js-store");
         let dataContent = JSON.parse(
-          jsStore?.getAttribute("data-content") || "{}",
+          jsStore?.getAttribute("data-content") || "{}"
         );
         if (blacklist.includes(dataContent?.store?.page?.data?.tab?.type)) {
           songData.name = "Couldn't display tab type";
           songData.artist = dataContent?.store?.page?.data?.tab?.type;
           return;
         }
-        songData.id = dataContent?.store?.page?.data?.tab?.song_id;
-        songData.name = dataContent?.store?.page?.data?.tab?.song_name;
-        songData.artist = dataContent?.store?.page?.data?.tab?.artist_name;
+        songData = {
+          id: dataContent?.store?.page?.data?.tab?.song_id,
+          name: dataContent?.store?.page?.data?.tab?.song_name,
+          artist: dataContent?.store?.page?.data?.tab?.artist_name,
+        };
 
-        tabData.tab =
-          dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
-            /\r\n/g,
-            "\n",
-          ) ?? "";
-        tabData.songId = songData.id;
-        tabData.tuning =
-          dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {};
-        tabData.rating = dataContent?.store?.page?.data?.tab?.rating ?? -1;
-        tabData.capo =
-          dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0;
-        tabData.version = dataContent?.store?.page?.data?.tab?.version ?? 0;
-        tabData.type = dataContent?.store?.page?.data?.tab?.type;
-
-        if (dataContent?.store?.page?.data?.tab?.part) {
-          tabData.type = `${tabData.type} ${dataContent?.store?.page?.data?.tab?.part}`;
-        }
-
-        tabData.contributors = dataContent?.store?.page?.data?.tab?.username
-          ? [dataContent?.store?.page?.data?.tab?.username]
-          : [];
-        tabData.contributors = [
-          ...tabData.contributors,
-          ...(dataContent?.store?.page?.data?.tab_view?.contributors?.map(
-            (c: Contributor) => c.username,
-          ) ?? []),
-        ];
+        tabData = {
+          taburl: tabData.taburl,
+          tab:
+            dataContent?.store?.page?.data?.tab_view?.wiki_tab?.content.replace(
+              /\r\n/g,
+              "\n"
+            ) ?? "",
+          songId: songData.id,
+          tuning: dataContent?.store?.page?.data?.tab_view?.meta?.tuning ?? {},
+          rating: dataContent?.store?.page?.data?.tab?.rating ?? -1,
+          capo: dataContent?.store?.page?.data?.tab_view?.meta?.capo ?? 0,
+          version: dataContent?.store?.page?.data?.tab?.version ?? 0,
+          type: dataContent?.store?.page?.data?.tab?.part
+            ? `${tabData.type} ${dataContent?.store?.page?.data?.tab?.part}`
+            : dataContent?.store?.page?.data?.tab?.type,
+          contributors:
+            (dataContent?.store?.page?.data?.tab?.username
+              ? [dataContent?.store?.page?.data?.tab?.username]
+              : []) +
+            (dataContent?.store?.page?.data?.tab_view?.contributors?.map(
+              (c: Contributor) => c.username
+            ) ?? []),
+        };
 
         altVersions = dataContent?.store?.page?.data?.tab_view?.versions
           .filter((v: AltVersion) => !blacklist.includes(v.type ?? ""))
@@ -79,7 +77,7 @@ export namespace UGAdapter {
             version: v.version,
             taburl: v.tab_url?.replace(
               "https://tabs.ultimate-guitar.com/tab/",
-              "",
+              ""
             ),
             type: v.type,
           }));
@@ -95,13 +93,13 @@ export namespace UGAdapter {
   export async function getSearch(
     search: string,
     type: string,
-    page: number,
+    page: number
   ): Promise<{ items: SearchResult[]; nextCursor?: number }> {
     if (search.length < 3) return { items: [], nextCursor: undefined };
 
     let cleanSearch = search.replace(
       /\(?(-? ?[0-9]* ?[Rr]emaster(ed)? ?[0-9]*)\)?|(\(-? ?[0-9]* ?[Ss]tereo ?[0-9]*\))/,
-      "",
+      ""
     );
     const URL = `https://www.ultimate-guitar.com/search.php?page=${page}&search_type=${type}&value=${cleanSearch}`;
     let results: SearchResult[] = [];
@@ -116,7 +114,7 @@ export namespace UGAdapter {
       const dom = new JSDOM(html);
       let jsStore = dom.window.document.querySelector(".js-store");
       let dataContent = JSON.parse(
-        jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}",
+        jsStore?.getAttribute("data-content")?.replace(/&quot;/g, '"') || "{}"
       );
       let foundResults = dataContent?.store?.page?.data?.results;
       if (foundResults !== undefined) results = foundResults;
