@@ -6,13 +6,11 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Script from "next/script";
-import NProgress from "nprogress";
-import { ReactElement, ReactNode, useEffect } from "react";
-import "../styles/nprogress.css";
-import { trpc } from "../utils/trpc";
 import { NuqsAdapter } from "nuqs/adapters/next/pages";
+import { ReactElement, ReactNode } from "react";
+import { trpc } from "../utils/trpc";
+import useRouteProgress from "@/hooks/useRouteProgress";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -23,27 +21,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const router = useRouter();
-
-  useEffect(() => {
-    const handleStart = (url: string) => {
-      NProgress.start();
-    };
-
-    const handleStop = () => {
-      NProgress.done();
-    };
-
-    router.events.on("routeChangeStart", handleStart);
-    router.events.on("routeChangeComplete", handleStop);
-    router.events.on("routeChangeError", handleStop);
-
-    return () => {
-      router.events.off("routeChangeStart", handleStart);
-      router.events.off("routeChangeComplete", handleStop);
-      router.events.off("routeChangeError", handleStop);
-    };
-  }, [router]);
+  useRouteProgress();
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
   const layout = getLayout(
@@ -77,7 +55,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       gtag('config', 'G-2Q5B9DT8HJ');
     `}
       </Script>
-    </Layout>,
+    </Layout>
   );
   return (
     <SessionProvider session={pageProps.session}>
