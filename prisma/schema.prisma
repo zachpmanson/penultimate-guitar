@@ -1,16 +1,17 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
   extensions = [pg_trgm]
 }
 
 model Tab {
   id           String   @id @default(cuid())
+  originalId   Int
   songId       Int
   tab          String
   taburl       String   @unique
@@ -23,15 +24,16 @@ model Tab {
   timestamp    String?  @default("2023-05-27T16:51:42.319Z") // should switch this to be a real datetime
   song         Song     @relation(fields: [songId], references: [id])
 
+  @@index([originalId])
   @@index([songId])
   @@index([taburl])
 }
 
 model Song {
-  id     Int    @id @default(autoincrement()) // autoincrement is dangerous here since we are using original song IDs
-  name   String
-  artist String
-  Tab    Tab[]
+  id            Int            @id @default(autoincrement()) // autoincrement is dangerous here since we are using original song IDs
+  name          String
+  artist        String
+  Tab           Tab[]
   possibleSongs PossibleSong[]
 
   @@index([name])
@@ -39,15 +41,15 @@ model Song {
 }
 
 model PossibleSong {
-  id     Int    @id @default(autoincrement())
-  name   String
-  artist String
-  taburl String @unique
-  type   String
+  id         Int    @id @default(autoincrement())
+  name       String
+  artist     String
+  taburl     String @unique
+  type       String
   originalId Int?
-  
+
   createdOn DateTime @default(now())
-  
+
   songId Int?
 
   song Song? @relation(fields: [songId], references: [id])
@@ -59,17 +61,17 @@ model PossibleSong {
 }
 
 model TrackTab {
-  id Int @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   spotifyTrackId String
-  taburl String
-  lastUpdated DateTime @default(now())
+  taburl         String
+  lastUpdated    DateTime @default(now())
 
   @@unique([spotifyTrackId])
 }
 
 model User {
-  id            String        @id @default(cuid())
-  spotifyUserId String        @unique
+  id            String @id @default(cuid())
+  spotifyUserId String @unique
 
   folders Folder[]
 
@@ -77,28 +79,29 @@ model User {
 }
 
 model UserTablink {
-  id            String  @id @default(cuid())
-  taburl        String
-  name          String?
-  artist        String?
-  type          String?
-  version       Int?
-  loadBest      Boolean?
+  id       String   @id @default(cuid())
+  taburl   String
+  name     String?
+  artist   String?
+  type     String?
+  version  Int?
+  loadBest Boolean?
 
   folderId Int
 
   folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
   @@unique([taburl, folderId])
 }
 
 model Folder {
-  id            Int    @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   name          String
   spotifyUserId String
   playlistUrl   String? // only present if playlist was used to create folder
   imageUrl      String?
 
-  user User @relation(fields: [spotifyUserId], references: [spotifyUserId])
+  user User          @relation(fields: [spotifyUserId], references: [spotifyUserId])
   tabs UserTablink[]
 
   @@unique([name, spotifyUserId])
