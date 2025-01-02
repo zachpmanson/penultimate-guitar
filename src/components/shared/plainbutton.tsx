@@ -17,14 +17,14 @@ export default function PlainButton({
     | ReactElement<any, string | JSXElementConstructor<any>>
     | ReactFragment
     | ReactPortal;
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler<HTMLElement>;
   disabled?: boolean;
   className?: string;
   title?: string;
   noPadding?: boolean;
 }) {
   return (
-    <div
+    <button
       className={
         "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
         (props.disabled ? "" : "hover:border-gray-400 active:bg-gray-400 ") +
@@ -35,6 +35,6 @@ export default function PlainButton({
       title={props.title}
     >
       {props.children}
-    </div>
+    </button>
   );
 }
