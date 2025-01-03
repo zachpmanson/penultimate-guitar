@@ -1,3 +1,4 @@
+import { ROUTE_PREFIX } from "@/constants";
 import prisma from "@/server/prisma";
 import { querySitemap } from "@/server/services/search-query";
 import { SpotifyApi } from "@/server/spotify-interface/spotify-api";
@@ -39,7 +40,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     taburl = track.taburl;
     return {
       redirect: {
-        destination: "/best/" + taburl,
+        destination: ROUTE_PREFIX.BEST_TAB + "/" + taburl,
       },
     };
   } else {
@@ -60,7 +61,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
     return {
       redirect: {
-        destination: "/best/" + cleanUrl(tabdetails.urlWeb),
+        destination: ROUTE_PREFIX.BEST_TAB + "/" + cleanUrl(tabdetails.urlWeb),
       },
     };
   }

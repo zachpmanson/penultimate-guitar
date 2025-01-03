@@ -1,4 +1,5 @@
 import PageDropdown from "@/components/directory/pagedropdown";
+import { ROUTE_PREFIX } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import prisma from "@/server/prisma";
 import { useSearchStore } from "@/state/search";
@@ -46,7 +47,7 @@ export default function Directory({
     allSongs = allSongs.filter(
       (song) =>
         song.name.toLowerCase().includes(lowerSearch) ||
-        song.artist.toLowerCase().includes(lowerSearch),
+        song.artist.toLowerCase().includes(lowerSearch)
     );
   }
 
@@ -54,7 +55,7 @@ export default function Directory({
 
   const generateLink = (song: SongMetadata, index: number) => (
     <Link
-      href={`/tab/${song.Tab[index].taburl}`}
+      href={`${ROUTE_PREFIX.TAB}/${song.Tab[index].taburl}`}
       prefetch={false}
       title={song.Tab[index].timestamp}
       className="color-unset"

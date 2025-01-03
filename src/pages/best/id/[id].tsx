@@ -1,3 +1,4 @@
+import { ROUTE_PREFIX } from "@/constants";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
 import { UGApi } from "@/server/ug-interface/ug-api";
@@ -44,12 +45,12 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
   // return {
   //   redirect: {
-  //     destination: "/best/" + cleanUrl(tab.urlWeb),
+  //     destination: "/best/tab/" + cleanUrl(tab.urlWeb),
   //   },
   // };
   return {
     redirect: {
-      destination: "/id/" + bestVersion.id,
+      destination: ROUTE_PREFIX.ID + "/" + bestVersion.id,
     },
     revalidate: 1,
   };

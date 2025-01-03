@@ -2,6 +2,7 @@ import { UGApi } from "@/server/ug-interface/ug-api";
 import LoadingSpinner from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
 import SearchLink from "./searchlink";
+import { ROUTE_PREFIX } from "@/constants";
 
 export default function ApiSearchResults({
   results,
@@ -35,7 +36,7 @@ export default function ApiSearchResults({
                 {...r}
                 key={i}
                 id={r.id}
-                prefix={"best/id"}
+                prefix={ROUTE_PREFIX.ID}
                 internal
                 rating={undefined}
               />

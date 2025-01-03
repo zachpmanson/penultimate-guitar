@@ -3,7 +3,7 @@ import TabSheet from "@/components/tab/tabsheet";
 import ToolbarButton, {
   getToolbarButtonStyle,
 } from "@/components/tab/toolbarbutton";
-import { GuitaleleStyle } from "@/constants";
+import { GuitaleleStyle, ROUTE_PREFIX } from "@/constants";
 import useAutoscroll from "@/hooks/useAutoscroll";
 import { TabDto, TabLinkDto } from "@/models/models";
 import { useConfigStore } from "@/state/config";
@@ -254,7 +254,10 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                     <li key={index}>
                       {t.taburl === tabDetails.taburl || (
                         <div className="flex justify-between">
-                          <Link href={`/tab/${t.taburl}`} prefetch={false}>
+                          <Link
+                            href={`${ROUTE_PREFIX.TAB}/${t.taburl}`}
+                            prefetch={false}
+                          >
                             {tabDetails.song.name}
                             <span className="font-light text-xs">
                               {" "}

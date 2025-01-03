@@ -1,3 +1,4 @@
+import { ROUTE_PREFIX } from "@/constants";
 import PlainButton from "../shared/plainbutton";
 
 function normalizedName(str: string) {
@@ -14,7 +15,7 @@ export default function SearchLink({
   rating,
   type,
   internal,
-  prefix = "tab",
+  prefix = "/tab",
 }: {
   id: string | number;
   song_name: string;
@@ -22,12 +23,12 @@ export default function SearchLink({
   rating?: number;
   type: string;
   internal: boolean;
-  prefix?: "tab" | "best/tab" | "id" | "best/id";
+  prefix?: (typeof ROUTE_PREFIX)[keyof typeof ROUTE_PREFIX];
 }) {
   // const color: Record<string, string> = ;
   return (
     <PlainButton
-      href={`/${prefix}/${id}`}
+      href={`${prefix}/${id}`}
       className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
       prefetch={false}
     >

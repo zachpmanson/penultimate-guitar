@@ -2,6 +2,7 @@ import { SearchResult } from "@/models/models";
 import LoadingSpinner from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
 import SearchLink from "./searchlink";
+import { ROUTE_PREFIX } from "@/constants";
 
 export default function SearchResults({
   results,
@@ -31,7 +32,12 @@ export default function SearchResults({
         ) : !isLoading ? (
           <>
             {results.map((r, i) => (
-              <SearchLink {...r} key={i} prefix="best/tab" id={r.tab_url} />
+              <SearchLink
+                {...r}
+                key={i}
+                prefix={ROUTE_PREFIX.BEST_TAB}
+                id={r.tab_url}
+              />
             ))}
 
             <div className="w-full flex flex-col items-center justify-start">

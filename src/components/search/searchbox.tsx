@@ -6,6 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
+import { ROUTE_PREFIX } from "@/constants";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -26,11 +27,11 @@ export default function SearchBox() {
     inputRef.current?.blur();
 
     if (searchText.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
-      router.push(`/tab/${searchText.slice(37)}`);
+      router.push(`${ROUTE_PREFIX.TAB}/${searchText.slice(37)}`);
     } else if (searchText.startsWith("https://open.spotify.com/playlist/")) {
       setButtonText("Loading...");
       const matches = searchText.match(
-        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/,
+        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
       );
       const playlistId = matches?.groups?.id!;
       getPlaylist
