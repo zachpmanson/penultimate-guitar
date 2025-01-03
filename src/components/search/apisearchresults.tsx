@@ -36,7 +36,7 @@ export default function ApiSearchResults({
                 {...r}
                 key={i}
                 id={r.id}
-                prefix={ROUTE_PREFIX.ID}
+                prefix={ROUTE_PREFIX.BEST_ID}
                 internal
                 rating={undefined}
               />
