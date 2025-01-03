@@ -10,9 +10,7 @@ import { useEffect } from "react";
 
 export default function Tab({ id }: { trpcState: any; id: number }) {
   const router = useRouter();
-  const { data, status } = trpc.tab.getTabDataWithoutDatabase.useQuery(
-    Number(id)
-  );
+  const { data, status } = trpc.tab.getTabFromOriginalId.useQuery(Number(id));
 
   if (status !== "success" || !data) {
     return <>Loading...</>;
@@ -49,7 +47,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
   const originalId = Number(params.id);
 
-  await helpers.tab.getTabDataWithoutDatabase.prefetch(originalId);
+  await helpers.tab.getTabFromOriginalId.prefetch(originalId);
 
   // return {
   //   redirect: {

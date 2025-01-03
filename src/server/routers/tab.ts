@@ -1,31 +1,43 @@
 import { TAB_TYPES } from "@/models/models";
 import { UGAdapter } from "@/server/ug-interface/ug-interface";
+import { cleanUrl } from "@/utils/url";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { querySitemap } from "../services/search-query";
-import { createRouter, publicProcedure } from "../trpc";
 import { getHighestRatedTabs, getTab } from "../services/get-tab";
-import { UGApi } from "../ug-interface/ug-api";
 import {
   getTabDetailsFromOriginalId,
-  getTabFromOriginalId,
+  getTabDetailsFromTaburl,
 } from "../services/get-taburl-from-originalid";
-import { TRPCError } from "@trpc/server";
 import { search } from "../services/search";
-import { cleanUrl } from "@/utils/url";
+import { querySitemap } from "../services/search-query";
+import { createRouter, publicProcedure } from "../trpc";
+import { UGApi } from "../ug-interface/ug-api";
 
 const searchTabType = z.enum(TAB_TYPES);
 
 export const tabRouter = createRouter({
   getTab: publicProcedure.input(z.string()).query(async ({ input }) => {
-    return await getTab(input);
+    try {
+      const possibleTab = await getTabDetailsFromTaburl(input);
+      return possibleTab;
+    } catch (e) {
+      console.error(e);
+      throw new TRPCError({ code: "NOT_FOUND" });
+    }
   }),
+
   getTabFromOriginalId: publicProcedure
     .input(z.number())
     .query(async ({ input }) => {
-      const possibleTab = await getTabFromOriginalId(input);
-      if (!possibleTab) throw new TRPCError({ code: "NOT_FOUND" });
-      return await getTab(possibleTab.taburl);
+      try {
+        const possibleTab = await getTabDetailsFromOriginalId(input);
+        return possibleTab;
+      } catch (e) {
+        console.error(e);
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
     }),
+
   getTabLazy: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     return await getTab(input);
   }),
@@ -88,14 +100,6 @@ export const tabRouter = createRouter({
         ...firstResult,
         taburl: cleanUrl(tab.urlWeb),
       };
-    }),
-
-  getTabDataWithoutDatabase: publicProcedure
-    .input(z.number())
-    .query(async ({ input }) => {
-      const possibleTab = getTabDetailsFromOriginalId(input);
-      if (!possibleTab) throw new TRPCError({ code: "NOT_FOUND" });
-      return possibleTab;
     }),
 
   querySitemap: publicProcedure

@@ -7,35 +7,30 @@ import { UGAdapter } from "../ug-interface/ug-interface";
 
 export async function getTab(taburl: string) {
   const start = new Date().getTime();
-  let props: TabDto = DEFAULT_TAB;
+  let tabDto: TabDto = DEFAULT_TAB;
 
-  let savedTab: any;
-  try {
-    savedTab = await prisma.tab.findUnique({
-      where: {
-        taburl: taburl,
-      },
-      include: {
-        song: {
-          include: {
-            Tab: {
-              select: {
-                taburl: true,
-                version: true,
-                rating: true,
-                type: true,
-              },
+  let savedTab = await prisma.tab.findUnique({
+    where: {
+      taburl: taburl,
+    },
+    include: {
+      song: {
+        include: {
+          Tab: {
+            select: {
+              taburl: true,
+              version: true,
+              rating: true,
+              type: true,
             },
           },
         },
       },
-    });
-  } catch (e) {
-    console.error("Find unique failed", e);
-  }
+    },
+  });
 
   if (savedTab?.tab && savedTab?.tab !== "ALT") {
-    props = {
+    tabDto = {
       ...savedTab,
       type: savedTab.type as TabType,
       tuning: JSON.parse(savedTab.tuning ?? "{}"),
@@ -51,7 +46,7 @@ export async function getTab(taburl: string) {
       });
     }
     tab.taburl = taburl;
-    props = {
+    tabDto = {
       ...tab,
       song: { ...song, Tab: [...altVersions, tab] },
     };
@@ -63,7 +58,7 @@ export async function getTab(taburl: string) {
 
   console.log("getTab", new Date().getTime() - start);
 
-  return props;
+  return tabDto;
 }
 
 export async function getHighestRatedTabs(taburl: string) {

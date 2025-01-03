@@ -1,16 +1,22 @@
 import { TabDto } from "@/models/models";
 import { DEFAULT_TAB } from "@/types/tab";
-import prisma from "../prisma";
-import { UGApi } from "../ug-interface/ug-api";
 import { mapApiResultToTabDto } from "@/utils/conversion";
-import { insertTab, upsertNewTab } from "../ug-interface/insert-tab";
+import prisma from "../prisma";
+import { insertTab } from "../ug-interface/insert-tab";
+import { UGApi } from "../ug-interface/ug-api";
+import { getIdFromTaburl } from "@/utils/url";
 
-export async function getTabFromOriginalId(originalId: number) {
+export async function getPossibleSongFromOriginalId(originalId: number) {
   return await prisma.possibleSong.findFirst({
     where: {
       originalId: originalId,
     },
   });
+}
+
+export async function getTabDetailsFromTaburl(taburl: string) {
+  const id = getIdFromTaburl(taburl);
+  return await getTabDetailsFromOriginalId(id);
 }
 
 export async function getTabDetailsFromOriginalId(originalId: number) {
@@ -62,6 +68,7 @@ export async function getTabDetailsFromOriginalId(originalId: number) {
 }
 
 async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
+  // attempt to match originalId of alt versions to taburls
   const taburlsFromAlts = await prisma.possibleSong.findMany({
     where: {
       originalId: {
@@ -73,11 +80,12 @@ async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
       originalId: true,
     },
   });
+  // need to ensure that the originalId column actually works and the migration can happen properly
   const idToTaburl = Object.fromEntries(
     taburlsFromAlts.map((t) => [t.originalId, t.taburl])
   );
   console.log(taburlsFromAlts);
-  insertTab(
+  await insertTab(
     {
       id: tabApiPayload.song_id,
       artist: tabApiPayload.artist_name,
@@ -90,5 +98,5 @@ async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
         ...v,
         taburl: idToTaburl[v.id],
       }))
-  ).then();
+  );
 }
