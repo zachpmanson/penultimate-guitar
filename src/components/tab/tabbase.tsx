@@ -254,7 +254,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                     <li key={index}>
                       {t.taburl === tabDetails.taburl || (
                         <div className="flex justify-between">
-                          <Link href={t.taburl} prefetch={false}>
+                          <Link href={`/tab/${t.taburl}`} prefetch={false}>
                             {tabDetails.song.name}
                             <span className="font-light text-xs">
                               {" "}
