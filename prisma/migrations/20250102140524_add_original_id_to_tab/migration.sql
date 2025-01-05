@@ -27,16 +27,24 @@ EXECUTE FUNCTION extract_original_id ();
 ALTER TABLE "Tab"
 ADD COLUMN "originalId" INTEGER;
 
-
-UPDATE "Tab" SET "originalId" = (
-     COALESCE(
-        CAST(split_part("taburl", '-', array_length(string_to_array("taburl", '-'), 1)) AS INTEGER), 
-        0
+UPDATE "Tab"
+SET
+    "originalId" = (
+        COALESCE(
+            CAST(
+                split_part(
+                    "taburl",
+                    '-',
+                    array_length(string_to_array("taburl", '-'), 1)
+                ) AS INTEGER
+            ),
+            0
+        )
     );
-);
 
 ALTER TABLE table_name
-ALTER COLUMN column_name SET NOT NULL;
+ALTER COLUMN column_name
+SET NOT NULL;
 
 -- CreateIndex
 CREATE INDEX "Tab_originalId_idx" ON "Tab" ("originalId");
