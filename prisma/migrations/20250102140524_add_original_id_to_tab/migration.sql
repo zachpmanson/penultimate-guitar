@@ -42,8 +42,8 @@ SET
         )
     );
 
-ALTER TABLE table_name
-ALTER COLUMN column_name
+ALTER TABLE "Tab"
+ALTER COLUMN "originalId"
 SET NOT NULL;
 
 -- CreateIndex
