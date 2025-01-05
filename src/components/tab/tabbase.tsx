@@ -120,7 +120,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
       window.removeEventListener("keydown", keyDownHandler);
       releaseWakeLock();
     };
-  }, [releaseWakeLock, requestWakeLock, setScrollSpeed]);
+  }, [releaseWakeLock, requestWakeLock, setScrollSpeed, isTouching]);
 
   const handleSave = () => {
     setSaveDialogActive(true);
