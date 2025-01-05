@@ -21,7 +21,7 @@ model Tab {
   rating       Float
   version      Int
   type         String
-  timestamp    String?  @default("2023-05-27T16:51:42.319Z") // should switch this to be a real datetime
+  timestamp    String?  @default("2023-05-27T16:51:42.319Z") // should switch this to be a real datetime, but trpc can't serialize date objects so would need a wrapper around everything
   song         Song     @relation(fields: [songId], references: [id])
 
   @@index([originalId])

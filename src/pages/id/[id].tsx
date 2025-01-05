@@ -1,12 +1,10 @@
 import TabBase from "@/components/tab/tabbase";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
-import { mapApiResultToTabDto } from "@/utils/conversion";
 import { trpc } from "@/utils/trpc";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function Tab({ id }: { trpcState: any; id: number }) {
   const router = useRouter();
@@ -31,7 +29,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
-    // transformer: superjson, // optional - adds superjson serialization
   });
   if (params === undefined) {
     return {

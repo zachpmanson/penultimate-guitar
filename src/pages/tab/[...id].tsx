@@ -40,7 +40,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
-    // transformer: superjson, // optional - adds superjson serialization
   });
 
   if (params === undefined) {

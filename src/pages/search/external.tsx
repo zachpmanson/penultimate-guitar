@@ -47,7 +47,7 @@ function preferHigherRatings(results: SearchResult[]) {
       (c) =>
         c.song_name === r.song_name &&
         c.artist_name === r.artist_name &&
-        c.type === r.type,
+        c.type === r.type
     );
     if (existing === -1) {
       colRes.push(r);
@@ -79,7 +79,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const {
@@ -97,7 +97,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const loadPage = () => {
@@ -130,7 +130,7 @@ export default function Search() {
 
   const maxPageNums = Math.max(
     dataInternal?.pages.length ?? 0,
-    dataExternal?.pages.length ?? 0,
+    dataExternal?.pages.length ?? 0
   );
 
   let resultsInPageOrder: SearchResult[] = [];
@@ -149,19 +149,19 @@ export default function Search() {
           date: r.timestamp ?? "",
           tab_url: r.taburl,
           internal: true,
-        })),
+        }))
       );
     }
 
     if (dataExternal && dataExternal.pages.length > i) {
       resultsInPageOrder = resultsInPageOrder.concat(
-        dataExternal.pages[i].items.map((r) => r),
+        dataExternal.pages[i].items.map((r) => r)
       );
     }
   }
 
   const mergedResults = preferHigherRatings(
-    dedupSearchResults(resultsInPageOrder),
+    dedupSearchResults(resultsInPageOrder)
   );
 
   useEffect(() => {

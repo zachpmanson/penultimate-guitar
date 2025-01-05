@@ -1,8 +1,7 @@
 import LoadingSpinner from "@/components/loadingspinner";
-import SearchLink from "@/components/search/searchlink";
 import SongItem from "@/components/search/songitem";
 import PlainButton from "@/components/shared/plainbutton";
-import { SearchResult, SearchTabType } from "@/models/models";
+import { SearchTabType } from "@/models/models";
 import { useSearchStore } from "@/state/search";
 import { trpc } from "@/utils/trpc";
 import Head from "next/head";
@@ -43,7 +42,7 @@ export default function Search() {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
         enabled: !!q,
-      },
+      }
     );
 
   const results = data?.pages.map((p) => p.items).flat() ?? [];

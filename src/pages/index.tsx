@@ -100,7 +100,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
-    // transformer: superjson, // optional - adds superjson serialization
   });
 
   await helpers.tab.getRecentTabs.prefetch(10);

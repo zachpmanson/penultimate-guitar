@@ -7,6 +7,13 @@ export async function upsertNewTab(tab: NewTab) {
   console.log(`Inserting tab '${tab.taburl}' with songId ${tab.songId}`);
   const originalId = Number(tab.taburl.split("-").at(-1));
   if (isNaN(originalId) || !originalId) throw new Error("Invalid taburl");
+  // const song = await prisma.song.findUnique({
+  //   where: {
+  //     id: tab.songId,
+  //   },
+  // });
+  // if (song === null) throw new Error("Couldn't find song");
+  // console.log(`Just checked and song ${song.name} ${song.id} exists`);
 
   return await prisma.tab
     .upsert({
@@ -27,7 +34,6 @@ export async function upsertNewTab(tab: NewTab) {
         rating: tab.rating,
         version: tab.version,
         type: tab.type,
-        timestamp: new Date().toISOString(),
         originalId: originalId,
       },
       update: {
@@ -35,7 +41,6 @@ export async function upsertNewTab(tab: NewTab) {
         contributors: tab.contributors,
         tuning: JSON.stringify(tab?.tuning ?? {}),
         capo: tab.capo ?? 0,
-        timestamp: new Date().toISOString(),
         type: tab.type,
       },
     })
@@ -79,10 +84,7 @@ export async function insertTab(
           ...DEFAULT_TAB,
           ...altVersion,
           tuning: undefined,
-          taburl: altVersion.taburl,
           tab: "ALT",
-          capo: 0,
-          contributors: [],
           songId: song.id,
         }).then();
       }
@@ -107,6 +109,6 @@ export async function insertTab(
         console.error("Error updating possibleSong", e);
       });
   } catch (err) {
-    console.warn("Insertion failed.", err);
+    console.error("Insertion failed.", err);
   }
 }
