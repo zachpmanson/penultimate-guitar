@@ -8,3 +8,14 @@ export default function LoadingSpinner({ className }: { className?: string }) {
     </div>
   );
 }
+
+export function Load({ isLoading, children }: { isLoading: boolean; children: React.ReactNode }) {
+  if (isLoading) {
+    return (
+      <div className="w-full h-full justify-center items-center flex">
+        <LoadingSpinner className="h-8" />;
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
