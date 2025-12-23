@@ -84,9 +84,10 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
   }, [mode, setTranposition]);
 
   useEffect(() => {
-    console.debug(isSupported, released);
+    console.debug({ isSupported, released });
     requestWakeLock();
     return () => {
+      console.debug({ isSupported, released });
       releaseWakeLock();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
