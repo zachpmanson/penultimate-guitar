@@ -1,0 +1,173 @@
+{
+  "settings": {
+    "size": {
+      "width": 360,
+      "height": 360
+    }
+  },
+  "layers": [
+    [
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 75,
+            "y": 255
+          },
+          {
+            "x": 285,
+            "y": 255
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 45,
+            "y": 225
+          },
+          {
+            "x": 315,
+            "y": 225
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 30,
+            "y": 195
+          },
+          {
+            "x": 330,
+            "y": 195
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 30,
+            "y": 165
+          },
+          {
+            "x": 330,
+            "y": 165
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 45,
+            "y": 135
+          },
+          {
+            "x": 315,
+            "y": 135
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 75,
+            "y": 105
+          },
+          {
+            "x": 285,
+            "y": 105
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "arc_c",
+        "vertices": [
+          {
+            "x": 180,
+            "y": 75
+          },
+          {
+            "x": 285,
+            "y": 180
+          },
+          {
+            "x": 180,
+            "y": 285
+          },
+          {
+            "x": 75,
+            "y": 180
+          },
+          {
+            "x": 180,
+            "y": 75
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "arc_c",
+        "vertices": [
+          {
+            "x": 345,
+            "y": 180
+          },
+          {
+            "x": 180,
+            "y": 345
+          },
+          {
+            "x": 15,
+            "y": 180
+          },
+          {
+            "x": 180,
+            "y": 15
+          },
+          {
+            "x": 345,
+            "y": 180
+          }
+        ]
+      }
+    ]
+  ],
+  "styles": [
+    {
+      "thickness": 9,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#000",
+      "fill": "none",
+      "mirror_style": 0,
+      "transform": "rotate(45)"
+    },
+    {
+      "thickness": 20,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#000",
+      "fill": "none",
+      "mirror_style": 0,
+      "transform": "rotate(45)"
+    },
+    {
+      "thickness": 14,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#fff",
+      "fill": "#fff",
+      "mirror_style": 0,
+      "transform": "rotate(45)"
+    }
+  ]
+}
