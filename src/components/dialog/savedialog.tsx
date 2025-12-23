@@ -1,17 +1,9 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
-import { Dialog } from "@headlessui/react";
-import {
-  ChangeEvent,
-  Dispatch,
-  KeyboardEvent,
-  KeyboardEventHandler,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, KeyboardEvent, KeyboardEventHandler, SetStateAction, useEffect, useState } from "react";
 import DialogButton from "./dialogbutton";
 import { dedupe } from "@/utils/dedupe";
+import BaseDialog from "./basedialog";
 
 type SaveDialogProps = {
   isOpen: boolean;
@@ -19,11 +11,7 @@ type SaveDialogProps = {
   tab: TabLinkDto;
 };
 
-export default function SaveDialog({
-  isOpen,
-  setIsOpen,
-  tab,
-}: SaveDialogProps) {
+export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) {
   const { setTabFolders, savedTabs } = useSavedTabs();
   const [currentFolders, setCurrentFolders] = useState<string[]>([]);
   const [addingNew, setAddingNew] = useState(false);
@@ -34,9 +22,7 @@ export default function SaveDialog({
   useEffect(() => setAddingNew(false), [isOpen]);
 
   useEffect(() => {
-    const folderNames = [
-      ...Array.from(new Set(["Favourites", ...savedTabs.map((f) => f.name)])),
-    ];
+    const folderNames = [...Array.from(new Set(["Favourites", ...savedTabs.map((f) => f.name)]))];
     setFolders(folderNames);
 
     let currentFolderNames = savedTabs
@@ -76,9 +62,7 @@ export default function SaveDialog({
     setNewFolder(event.target.value);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
-    event: KeyboardEvent<HTMLInputElement>,
-  ) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") addNew();
   };
 
@@ -92,67 +76,51 @@ export default function SaveDialog({
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className="relative z-50"
-    >
-      {currentFolders}
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="w-full max-w-xs rounded bg-white dark:bg-gray-800 p-4">
-          <Dialog.Title>Save tab to folder</Dialog.Title>
-          <Dialog.Description></Dialog.Description>
-          <hr className="dark:border-gray-600" />
-          <div className="flex flex-col">
-            {folders.map((f, i) => (
-              <label key={i} className="w-full text-lg">
-                <input
-                  type="checkbox"
-                  value={f}
-                  name={f}
-                  checked={currentFolders.includes(f)}
-                  onChange={handleFolderChange}
-                />{" "}
-                {f}
-              </label>
-            ))}
-          </div>
-          <div className="flex flex-col gap-4 mt-4">
-            <div className="flex justify-between">
-              {addingNew ? (
-                <div className="w-full">
-                  <input
-                    autoFocus
-                    className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                    type="text"
-                    placeholder="New folder..."
-                    onBlur={addNew}
-                    onKeyDown={handleKeyDown}
-                    onChange={handleNewFolderChange}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div>
-                    <DialogButton
-                      onClick={() => setAddingNew(true)}
-                      disabled={false}
-                    >
-                      New
-                    </DialogButton>
-                  </div>
-                  <div className="flex gap-4">
-                    <DialogButton onClick={() => save()} disabled={false}>
-                      Save
-                    </DialogButton>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </Dialog.Panel>
+    <BaseDialog isOpen={isOpen} onClose={() => setIsOpen(false)} title="Save tab to folder">
+      <div className="flex flex-col">
+        {folders.map((f, i) => (
+          <label key={i} className="w-full text-lg">
+            <input
+              type="checkbox"
+              value={f}
+              name={f}
+              checked={currentFolders.includes(f)}
+              onChange={handleFolderChange}
+            />{" "}
+            {f}
+          </label>
+        ))}
       </div>
-    </Dialog>
+      <div className="flex flex-col gap-4 mt-4">
+        <div className="flex justify-between">
+          {addingNew ? (
+            <div className="w-full">
+              <input
+                autoFocus
+                className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                type="text"
+                placeholder="New folder..."
+                onBlur={addNew}
+                onKeyDown={handleKeyDown}
+                onChange={handleNewFolderChange}
+              />
+            </div>
+          ) : (
+            <>
+              <div>
+                <DialogButton onClick={() => setAddingNew(true)} disabled={false}>
+                  New
+                </DialogButton>
+              </div>
+              <div className="flex gap-4">
+                <DialogButton onClick={() => save()} disabled={false}>
+                  Save
+                </DialogButton>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </BaseDialog>
   );
 }
