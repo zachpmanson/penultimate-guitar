@@ -1,23 +1,19 @@
 import Link from "next/link";
-import {
-  JSXElementConstructor,
-  MouseEventHandler,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-} from "react";
+import { MouseEventHandler, ReactNode } from "react";
+import LoadingSpinner from "../loadingspinner";
 
 export default function PlainButton({
   noPadding = false,
-  ...props
+  children,
+  onClick,
+  disabled,
+  className,
+  title,
+  href,
+  prefetch,
+  isLoading,
 }: {
-  children:
-    | string
-    | number
-    | boolean
-    | ReactElement<any, string | JSXElementConstructor<any>>
-    | ReactFragment
-    | ReactPortal;
+  children: ReactNode;
   onClick?: MouseEventHandler<HTMLElement>;
   disabled?: boolean;
   className?: string;
@@ -25,28 +21,26 @@ export default function PlainButton({
   noPadding?: boolean;
   href?: string;
   prefetch?: boolean;
+  isLoading?: boolean;
 }) {
-  const className =
-    "border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
-    (props.disabled ? "" : "hover:border-gray-400 active:bg-gray-400 ") +
+  const clsname =
+    "relative border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
+    (disabled ? "" : "hover:border-gray-400 active:bg-gray-400 ") +
     (noPadding ? "" : "py-2 px-3 ") +
-    props.className;
-  return props.href ? (
-    <Link
-      href={props.href}
-      className={className}
-      prefetch={props.prefetch}
-      title={props.title}
-    >
-      {props.children}
+    className;
+
+  return href ? (
+    <Link href={href} className={clsname} prefetch={prefetch} title={title}>
+      {children}
     </Link>
   ) : (
-    <button
-      className={className}
-      onClick={props.disabled ? undefined : props.onClick}
-      title={props.title}
-    >
-      {props.children}
+    <button className={clsname} onClick={disabled ? undefined : onClick} title={title}>
+      {isLoading ? <div className="invisible">{children}</div> : children}
+      {isLoading && (
+        <div className="absolute top-0 right-0 flex justify-center items-center h-full w-full p-2">
+          <LoadingSpinner className="max-h-8" />
+        </div>
+      )}
     </button>
   );
 }
