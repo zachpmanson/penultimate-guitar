@@ -13,3 +13,7 @@ export const tabCompareFn = (a: SortableTab, b: SortableTab) => {
   }
   return a.version - b.version;
 };
+
+export function sortByName(s1: string, s2: string) {
+  return s1 > s2 ? 1 : -1;
+}

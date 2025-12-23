@@ -36,4 +36,5 @@ export type Folder = {
   playlistUrl: string | null;
   imageUrl: string | null;
   tabs: TabLink[];
+  isOpen: boolean;
 };
