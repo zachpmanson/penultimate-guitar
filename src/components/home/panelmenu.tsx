@@ -10,13 +10,11 @@ export default function PanelMenu({
 }) {
   return (
     <>
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="relative inline-block text-left z-20">
         <div>
           <Menu.Button>
             <PlainButton noPadding>
-              <div className="px-4 w-10 flex justify-center items-center">
-                ▼
-              </div>
+              <div className="px-4 w-10 flex justify-center items-center">▼</div>
             </PlainButton>
           </Menu.Button>
         </div>
@@ -41,9 +39,7 @@ export default function PanelMenu({
                         target="_blank"
                         prefetch={false}
                         className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
+                          active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline text-left`}
                       >
                         {item.text}
@@ -56,16 +52,14 @@ export default function PanelMenu({
                       <button
                         onClick={item.onClick}
                         className={`${
-                          active
-                            ? "bg-blue-700 text-white"
-                            : "text-gray-900  dark:text-gray-200"
+                          active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm text-left`}
                       >
                         {item.text}
                       </button>
                     )}
                   </Menu.Item>
-                ),
+                )
               )}
             </div>
           </Menu.Items>
