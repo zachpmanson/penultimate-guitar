@@ -1,8 +1,6 @@
 import SaveDialog from "@/components/dialog/savedialog";
 import TabSheet from "@/components/tab/tabsheet";
-import ToolbarButton, {
-  getToolbarButtonStyle,
-} from "@/components/tab/toolbarbutton";
+import ToolbarButton, { getToolbarButtonStyle } from "@/components/tab/toolbarbutton";
 import { GuitaleleStyle, ROUTE_PREFIX } from "@/constants";
 import useAutoscroll from "@/hooks/useAutoscroll";
 import { TabDto, TabLinkDto } from "@/models/models";
@@ -19,21 +17,23 @@ import { useWakeLock } from "react-screen-wake-lock";
 import "react-tooltip/dist/react-tooltip.css";
 
 export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
-  const { request: requestWakeLock, release: releaseWakeLock } = useWakeLock({
-    onRequest: () => console.log("Screen Wake Lock: requested!"),
-    onError: (e) => console.log("An error happened", e),
-    onRelease: () => console.log("Screen Wake Lock: released!"),
+  const {
+    request: requestWakeLock,
+    release: releaseWakeLock,
+    isSupported,
+    released,
+  } = useWakeLock({
+    onRequest: () => console.debug("Screen Wake Lock: requested!"),
+    onError: (e) => console.debug("An error happened", e),
+    onRelease: () => console.debug("Screen Wake Lock: released!"),
   });
 
   const element = useRef<HTMLDivElement>(null);
-  const { scrollSpeed, changeScrolling, setScrollSpeed, isTouching } =
-    useAutoscroll(element);
+  const { scrollSpeed, changeScrolling, setScrollSpeed, isTouching } = useAutoscroll(element);
 
   const { mode, setMode } = useConfigStore();
   const [fontSize, setFontSize] = useState(12);
-  const [tranposition, setTranposition] = useState(
-    mode === "guitalele" ? -5 : 0
-  );
+  const [tranposition, setTranposition] = useState(mode === "guitalele" ? -5 : 0);
   const oldScrollSpeed = useRef(1);
   const [saveDialogActive, setSaveDialogActive] = useState(false);
 
@@ -84,9 +84,17 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
   }, [mode, setTranposition]);
 
   useEffect(() => {
+    console.debug(isSupported, released);
+    requestWakeLock();
+    return () => {
+      releaseWakeLock();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const onTouch = () => (isTouching.current = true);
-    const onTouchEnd = () =>
-      setTimeout(() => (isTouching.current = false), 2000);
+    const onTouchEnd = () => setTimeout(() => (isTouching.current = false), 2000);
 
     window.addEventListener("touchstart", onTouch);
     window.addEventListener("touchend", onTouchEnd);
@@ -95,8 +103,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (
         event.key === " " &&
-        (document.activeElement === element.current ||
-          document.activeElement?.tagName === "BODY")
+        (document.activeElement === element.current || document.activeElement?.tagName === "BODY")
       ) {
         event.preventDefault();
         setScrollSpeed((old) => {
@@ -112,26 +119,19 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
 
     window.addEventListener("keydown", keyDownHandler);
 
-    requestWakeLock();
-
     return () => {
       window.removeEventListener("touchstart", onTouch);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("keydown", keyDownHandler);
-      releaseWakeLock();
     };
-  }, [releaseWakeLock, requestWakeLock, setScrollSpeed, isTouching]);
+  }, [setScrollSpeed, isTouching]);
 
   const handleSave = () => {
     setSaveDialogActive(true);
   };
 
   const formattedTransposition = () => {
-    return tranposition === 0
-      ? ""
-      : tranposition < 0
-        ? tranposition.toString()
-        : `+${tranposition}`;
+    return tranposition === 0 ? "" : tranposition < 0 ? tranposition.toString() : `+${tranposition}`;
   };
 
   const toggleMode = () => {
@@ -164,20 +164,16 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 <button
                   onClick={() => toggleMode()}
                   className={`${
-                    active
-                      ? "bg-blue-700 text-white"
-                      : "text-gray-900 dark:text-gray-200"
+                    active ? "bg-blue-700 text-white" : "text-gray-900 dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   {mode === "default" ? (
                     <span>
-                      Enable{" "}
-                      <span className={GuitaleleStyle}>Guitalele Mode</span>
+                      Enable <span className={GuitaleleStyle}>Guitalele Mode</span>
                     </span>
                   ) : (
                     <span>
-                      Disable{" "}
-                      <span className={GuitaleleStyle}>Guitalele Mode</span>
+                      Disable <span className={GuitaleleStyle}>Guitalele Mode</span>
                     </span>
                   )}
                 </button>
@@ -190,9 +186,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 <button
                   onClick={() => print()}
                   className={`${
-                    active
-                      ? "bg-blue-700 text-white"
-                      : "text-gray-900  dark:text-gray-200"
+                    active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Print
@@ -204,9 +198,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 <Link
                   href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
                   className={`${
-                    active
-                      ? "bg-blue-700 text-white"
-                      : "text-gray-900  dark:text-gray-200"
+                    active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline hover:text-white`}
                 >
                   View on Ultimate Guitar
@@ -224,23 +216,15 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
       <Head>
         <title>
           {tabDetails.song.name
-            ? `${tabDetails.song.name} ${
-                tabDetails.song.artist && "- " + tabDetails.song.artist
-              }`
+            ? `${tabDetails.song.name} ${tabDetails.song.artist && "- " + tabDetails.song.artist}`
             : "Penultimate Guitar"}
         </title>
       </Head>
-      <div
-        ref={element}
-        tabIndex={0}
-        className="flex flex-col align-middle w-full"
-      >
+      <div ref={element} tabIndex={0} className="flex flex-col align-middle w-full">
         <div>
           <h1 className="text-center text-2xl my-4">
             <span className="font-medium">{tabDetails.song.name}</span>
-            <span className="font-light">{` ${
-              tabDetails.song.artist && "- " + tabDetails.song.artist
-            }`}</span>
+            <span className="font-light">{` ${tabDetails.song.artist && "- " + tabDetails.song.artist}`}</span>
           </h1>
           <div className="max-w-lg mx-auto my-4">
             {(tabDetails?.song?.Tab?.length ?? 1) > 1 && (
@@ -254,19 +238,14 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                     <li key={index}>
                       {t.taburl === tabDetails.taburl || (
                         <div className="flex justify-between">
-                          <Link
-                            href={`${ROUTE_PREFIX.TAB}/${t.taburl}`}
-                            prefetch={false}
-                          >
+                          <Link href={`${ROUTE_PREFIX.TAB}/${t.taburl}`} prefetch={false}>
                             {tabDetails.song.name}
                             <span className="font-light text-xs">
                               {" "}
                               ({t.type}) (v{t.version}){" "}
                             </span>
                           </Link>
-                          <div>
-                            Rating: {Math.round(t.rating * 100) / 100} / 5.00
-                          </div>
+                          <div>Rating: {Math.round(t.rating * 100) / 100} / 5.00</div>
                         </div>
                       )}
                     </li>
@@ -277,9 +256,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
             {!!tabDetails?.capo && <div>Capo: Fret {tabDetails?.capo}</div>}
             {!!tabDetails?.tuning?.value && (
               <div>
-                Tuning:{" "}
-                <span className="font-bold">{tabDetails?.tuning.name}</span>,{" "}
-                {tabDetails?.tuning.value}
+                Tuning: <span className="font-bold">{tabDetails?.tuning.name}</span>, {tabDetails?.tuning.value}
               </div>
             )}
           </div>
@@ -294,38 +271,23 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 <div className="flex flex-row lg:flex-col justify-between my-4 gap-2 text-sm flex-wrap relative">
                   <div className="flex-1 flex-col text-center">
                     <p className="text-xs whitespace-nowrap">
-                      {mode !== "guitalele" ? (
-                        "Transpose"
-                      ) : (
-                        <span className={GuitaleleStyle}>Guitalele Mode!</span>
-                      )}
-                      {mode === "guitalele" ||
-                        tranposition === 0 ||
-                        ` (${formattedTransposition()})`}
+                      {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}
+                      {mode === "guitalele" || tranposition === 0 || ` (${formattedTransposition()})`}
                     </p>
                     <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton
-                        onClick={() => setTranposition(tranposition - 1)}
-                      >
+                      <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>
                         <MinusIcon className="w-6 h-6" />
                       </ToolbarButton>
-                      <ToolbarButton
-                        onClick={() => setTranposition(tranposition + 1)}
-                      >
+                      <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>
                         <PlusIcon className="w-6 h-6" />
                       </ToolbarButton>
                     </div>
                   </div>
 
                   <div className="flex-1 flex-col text-center">
-                    <p className="text-xs whitespace-nowrap">
-                      Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}
-                    </p>
+                    <p className="text-xs whitespace-nowrap">Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</p>
                     <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton
-                        onClick={() => changeScrolling("down")}
-                        disabled={scrollSpeed < 1}
-                      >
+                      <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
                         <MinusIcon className="w-6 h-6" />
                       </ToolbarButton>
                       <ToolbarButton onClick={() => changeScrolling("up")}>
@@ -336,10 +298,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                   <div className="flex-1 flex-col text-center">
                     <p className="text-xs whitespace-nowrap">Font size</p>
                     <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton
-                        onClick={() => setFontSize(fontSize - 2)}
-                        disabled={fontSize < 8}
-                      >
+                      <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
                         <span className="text-xs">A</span>
                       </ToolbarButton>
                       <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
@@ -361,11 +320,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
             </div>
           )}
           <div className="lg:pt-0 pt-24 z-30 relative">
-            <TabSheet
-              plainTab={plainTab}
-              fontSize={fontSize}
-              transposition={tranposition}
-            />
+            <TabSheet plainTab={plainTab} fontSize={fontSize} transposition={tranposition} />
           </div>
         </div>
 
@@ -375,15 +330,11 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
             <div>
               {!!tabDetails?.contributors?.length && (
                 <details>
-                  <summary>
-                    {tabDetails?.contributors?.length} Contributors
-                  </summary>
+                  <summary>{tabDetails?.contributors?.length} Contributors</summary>
                   <ul>
                     {tabDetails?.contributors?.map((c, index) => (
                       <li key={index}>
-                        <Link href={`https://www.ultimate-guitar.com/u/${c}`}>
-                          {c}
-                        </Link>
+                        <Link href={`https://www.ultimate-guitar.com/u/${c}`}>{c}</Link>
                       </li>
                     ))}
                   </ul>
@@ -392,13 +343,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
             </div>
           </div>
         </div>
-        {saveDialogActive && (
-          <SaveDialog
-            isOpen={saveDialogActive}
-            setIsOpen={setSaveDialogActive}
-            tab={tabLink}
-          />
-        )}
+        {saveDialogActive && <SaveDialog isOpen={saveDialogActive} setIsOpen={setSaveDialogActive} tab={tabLink} />}
       </div>
     </>
   );
