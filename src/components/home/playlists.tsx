@@ -7,21 +7,20 @@ import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Fragment, useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import LoadingSpinner from "../loadingspinner";
+import LoadingSpinner, { Load } from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
 import PanelMenu from "./panelmenu";
 
 export default function Playlists() {
-  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
-    trpc.user.getPlaylists.useInfiniteQuery(
-      {
-        pageSize: 20,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-        initialCursor: 1,
-      },
-    );
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = trpc.user.getPlaylists.useInfiniteQuery(
+    {
+      pageSize: 20,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: 1,
+    }
+  );
 
   const playlists = data?.pages.flatMap((p) => p.items) ?? [];
 
@@ -32,33 +31,29 @@ export default function Playlists() {
           <h1 className="text-left text-xl">Playlists</h1>
           <div className="text-sm text-red-700">BETA</div>
         </div>
-        {isLoading ? (
-          <LoadingSpinner className="h-8" />
-        ) : playlists.length === 0 ? (
-          <div className="flex flex-col gap-1 mt-2">
-            <p className="text-center">You have no playlists apparently!</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-1 mt-2">
-            <>
-              {playlists.map((p, i) => (
-                <PlaylistPanel playlist={p} key={`${i}-${p.name}`} />
-              ))}
-              {hasNextPage && (
-                <PlainButton
-                  className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex justify-center items-center h-12"
-                  onClick={() => fetchNextPage()}
-                >
-                  {isFetching ? (
-                    <LoadingSpinner className="h-full" />
-                  ) : (
-                    "Load more"
-                  )}
-                </PlainButton>
-              )}
-            </>
-          </div>
-        )}
+        <Load isLoading={isLoading}>
+          {playlists.length === 0 ? (
+            <div className="flex flex-col gap-1 mt-2">
+              <p className="text-center">You have no playlists apparently!</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1 mt-2">
+              <>
+                {playlists.map((p, i) => (
+                  <PlaylistPanel playlist={p} key={`${i}-${p.name}`} />
+                ))}
+                {hasNextPage && (
+                  <PlainButton
+                    className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex justify-center items-center h-12"
+                    onClick={() => fetchNextPage()}
+                  >
+                    {isFetching ? <LoadingSpinner className="h-full" /> : "Load more"}
+                  </PlainButton>
+                )}
+              </>
+            </div>
+          )}
+        </Load>
       </div>
     </div>
   );
@@ -95,9 +90,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
 
     for (let track of data.tracks) {
       setPulling(track.name);
-      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
-        console.log("Couldn't find track", track),
-      );
+      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() => console.log("Couldn't find track", track));
       await new Promise((r) => setTimeout(r, 2000));
     }
 
@@ -108,7 +101,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
     { playlistId: playlist.uri.split(":").at(-1) ?? "", save: false },
     {
       enabled: isOpen,
-    },
+    }
   );
 
   return (
@@ -126,11 +119,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         <div
           className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl"
           onClick={() => {
-            if (
-              isOpen &&
-              divRef.current &&
-              window.scrollY > divRef.current.offsetTop
-            ) {
+            if (isOpen && divRef.current && window.scrollY > divRef.current.offsetTop) {
               divRef.current.scrollIntoView({ behavior: "smooth" });
             }
             setIsOpen(!isOpen);
@@ -139,21 +128,11 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
           <h2 className="text-lg">{playlist.name}</h2>
           <div className="flex justify-between gap-2 items-center">
             {playlist.images?.at(-1)?.url && (
-              <Link
-                href={`https://open.spotify.com/playlist/${playlist.id}`}
-                target="_blank"
-                prefetch={false}
-              >
-                <img
-                  src={playlist.images?.[0].url ?? undefined}
-                  className="w-8 h-8 rounded"
-                  alt=""
-                />
+              <Link href={`https://open.spotify.com/playlist/${playlist.id}`} target="_blank" prefetch={false}>
+                <img src={playlist.images?.[0].url ?? undefined} className="w-8 h-8 rounded" alt="" />
               </Link>
             )}
-            <ChevronLeftIcon
-              className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")}
-            />
+            <ChevronLeftIcon className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")} />
           </div>
         </div>
         {isOpen && (
@@ -167,8 +146,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
                     prefetch={false}
                   >
-                    <span className="font-bold text-sm">{t.name}</span> -{" "}
-                    {t.artists.join(", ")}
+                    <span className="font-bold text-sm">{t.name}</span> - {t.artists.join(", ")}
                   </PlainButton>
                 ))}
               </>
@@ -207,11 +185,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         )}
       </div>
       {isImportOpen && data && (
-        <ImportPlaylistDialog
-          playlist={data}
-          isOpen={isImportOpen}
-          setIsOpen={setIsImportOpen}
-        />
+        <ImportPlaylistDialog playlist={data} isOpen={isImportOpen} setIsOpen={setIsImportOpen} />
       )}
     </div>
   );
