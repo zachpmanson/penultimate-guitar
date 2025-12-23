@@ -167,9 +167,17 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
       },
 
       setUserAllFolders: (folders: Omit<Folder, "isOpen">[], userId: string) => {
-        set((old) => ({
-          savedTabs: { ...old.savedTabs, [userId]: folders.map((f) => ({ ...f, isOpen: false })) },
-        }));
+        set((old) => {
+          const isOpenMap = new Map<string, boolean>();
+          for (let [name, isOpen] of old.savedTabs[userId].map((f) => [f.name, f.isOpen] as const)) {
+            isOpenMap.set(name, isOpen);
+          }
+
+          const mergedFolders = folders.map((f) => ({ ...f, isOpen: isOpenMap.get(f.name) ?? false }));
+          return {
+            savedTabs: { ...old.savedTabs, [userId]: mergedFolders },
+          };
+        });
       },
       setAllSavedTabs: (newValue: SavedUserTabLinks) => {
         set({ savedTabs: newValue });
