@@ -114,7 +114,7 @@ function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         onMouseOut={() => setHovering(false)}
       >
         <div
-          className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl"
+          className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl z-10"
           onClick={() => {
             if (isOpen && divRef.current && window.scrollY > divRef.current.offsetTop) {
               divRef.current.scrollIntoView({ behavior: "smooth" });
