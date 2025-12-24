@@ -29,7 +29,7 @@ function collapseResults(results: SearchResult[]) {
       (c) =>
         c.song_name === r.song_name &&
         c.artist_name === r.artist_name &&
-        c.type === r.type
+        c.type === r.type,
     );
     if (existing === -1) {
       colRes.push(r);
@@ -61,7 +61,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    }
+    },
   );
 
   const loadPage = () => {

@@ -42,7 +42,7 @@ export default function Search() {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
         enabled: !!q,
-      }
+      },
     );
 
   const results = data?.pages.map((p) => p.items).flat() ?? [];

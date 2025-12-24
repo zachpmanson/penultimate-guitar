@@ -197,7 +197,7 @@ export namespace UGApi {
         tonality_name: z.string().optional(), // Optional because it can be empty
         version_description: z.string().nullable(), // Nullable because it can be null
         verified: z.number(),
-      })
+      }),
     ),
   });
   export type TabInfo = z.infer<typeof tabInfoSchema>;
@@ -214,7 +214,7 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/search?${query}`,
       {
         headers,
-      }
+      },
     );
     const status = data.status;
 
@@ -229,7 +229,7 @@ export namespace UGApi {
     console.log("getSearch", new Date().getTime() - start);
 
     return (tabs ?? []).filter(
-      (i) => !["Power", "Official", "Pro"].includes(i.type)
+      (i) => !["Power", "Official", "Pro"].includes(i.type),
     );
   }
 
@@ -242,7 +242,7 @@ export namespace UGApi {
       `https://api.ultimate-guitar.com/api/v1/tab/info?${query}`,
       {
         headers,
-      }
+      },
     );
     const data = await res.json();
 

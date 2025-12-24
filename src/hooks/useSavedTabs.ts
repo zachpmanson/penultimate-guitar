@@ -36,7 +36,8 @@ export default function useSavedTabs() {
   const setBestTabApi = trpc.user.setBestTab.useMutation();
 
   useEffect(() => {
-    if (tablinksAndFolders && userId) setUserAllTabLinks(tablinksAndFolders, userId);
+    if (tablinksAndFolders && userId)
+      setUserAllTabLinks(tablinksAndFolders, userId);
   }, [userId, tablinksAndFolders, setUserAllTabLinks]);
 
   const setTabFolders = useCallback(
@@ -59,7 +60,7 @@ export default function useSavedTabs() {
         setTabFoldersLocal(tablink, [...folders], userKey);
       }
     },
-    [session, userKey, refetchTabs, setTabFoldersLocal, setTabLinksApi]
+    [session, userKey, refetchTabs, setTabFoldersLocal, setTabLinksApi],
   );
 
   const addSavedTab = useCallback(
@@ -74,7 +75,7 @@ export default function useSavedTabs() {
         addTabLinkLocal(newTab, userKey, folderName);
       }
     },
-    [userId, userKey, addTabLinkApi, addTabLinkLocal, refetchTabs]
+    [userId, userKey, addTabLinkApi, addTabLinkLocal, refetchTabs],
   );
 
   const removeSavedTab = useCallback(
@@ -90,18 +91,20 @@ export default function useSavedTabs() {
         removeSavedTabLocal(tab, userKey, folder);
       }
     },
-    [userId, userKey, deleteTabLinkApi, refetchTabs, removeSavedTabLocal]
+    [userId, userKey, deleteTabLinkApi, refetchTabs, removeSavedTabLocal],
   );
 
   const removeFolder = useCallback(
     (folder: string) => {
       if (userId) {
-        removeFolderApi.mutateAsync({ folderName: folder }).then(() => refetchTabs());
+        removeFolderApi
+          .mutateAsync({ folderName: folder })
+          .then(() => refetchTabs());
       } else {
         removeFolderLocal(folder, userId);
       }
     },
-    [userId, removeFolderApi, refetchTabs, removeFolderLocal]
+    [userId, removeFolderApi, refetchTabs, removeFolderLocal],
   );
 
   const setBestTab = useCallback(
@@ -117,7 +120,7 @@ export default function useSavedTabs() {
         setBestTabLocal(userKey, oldTaburl, newTab);
       }
     },
-    [userKey, userId, setBestTabLocal, refetchTabs, setBestTabApi]
+    [userKey, userId, setBestTabLocal, refetchTabs, setBestTabApi],
   );
 
   const setFolderOpen = useCallback(
@@ -126,15 +129,17 @@ export default function useSavedTabs() {
         setFolderOpenLocal(userKey, folderName, isOpen);
       }
     },
-    [userKey, setFolderOpenLocal, refetchTabs]
+    [userKey, setFolderOpenLocal, refetchTabs],
   );
 
   const isSaved = useCallback(
     (newTab: TabLinkDto) => {
-      let existingIndex = savedTabs[userKey].flatMap((f) => f.tabs).findIndex((t) => t.taburl === newTab.taburl);
+      let existingIndex = savedTabs[userKey]
+        .flatMap((f) => f.tabs)
+        .findIndex((t) => t.taburl === newTab.taburl);
       return existingIndex !== -1;
     },
-    [savedTabs, userKey]
+    [savedTabs, userKey],
   );
 
   const flatTabs = savedTabs[userKey]?.flatMap((f) => f.tabs) ?? [];

@@ -22,7 +22,7 @@ export default function Profile() {
     { playlistId: playlistId ?? "", save: true },
     {
       enabled: !!playlistId,
-    }
+    },
   );
   const [isImportOpen, setIsImportOpen] = useState(false);
   const { setPlaylists } = useGlobal();
@@ -34,13 +34,13 @@ export default function Profile() {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
         initialCursor: 1,
-      }
+      },
     );
 
   const pullPlaylist = (url: string) => {
     console.log("pulling playlist", url);
     const matches = url.match(
-      /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/
+      /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/,
     );
     const playlistId = matches?.groups?.id!;
     setPlaylistId(playlistId);

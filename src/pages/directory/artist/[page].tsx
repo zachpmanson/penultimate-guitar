@@ -47,7 +47,7 @@ export default function Directory({
     allSongs = allSongs.filter(
       (song) =>
         song.name.toLowerCase().includes(lowerSearch) ||
-        song.artist.toLowerCase().includes(lowerSearch)
+        song.artist.toLowerCase().includes(lowerSearch),
     );
   }
 

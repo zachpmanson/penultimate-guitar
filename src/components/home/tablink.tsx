@@ -32,13 +32,17 @@ export default function TabLink({
 
   return (
     <>
-      <div className="w-full flex mx-auto justify-between gap-2" onMouseOver={(e) => e.stopPropagation()}>
+      <div
+        className="w-full flex mx-auto justify-between gap-2"
+        onMouseOver={(e) => e.stopPropagation()}
+      >
         <PlainButton
           href={`${tablink.loadBest ? ROUTE_PREFIX.BEST_TAB : ROUTE_PREFIX.TAB}/${tablink.taburl}`}
           prefetch={prefetch}
           className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
         >
-          <span className="font-bold text-sm">{tablink.name}</span> - {tablink.artist}
+          <span className="font-bold text-sm">{tablink.name}</span> -{" "}
+          {tablink.artist}
           {tablink.version && (
             <span className="font-light text-xs">
               {" "}
@@ -49,11 +53,21 @@ export default function TabLink({
         {/* </Link> */}
         <PlainButton onClick={handleSave}>
           <div className="flex items-center h-full w-4 text-gray-800 dark:text-gray-200">
-            {recent || !folder ? <BookmarkIcon className="w-full h-full" /> : <XMarkIcon className="w-full h-full" />}
+            {recent || !folder ? (
+              <BookmarkIcon className="w-full h-full" />
+            ) : (
+              <XMarkIcon className="w-full h-full" />
+            )}
           </div>
         </PlainButton>
       </div>
-      {saveDialogActive && <SaveDialog isOpen={saveDialogActive} setIsOpen={setSaveDialogActive} tab={tablink} />}
+      {saveDialogActive && (
+        <SaveDialog
+          isOpen={saveDialogActive}
+          setIsOpen={setSaveDialogActive}
+          tab={tablink}
+        />
+      )}
     </>
   );
 }

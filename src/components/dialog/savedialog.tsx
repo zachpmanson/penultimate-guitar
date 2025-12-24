@@ -1,6 +1,14 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
-import { ChangeEvent, Dispatch, KeyboardEvent, KeyboardEventHandler, SetStateAction, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  KeyboardEventHandler,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import DialogButton from "./dialogbutton";
 import { dedupe } from "@/utils/dedupe";
 import BaseDialog from "./basedialog";
@@ -11,7 +19,11 @@ type SaveDialogProps = {
   tab: TabLinkDto;
 };
 
-export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) {
+export default function SaveDialog({
+  isOpen,
+  setIsOpen,
+  tab,
+}: SaveDialogProps) {
   const { setTabFolders, savedTabs } = useSavedTabs();
   const [currentFolders, setCurrentFolders] = useState<string[]>([]);
   const [addingNew, setAddingNew] = useState(false);
@@ -22,7 +34,9 @@ export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) 
   useEffect(() => setAddingNew(false), [isOpen]);
 
   useEffect(() => {
-    const folderNames = [...Array.from(new Set(["Favourites", ...savedTabs.map((f) => f.name)]))];
+    const folderNames = [
+      ...Array.from(new Set(["Favourites", ...savedTabs.map((f) => f.name)])),
+    ];
     setFolders(folderNames);
 
     let currentFolderNames = savedTabs
@@ -62,7 +76,9 @@ export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) 
     setNewFolder(event.target.value);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (
+    event: KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (event.key === "Enter") addNew();
   };
 
@@ -76,7 +92,11 @@ export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) 
   };
 
   return (
-    <BaseDialog isOpen={isOpen} onClose={() => setIsOpen(false)} title="Save tab to folder">
+    <BaseDialog
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      title="Save tab to folder"
+    >
       <div className="flex flex-col">
         {folders.map((f, i) => (
           <label key={i} className="w-full text-lg">
@@ -108,7 +128,10 @@ export default function SaveDialog({ isOpen, setIsOpen, tab }: SaveDialogProps) 
           ) : (
             <>
               <div>
-                <DialogButton onClick={() => setAddingNew(true)} disabled={false}>
+                <DialogButton
+                  onClick={() => setAddingNew(true)}
+                  disabled={false}
+                >
                   New
                 </DialogButton>
               </div>

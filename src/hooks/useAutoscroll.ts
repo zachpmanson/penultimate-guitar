@@ -33,7 +33,7 @@ export default function useAutoscroll(element: RefObject<HTMLElement>) {
           console.log(
             `(${window.innerHeight + window.scrollY}) >= ${
               document.body.scrollHeight - 5
-            }`
+            }`,
           );
         if (
           window.innerHeight + window.scrollY >=

@@ -50,7 +50,7 @@ export async function upsertNewTab(tab: NewTab) {
 export async function insertTab(
   song: Song,
   tab: NewTab,
-  altVersions: AltVersion[]
+  altVersions: AltVersion[],
 ) {
   try {
     // upsert song

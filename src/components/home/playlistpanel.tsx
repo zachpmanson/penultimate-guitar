@@ -39,7 +39,9 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
 
     for (let track of data.tracks) {
       setPulling(track.name);
-      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() => console.log("Couldn't find track", track));
+      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() =>
+        console.log("Couldn't find track", track),
+      );
       await new Promise((r) => setTimeout(r, 2000));
     }
 
@@ -50,7 +52,7 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
     { playlistId: playlist.uri.split(":").at(-1) ?? "", save: false },
     {
       enabled: isOpen,
-    }
+    },
   );
 
   return (
@@ -68,7 +70,11 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         <div
           className="flex justify-between p-2 px-3 items-center sticky top-0 bg-gray-200 dark:bg-gray-800 rounded-xl z-10"
           onClick={() => {
-            if (isOpen && divRef.current && window.scrollY > divRef.current.offsetTop) {
+            if (
+              isOpen &&
+              divRef.current &&
+              window.scrollY > divRef.current.offsetTop
+            ) {
               divRef.current.scrollIntoView({ behavior: "smooth" });
             }
             setIsOpen(!isOpen);
@@ -77,11 +83,21 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
           <h2 className="text-lg">{playlist.name}</h2>
           <div className="flex justify-between gap-2 items-center">
             {playlist.images?.at(-1)?.url && (
-              <Link href={`https://open.spotify.com/playlist/${playlist.id}`} target="_blank" prefetch={false}>
-                <img src={playlist.images?.[0].url ?? undefined} className="w-8 h-8 rounded" alt="" />
+              <Link
+                href={`https://open.spotify.com/playlist/${playlist.id}`}
+                target="_blank"
+                prefetch={false}
+              >
+                <img
+                  src={playlist.images?.[0].url ?? undefined}
+                  className="w-8 h-8 rounded"
+                  alt=""
+                />
               </Link>
             )}
-            <ChevronLeftIcon className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")} />
+            <ChevronLeftIcon
+              className={"w-4 h-4 transition " + (isOpen ? "-rotate-90" : "")}
+            />
           </div>
         </div>
         {isOpen && (
@@ -95,7 +111,8 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
                     prefetch={false}
                   >
-                    <span className="font-bold text-sm">{t.name}</span> - {t.artists.join(", ")}
+                    <span className="font-bold text-sm">{t.name}</span> -{" "}
+                    {t.artists.join(", ")}
                   </PlainButton>
                 ))}
               </>
@@ -134,7 +151,11 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         )}
       </div>
       {isImportOpen && data && (
-        <ImportPlaylistDialog playlist={data} isOpen={isImportOpen} setIsOpen={setIsImportOpen} />
+        <ImportPlaylistDialog
+          playlist={data}
+          isOpen={isImportOpen}
+          setIsOpen={setIsImportOpen}
+        />
       )}
     </div>
   );

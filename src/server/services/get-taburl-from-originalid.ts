@@ -82,7 +82,7 @@ async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
   });
   // need to ensure that the originalId column actually works and the migration can happen properly
   const idToTaburl = Object.fromEntries(
-    taburlsFromAlts.map((t) => [t.originalId, t.taburl])
+    taburlsFromAlts.map((t) => [t.originalId, t.taburl]),
   );
   console.log(taburlsFromAlts);
   await insertTab(
@@ -97,6 +97,6 @@ async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
       .map((v) => ({
         ...v,
         taburl: idToTaburl[v.id],
-      }))
+      })),
   );
 }
