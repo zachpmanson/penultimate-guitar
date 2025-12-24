@@ -1,12 +1,6 @@
-import { Playlist } from "@/types/spotify";
 import { trpc } from "@/utils/trpc";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { useRef, useState } from "react";
-import ImportPlaylistDialog from "../dialog/importplaylistdialog";
 import LoadingSpinner, { Load } from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
-import PanelMenu from "./panelmenu";
 import PlaylistPanel from "./playlistpanel";
 
 export default function Playlists() {
@@ -27,7 +21,7 @@ export default function Playlists() {
       <div>
         <div className="flex justify-between items-center pt-4">
           <h1 className="text-left text-xl">Playlists</h1>
-          <div className="text-sm text-red-700">BETA</div>
+          <div className="text-sm text-red-700">ALPHA</div>
         </div>
         <Load isLoading={isLoading}>
           {playlists.length === 0 ? (
