@@ -1,13 +1,10 @@
 import { TAB_TYPES } from "@/models/models";
 import { UGAdapter } from "@/server/ug-interface/ug-interface";
-import { cleanUrl } from "@/utils/url";
+import { extractTaburl } from "@/utils/url";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getHighestRatedTabs, getTab } from "../services/get-tab";
-import {
-  getTabDetailsFromOriginalId,
-  getTabDetailsFromTaburl,
-} from "../services/get-taburl-from-originalid";
+import { getTabDetailsFromOriginalId, getTabDetailsFromTaburl } from "../services/get-taburl-from-originalid";
 import { search } from "../services/search";
 import { querySitemap } from "../services/search-query";
 import { createRouter, publicProcedure } from "../trpc";
@@ -26,32 +23,26 @@ export const tabRouter = createRouter({
     }
   }),
 
-  getTabFromOriginalId: publicProcedure
-    .input(z.number())
-    .query(async ({ input }) => {
-      try {
-        const possibleTab = await getTabDetailsFromOriginalId(input);
-        return possibleTab;
-      } catch (e) {
-        console.error(e);
-        throw new TRPCError({ code: "NOT_FOUND" });
-      }
-    }),
+  getTabFromOriginalId: publicProcedure.input(z.number()).query(async ({ input }) => {
+    try {
+      const possibleTab = await getTabDetailsFromOriginalId(input);
+      return possibleTab;
+    } catch (e) {
+      console.error(e);
+      throw new TRPCError({ code: "NOT_FOUND" });
+    }
+  }),
 
   getTabLazy: publicProcedure.input(z.string()).mutation(async ({ input }) => {
     return await getTab(input);
   }),
 
-  getHighestRatedTabs: publicProcedure
-    .input(z.string())
-    .query(async ({ input }) => {
-      return await getHighestRatedTabs(input);
-    }),
-  getHighestRatedTabLazy: publicProcedure
-    .input(z.string())
-    .mutation(async ({ input }) => {
-      return await getHighestRatedTabs(input);
-    }),
+  getHighestRatedTabs: publicProcedure.input(z.string()).query(async ({ input }) => {
+    return await getHighestRatedTabs(input);
+  }),
+  getHighestRatedTabLazy: publicProcedure.input(z.string()).mutation(async ({ input }) => {
+    return await getHighestRatedTabs(input);
+  }),
 
   search: publicProcedure
     .input(
@@ -59,7 +50,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      }),
+      })
     )
     .query(async ({ input }) => await search(input)),
 
@@ -69,7 +60,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         cursor: z.number().gt(0),
         type: searchTabType,
-      }),
+      })
     )
     .mutation(async ({ input }) => await search(input)),
 
@@ -78,7 +69,7 @@ export const tabRouter = createRouter({
       z.object({
         value: z.string(),
         type: searchTabType,
-      }),
+      })
     )
     .mutation(async ({ input }) => {
       const searchResult = await search({
@@ -98,7 +89,7 @@ export const tabRouter = createRouter({
       });
       return {
         ...firstResult,
-        taburl: cleanUrl(tab.urlWeb),
+        taburl: extractTaburl(tab.urlWeb),
       };
     }),
 
@@ -111,16 +102,10 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         page_size: z.number().gt(0).lte(100),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ input }) => {
-      return await querySitemap(
-        input.value,
-        input.artist,
-        input.tab_type,
-        input.cursor,
-        input.page_size,
-      );
+      return await querySitemap(input.value, input.artist, input.tab_type, input.cursor, input.page_size);
     }),
   querySitemapLazy: publicProcedure
     .input(
@@ -130,16 +115,10 @@ export const tabRouter = createRouter({
         tab_type: searchTabType,
         cursor: z.number().gt(0),
         page_size: z.number().gt(0).lte(100),
-      }),
+      })
     )
     .mutation(async ({ input }) => {
-      return await querySitemap(
-        input.value,
-        input.artist,
-        input.tab_type,
-        input.cursor,
-        input.page_size,
-      );
+      return await querySitemap(input.value, input.artist, input.tab_type, input.cursor, input.page_size);
     }),
 
   searchTabsInternalFuzzy: publicProcedure
@@ -148,7 +127,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -185,7 +164,7 @@ export const tabRouter = createRouter({
       `,
         input.value,
         PAGE_SIZE,
-        (input.cursor - 1) * PAGE_SIZE,
+        (input.cursor - 1) * PAGE_SIZE
       );
       console.log(tabIdRows);
 
@@ -219,7 +198,7 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const PAGE_SIZE = 50;
@@ -266,14 +245,10 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
-      return await UGAdapter.getSearch(
-        input.value,
-        input.search_type,
-        input.cursor,
-      );
+      return await UGAdapter.getSearch(input.value, input.search_type, input.cursor);
     }),
 
   searchTabsExternalLazy: publicProcedure
@@ -282,28 +257,22 @@ export const tabRouter = createRouter({
         value: z.string(),
         search_type: z.string(),
         cursor: z.number().gt(0),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
-      return await UGAdapter.getSearch(
-        input.value,
-        input.search_type,
-        input.cursor,
-      );
+      return await UGAdapter.getSearch(input.value, input.search_type, input.cursor);
     }),
-  getRecentTabs: publicProcedure
-    .input(z.number())
-    .query(async ({ ctx, input }) => {
-      return await ctx.prisma.tab.findMany({
-        orderBy: {
-          timestamp: "desc",
-        },
-        take: input,
-        include: {
-          song: true,
-        },
-      });
-    }),
+  getRecentTabs: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    return await ctx.prisma.tab.findMany({
+      orderBy: {
+        timestamp: "desc",
+      },
+      take: input,
+      include: {
+        song: true,
+      },
+    });
+  }),
 });
 
 export type TabRouter = typeof tabRouter;

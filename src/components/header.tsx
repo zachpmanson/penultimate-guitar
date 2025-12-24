@@ -7,7 +7,7 @@ import ThemeSwitcher from "./buttons/themeswitcher";
 import IconShuffle from "./icons/IconShuffle";
 import SearchBox from "./search/searchbox";
 import PlainButton from "./shared/plainbutton";
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 
 export default function Header() {
   const { theme } = useThemeOnMount();
@@ -28,7 +28,7 @@ export default function Header() {
         <div className="flex gap-4 items-center">
           <div className="flex gap-2 items-center">
             <PlainButton
-              href={ROUTE_PREFIX.TAB + "/" + allSaved[Math.floor(Math.random() * allSaved.length)]}
+              href={ROUTES.TAB(allSaved[Math.floor(Math.random() * allSaved.length)])}
               disabled={allSaved.length === 0}
               className="flex items-center justify-center w-8 h-8"
               noPadding

@@ -1,7 +1,7 @@
 import { SitemapSearchResult } from "@/server/services/search-query";
 import { ReactNode } from "react";
 import PlainButton from "../shared/plainbutton";
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 function normalizedName(str: string) {
   str = str.toLowerCase();
   if (str === "bass tabs") {
@@ -54,7 +54,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
       <div className="flex gap-1">
         <div className="w-1/4">
           {chords ? (
-            <ActiveButton href={`${ROUTE_PREFIX.BEST_TAB}/${chords.taburl}`}>
+            <ActiveButton href={ROUTES.BEST_TAB(chords.taburl)}>
               Chords
             </ActiveButton>
           ) : (
@@ -64,7 +64,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {tabs ? (
-            <ActiveButton href={`${ROUTE_PREFIX.TAB}/${tabs.taburl}`}>
+            <ActiveButton href={ROUTES.TAB(tabs.taburl)}>
               Tabs
             </ActiveButton>
           ) : (
@@ -74,7 +74,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {bass ? (
-            <ActiveButton href={`${ROUTE_PREFIX.TAB}/${bass.taburl}`}>
+            <ActiveButton href={ROUTES.TAB(bass.taburl)}>
               Bass
             </ActiveButton>
           ) : (
@@ -84,7 +84,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {ukulele ? (
-            <ActiveButton href={`${ROUTE_PREFIX.TAB}/${ukulele.taburl}`}>
+            <ActiveButton href={ROUTES.TAB(ukulele.taburl)}>
               Ukulele
             </ActiveButton>
           ) : (

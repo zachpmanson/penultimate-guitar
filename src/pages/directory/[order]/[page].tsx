@@ -1,5 +1,5 @@
 import PageDropdown from "@/components/directory/pagedropdown";
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 import prisma from "@/server/prisma";
 import { useSearchStore } from "@/state/search";
 import { Song } from "@prisma/client";
@@ -53,7 +53,7 @@ export default function Directory({
 
   const generateLink = (t: TabMetadata) => (
     <Link
-      href={`${ROUTE_PREFIX.TAB}/${t.taburl}`}
+      href={ROUTES.TAB(t.taburl)}
       prefetch={false}
       title={t.timestamp}
       className="color-unset"

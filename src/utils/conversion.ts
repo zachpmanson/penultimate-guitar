@@ -1,6 +1,6 @@
 import { NewTab, TabDto, TabLinkDto, TabType } from "@/models/models";
 import { UGApi } from "@/server/ug-interface/ug-api";
-import { cleanUrl } from "./url";
+import { extractTaburl } from "./url";
 
 export function mapTabDtoToTabLink(tabDto: TabDto): TabLinkDto {
   return {
@@ -23,7 +23,7 @@ export function mapApiResultToTabDto(tabInfo: UGApi.TabInfo) {
         }
       : undefined,
     contributors: tabInfo.contributor ? [tabInfo.contributor.username] : [],
-    taburl: cleanUrl(tabInfo.urlWeb),
+    taburl: extractTaburl(tabInfo.urlWeb),
     tab: tabInfo.content,
     song: {
       id: tabInfo.song_id,
@@ -43,7 +43,7 @@ export function mapTabInfoToNewTab(tabInfo: UGApi.TabInfo): NewTab {
 
   return {
     type: tabInfo.type,
-    taburl: cleanUrl(tabInfo.urlWeb),
+    taburl: extractTaburl(tabInfo.urlWeb),
     tab: tabInfo.content,
     songId: tabInfo.song_id,
     contributors: [tabInfo.contributor.username],

@@ -1,4 +1,4 @@
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 import { getHighestRatedTabs } from "@/server/services/get-tab";
 import { GetStaticPropsContext } from "next";
 
@@ -24,10 +24,10 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   }
 
   const url = params.id.join("/");
+  const taburl = (await getHighestRatedTabs(url))[0].taburl;
   return {
     redirect: {
-      destination:
-        ROUTE_PREFIX.TAB + "/" + (await getHighestRatedTabs(url))[0].taburl,
+      destination: ROUTES.TAB(taburl),
     },
   };
 };

@@ -6,7 +6,7 @@ import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
 import useSavedTabs from "@/hooks/useSavedTabs";
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 
 export default function TabLink({
   tablink,
@@ -37,7 +37,7 @@ export default function TabLink({
         onMouseOver={(e) => e.stopPropagation()}
       >
         <PlainButton
-          href={`${tablink.loadBest ? ROUTE_PREFIX.BEST_TAB : ROUTE_PREFIX.TAB}/${tablink.taburl}`}
+          href={tablink.loadBest ? ROUTES.BEST_TAB(tablink.taburl) : ROUTES.TAB(tablink.taburl)}
           prefetch={prefetch}
           className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
         >

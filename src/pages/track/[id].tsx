@@ -1,9 +1,9 @@
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 import prisma from "@/server/prisma";
 import { querySitemap } from "@/server/services/search-query";
 import { SpotifyApi } from "@/server/spotify-interface/spotify-api";
 import { UGApi } from "@/server/ug-interface/ug-api";
-import { cleanUrl } from "@/utils/url";
+import { extractTaburl } from "@/utils/url";
 import { GetStaticPropsContext } from "next";
 
 export default function Tab() {
@@ -40,7 +40,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     taburl = track.taburl;
     return {
       redirect: {
-        destination: ROUTE_PREFIX.BEST_TAB + "/" + taburl,
+        destination: ROUTES.BEST_TAB(taburl),
       },
     };
   } else {
@@ -55,13 +55,14 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
         notFound: true,
       };
     }
+
     const tabdetails = await UGApi.getTab({
       tab_id: topTab[0].id,
     });
 
     return {
       redirect: {
-        destination: ROUTE_PREFIX.BEST_TAB + "/" + cleanUrl(tabdetails.urlWeb),
+        destination: ROUTES.BEST_TAB(extractTaburl(tabdetails.urlWeb)),
       },
     };
   }

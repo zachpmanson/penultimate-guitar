@@ -6,7 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { ROUTE_PREFIX } from "@/constants";
+import { ROUTES } from "@/constants";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function SearchBox() {
     inputRef.current?.blur();
 
     if (searchText.startsWith("https://tabs.ultimate-guitar.com/tab/")) {
-      router.push(`${ROUTE_PREFIX.TAB}/${searchText.slice(37)}`);
+      router.push(ROUTES.TAB(searchText.slice(37)));
     } else if (searchText.startsWith("https://open.spotify.com/playlist/")) {
       setButtonText("Loading...");
       const matches = searchText.match(
