@@ -267,9 +267,9 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
 
         <div className="relative w-fit max-w-full lg:px-24 m-auto z-0">
           {tabDetails?.tab && (
-            <div className="absolute top-0 lg:right-0 w-full  lg:w-fit h-full">
-              <div className="bg-white/50 dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto overflow-x-scroll">
-                <div className="flex flex-row lg:flex-col max-w-full justify-between my-4 gap-2 text-sm flex-wrap relative min-w-96">
+            <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
+              <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto overflow-x-scroll">
+                <div className="flex flex-row lg:flex-col items-end max-w-full justify-between my-4 gap-2 text-sm flex-wrap relative min-w-96">
                   <div className="flex-1 flex-col text-center">
                     <p className="text-xs whitespace-nowrap">
                       {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}

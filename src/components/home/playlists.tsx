@@ -1,5 +1,5 @@
 import { trpc } from "@/utils/trpc";
-import LoadingSpinner, { Load } from "../loadingspinner";
+import { Load } from "../loadingspinner";
 import PlainButton from "../shared/plainbutton";
 import PlaylistPanel from "./playlistpanel";
 
@@ -38,8 +38,9 @@ export default function Playlists() {
                   <PlainButton
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex justify-center items-center h-12"
                     onClick={() => fetchNextPage()}
+                    isLoading={isFetching}
                   >
-                    {isFetching ? <LoadingSpinner className="h-full" /> : "Load more"}
+                    Load more
                   </PlainButton>
                 )}
               </>
