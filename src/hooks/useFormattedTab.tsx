@@ -13,7 +13,10 @@ export default function useFormattedTab(plainTab: string, transposition: number,
 
   const [lineCutoff, setLineCutoff] = useState(40);
 
-  const formattedTab = useMemo(() => recusivelyTruncate(plainTab, lineCutoff), [plainTab, lineCutoff]);
+  const formattedTab = useMemo(
+    () => recusivelyTruncate(plainTab, lineCutoff), //.replace(/ /g, "·"),
+    [plainTab, lineCutoff]
+  );
 
   useEffect(() => {
     setLineCutoff(Math.floor((width + 16) / (fontSize * 0.67)));
