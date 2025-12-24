@@ -25,6 +25,25 @@ function getApiHeaders() {
   };
 }
 
+function stripRemasterAnnotations(songName: string): string {
+  return songName
+    .replace(/\s*(?:[-–]\s*Remaster(?:ed)?(?:\s+\(?\d{4}\)?)?|\(Remaster(?:ed)?(?:\s+\d{4})?\))/i, "")
+    .replace(/\s*[-–]\s*\d{4}\s+Remaster(?:ed)?/i, "")
+    .trim();
+}
+
+function stripSpecialCharacters(songName: string): string {
+  return songName.replace(/[?!]/g, "").trim();
+}
+
+function prepSearch(songName: string) {
+  // god i wish JS had a pipe operator
+  let x = stripSpecialCharacters(songName);
+  x = stripRemasterAnnotations(x);
+  console.log(`Initial search term ${songName}->${x}`);
+  return x;
+}
+
 export namespace UGApi {
   const searchResultSchema = z.object({
     id: z.number(),
@@ -204,7 +223,7 @@ export namespace UGApi {
 
   export async function getSearch(params: { title: string; page: number; type?: number }) {
     const start = new Date().getTime();
-    const query = toParams(params);
+    const query = toParams({ ...params, title: prepSearch(params.title) });
     const headers = getApiHeaders();
     const data = await fetch(`https://api.ultimate-guitar.com/api/v1/tab/search?${query}`, {
       headers,
