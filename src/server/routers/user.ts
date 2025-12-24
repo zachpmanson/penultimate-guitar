@@ -15,100 +15,94 @@ export const userRouter = createRouter({
     });
   }),
 
-  addTabLink: authProcedure
-    .input(NewTabSchema)
-    .mutation(async ({ ctx, input }) => {
-      const {
-        newTab: { taburl, name, artist, type, version, folder, loadBest },
-      } = input;
+  addTabLink: authProcedure.input(NewTabSchema).mutation(async ({ ctx, input }) => {
+    const {
+      newTab: { taburl, name, artist, type, version, folder, loadBest },
+    } = input;
 
-      // create folder if it doesn't exist
-      const folderName = folder ?? "Favourites";
-      const folderRow = await ctx.prisma.folder.upsert({
-        create: {
+    // create folder if it doesn't exist
+    const folderName = folder ?? "Favourites";
+    const folderRow = await ctx.prisma.folder.upsert({
+      create: {
+        name: folderName,
+        spotifyUserId: ctx.session.user.id,
+      },
+      update: {},
+      where: {
+        name_spotifyUserId: {
           name: folderName,
           spotifyUserId: ctx.session.user.id,
         },
-        update: {},
-        where: {
-          name_spotifyUserId: {
-            name: folderName,
-            spotifyUserId: ctx.session.user.id,
-          },
-        },
-      });
+      },
+    });
 
-      const result = await ctx.prisma.userTablink.upsert({
-        create: {
-          // spotifyUserId: ctx.session.user.id,
+    const result = await ctx.prisma.userTablink.upsert({
+      create: {
+        // spotifyUserId: ctx.session.user.id,
+        taburl,
+        folderId: folderRow.id,
+        name,
+        artist,
+        type,
+        version,
+        loadBest,
+      },
+      update: {
+        // spotifyUserId: ctx.session.user.id,
+        taburl,
+        folderId: folderRow.id,
+        name,
+        artist,
+        type,
+        version,
+        loadBest,
+      },
+      where: {
+        // spotifyUserId: ctx.session.user.id,
+        taburl_folderId: {
           taburl,
           folderId: folderRow.id,
-          name,
-          artist,
-          type,
-          version,
-          loadBest,
         },
-        update: {
-          // spotifyUserId: ctx.session.user.id,
-          taburl,
-          folderId: folderRow.id,
-          name,
-          artist,
-          type,
-          version,
-          loadBest,
-        },
-        where: {
-          // spotifyUserId: ctx.session.user.id,
-          taburl_folderId: {
-            taburl,
-            folderId: folderRow.id,
-          },
-        },
-      });
+      },
+    });
 
-      return result;
-    }),
+    return result;
+  }),
 
-  deleteTabLink: authProcedure
-    .input(DeleteTabLinkSchema)
-    .mutation(async ({ ctx, input }) => {
-      const { taburl, folderName } = input;
+  deleteTabLink: authProcedure.input(DeleteTabLinkSchema).mutation(async ({ ctx, input }) => {
+    const { taburl, folderName } = input;
 
-      const result = await ctx.prisma.userTablink.deleteMany({
-        where: {
-          taburl,
-          folder: {
-            name: folderName,
-            spotifyUserId: ctx.session.user.id,
-          },
+    const result = await ctx.prisma.userTablink.deleteMany({
+      where: {
+        taburl,
+        folder: {
+          name: folderName,
+          spotifyUserId: ctx.session.user.id,
         },
-      });
-      return result;
-    }),
+      },
+    });
+    return result;
+  }),
 
-  deleteFolder: authProcedure
-    .input(z.object({ folderName: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const { folderName } = input;
-      const result = await ctx.prisma.folder.delete({
-        where: {
-          name_spotifyUserId: {
-            name: folderName,
-            spotifyUserId: ctx.session.user.id,
-          },
+  deleteFolder: authProcedure.input(z.object({ folderName: z.string() })).mutation(async ({ ctx, input }) => {
+    const { folderName } = input;
+    const result = await ctx.prisma.folder.delete({
+      where: {
+        name_spotifyUserId: {
+          name: folderName,
+          spotifyUserId: ctx.session.user.id,
         },
-      });
-      return result;
-    }),
+      },
+    });
+    return result;
+  }),
 
   setTabLinks: authProcedure
     .input(
       z.object({
         tab: TabSchema,
         folders: z.array(z.string()),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const count = ctx.prisma.$transaction(async (tx) => {
@@ -199,7 +193,7 @@ export const userRouter = createRouter({
           type: z.string(),
           version: z.number(),
         }),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const u = await ctx.prisma.userTablink.updateMany({
@@ -223,14 +217,10 @@ export const userRouter = createRouter({
       z.object({
         cursor: z.number(),
         pageSize: z.number().optional(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
-      return await SpotifyApi.getUserPlaylists(
-        ctx.session.user.id,
-        input.cursor,
-        input.pageSize,
-      );
+      return await SpotifyApi.getUserPlaylists(ctx.session.user.id, input.cursor, input.pageSize);
     }),
 });
 

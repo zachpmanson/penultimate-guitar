@@ -30,23 +30,19 @@ export default function SearchBox() {
       router.push(ROUTES.TAB(searchText.slice(37)));
     } else if (searchText.startsWith("https://open.spotify.com/playlist/")) {
       setButtonText("Loading...");
-      const matches = searchText.match(
-        /https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/,
-      );
+      const matches = searchText.match(/https:\/\/open\.spotify\.com\/playlist\/(?<id>[0-9A-Za-z]+).*/);
       const playlistId = matches?.groups?.id!;
-      getPlaylist
-        .mutateAsync({ playlistId })
-        .then((playlist: IndividualPlaylist) => {
-          setPlaylist(playlist);
-          setIsImportOpen(true);
-          setPlaylists((o) => {
-            let n = { ...o };
-            if (playlistId) n[playlist.name] = playlistId;
-            return n;
-          });
-
-          setButtonText("Search");
+      getPlaylist.mutateAsync({ playlistId }).then((playlist: IndividualPlaylist) => {
+        setPlaylist(playlist);
+        setIsImportOpen(true);
+        setPlaylists((o) => {
+          let n = { ...o };
+          if (playlistId) n[playlist.name] = playlistId;
+          return n;
         });
+
+        setButtonText("Search");
+      });
     } else {
       console.log(router.pathname);
       if (router.pathname.startsWith("/search/internal")) {
@@ -67,10 +63,7 @@ export default function SearchBox() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <label
-          htmlFor="default-search"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-200"
-        >
+        <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-200">
           Search
         </label>
         <div className="relative max-w-2xl mx-auto my-4">
@@ -127,11 +120,7 @@ export default function SearchBox() {
         </div>
       </form>
       {isImportOpen && playlist && (
-        <ImportPlaylistDialog
-          playlist={playlist}
-          isOpen={isImportOpen}
-          setIsOpen={setIsImportOpen}
-        />
+        <ImportPlaylistDialog playlist={playlist} isOpen={isImportOpen} setIsOpen={setIsImportOpen} />
       )}
     </>
   );

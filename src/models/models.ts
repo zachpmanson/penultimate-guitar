@@ -3,22 +3,9 @@ import { Folder } from "@/types/user";
 // switched to string because I don't know all the different forms that Tab parts can come in
 export type TabType = string;
 // export type TabType = "Tab" | "Chords" | "Ukulele" | "Bass Tabs";
-export const TAB_TYPES = [
-  "chords",
-  "tabs",
-  "ukulele",
-  "bass",
-  "drums",
-  "all",
-] as const;
+export const TAB_TYPES = ["chords", "tabs", "ukulele", "bass", "drums", "all"] as const;
 
-export type SearchTabType =
-  | "chords"
-  | "tabs"
-  | "ukulele"
-  | "bass"
-  | "drums"
-  | "all";
+export type SearchTabType = "chords" | "tabs" | "ukulele" | "bass" | "drums" | "all";
 
 export type Mode = "default" | "guitalele";
 

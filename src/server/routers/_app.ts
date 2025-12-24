@@ -5,13 +5,11 @@ import { tabRouter } from "./tab";
 import { userRouter } from "./user";
 
 export const appRouter = createRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
+  hello: publicProcedure.input(z.object({ text: z.string() })).query(({ input }) => {
+    return {
+      greeting: `Hello ${input.text}`,
+    };
+  }),
   user: userRouter,
   tab: tabRouter,
   spotify: spotifyRouter,

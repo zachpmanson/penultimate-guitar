@@ -10,13 +10,7 @@ function normalizedName(str: string) {
   return str;
 }
 
-function ActiveButton({
-  href,
-  children,
-}: {
-  href: string;
-  children: ReactNode;
-}) {
+function ActiveButton({ href, children }: { href: string; children: ReactNode }) {
   return (
     <PlainButton
       href={href}
@@ -30,11 +24,7 @@ function ActiveButton({
 
 function DisabledButton({ children }: { children: ReactNode }) {
   return (
-    <PlainButton
-      className={"flex gap-2 items-center justify-center opacity-20"}
-      title="No chords available"
-      disabled
-    >
+    <PlainButton className={"flex gap-2 items-center justify-center opacity-20"} title="No chords available" disabled>
       <div className="w-full uppercase text-xs text-center">{children}</div>
     </PlainButton>
   );
@@ -54,9 +44,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
       <div className="flex gap-1">
         <div className="w-1/4">
           {chords ? (
-            <ActiveButton href={ROUTES.BEST_TAB(chords.taburl)}>
-              Chords
-            </ActiveButton>
+            <ActiveButton href={ROUTES.BEST_TAB(chords.taburl)}>Chords</ActiveButton>
           ) : (
             <DisabledButton>Chords</DisabledButton>
           )}
@@ -64,9 +52,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {tabs ? (
-            <ActiveButton href={ROUTES.TAB(tabs.taburl)}>
-              Tabs
-            </ActiveButton>
+            <ActiveButton href={ROUTES.TAB(tabs.taburl)}>Tabs</ActiveButton>
           ) : (
             <DisabledButton>Tabs</DisabledButton>
           )}
@@ -74,9 +60,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {bass ? (
-            <ActiveButton href={ROUTES.TAB(bass.taburl)}>
-              Bass
-            </ActiveButton>
+            <ActiveButton href={ROUTES.TAB(bass.taburl)}>Bass</ActiveButton>
           ) : (
             <DisabledButton>Bass</DisabledButton>
           )}
@@ -84,9 +68,7 @@ export default function SongItem({ song }: { song: SitemapSearchResult }) {
 
         <div className="w-1/4">
           {ukulele ? (
-            <ActiveButton href={ROUTES.TAB(ukulele.taburl)}>
-              Ukulele
-            </ActiveButton>
+            <ActiveButton href={ROUTES.TAB(ukulele.taburl)}>Ukulele</ActiveButton>
           ) : (
             <DisabledButton>Ukulele</DisabledButton>
           )}

@@ -1,12 +1,8 @@
 <!doctype html>
 <html lang="en">
-  <head
-    prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
-  >
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <title>
-      Hotel, 500 chords &amp; tabs found @ Ultimate-Guitar.Com Search
-    </title>
+    <title>Hotel, 500 chords &amp; tabs found @ Ultimate-Guitar.Com Search</title>
     <meta name="keywords" content="" />
     <script>
       !(function (n, e) {
@@ -31,9 +27,7 @@
         }
         function l(t) {
           if (t.cancelable) {
-            var o =
-              (t.timeStamp > 1e12 ? new Date() : performance.now()) -
-              t.timeStamp;
+            var o = (t.timeStamp > 1e12 ? new Date() : performance.now()) - t.timeStamp;
             "pointerdown" == t.type
               ? (function (t, o) {
                   function i() {
@@ -51,13 +45,7 @@
           }
         }
         function w(n) {
-          [
-            "click",
-            "mousedown",
-            "keydown",
-            "touchstart",
-            "pointerdown",
-          ].forEach(function (e) {
+          ["click", "mousedown", "keydown", "touchstart", "pointerdown"].forEach(function (e) {
             n(e, l, f);
           });
         }
@@ -110,7 +98,7 @@
             "content",
             isLargeViewport
               ? "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
-              : "width=1280, minimum-scale=0.1, maximum-scale=5.0",
+              : "width=1280, minimum-scale=0.1, maximum-scale=5.0"
           );
           document.cookie =
             "_ug_small_screen=" +
@@ -120,9 +108,7 @@
             ";";
         }
         setViewport();
-        window
-          .matchMedia("(orientation: landscape)")
-          .addEventListener("change", setViewport);
+        window.matchMedia("(orientation: landscape)").addEventListener("change", setViewport);
       })();
     </script>
     <meta name="csrf-param" content="_csrf" />
@@ -190,21 +176,17 @@
       (function () {
         if ("serviceWorker" in navigator) {
           window.addEventListener("load", function () {
-            window.navigator.serviceWorker
-              .getRegistrations()
-              .then(function (registrations) {
-                registrations.forEach(function (registration) {
-                  if (
-                    registration.active.scriptURL.indexOf("sw_ug.js") !== -1 ||
-                    registration.active.scriptURL.indexOf("sw_ug_v2.js") !== -1
-                  ) {
-                    registration.unregister();
-                  }
-                });
+            window.navigator.serviceWorker.getRegistrations().then(function (registrations) {
+              registrations.forEach(function (registration) {
+                if (
+                  registration.active.scriptURL.indexOf("sw_ug.js") !== -1 ||
+                  registration.active.scriptURL.indexOf("sw_ug_v2.js") !== -1
+                ) {
+                  registration.unregister();
+                }
               });
-            window.navigator.serviceWorker
-              .register("/sw_ug_v3.js")
-              .catch(function (error) {});
+            });
+            window.navigator.serviceWorker.register("/sw_ug_v3.js").catch(function (error) {});
           });
         }
       })();
@@ -281,13 +263,7 @@
         a.async = 1;
         a.src = g;
         m.parentNode.insertBefore(a, m);
-      })(
-        window,
-        document,
-        "script",
-        "//www.ultimate-guitar.com/static/vendor/ga/analytics_ver1676267223.js",
-        "ga",
-      );
+      })(window, document, "script", "//www.ultimate-guitar.com/static/vendor/ga/analytics_ver1676267223.js", "ga");
 
       ga("create", "UA-9160560-1", "auto");
 
@@ -310,22 +286,11 @@
         ga_client_id = tracker.get("clientId");
         ga("set", "dimension4", ga_client_id);
 
-        ga(
-          "sampledTracker.set",
-          "dimension4",
-          ga.getByName("sampledTracker").get("clientId"),
-        );
+        ga("sampledTracker.set", "dimension4", ga.getByName("sampledTracker").get("clientId"));
 
         var ga_client_id_value = ga.getByName("sampledTracker").get("clientId");
-        document.cookie =
-          "ga_client_id=" +
-          ga_client_id_value +
-          "; path=/; domain=.ultimate-guitar.com";
-        ga(
-          "reactTracker.set",
-          "dimension4",
-          ga.getByName("reactTracker").get("clientId"),
-        );
+        document.cookie = "ga_client_id=" + ga_client_id_value + "; path=/; domain=.ultimate-guitar.com";
+        ga("reactTracker.set", "dimension4", ga.getByName("reactTracker").get("clientId"));
       });
 
       ga("send", "pageview");
@@ -336,13 +301,10 @@
       (function (d, w, c) {
         function setCookie(name, value) {
           var options = {};
-          options.expires = new Date(
-            new Date().setFullYear(new Date().getFullYear() + 1),
-          ).toUTCString();
+          options.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toUTCString();
           options.path = "/";
           options.domain = ".ultimate-guitar.com";
-          var updatedCookie =
-            encodeURIComponent(name) + "=" + encodeURIComponent(value);
+          var updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
           for (var optionKey in options) {
             updatedCookie += "; " + optionKey;
             var optionValue = options[optionKey];
@@ -368,8 +330,7 @@
             setCookie("_ug_client_id", clientId);
 
             var isPwa =
-              (window.matchMedia &&
-                window.matchMedia("(display-mode: standalone)").matches) ||
+              (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
               window.navigator.standalone === true;
             var params = {
               has_web_pro_access: 0,
@@ -404,11 +365,7 @@
     </script>
 
     <noscript>
-      <img
-        src="//mc.yandex.ru/watch/18746557"
-        style="position: absolute; left: -9999px"
-        alt=""
-      />
+      <img src="//mc.yandex.ru/watch/18746557" style="position: absolute; left: -9999px" alt="" />
     </noscript>
 
     <style>

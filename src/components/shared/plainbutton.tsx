@@ -34,11 +34,7 @@ export default function PlainButton({
       {children}
     </Link>
   ) : (
-    <button
-      className={clsname}
-      onClick={disabled ? undefined : onClick}
-      title={title}
-    >
+    <button className={clsname} onClick={disabled ? undefined : onClick} title={title}>
       {isLoading ? <div className="invisible">{children}</div> : children}
       {isLoading && (
         <div className="absolute top-0 right-0 flex justify-center items-center h-full w-full p-2">

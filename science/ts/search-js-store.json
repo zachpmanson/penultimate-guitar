@@ -72,11 +72,7 @@
     "rtAnalytics": {
       "trackUrl": "/components/ab/event",
       "trackingEnabled": true,
-      "forceSendEvents": [
-        "Tab Favorite Add Click",
-        "Tab Rate Click",
-        "Tab View"
-      ],
+      "forceSendEvents": ["Tab Favorite Add Click", "Tab Rate Click", "Tab View"],
       "tabToolLogging": true,
       "samplerHeartbeat": 5
     },

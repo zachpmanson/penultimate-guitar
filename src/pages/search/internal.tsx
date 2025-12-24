@@ -26,10 +26,7 @@ function collapseResults(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
   for (let r of results) {
     const existing = colRes.findIndex(
-      (c) =>
-        c.song_name === r.song_name &&
-        c.artist_name === r.artist_name &&
-        c.type === r.type,
+      (c) => c.song_name === r.song_name && c.artist_name === r.artist_name && c.type === r.type
     );
     if (existing === -1) {
       colRes.push(r);
@@ -61,7 +58,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const loadPage = () => {
@@ -103,8 +100,8 @@ export default function Search() {
       <div className="max-w-[80ch] w-full m-auto">
         <h1 className="text-lg">Search Internal Results</h1>
         <p className="text-gray-400 mb-4 font-extralight">
-          Only the highest rated versions of each are shown. This is in testing,
-          search is fuzzy but it might be inaccurate.
+          Only the highest rated versions of each are shown. This is in testing, search is fuzzy but it might be
+          inaccurate.
         </p>
         <SearchResults
           results={mergedResults}

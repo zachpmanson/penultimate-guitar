@@ -1,10 +1,4 @@
-export default function IconGuitar({
-  className,
-  color = "black",
-}: {
-  className?: string;
-  color?: string;
-}) {
+export default function IconGuitar({ className, color = "black" }: { className?: string; color?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

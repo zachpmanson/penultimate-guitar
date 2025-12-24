@@ -71,11 +71,7 @@
     "rtAnalytics": {
       "trackUrl": "/components/ab/event",
       "trackingEnabled": true,
-      "forceSendEvents": [
-        "Tab Favorite Add Click",
-        "Tab Rate Click",
-        "Tab View"
-      ],
+      "forceSendEvents": ["Tab Favorite Add Click", "Tab Rate Click", "Tab View"],
       "tabToolLogging": true,
       "samplerHeartbeat": 5
     },
@@ -518,9 +514,7 @@
               },
               {
                 "id": "x57765",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [57, 53, 50, 45, 38, -1],
                 "frets": [5, 6, 7, 7, 5, -1],
@@ -531,9 +525,7 @@
               },
               {
                 "id": "xx0101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 38, -1, -1],
                 "frets": [10, 10, 10, 0, -1, -1],
@@ -544,9 +536,7 @@
               },
               {
                 "id": "xx0101013",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 2, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [65, 57, 53, 38, -1, -1],
                 "frets": [13, 10, 10, 0, -1, -1],
@@ -557,9 +547,7 @@
               },
               {
                 "id": "101212101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 50, 45, 38],
                 "frets": [10, 10, 10, 12, 12, 10],
@@ -570,9 +558,7 @@
               },
               {
                 "id": "101212101013",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [65, 57, 53, 50, 45, 38],
                 "frets": [13, 10, 10, 12, 12, 10],
@@ -583,9 +569,7 @@
               },
               {
                 "id": "xx12101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 50, -1, -1],
                 "frets": [10, 10, 10, 12, -1, -1],
@@ -596,9 +580,7 @@
               },
               {
                 "id": "xx12101013",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 2, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [65, 57, 53, 50, -1, -1],
                 "frets": [13, 10, 10, 12, -1, -1],
@@ -620,9 +602,7 @@
               },
               {
                 "id": "1012121010x",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [-1, 57, 53, 50, 45, 38],
                 "frets": [-1, 10, 10, 12, 12, 10],
@@ -633,9 +613,7 @@
               },
               {
                 "id": "10877xx",
-                "listCapos": [
-                  { "fret": 7, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 7, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [-1, -1, 50, 45, 41, 38],
                 "frets": [-1, -1, 7, 7, 8, 10],
@@ -646,9 +624,7 @@
               },
               {
                 "id": "10121210xx",
-                "listCapos": [
-                  { "fret": 10, "startString": 2, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 2, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [-1, -1, 53, 50, 45, 38],
                 "frets": [-1, -1, 10, 12, 12, 10],
@@ -659,9 +635,7 @@
               },
               {
                 "id": "x5x765",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [57, 53, 50, -1, 38, -1],
                 "frets": [5, 6, 7, -1, 5, -1],
@@ -672,9 +646,7 @@
               },
               {
                 "id": "10x12101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 50, -1, 38],
                 "frets": [10, 10, 10, 12, -1, 10],
@@ -685,9 +657,7 @@
               },
               {
                 "id": "10x12101013",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [65, 57, 53, 50, -1, 38],
                 "frets": [13, 10, 10, 12, -1, 10],
@@ -698,9 +668,7 @@
               },
               {
                 "id": "10x121010x",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [-1, 57, 53, 50, -1, 38],
                 "frets": [-1, 10, 10, 12, -1, 10],
@@ -724,9 +692,7 @@
               },
               {
                 "id": "xx10101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 3, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 48, -1, -1],
                 "frets": [10, 10, 10, 10, -1, -1],
@@ -748,9 +714,7 @@
               },
               {
                 "id": "8877xx",
-                "listCapos": [
-                  { "fret": 7, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 7, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 2,
                 "notes": [-1, -1, 50, 45, 41, 36],
                 "frets": [-1, -1, 7, 7, 8, 8],
@@ -772,9 +736,7 @@
               },
               {
                 "id": "8x7101010",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 2, "finger": 4 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 2, "finger": 4 }],
                 "noteIndex": 2,
                 "notes": [62, 57, 53, 45, -1, 36],
                 "frets": [10, 10, 10, 7, -1, 8],
@@ -820,9 +782,7 @@
               },
               {
                 "id": "x35553",
-                "listCapos": [
-                  { "fret": 3, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [55, 52, 48, 43, 36, -1],
                 "frets": [3, 5, 5, 5, 3, -1],
@@ -833,9 +793,7 @@
               },
               {
                 "id": "81010988",
-                "listCapos": [
-                  { "fret": 8, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [60, 55, 52, 48, 43, 36],
                 "frets": [8, 8, 9, 10, 10, 8],
@@ -846,9 +804,7 @@
               },
               {
                 "id": "xx10988",
-                "listCapos": [
-                  { "fret": 8, "startString": 0, "lastString": 1, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 0, "lastString": 1, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [60, 55, 52, 48, -1, -1],
                 "frets": [8, 8, 9, 10, -1, -1],
@@ -881,9 +837,7 @@
               },
               {
                 "id": "x3555x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 3, "finger": 3 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 3, "finger": 3 }],
                 "noteIndex": 0,
                 "notes": [-1, 52, 48, 43, 36, -1],
                 "frets": [-1, 5, 5, 5, 3, -1],
@@ -894,9 +848,7 @@
               },
               {
                 "id": "87555x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [-1, 52, 48, 43, 40, 36],
                 "frets": [-1, 5, 5, 5, 7, 8],
@@ -907,9 +859,7 @@
               },
               {
                 "id": "8101098x",
-                "listCapos": [
-                  { "fret": 8, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [-1, 55, 52, 48, 43, 36],
                 "frets": [-1, 8, 9, 10, 10, 8],
@@ -920,9 +870,7 @@
               },
               {
                 "id": "8755xx",
-                "listCapos": [
-                  { "fret": 5, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [-1, -1, 48, 43, 40, 36],
                 "frets": [-1, -1, 5, 5, 7, 8],
@@ -955,9 +903,7 @@
               },
               {
                 "id": "x3x553",
-                "listCapos": [
-                  { "fret": 3, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [55, 52, 48, -1, 36, -1],
                 "frets": [3, 5, 5, -1, 3, -1],
@@ -968,9 +914,7 @@
               },
               {
                 "id": "8x10988",
-                "listCapos": [
-                  { "fret": 8, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [60, 55, 52, 48, -1, 36],
                 "frets": [8, 8, 9, 10, -1, 8],
@@ -981,9 +925,7 @@
               },
               {
                 "id": "8x555x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [-1, 52, 48, 43, -1, 36],
                 "frets": [-1, 5, 5, 5, -1, 8],
@@ -994,9 +936,7 @@
               },
               {
                 "id": "8x1098x",
-                "listCapos": [
-                  { "fret": 8, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 0,
                 "notes": [-1, 55, 52, 48, -1, 36],
                 "frets": [-1, 8, 9, 10, -1, 8],
@@ -1009,9 +949,7 @@
             "Bb": [
               {
                 "id": "x13331",
-                "listCapos": [
-                  { "fret": 1, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [53, 50, 46, 41, 34, -1],
                 "frets": [1, 3, 3, 3, 1, -1],
@@ -1022,9 +960,7 @@
               },
               {
                 "id": "688766",
-                "listCapos": [
-                  { "fret": 6, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 6, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [58, 53, 50, 46, 41, 34],
                 "frets": [6, 6, 7, 8, 8, 6],
@@ -1035,9 +971,7 @@
               },
               {
                 "id": "xx8766",
-                "listCapos": [
-                  { "fret": 6, "startString": 0, "lastString": 1, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 6, "startString": 0, "lastString": 1, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [58, 53, 50, 46, -1, -1],
                 "frets": [6, 6, 7, 8, -1, -1],
@@ -1059,9 +993,7 @@
               },
               {
                 "id": "x1312101110",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [62, 58, 53, 50, 46, -1],
                 "frets": [10, 11, 10, 12, 13, -1],
@@ -1072,9 +1004,7 @@
               },
               {
                 "id": "x1333x",
-                "listCapos": [
-                  { "fret": 3, "startString": 1, "lastString": 3, "finger": 3 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 1, "lastString": 3, "finger": 3 }],
                 "noteIndex": 10,
                 "notes": [-1, 50, 46, 41, 34, -1],
                 "frets": [-1, 3, 3, 3, 1, -1],
@@ -1085,9 +1015,7 @@
               },
               {
                 "id": "65333x",
-                "listCapos": [
-                  { "fret": 3, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [-1, 50, 46, 41, 38, 34],
                 "frets": [-1, 3, 3, 3, 5, 6],
@@ -1098,9 +1026,7 @@
               },
               {
                 "id": "68876x",
-                "listCapos": [
-                  { "fret": 6, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 6, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [-1, 53, 50, 46, 41, 34],
                 "frets": [-1, 6, 7, 8, 8, 6],
@@ -1122,9 +1048,7 @@
               },
               {
                 "id": "6533xx",
-                "listCapos": [
-                  { "fret": 3, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [-1, -1, 46, 41, 38, 34],
                 "frets": [-1, -1, 3, 3, 5, 6],
@@ -1146,9 +1070,7 @@
               },
               {
                 "id": "x1x331",
-                "listCapos": [
-                  { "fret": 1, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [53, 50, 46, -1, 34, -1],
                 "frets": [1, 3, 3, -1, 1, -1],
@@ -1159,9 +1081,7 @@
               },
               {
                 "id": "6x8766",
-                "listCapos": [
-                  { "fret": 6, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 6, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [58, 53, 50, 46, -1, 34],
                 "frets": [6, 6, 7, 8, -1, 6],
@@ -1172,9 +1092,7 @@
               },
               {
                 "id": "x13x101110",
-                "listCapos": [
-                  { "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [62, 58, 53, -1, 46, -1],
                 "frets": [10, 11, 10, -1, 13, -1],
@@ -1185,9 +1103,7 @@
               },
               {
                 "id": "6x333x",
-                "listCapos": [
-                  { "fret": 3, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 3, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [-1, 50, 46, 41, -1, 34],
                 "frets": [-1, 3, 3, 3, -1, 6],
@@ -1198,9 +1114,7 @@
               },
               {
                 "id": "6x876x",
-                "listCapos": [
-                  { "fret": 6, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 6, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 10,
                 "notes": [-1, 53, 50, 46, -1, 34],
                 "frets": [-1, 6, 7, 8, -1, 6],
@@ -1224,9 +1138,7 @@
               },
               {
                 "id": "x02225",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 49, 45, 40, 33, -1],
                 "frets": [5, 2, 2, 2, 0, -1],
@@ -1237,9 +1149,7 @@
               },
               {
                 "id": "x07655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 1, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 1, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 45, 33, -1],
                 "frets": [5, 5, 6, 7, 0, -1],
@@ -1250,9 +1160,7 @@
               },
               {
                 "id": "577655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 45, 40, 33],
                 "frets": [5, 5, 6, 7, 7, 5],
@@ -1263,9 +1171,7 @@
               },
               {
                 "id": "xx7655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 1, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 1, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 45, -1, -1],
                 "frets": [5, 5, 6, 7, -1, -1],
@@ -1298,9 +1204,7 @@
               },
               {
                 "id": "x0119109",
-                "listCapos": [
-                  { "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [61, 57, 52, 49, 33, -1],
                 "frets": [9, 10, 9, 11, 0, -1],
@@ -1322,9 +1226,7 @@
               },
               {
                 "id": "x12119109",
-                "listCapos": [
-                  { "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [61, 57, 52, 49, 45, -1],
                 "frets": [9, 10, 9, 11, 12, -1],
@@ -1335,9 +1237,7 @@
               },
               {
                 "id": "x0222x",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 49, 45, 40, 33, -1],
                 "frets": [-1, 2, 2, 2, 0, -1],
@@ -1348,9 +1248,7 @@
               },
               {
                 "id": "54222x",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 49, 45, 40, 37, 33],
                 "frets": [-1, 2, 2, 2, 4, 5],
@@ -1372,9 +1270,7 @@
               },
               {
                 "id": "57765x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 52, 49, 45, 40, 33],
                 "frets": [-1, 5, 6, 7, 7, 5],
@@ -1407,9 +1303,7 @@
               },
               {
                 "id": "5422xx",
-                "listCapos": [
-                  { "fret": 2, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, -1, 45, 40, 37, 33],
                 "frets": [-1, -1, 2, 2, 4, 5],
@@ -1442,9 +1336,7 @@
               },
               {
                 "id": "5x7655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 45, -1, 33],
                 "frets": [5, 5, 6, 7, -1, 5],
@@ -1455,9 +1347,7 @@
               },
               {
                 "id": "x12x9109",
-                "listCapos": [
-                  { "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 9, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [61, 57, 52, -1, 45, -1],
                 "frets": [9, 10, 9, -1, 12, -1],
@@ -1468,9 +1358,7 @@
               },
               {
                 "id": "5x222x",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 49, 45, 40, -1, 33],
                 "frets": [-1, 2, 2, 2, -1, 5],
@@ -1481,9 +1369,7 @@
               },
               {
                 "id": "5x765x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 52, 49, 45, -1, 33],
                 "frets": [-1, 5, 6, 7, -1, 5],
@@ -1496,9 +1382,7 @@
             "F": [
               {
                 "id": "133211",
-                "listCapos": [
-                  { "fret": 1, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [53, 48, 45, 41, 36, 29],
                 "frets": [1, 1, 2, 3, 3, 1],
@@ -1509,9 +1393,7 @@
               },
               {
                 "id": "xx3211",
-                "listCapos": [
-                  { "fret": 1, "startString": 0, "lastString": 1, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 0, "lastString": 1, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [53, 48, 45, 41, -1, -1],
                 "frets": [1, 1, 2, 3, -1, -1],
@@ -1533,9 +1415,7 @@
               },
               {
                 "id": "x87565",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [57, 53, 48, 45, 41, -1],
                 "frets": [5, 6, 5, 7, 8, -1],
@@ -1546,9 +1426,7 @@
               },
               {
                 "id": "x81010108",
-                "listCapos": [
-                  { "fret": 8, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [60, 57, 53, 48, 41, -1],
                 "frets": [8, 10, 10, 10, 8, -1],
@@ -1559,9 +1437,7 @@
               },
               {
                 "id": "13321x",
-                "listCapos": [
-                  { "fret": 1, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [-1, 48, 45, 41, 36, 29],
                 "frets": [-1, 1, 2, 3, 3, 1],
@@ -1583,9 +1459,7 @@
               },
               {
                 "id": "x8101010x",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 3, "finger": 3 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 3, "finger": 3 }],
                 "noteIndex": 5,
                 "notes": [-1, 57, 53, 48, 41, -1],
                 "frets": [-1, 10, 10, 10, 8, -1],
@@ -1596,9 +1470,7 @@
               },
               {
                 "id": "1312101010x",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [-1, 57, 53, 48, 45, 41],
                 "frets": [-1, 10, 10, 10, 12, 13],
@@ -1620,9 +1492,7 @@
               },
               {
                 "id": "13121010xx",
-                "listCapos": [
-                  { "fret": 10, "startString": 2, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 2, "lastString": 3, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [-1, -1, 53, 48, 45, 41],
                 "frets": [-1, -1, 10, 10, 12, 13],
@@ -1633,9 +1503,7 @@
               },
               {
                 "id": "1x3211",
-                "listCapos": [
-                  { "fret": 1, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [53, 48, 45, 41, -1, 29],
                 "frets": [1, 1, 2, 3, -1, 1],
@@ -1646,9 +1514,7 @@
               },
               {
                 "id": "x8x565",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 2, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [57, 53, 48, -1, 41, -1],
                 "frets": [5, 6, 5, -1, 8, -1],
@@ -1659,9 +1525,7 @@
               },
               {
                 "id": "x8x10108",
-                "listCapos": [
-                  { "fret": 8, "startString": 0, "lastString": 4, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 8, "startString": 0, "lastString": 4, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [60, 57, 53, -1, 41, -1],
                 "frets": [8, 10, 10, -1, 8, -1],
@@ -1672,9 +1536,7 @@
               },
               {
                 "id": "1x321x",
-                "listCapos": [
-                  { "fret": 1, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 1, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [-1, 48, 45, 41, -1, 29],
                 "frets": [-1, 1, 2, 3, -1, 1],
@@ -1685,9 +1547,7 @@
               },
               {
                 "id": "13x101010x",
-                "listCapos": [
-                  { "fret": 10, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 10, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 5,
                 "notes": [-1, 57, 53, 48, -1, 41],
                 "frets": [-1, 10, 10, 10, -1, 13],
@@ -1722,9 +1582,7 @@
               },
               {
                 "id": "x02223",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [55, 49, 45, 40, 33, -1],
                 "frets": [3, 2, 2, 2, 0, -1],
@@ -1735,9 +1593,7 @@
               },
               {
                 "id": "x05223",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [55, 49, 45, 43, 33, -1],
                 "frets": [3, 2, 2, 5, 0, -1],
@@ -1748,9 +1604,7 @@
               },
               {
                 "id": "542223",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [55, 49, 45, 40, 37, 33],
                 "frets": [3, 2, 2, 2, 4, 5],
@@ -1772,9 +1626,7 @@
               },
               {
                 "id": "x05655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 43, 33, -1],
                 "frets": [5, 5, 6, 5, 0, -1],
@@ -1785,9 +1637,7 @@
               },
               {
                 "id": "x05685",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 55, 49, 43, 33, -1],
                 "frets": [5, 8, 6, 5, 0, -1],
@@ -1809,9 +1659,7 @@
               },
               {
                 "id": "575655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 43, 40, 33],
                 "frets": [5, 5, 6, 5, 7, 5],
@@ -1822,9 +1670,7 @@
               },
               {
                 "id": "575685",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 55, 49, 43, 40, 33],
                 "frets": [5, 8, 6, 5, 7, 5],
@@ -1923,9 +1769,7 @@
               },
               {
                 "id": "x0522x",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 49, 45, 43, 33, -1],
                 "frets": [-1, 2, 2, 5, 0, -1],
@@ -1936,9 +1780,7 @@
               },
               {
                 "id": "x0565x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 52, 49, 43, 33, -1],
                 "frets": [-1, 5, 6, 5, 0, -1],
@@ -1960,9 +1802,7 @@
               },
               {
                 "id": "57565x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 52, 49, 43, 40, 33],
                 "frets": [-1, 5, 6, 5, 7, 5],
@@ -1973,9 +1813,7 @@
               },
               {
                 "id": "57568x",
-                "listCapos": [
-                  { "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 55, 49, 43, 40, 33],
                 "frets": [-1, 8, 6, 5, 7, 5],
@@ -2052,9 +1890,7 @@
               },
               {
                 "id": "5756xx",
-                "listCapos": [
-                  { "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, -1, 49, 43, 40, 33],
                 "frets": [-1, -1, 6, 5, 7, 5],
@@ -2065,9 +1901,7 @@
               },
               {
                 "id": "x0x223",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 2, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [55, 49, 45, -1, 33, -1],
                 "frets": [3, 2, 2, -1, 0, -1],
@@ -2078,9 +1912,7 @@
               },
               {
                 "id": "5x2223",
-                "listCapos": [
-                  { "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 2, "startString": 1, "lastString": 3, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [55, 49, 45, 40, -1, 33],
                 "frets": [3, 2, 2, 2, -1, 5],
@@ -2091,9 +1923,7 @@
               },
               {
                 "id": "5x5655",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 52, 49, 43, -1, 33],
                 "frets": [5, 5, 6, 5, -1, 5],
@@ -2104,9 +1934,7 @@
               },
               {
                 "id": "5x5685",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 55, 49, 43, -1, 33],
                 "frets": [5, 8, 6, 5, -1, 5],
@@ -2117,9 +1945,7 @@
               },
               {
                 "id": "5x7685",
-                "listCapos": [
-                  { "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 0, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [57, 55, 49, 45, -1, 33],
                 "frets": [5, 8, 6, 7, -1, 5],
@@ -2130,9 +1956,7 @@
               },
               {
                 "id": "5x565x",
-                "listCapos": [
-                  { "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 1, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 52, 49, 43, -1, 33],
                 "frets": [-1, 5, 6, 5, -1, 5],
@@ -2143,9 +1967,7 @@
               },
               {
                 "id": "5x568x",
-                "listCapos": [
-                  { "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }
-                ],
+                "listCapos": [{ "fret": 5, "startString": 3, "lastString": 5, "finger": 1 }],
                 "noteIndex": 9,
                 "notes": [-1, 55, 49, 43, -1, 33],
                 "frets": [-1, 8, 6, 5, -1, 5],

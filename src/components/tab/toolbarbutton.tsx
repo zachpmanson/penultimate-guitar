@@ -4,17 +4,9 @@ type ToolbarButton = {
   disabled?: boolean;
 };
 
-export default function ToolbarButton({
-  onClick,
-  children,
-  disabled,
-}: ToolbarButton) {
+export default function ToolbarButton({ onClick, children, disabled }: ToolbarButton) {
   return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      className={getToolbarButtonStyle(!!disabled)}
-    >
+    <button disabled={disabled} onClick={onClick} className={getToolbarButtonStyle(!!disabled)}>
       {children}
     </button>
   );

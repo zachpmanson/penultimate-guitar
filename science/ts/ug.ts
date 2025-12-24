@@ -21,8 +21,7 @@ async function getChords(URL: string): Promise<string> {
       var jsStore = dom.window.document.querySelector(".js-store");
       console.log(jsStore);
       let dataContent = JSON.parse(jsStore.getAttribute("data-content"));
-      chords =
-        dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"];
+      chords = dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"];
       console.log(dataContent?.store?.page?.data?.tab);
     })
     .catch((err) => {
@@ -50,9 +49,7 @@ async function getSearch(URL: string): Promise<string> {
       // Get the image file
       let jsStore = dom.window.document.querySelector(".js-store");
       console.log(jsStore);
-      let dataContent = JSON.parse(
-        jsStore.getAttribute("data-content").replace(/&quot;/g, '"'),
-      );
+      let dataContent = JSON.parse(jsStore.getAttribute("data-content").replace(/&quot;/g, '"'));
       results = dataContent["store"]["page"]["data"]["results"];
     })
     .catch((err) => {

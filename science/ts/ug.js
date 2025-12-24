@@ -24,9 +24,7 @@ var __awaiter =
         }
       }
       function step(result) {
-        result.done
-          ? resolve(result.value)
-          : adopt(result.value).then(fulfilled, rejected);
+        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
@@ -67,12 +65,7 @@ var __generator =
           if (
             ((f = 1),
             y &&
-              (t =
-                op[0] & 2
-                  ? y["return"]
-                  : op[0]
-                    ? y["throw"] || ((t = y["return"]) && t.call(y), 0)
-                    : y.next) &&
+              (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) &&
               !(t = t.call(y, op[1])).done)
           )
             return t;
@@ -95,10 +88,7 @@ var __generator =
               _.trys.pop();
               continue;
             default:
-              if (
-                !((t = _.trys), (t = t.length > 0 && t[t.length - 1])) &&
-                (op[0] === 6 || op[0] === 2)
-              ) {
+              if (!((t = _.trys), (t = t.length > 0 && t[t.length - 1])) && (op[0] === 6 || op[0] === 2)) {
                 _ = 0;
                 continue;
               }
@@ -159,26 +149,19 @@ function getChords(URL) {
                 // Get the image file
                 var jsStore = dom.window.document.querySelector(".js-store");
                 console.log(jsStore);
-                var dataContent = JSON.parse(
-                  jsStore.getAttribute("data-content"),
-                );
-                chords =
-                  dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"][
-                    "content"
-                  ];
+                var dataContent = JSON.parse(jsStore.getAttribute("data-content"));
+                chords = dataContent["store"]["page"]["data"]["tab_view"]["wiki_tab"]["content"];
                 console.log(
                   (_c =
                     (_b =
-                      (_a =
-                        dataContent === null || dataContent === void 0
-                          ? void 0
-                          : dataContent.store) === null || _a === void 0
+                      (_a = dataContent === null || dataContent === void 0 ? void 0 : dataContent.store) === null ||
+                      _a === void 0
                         ? void 0
                         : _a.page) === null || _b === void 0
                       ? void 0
                       : _b.data) === null || _c === void 0
                     ? void 0
-                    : _c.tab,
+                    : _c.tab
                 );
               })
               ["catch"](function (err) {
@@ -217,9 +200,7 @@ function getSearch(URL) {
                 // Get the image file
                 var jsStore = dom.window.document.querySelector(".js-store");
                 console.log(jsStore);
-                var dataContent = JSON.parse(
-                  jsStore.getAttribute("data-content").replace(/&quot;/g, '"'),
-                );
+                var dataContent = JSON.parse(jsStore.getAttribute("data-content").replace(/&quot;/g, '"'));
                 results = dataContent["store"]["page"]["data"]["results"];
               })
               ["catch"](function (err) {

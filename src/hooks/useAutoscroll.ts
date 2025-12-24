@@ -30,15 +30,8 @@ export default function useAutoscroll(element: RefObject<HTMLElement>) {
           });
         }
         if (element.current)
-          console.log(
-            `(${window.innerHeight + window.scrollY}) >= ${
-              document.body.scrollHeight - 5
-            }`,
-          );
-        if (
-          window.innerHeight + window.scrollY >=
-          document.body.scrollHeight - 5
-        ) {
+          console.log(`(${window.innerHeight + window.scrollY}) >= ${document.body.scrollHeight - 5}`);
+        if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 5) {
           setScrollSpeed(0);
           clearInterval(scrollinterval.current);
         }

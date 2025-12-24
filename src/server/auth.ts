@@ -1,8 +1,4 @@
-import type {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
+import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import type { NextAuthOptions } from "next-auth";
 import { getServerSession } from "next-auth";
 import Spotify from "next-auth/providers/spotify";
@@ -65,10 +61,7 @@ export const authOptions = {
 
 // Use it in server contexts
 export function getServerAuthSession(
-  ...args:
-    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
-    | [NextApiRequest, NextApiResponse]
-    | []
+  ...args: [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]] | [NextApiRequest, NextApiResponse] | []
 ) {
   // console.log("getServerAuthSession", args);
   return getServerSession(...args, authOptions);

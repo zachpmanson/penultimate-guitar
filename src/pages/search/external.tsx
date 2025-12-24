@@ -44,10 +44,7 @@ function preferHigherRatings(results: SearchResult[]) {
   let colRes: SearchResult[] = [];
   for (let r of results) {
     const existing = colRes.findIndex(
-      (c) =>
-        c.song_name === r.song_name &&
-        c.artist_name === r.artist_name &&
-        c.type === r.type,
+      (c) => c.song_name === r.song_name && c.artist_name === r.artist_name && c.type === r.type
     );
     if (existing === -1) {
       colRes.push(r);
@@ -79,7 +76,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const {
@@ -97,7 +94,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const loadPage = () => {
@@ -128,10 +125,7 @@ export default function Search() {
   //   ? dataExternal.pages.map((p) => p.items).flat()
   //   : [];
 
-  const maxPageNums = Math.max(
-    dataInternal?.pages.length ?? 0,
-    dataExternal?.pages.length ?? 0,
-  );
+  const maxPageNums = Math.max(dataInternal?.pages.length ?? 0, dataExternal?.pages.length ?? 0);
 
   let resultsInPageOrder: SearchResult[] = [];
   for (let i = 0; i < maxPageNums; i++) {
@@ -149,20 +143,16 @@ export default function Search() {
           date: r.timestamp ?? "",
           tab_url: r.taburl,
           internal: true,
-        })),
+        }))
       );
     }
 
     if (dataExternal && dataExternal.pages.length > i) {
-      resultsInPageOrder = resultsInPageOrder.concat(
-        dataExternal.pages[i].items.map((r) => r),
-      );
+      resultsInPageOrder = resultsInPageOrder.concat(dataExternal.pages[i].items.map((r) => r));
     }
   }
 
-  const mergedResults = preferHigherRatings(
-    dedupSearchResults(resultsInPageOrder),
-  );
+  const mergedResults = preferHigherRatings(dedupSearchResults(resultsInPageOrder));
 
   useEffect(() => {
     if (q) {
@@ -177,9 +167,7 @@ export default function Search() {
       </Head>
       <div className="max-w-[80ch] w-full m-auto">
         <h1 className="text-lg">Search Results</h1>
-        <p className="text-gray-400 mb-4 font-extralight">
-          Only the highest rated versions of each are shown.
-        </p>
+        <p className="text-gray-400 mb-4 font-extralight">Only the highest rated versions of each are shown.</p>
         {/* {allItemsInternal.length} + {allItemsExternal.length} ={" "}
         {mergedResults.length} */}
         <SearchResults

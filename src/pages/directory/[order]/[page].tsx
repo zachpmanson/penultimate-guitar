@@ -24,11 +24,7 @@ type ListProps = {
   totalTabs: number;
 };
 
-export default function Directory({
-  allTabs,
-  totalSongs,
-  totalTabs,
-}: ListProps) {
+export default function Directory({ allTabs, totalSongs, totalTabs }: ListProps) {
   const router = useRouter();
   const { page, order } = router.query;
 
@@ -43,21 +39,14 @@ export default function Directory({
   if (searchText.length >= 3) {
     let lowerSearch = searchText.toLowerCase();
     allTabs = allTabs.filter(
-      (t) =>
-        t.song.name.toLowerCase().includes(lowerSearch) ||
-        t.song.artist.toLowerCase().includes(lowerSearch),
+      (t) => t.song.name.toLowerCase().includes(lowerSearch) || t.song.artist.toLowerCase().includes(lowerSearch)
     );
   }
 
   const pageCount = Math.ceil(totalTabs / PAGE_SIZE);
 
   const generateLink = (t: TabMetadata) => (
-    <Link
-      href={ROUTES.TAB(t.taburl)}
-      prefetch={false}
-      title={t.timestamp}
-      className="color-unset"
-    >
+    <Link href={ROUTES.TAB(t.taburl)} prefetch={false} title={t.timestamp} className="color-unset">
       {t.song.artist} - {t.song.name}
       <span className="font-light text-xs">
         {" "}
@@ -102,11 +91,7 @@ export default function Directory({
                 By oldest
               </option>
             </select>
-            <PageDropdown
-              pageNum={pageNum}
-              pageCount={pageCount}
-              order={orderName}
-            />
+            <PageDropdown pageNum={pageNum} pageCount={pageCount} order={orderName} />
           </div>
         </div>
         <hr className="m-2 dark:border-gray-600" />
@@ -116,12 +101,7 @@ export default function Directory({
             {tabList}
           </ol>
           <div className="flex justify-center">
-            <PageDropdown
-              pageNum={pageNum}
-              pageCount={pageCount}
-              order={orderName}
-              withButtons
-            />
+            <PageDropdown pageNum={pageNum} pageCount={pageCount} order={orderName} withButtons />
           </div>
         </div>
       </div>

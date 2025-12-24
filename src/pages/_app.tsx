@@ -29,25 +29,16 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     <Layout>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-          name="description"
-          content="Find the cheapest drinks, per standard"
-        />
+        <meta name="description" content="Find the cheapest drinks, per standard" />
         <link rel="icon" href="/icons/guitar-icon.svg" type="image/svg+xml" />
 
         <meta name="msapplication-TileColor" content="#603cba" />
         <meta name="msapplication-config" content="/icons/browserconfig.xml" />
         <meta name="theme-color" content="#282A36" />
-        <meta
-          name="description"
-          content="An alternate frontend for Ultimate Guitar"
-        />
+        <meta name="description" content="An alternate frontend for Ultimate Guitar" />
       </Head>
       <Component {...pageProps} />
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-2Q5B9DT8HJ"
-        strategy="afterInteractive"
-      />
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-2Q5B9DT8HJ" strategy="afterInteractive" />
       <Script id="google-analytics" strategy="afterInteractive">
         {`
       window.dataLayer = window.dataLayer || [];
@@ -56,7 +47,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       gtag('config', 'G-2Q5B9DT8HJ');
     `}
       </Script>
-    </Layout>,
+    </Layout>
   );
   return (
     <SessionProvider session={pageProps.session}>

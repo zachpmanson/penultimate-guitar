@@ -1,9 +1,4 @@
-import {
-  JSXElementConstructor,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-} from "react";
+import { JSXElementConstructor, ReactElement, ReactFragment, ReactPortal } from "react";
 
 type DialogButtonProps = {
   onClick: () => void;
@@ -17,11 +12,7 @@ type DialogButtonProps = {
     | ReactPortal;
 };
 
-export default function DialogButton({
-  onClick,
-  disabled,
-  children,
-}: DialogButtonProps): JSX.Element {
+export default function DialogButton({ onClick, disabled, children }: DialogButtonProps): JSX.Element {
   return (
     <>
       <button

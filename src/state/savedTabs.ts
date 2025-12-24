@@ -9,11 +9,7 @@ type SavedTabsState = {
 
 type SavedTabsActions = {
   addTabLink: (newTab: TabLinkDto, userId: string, folderName: string) => void;
-  removeSavedTab: (
-    newTab: TabLinkDto,
-    userId: string,
-    folderName: string,
-  ) => void;
+  removeSavedTab: (newTab: TabLinkDto, userId: string, folderName: string) => void;
   setTabFolders: (tab: TabLinkDto, folders: string[], userId: string) => void;
   removeFolder: (folder: string, userId?: string) => void;
   setUserAllFolders: (tab: Omit<Folder, "isOpen">[], userId: string) => void;
@@ -29,9 +25,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
 
       addTabLink: (tab: TabLinkDto, userId: string, folderName: string) => {
         set((old) => {
-          let folderIndex = old.savedTabs[userId]?.findIndex(
-            (f) => f.name === folderName,
-          );
+          let folderIndex = old.savedTabs[userId]?.findIndex((f) => f.name === folderName);
 
           const n = { ...old };
 
@@ -56,9 +50,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               imageUrl: null,
             });
           } else {
-            const tabIndex = old.savedTabs[userId][folderIndex].tabs.findIndex(
-              (t) => t.taburl === tab.taburl,
-            );
+            const tabIndex = old.savedTabs[userId][folderIndex].tabs.findIndex((t) => t.taburl === tab.taburl);
 
             if (tabIndex === -1) {
               // add tab to folder
@@ -90,36 +82,26 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
       removeSavedTab: (tab: TabLinkDto, userId: string, folderName: string) => {
         set((old) => {
           let n = { ...old };
-          let folderIndex = n.savedTabs[userId]?.findIndex(
-            (f) => f.name === folderName,
-          );
+          let folderIndex = n.savedTabs[userId]?.findIndex((f) => f.name === folderName);
 
           if (folderIndex === -1) return old;
 
-          n.savedTabs[userId][folderIndex].tabs = n.savedTabs[userId][
-            folderIndex
-          ].tabs.filter((t) => !(t.taburl === tab.taburl));
+          n.savedTabs[userId][folderIndex].tabs = n.savedTabs[userId][folderIndex].tabs.filter(
+            (t) => !(t.taburl === tab.taburl)
+          );
 
           return n;
         });
       },
-      setTabFolders: (
-        tab: TabLinkDto,
-        desiredFolders: string[],
-        userId: string,
-      ) => {
+      setTabFolders: (tab: TabLinkDto, desiredFolders: string[], userId: string) => {
         console.log("setTabFolders", { tab, desiredFolders, userId });
         set((old) => {
           let n = { ...old };
           console.log({ n });
           for (let [i, folder] of n.savedTabs[userId].entries()) {
-            const tabIndex = folder.tabs.findIndex(
-              (t) => t.taburl === tab.taburl,
-            );
+            const tabIndex = folder.tabs.findIndex((t) => t.taburl === tab.taburl);
 
-            const positionInDesiredFolders = desiredFolders.findIndex(
-              (f) => f === folder.name,
-            );
+            const positionInDesiredFolders = desiredFolders.findIndex((f) => f === folder.name);
             const weWantItInFolder = positionInDesiredFolders !== -1;
             const existsInFolder = tabIndex !== -1;
             if (!existsInFolder && weWantItInFolder) {
@@ -178,23 +160,16 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
         set((old) => {
           let n = { ...old };
 
-          n.savedTabs[userKey] = n.savedTabs[userKey].filter(
-            (f) => f.name !== folder,
-          );
+          n.savedTabs[userKey] = n.savedTabs[userKey].filter((f) => f.name !== folder);
 
           return n;
         });
       },
 
-      setUserAllFolders: (
-        folders: Omit<Folder, "isOpen">[],
-        userId: string,
-      ) => {
+      setUserAllFolders: (folders: Omit<Folder, "isOpen">[], userId: string) => {
         set((old) => {
           const isOpenMap = new Map<string, boolean>();
-          for (let [name, isOpen] of old.savedTabs[userId].map(
-            (f) => [f.name, f.isOpen] as const,
-          )) {
+          for (let [name, isOpen] of (old.savedTabs[userId] ?? []).map((f) => [f.name, f.isOpen] as const)) {
             isOpenMap.set(name, isOpen);
           }
 
@@ -264,9 +239,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
           };
           const v0PersistedState = persistedState as v0;
 
-          for (const [key, value] of Object.entries(
-            v0PersistedState.savedTabs,
-          )) {
+          for (const [key, value] of Object.entries(v0PersistedState.savedTabs)) {
             let folders: Record<string, Folder> = {};
             for (const tablink of value) {
               folders[tablink.folder ?? "Favourites"] = {
@@ -298,6 +271,6 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
 
         return persistedState;
       },
-    },
-  ),
+    }
+  )
 );

@@ -17,9 +17,7 @@ export default function PageDropdown({
     <div className="flex items-center justify-center gap-4">
       {withButtons && (
         <div className="flex-1 flex justify-end">
-          {pageNum > 1 && (
-            <Link href={`/directory/${order}/${pageNum - 1}`}>Previous</Link>
-          )}
+          {pageNum > 1 && <Link href={`/directory/${order}/${pageNum - 1}`}>Previous</Link>}
         </div>
       )}
 
@@ -43,13 +41,7 @@ export default function PageDropdown({
 
       {withButtons && (
         <div className="flex-1 flex justify-start">
-          {pageCount > pageNum && (
-            <Link
-              href={`/directory/${order}/${Math.min(pageNum + 1, pageCount)}`}
-            >
-              Next
-            </Link>
-          )}
+          {pageCount > pageNum && <Link href={`/directory/${order}/${Math.min(pageNum + 1, pageCount)}`}>Next</Link>}
         </div>
       )}
     </div>

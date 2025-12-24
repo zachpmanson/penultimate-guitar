@@ -31,11 +31,7 @@ export namespace SpotifyApi {
           accessResponse = data;
           token = accessResponse.access_token;
           if (accessResponse.expires_in - 100 > 1) {
-            memoryCache.put(
-              "spotify-token",
-              token,
-              accessResponse.expires_in - 100,
-            );
+            memoryCache.put("spotify-token", token, accessResponse.expires_in - 100);
           }
         });
     }
@@ -61,24 +57,19 @@ export namespace SpotifyApi {
     };
   }
 
-  export async function getPlaylist(
-    playlistId: string,
-  ): Promise<IndividualPlaylist> {
+  export async function getPlaylist(playlistId: string): Promise<IndividualPlaylist> {
     let playlistPayload = await spotifyFetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,images,owner,description,tracks(total,items(track.name, track.artists(name), track.uri),limit,href,next)`,
+      `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,images,owner,description,tracks(total,items(track.name, track.artists(name), track.uri),limit,href,next)`
     );
 
     console.log(
-      `Pulling playlist ${playlistId} playlistPayload`,
+      `Pulling playlist ${playlistId} playlistPayload`
       // JSON.stringify(playlistPayload, null, 2)
     );
     let playlist: IndividualPlaylist = {
       playlistId: playlistId,
       name: playlistPayload.name,
-      image:
-        playlistPayload?.images?.length > 0
-          ? playlistPayload.images.at(-1).url
-          : undefined,
+      image: playlistPayload?.images?.length > 0 ? playlistPayload.images.at(-1).url : undefined,
       tracks: [],
       owner: playlistPayload.owner.display_name,
       description: playlistPayload.description,
@@ -89,16 +80,14 @@ export namespace SpotifyApi {
 
     if (playlistPayload.tracks.total > 100) {
       let pages = Math.floor(playlistPayload.tracks.total / PAGESIZE);
-      let offsets = [...Array(pages).keys()].map(
-        (pageNum) => (pageNum + 1) * PAGESIZE,
-      );
+      let offsets = [...Array(pages).keys()].map((pageNum) => (pageNum + 1) * PAGESIZE);
 
       await Promise.all(
         offsets.map(async (offset) => {
           let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${PAGESIZE}&offset=${offset}`;
           const data = await spotifyFetch(url);
           tracks.push(...data.items.map(mapSpotifyTrack));
-        }),
+        })
       );
     }
 
@@ -109,13 +98,11 @@ export namespace SpotifyApi {
   export async function getUserPlaylists(
     userId: string,
     page: number,
-    pageSize: number = PLAYLISTS_PAGESIZE,
+    pageSize: number = PLAYLISTS_PAGESIZE
   ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
     console.log("getUserPlaylists", userId, page);
     let payload = (await spotifyFetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${pageSize}&offset=${
-        (page - 1) * pageSize
-      }`,
+      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${pageSize}&offset=${(page - 1) * pageSize}`
     )) as SpotifyPlaylistResponse;
     // console.log(userId, page, payload);
     return {
@@ -126,9 +113,7 @@ export namespace SpotifyApi {
 
   export async function getTrack(trackId: string): Promise<Track> {
     const start = new Date().getTime();
-    let trackPayload = await spotifyFetch(
-      `https://api.spotify.com/v1/tracks/${trackId}`,
-    );
+    let trackPayload = await spotifyFetch(`https://api.spotify.com/v1/tracks/${trackId}`);
     // log time
     console.log("getTrack", new Date().getTime() - start);
 

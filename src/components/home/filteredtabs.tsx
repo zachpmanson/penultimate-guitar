@@ -12,11 +12,9 @@ export default function FilteredSavedTabs() {
   const lowerSearchText = searchText.toLowerCase();
   const filteredTabs = _.uniqBy(
     flatTabs.filter(
-      (t) =>
-        t.name?.toLowerCase().includes(lowerSearchText) ||
-        t.artist?.toLowerCase().includes(lowerSearchText),
+      (t) => t.name?.toLowerCase().includes(lowerSearchText) || t.artist?.toLowerCase().includes(lowerSearchText)
     ),
-    (t: TabLinkDto) => t.taburl,
+    (t: TabLinkDto) => t.taburl
   );
 
   return (
@@ -30,9 +28,7 @@ export default function FilteredSavedTabs() {
       ) : (
         <div>
           <div className="pt-4">
-            <h1 className="text-left text-xl">
-              Favourites containing &quot;{searchText}&quot;
-            </h1>
+            <h1 className="text-left text-xl">Favourites containing &quot;{searchText}&quot;</h1>
           </div>
           <div className="flex flex-col gap-2 mt-2">
             {filteredTabs.map((tab, i) => (
@@ -42,9 +38,7 @@ export default function FilteredSavedTabs() {
         </div>
       )}
       <p className="text-center">
-        Click{" "}
-        <Link href={`/search?q=${encodeURIComponent(searchText)}`}>search</Link>{" "}
-        to search all tabs.
+        Click <Link href={`/search?q=${encodeURIComponent(searchText)}`}>search</Link> to search all tabs.
       </p>
     </div>
   );

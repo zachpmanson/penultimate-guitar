@@ -24,13 +24,11 @@ export default function ChordText({
 }) {
   const { guitarChords: chordsDB } = useConfigStore();
 
-  let positions = chordsDB?.chords[
-    transposedChord.chordDbChord.replace("#", "sharp")
-  ]?.find((c) => c.suffix === transposedChord.fullSuffix)?.positions;
+  let positions = chordsDB?.chords[transposedChord.chordDbChord.replace("#", "sharp")]?.find(
+    (c) => c.suffix === transposedChord.fullSuffix
+  )?.positions;
 
-  let chordObj = positions
-    ? positions[inversion % positions.length]
-    : undefined;
+  let chordObj = positions ? positions[inversion % positions.length] : undefined;
 
   const fullTransposedChord = transposedChord.fullChord;
   const size = fontSize * 12;
@@ -57,9 +55,7 @@ export default function ChordText({
           className="pointer-events-none absolute z-50 bg-white  opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded"
         >
           <div className="text-center chord text-black">
-            <span className="font-bold mr-2">
-              {`${transposedChord.key}${transposedChord.simpleSuffix}`}
-            </span>
+            <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
             <span>
               ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
             </span>

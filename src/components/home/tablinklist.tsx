@@ -18,9 +18,7 @@ export default function TablinkList({
       </div>
       <div className="flex flex-col gap-1 mt-2">
         {tablinks.length > 0
-          ? tablinks.map((r: TabLinkDto, i) => (
-              <TabLink key={i} tablink={{ ...r }} recent={true} />
-            ))
+          ? tablinks.map((r: TabLinkDto, i) => <TabLink key={i} tablink={{ ...r }} recent={true} />)
           : emptyMessage}
       </div>
     </>

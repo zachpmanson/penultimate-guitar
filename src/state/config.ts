@@ -20,11 +20,10 @@ export const useConfigStore = create<ConfigState & ConfigActions>()(
       setMode: (mode: Mode) => set(() => ({ mode })),
 
       guitarChords: undefined,
-      setGuitarChords: (chords: ChordDB.GuitarChords) =>
-        set(() => ({ guitarChords: chords })),
+      setGuitarChords: (chords: ChordDB.GuitarChords) => set(() => ({ guitarChords: chords })),
     }),
     {
       name: "config-storage", // name of the item in the storage (must be unique)
-    },
-  ),
+    }
+  )
 );

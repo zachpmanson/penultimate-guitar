@@ -1,10 +1,4 @@
-export default function IconShuffle({
-  className,
-  color = "black",
-}: {
-  className?: string;
-  color?: string;
-}) {
+export default function IconShuffle({ className, color = "black" }: { className?: string; color?: string }) {
   return (
     <svg
       width="800px"

@@ -9,13 +9,7 @@ export default function LoadingSpinner({ className }: { className?: string }) {
   );
 }
 
-export function Load({
-  isLoading,
-  children,
-}: {
-  isLoading: boolean;
-  children: React.ReactNode;
-}) {
+export function Load({ isLoading, children }: { isLoading: boolean; children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="w-full h-full justify-center items-center flex">

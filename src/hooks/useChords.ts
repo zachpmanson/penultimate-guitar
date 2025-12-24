@@ -46,17 +46,10 @@ export default function useChords(plainTab: string, transposition: number = 0) {
   }, [plainTab]);
 
   const chords = useMemo(() => {
-    return [
-      ...new Set(
-        allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", "")),
-      ),
-    ];
+    return [...new Set(allChords?.map((c) => c.replace("[ch]", "").replace("[/ch]", "")))];
   }, [allChords]);
 
-  function transposeChord(
-    chord: string,
-    transposition: number,
-  ): TransposedChord {
+  function transposeChord(chord: string, transposition: number): TransposedChord {
     let matches = chord.match(/^[A-Z][#b]?/);
     let key = matches ? matches[0] : "N/A";
     let suffix = chord.replace(/^[A-Z][#b]?/g, "");
@@ -84,9 +77,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
       transposedBassNote = keys[(bassIndex + transposition) % keys.length];
     }
 
-    let chordSuffix = chordsDB?.suffixes
-      ? getSuffix(simpleSuffix, chordsDB?.suffixes)
-      : "major";
+    let chordSuffix = chordsDB?.suffixes ? getSuffix(simpleSuffix, chordsDB?.suffixes) : "major";
 
     if (GODS_MISTAKES.includes(transposedKey)) {
       transposedKey = KEY_MAP[transposedKey];
@@ -106,10 +97,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
   }
 
   const transposedChords = useMemo(() => {
-    function transposeChord(
-      chord: string,
-      transposition: number,
-    ): TransposedChord {
+    function transposeChord(chord: string, transposition: number): TransposedChord {
       let matches = chord.match(/^[A-Z][#b]?/);
       let key = matches ? matches[0] : "N/A";
       let suffix = chord.replace(/^[A-Z][#b]?/g, "");
@@ -137,9 +125,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
         transposedBassNote = keys[(bassIndex + transposition) % keys.length];
       }
 
-      let chordSuffix = chordsDB?.suffixes
-        ? getSuffix(simpleSuffix, chordsDB?.suffixes)
-        : "major";
+      let chordSuffix = chordsDB?.suffixes ? getSuffix(simpleSuffix, chordsDB?.suffixes) : "major";
 
       if (GODS_MISTAKES.includes(transposedKey)) {
         transposedKey = KEY_MAP[transposedKey];
@@ -158,9 +144,7 @@ export default function useChords(plainTab: string, transposition: number = 0) {
       };
     }
 
-    return Object.fromEntries(
-      chords.map((chord) => [chord, transposeChord(chord, transposition)]),
-    );
+    return Object.fromEntries(chords.map((chord) => [chord, transposeChord(chord, transposition)]));
   }, [chords, transposition, chordsDB?.suffixes, keys]);
 
   return {

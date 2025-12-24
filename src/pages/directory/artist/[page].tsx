@@ -45,9 +45,7 @@ export default function Directory({
   if (searchText.length >= 3) {
     let lowerSearch = searchText.toLowerCase();
     allSongs = allSongs.filter(
-      (song) =>
-        song.name.toLowerCase().includes(lowerSearch) ||
-        song.artist.toLowerCase().includes(lowerSearch),
+      (song) => song.name.toLowerCase().includes(lowerSearch) || song.artist.toLowerCase().includes(lowerSearch)
     );
   }
 
@@ -77,10 +75,7 @@ export default function Directory({
           ) : (
             <details>
               <summary>
-                {song.artist} - {song.name}{" "}
-                <span className="font-light text-xs">
-                  ({song.Tab.length} versions)
-                </span>
+                {song.artist} - {song.name} <span className="font-light text-xs">({song.Tab.length} versions)</span>
               </summary>
               <ul className="pl-4">
                 {song.Tab.sort(tabCompareFn).map((t, j) => (
@@ -122,11 +117,7 @@ export default function Directory({
                 By oldest
               </option>
             </select>
-            <PageDropdown
-              pageNum={pageNum}
-              pageCount={pageCount}
-              order={"artist"}
-            />
+            <PageDropdown pageNum={pageNum} pageCount={pageCount} order={"artist"} />
           </div>
         </div>
         <hr className="m-2 no-print dark:border-gray-600" />
@@ -136,12 +127,7 @@ export default function Directory({
             {tabList}
           </ol>
           <div className="w-full flex justify-center">
-            <PageDropdown
-              pageNum={pageNum}
-              pageCount={pageCount}
-              order={"artist"}
-              withButtons
-            />
+            <PageDropdown pageNum={pageNum} pageCount={pageCount} order={"artist"} withButtons />
           </div>
         </div>
       </div>

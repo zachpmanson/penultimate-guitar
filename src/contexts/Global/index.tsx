@@ -23,9 +23,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // put old saved tabs into new format and remove old format
-    const parsedTabs = JSON.parse(
-      localStorage.getItem("savedUserTabs") ?? "{}",
-    ) as SavedUserTabLinks;
+    const parsedTabs = JSON.parse(localStorage.getItem("savedUserTabs") ?? "{}") as SavedUserTabLinks;
 
     console.log("getSavedTabs", userId);
     if (parsedTabs["@localStorage"]) {
@@ -52,9 +50,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [playlists]);
 
   const getPlaylists = () => {
-    const parsedPlaylists = JSON.parse(
-      localStorage.getItem("playlists") ?? "{}",
-    ) as PlaylistCollection;
+    const parsedPlaylists = JSON.parse(localStorage.getItem("playlists") ?? "{}") as PlaylistCollection;
     setPlaylists(parsedPlaylists);
   };
 
@@ -67,12 +63,10 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       playlists,
       setPlaylists,
     }),
-    [playlists, setPlaylists],
+    [playlists, setPlaylists]
   );
 
-  return (
-    <GlobalContextProvider value={value}>{children}</GlobalContextProvider>
-  );
+  return <GlobalContextProvider value={value}>{children}</GlobalContextProvider>;
 };
 
 export default GlobalProvider;

@@ -1,5 +1,5 @@
-import { ReactNode, useRef, useState } from "react";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { ReactNode, useRef, useState } from "react";
 import { Load } from "../loadingspinner";
 
 export default function BasePanel({

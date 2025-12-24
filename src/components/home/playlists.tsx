@@ -10,16 +10,15 @@ import PanelMenu from "./panelmenu";
 import PlaylistPanel from "./playlistpanel";
 
 export default function Playlists() {
-  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } =
-    trpc.user.getPlaylists.useInfiniteQuery(
-      {
-        pageSize: 20,
-      },
-      {
-        getNextPageParam: (lastPage) => lastPage.nextCursor,
-        initialCursor: 1,
-      },
-    );
+  const { data, isLoading, isFetching, hasNextPage, fetchNextPage } = trpc.user.getPlaylists.useInfiniteQuery(
+    {
+      pageSize: 20,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: 1,
+    }
+  );
 
   const playlists = data?.pages.flatMap((p) => p.items) ?? [];
 
@@ -46,11 +45,7 @@ export default function Playlists() {
                     className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex justify-center items-center h-12"
                     onClick={() => fetchNextPage()}
                   >
-                    {isFetching ? (
-                      <LoadingSpinner className="h-full" />
-                    ) : (
-                      "Load more"
-                    )}
+                    {isFetching ? <LoadingSpinner className="h-full" /> : "Load more"}
                   </PlainButton>
                 )}
               </>

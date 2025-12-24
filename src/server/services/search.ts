@@ -1,14 +1,6 @@
 import { UGApi } from "../ug-interface/ug-api";
 
-export async function search({
-  value,
-  type,
-  cursor,
-}: {
-  value: string;
-  type: string;
-  cursor: number;
-}) {
+export async function search({ value, type, cursor }: { value: string; type: string; cursor: number }) {
   let tabType = undefined;
   if (type === "all") tabType = undefined;
   if (type === "tabs") tabType = 200;

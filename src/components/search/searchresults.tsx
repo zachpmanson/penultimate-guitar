@@ -31,26 +31,16 @@ export default function SearchResults({
         ) : !isLoading ? (
           <>
             {results.map((r, i) => (
-              <SearchLink
-                {...r}
-                key={i}
-                routeType="BEST_TAB"
-                id={r.tab_url}
-              />
+              <SearchLink {...r} key={i} routeType="BEST_TAB" id={r.tab_url} />
             ))}
 
             <div className="w-full flex flex-col items-center justify-start">
               {hasNextPage && (
-                <PlainButton
-                  onClick={loadNextPage}
-                  className="flex-grow w-full flex items-center justify-center"
-                >
+                <PlainButton onClick={loadNextPage} className="flex-grow w-full flex items-center justify-center">
                   {isFetching ? (
                     <LoadingSpinner className="h-8" />
                   ) : (
-                    <div className="w-fit h-8 flex items-center justify-center">
-                      Load More
-                    </div>
+                    <div className="w-fit h-8 flex items-center justify-center">Load More</div>
                   )}
                 </PlainButton>
               )}

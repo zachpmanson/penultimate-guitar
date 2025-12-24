@@ -47,11 +47,7 @@ export async function upsertNewTab(tab: NewTab) {
     .catch((e) => console.error(`Error upserting tab '${tab.taburl}':`, e));
 }
 
-export async function insertTab(
-  song: Song,
-  tab: NewTab,
-  altVersions: AltVersion[],
-) {
+export async function insertTab(song: Song, tab: NewTab, altVersions: AltVersion[]) {
   try {
     // upsert song
     console.log(`Upserting song '${song.id}'`);
@@ -90,10 +86,7 @@ export async function insertTab(
       }
     }
 
-    const taburls = [
-      tab.taburl,
-      ...altVersions.map((altVersion) => altVersion.taburl),
-    ];
+    const taburls = [tab.taburl, ...altVersions.map((altVersion) => altVersion.taburl)];
     prisma.possibleSong
       .updateMany({
         where: {

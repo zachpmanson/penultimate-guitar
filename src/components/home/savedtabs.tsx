@@ -20,8 +20,7 @@ export default function SavedTabs() {
           {allSaved.length === 0 ? (
             <div className="flex flex-col gap-1 mt-2">
               <p className="text-center">
-                You have no saved tabs yet! Press{" "}
-                <BookmarkIcon className="h-[1em] inline-block" /> to save a tab.
+                You have no saved tabs yet! Press <BookmarkIcon className="h-[1em] inline-block" /> to save a tab.
               </p>
             </div>
           ) : (
@@ -32,11 +31,7 @@ export default function SavedTabs() {
                     {favourites.tabs
                       .sort((a, b) => sortByName(a.name ?? "", b.name ?? ""))
                       .map((t, j) => (
-                        <TabLink
-                          key={j}
-                          tablink={{ ...t, saved: true }}
-                          folder={favourites.name}
-                        />
+                        <TabLink key={j} tablink={{ ...t, saved: true }} folder={favourites.name} />
                       ))}
                   </div>
                 )}

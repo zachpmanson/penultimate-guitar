@@ -37,8 +37,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const bestAltVersion = tabData.versions?.length
     ? tabData.versions.reduce((a, b) => (a.rating > b.rating ? a : b))
     : tabData;
-  const bestVersion =
-    bestAltVersion.rating > tabData.rating ? bestAltVersion : tabData;
+  const bestVersion = bestAltVersion.rating > tabData.rating ? bestAltVersion : tabData;
 
   // await helpers.tab.getTabDataWithoutDatabase.prefetch(originalId);
 

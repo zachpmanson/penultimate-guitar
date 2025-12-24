@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head
-    prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
-  >
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <title>ALRIGHTY APHRODITE CHORDS by Peach Pit @ Ultimate-Guitar.Com</title>
     <meta
@@ -16,19 +14,13 @@
     <script>
       (function () {
         var isTouch = "ontouchstart" in window || "onmsgesturechange" in window;
-        var isMac =
-          ["Macintosh", "MacIntel", "MacPPC", "Mac68K"].indexOf(
-            window.navigator.platform,
-          ) > -1;
+        var isMac = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"].indexOf(window.navigator.platform) > -1;
 
         if (isMac && isTouch) {
           var date = new Date();
           date.setFullYear(date.getFullYear() + 1);
 
-          document.cookie =
-            "_ug_force_ipad=1;path=/;domain=.ultimate-guitar.com;expires=" +
-            date.toUTCString() +
-            ";";
+          document.cookie = "_ug_force_ipad=1;path=/;domain=.ultimate-guitar.com;expires=" + date.toUTCString() + ";";
           window.location = window.location.href;
         }
       })();
@@ -56,9 +48,7 @@
         }
         function l(t) {
           if (t.cancelable) {
-            var o =
-              (t.timeStamp > 1e12 ? new Date() : performance.now()) -
-              t.timeStamp;
+            var o = (t.timeStamp > 1e12 ? new Date() : performance.now()) - t.timeStamp;
             "pointerdown" == t.type
               ? (function (t, o) {
                   function i() {
@@ -76,13 +66,7 @@
           }
         }
         function w(n) {
-          [
-            "click",
-            "mousedown",
-            "keydown",
-            "touchstart",
-            "pointerdown",
-          ].forEach(function (e) {
+          ["click", "mousedown", "keydown", "touchstart", "pointerdown"].forEach(function (e) {
             n(e, l, f);
           });
         }
@@ -138,15 +122,9 @@
     />
     <meta property="fb:app_id" content="539490962762175" />
     <meta property="og:type" content="music.song" />
-    <meta
-      property="og:title"
-      content="Peach Pit - Alrighty Aphrodite (Chords)"
-    />
+    <meta property="og:title" content="Peach Pit - Alrighty Aphrodite (Chords)" />
     <meta property="og:description" content="CHORDS by Peach Pit" />
-    <meta
-      property="og:image"
-      content="https://tabs.ultimate-guitar.com/static/_img/ug-logo-fb.png"
-    />
+    <meta property="og:image" content="https://tabs.ultimate-guitar.com/static/_img/ug-logo-fb.png" />
     <meta
       name="viewport"
       class="js-viewport"
@@ -165,7 +143,7 @@
             "content",
             isLargeViewport
               ? "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
-              : "width=1280, minimum-scale=0.1, maximum-scale=5.0",
+              : "width=1280, minimum-scale=0.1, maximum-scale=5.0"
           );
           document.cookie =
             "_ug_small_screen=" +
@@ -175,9 +153,7 @@
             ";";
         }
         setViewport();
-        window
-          .matchMedia("(orientation: landscape)")
-          .addEventListener("change", setViewport);
+        window.matchMedia("(orientation: landscape)").addEventListener("change", setViewport);
       })();
     </script>
     <meta name="csrf-param" content="_csrf" />
@@ -270,9 +246,7 @@
       };
 
       UGERROR.loadErrorLogger = function (release) {
-        var whitelistUrls = [
-          new RegExp("https://tabs.ultimate-guitar.com/static/public"),
-        ];
+        var whitelistUrls = [new RegExp("https://tabs.ultimate-guitar.com/static/public")];
 
         if (window.location.pathname !== "/") {
           whitelistUrls.push(new RegExp(window.location.href));
@@ -287,40 +261,34 @@
         };
 
         !UGERROR.loggerLoaded &&
-          loadScript(
-            "https://tabs.ultimate-guitar.com/static/vendor/centry/raven.3.27.0.min.js",
-            function () {
-              window.onerror = oldOnError;
-              window.Raven.setUserContext({
-                userId: "0",
-              });
-              window.Raven.config(
-                "https://71cf858585c249f5b0f360c3ab811c84@sentry10.ultimate-guitar.com/7",
-                {
-                  release: release,
-                  whitelistUrls: whitelistUrls,
-                  tags: tags,
-                },
-              ).install();
+          loadScript("https://tabs.ultimate-guitar.com/static/vendor/centry/raven.3.27.0.min.js", function () {
+            window.onerror = oldOnError;
+            window.Raven.setUserContext({
+              userId: "0",
+            });
+            window.Raven.config("https://71cf858585c249f5b0f360c3ab811c84@sentry10.ultimate-guitar.com/7", {
+              release: release,
+              whitelistUrls: whitelistUrls,
+              tags: tags,
+            }).install();
 
-              var messages = UGERROR.errors.map(function (err) {
-                return err[0];
+            var messages = UGERROR.errors.map(function (err) {
+              return err[0];
+            });
+            UGERROR.errors
+              .filter(function (error, index) {
+                return messages.indexOf(error[0]) === index;
+              })
+              .forEach(function (args) {
+                if (args.length > 1) {
+                  window.onerror.apply(this, args);
+                } else if (typeof args[0] === "string") {
+                  window.Raven.captureMessage(args[0]);
+                } else {
+                  window.Raven.captureException(args[0]);
+                }
               });
-              UGERROR.errors
-                .filter(function (error, index) {
-                  return messages.indexOf(error[0]) === index;
-                })
-                .forEach(function (args) {
-                  if (args.length > 1) {
-                    window.onerror.apply(this, args);
-                  } else if (typeof args[0] === "string") {
-                    window.Raven.captureMessage(args[0]);
-                  } else {
-                    window.Raven.captureException(args[0]);
-                  }
-                });
-            },
-          );
+          });
       };
 
       window.onerror = function () {
@@ -328,11 +296,7 @@
         oldOnError && oldOnError.apply(this, arguments);
 
         var message = typeof arguments[0] === "object" && arguments[0].message;
-        if (
-          typeof message === "string" &&
-          message.toLowerCase().indexOf("loading chunk") &&
-          window.UGAPP.trigger
-        ) {
+        if (typeof message === "string" && message.toLowerCase().indexOf("loading chunk") && window.UGAPP.trigger) {
           window.UGAPP.trigger("globalEvent:YM:metrica", "Chunk Load Error");
         }
 
@@ -353,21 +317,17 @@
       (function () {
         if ("serviceWorker" in navigator) {
           window.addEventListener("load", function () {
-            window.navigator.serviceWorker
-              .getRegistrations()
-              .then(function (registrations) {
-                registrations.forEach(function (registration) {
-                  if (
-                    registration.active.scriptURL.indexOf("sw_ug.js") !== -1 ||
-                    registration.active.scriptURL.indexOf("sw_ug_v2.js") !== -1
-                  ) {
-                    registration.unregister();
-                  }
-                });
+            window.navigator.serviceWorker.getRegistrations().then(function (registrations) {
+              registrations.forEach(function (registration) {
+                if (
+                  registration.active.scriptURL.indexOf("sw_ug.js") !== -1 ||
+                  registration.active.scriptURL.indexOf("sw_ug_v2.js") !== -1
+                ) {
+                  registration.unregister();
+                }
               });
-            window.navigator.serviceWorker
-              .register("/sw_ug_v3.js")
-              .catch(function (error) {});
+            });
+            window.navigator.serviceWorker.register("/sw_ug_v3.js").catch(function (error) {});
           });
         }
       })();
@@ -444,13 +404,7 @@
         a.async = 1;
         a.src = g;
         m.parentNode.insertBefore(a, m);
-      })(
-        window,
-        document,
-        "script",
-        "//tabs.ultimate-guitar.com/static/vendor/ga/analytics_ver1676045777.js",
-        "ga",
-      );
+      })(window, document, "script", "//tabs.ultimate-guitar.com/static/vendor/ga/analytics_ver1676045777.js", "ga");
 
       ga("create", "UA-9160560-1", "auto");
 
@@ -473,22 +427,11 @@
         ga_client_id = tracker.get("clientId");
         ga("set", "dimension4", ga_client_id);
 
-        ga(
-          "sampledTracker.set",
-          "dimension4",
-          ga.getByName("sampledTracker").get("clientId"),
-        );
+        ga("sampledTracker.set", "dimension4", ga.getByName("sampledTracker").get("clientId"));
 
         var ga_client_id_value = ga.getByName("sampledTracker").get("clientId");
-        document.cookie =
-          "ga_client_id=" +
-          ga_client_id_value +
-          "; path=/; domain=.ultimate-guitar.com";
-        ga(
-          "reactTracker.set",
-          "dimension4",
-          ga.getByName("reactTracker").get("clientId"),
-        );
+        document.cookie = "ga_client_id=" + ga_client_id_value + "; path=/; domain=.ultimate-guitar.com";
+        ga("reactTracker.set", "dimension4", ga.getByName("reactTracker").get("clientId"));
       });
 
       ga("send", "pageview");
@@ -499,13 +442,10 @@
       (function (d, w, c) {
         function setCookie(name, value) {
           var options = {};
-          options.expires = new Date(
-            new Date().setFullYear(new Date().getFullYear() + 1),
-          ).toUTCString();
+          options.expires = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toUTCString();
           options.path = "/";
           options.domain = ".ultimate-guitar.com";
-          var updatedCookie =
-            encodeURIComponent(name) + "=" + encodeURIComponent(value);
+          var updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
           for (var optionKey in options) {
             updatedCookie += "; " + optionKey;
             var optionValue = options[optionKey];
@@ -531,8 +471,7 @@
             setCookie("_ug_client_id", clientId);
 
             var isPwa =
-              (window.matchMedia &&
-                window.matchMedia("(display-mode: standalone)").matches) ||
+              (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
               window.navigator.standalone === true;
             var params = {
               has_web_pro_access: 0,
@@ -567,11 +506,7 @@
     </script>
 
     <noscript>
-      <img
-        src="//mc.yandex.ru/watch/18746557"
-        style="position: absolute; left: -9999px"
-        alt=""
-      />
+      <img src="//mc.yandex.ru/watch/18746557" style="position: absolute; left: -9999px" alt="" />
     </noscript>
     <script type="application/ld+json">
       {

@@ -27,10 +27,7 @@ function dedupSearchResults(res: UGApi.SearchResult[]) {
 export default function Search() {
   const [q] = useQueryState("q");
   const { setSearchText } = useSearchStore();
-  const [type, setTabType] = useQueryState(
-    "type",
-    parseAsStringLiteral(TAB_TYPES).withDefault("all"),
-  );
+  const [type, setTabType] = useQueryState("type", parseAsStringLiteral(TAB_TYPES).withDefault("all"));
 
   const {
     fetchNextPage: fetchNextPageExternal,
@@ -47,7 +44,7 @@ export default function Search() {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
       enabled: !!q,
-    },
+    }
   );
 
   const loadPage = () => {
@@ -59,9 +56,7 @@ export default function Search() {
   let resultsInPageOrder: UGApi.SearchResult[] = [];
   for (let i = 0; i < maxPageNums; i++) {
     if (dataExternal && dataExternal.pages.length > i) {
-      resultsInPageOrder = resultsInPageOrder.concat(
-        dataExternal.pages[i].items,
-      );
+      resultsInPageOrder = resultsInPageOrder.concat(dataExternal.pages[i].items);
     }
   }
 
@@ -81,11 +76,7 @@ export default function Search() {
       <div className="max-w-[80ch] w-full m-auto">
         <div className="flex justify-between items-center">
           <h1 className="text-lg">Search Results</h1>
-          <select
-            className="p-2 rounded"
-            onChange={(e) => setTabType(e.target.value as SearchTabType)}
-            value={type}
-          >
+          <select className="p-2 rounded" onChange={(e) => setTabType(e.target.value as SearchTabType)} value={type}>
             <option value="all">All</option>
             <option value="tabs">Tabs</option>
             <option value="chords">Chords</option>
@@ -93,9 +84,7 @@ export default function Search() {
             <option value="bass">Bass</option>
           </select>
         </div>
-        <p className="text-gray-400 mb-4 font-extralight">
-          Only the highest rated versions of each are shown.
-        </p>
+        <p className="text-gray-400 mb-4 font-extralight">Only the highest rated versions of each are shown.</p>
         <ApiSearchResults
           results={mergedResults}
           isLoading={isLoadingExternal}

@@ -6,9 +6,7 @@ export default function RecentTabs() {
   const [recents, setRecents] = useState<TabLinkDto[]>([]);
 
   useEffect(() => {
-    const savedRecents: any = JSON.parse(
-      localStorage?.getItem("recents") || "[]",
-    );
+    const savedRecents: any = JSON.parse(localStorage?.getItem("recents") || "[]");
     if (Array.isArray(savedRecents)) {
       setRecents(savedRecents);
     } else {
@@ -29,9 +27,7 @@ export default function RecentTabs() {
     <TablinkList
       tablinks={recents.slice(0, 10).filter((r) => r.name && r.artist)}
       title="Recent Tabs"
-      emptyMessage={
-        <p className="text-center">Recently viewed tabs will show up here!</p>
-      }
+      emptyMessage={<p className="text-center">Recently viewed tabs will show up here!</p>}
     />
   );
 }

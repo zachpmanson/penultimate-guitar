@@ -197,25 +197,18 @@ export namespace UGApi {
         tonality_name: z.string().optional(), // Optional because it can be empty
         version_description: z.string().nullable(), // Nullable because it can be null
         verified: z.number(),
-      }),
+      })
     ),
   });
   export type TabInfo = z.infer<typeof tabInfoSchema>;
 
-  export async function getSearch(params: {
-    title: string;
-    page: number;
-    type?: number;
-  }) {
+  export async function getSearch(params: { title: string; page: number; type?: number }) {
     const start = new Date().getTime();
     const query = toParams(params);
     const headers = getApiHeaders();
-    const data = await fetch(
-      `https://api.ultimate-guitar.com/api/v1/tab/search?${query}`,
-      {
-        headers,
-      },
-    );
+    const data = await fetch(`https://api.ultimate-guitar.com/api/v1/tab/search?${query}`, {
+      headers,
+    });
     const status = data.status;
 
     const results = await data.json();
@@ -223,14 +216,11 @@ export namespace UGApi {
     console.log("getSearch fetch time", new Date().getTime() - start);
     // console.log(results);
 
-    const { tabs } =
-      status === 404 ? { tabs: [] } : searchPayloadSchema.parse(results);
+    const { tabs } = status === 404 ? { tabs: [] } : searchPayloadSchema.parse(results);
     // return items;
     console.log("getSearch", new Date().getTime() - start);
 
-    return (tabs ?? []).filter(
-      (i) => !["Power", "Official", "Pro"].includes(i.type),
-    );
+    return (tabs ?? []).filter((i) => !["Power", "Official", "Pro"].includes(i.type));
   }
 
   export async function getTab(params: { tab_id: number }) {
@@ -238,12 +228,9 @@ export namespace UGApi {
     const query = toParams({ ...params, tab_access_type: "public" });
 
     const headers = getApiHeaders();
-    const res = await fetch(
-      `https://api.ultimate-guitar.com/api/v1/tab/info?${query}`,
-      {
-        headers,
-      },
-    );
+    const res = await fetch(`https://api.ultimate-guitar.com/api/v1/tab/info?${query}`, {
+      headers,
+    });
     const data = await res.json();
 
     // console.log(data);
