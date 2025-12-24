@@ -1,10 +1,8 @@
 import { ROUTES } from "@/constants";
-import prisma from "@/server/prisma";
-import { querySitemap } from "@/server/services/search-query";
-import { SpotifyApi } from "@/server/spotify-interface/spotify-api";
-import { UGApi } from "@/server/ug-interface/ug-api";
-import { extractTaburl } from "@/utils/url";
 import { GetStaticPropsContext } from "next";
+import { getBestTaburl } from "src/server/services/get-tab";
+import prisma from "@/server/prisma";
+import { trackToBestTaburl } from "src/server/services/assign-track";
 
 export default function Tab() {
   return <></>;
@@ -35,35 +33,26 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     },
   });
 
-  let taburl: string;
   if (track) {
-    taburl = track.taburl;
-    return {
-      redirect: {
-        destination: ROUTES.BEST_TAB(taburl),
-      },
-    };
-  } else {
-    const song = await SpotifyApi.getTrack(trackId);
-    const topTab = await UGApi.getSearch({
-      title: `${song.name} ${song.artists[0]}`,
-      page: 1,
-      type: 300,
-    });
-    if (topTab.length === 0) {
-      return {
-        notFound: true,
-      };
-    }
-
-    const tabdetails = await UGApi.getTab({
-      tab_id: topTab[0].id,
-    });
+    const taburl = track.taburl;
+    const bestTaburl = await getBestTaburl(taburl);
 
     return {
       redirect: {
-        destination: ROUTES.BEST_TAB(extractTaburl(tabdetails.urlWeb)),
+        destination: ROUTES.TAB(bestTaburl),
       },
     };
   }
+
+  const bestTaburl = await trackToBestTaburl(trackId);
+  if (!bestTaburl) {
+    return {
+      notFound: true,
+    };
+  }
+  return {
+    redirect: {
+      destination: ROUTES.TAB(bestTaburl),
+    },
+  };
 };

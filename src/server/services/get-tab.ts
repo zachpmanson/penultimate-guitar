@@ -50,9 +50,7 @@ export async function getTab(taburl: string) {
       ...tab,
       song: { ...song, Tab: [...altVersions, tab] },
     };
-    insertTab(song, tab, altVersions).catch(() =>
-      console.error("Database error occured for", tab.taburl),
-    );
+    insertTab(song, tab, altVersions).catch(() => console.error("Database error occured for", tab.taburl));
   }
   // console.log(props);
 
@@ -108,9 +106,7 @@ export async function getHighestRatedTabs(taburl: string) {
     return rankings;
   } else {
     const [song, tab, altVersions] = await UGAdapter.getTab(taburl);
-    insertTab(song, tab, altVersions).catch(() =>
-      console.error("Database error occured for", tab.taburl),
-    );
+    insertTab(song, tab, altVersions).catch(() => console.error("Database error occured for", tab.taburl));
 
     const rankings: AltVersion[] = [
       {
@@ -126,4 +122,11 @@ export async function getHighestRatedTabs(taburl: string) {
 
     return rankings;
   }
+}
+
+export async function getBestTaburl(taburl: string) {
+  const highestRatedTabs = await getHighestRatedTabs(taburl);
+  const bestTaburl = highestRatedTabs[0].taburl;
+
+  return bestTaburl;
 }

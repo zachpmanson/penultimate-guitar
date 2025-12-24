@@ -1,7 +1,8 @@
 import { ROUTES } from "@/constants";
-import { getHighestRatedTabs } from "@/server/services/get-tab";
+import { getBestTaburl } from "@/server/services/get-tab";
 import { GetStaticPropsContext } from "next";
 
+/** This page takes a taburl and returns the highest rated version of that song. */
 export default function Tab() {
   return <></>;
 }
@@ -24,7 +25,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   }
 
   const url = params.id.join("/");
-  const taburl = (await getHighestRatedTabs(url))[0].taburl;
+  const taburl = await getBestTaburl(url);
   return {
     redirect: {
       destination: ROUTES.TAB(taburl),
