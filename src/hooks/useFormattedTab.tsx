@@ -11,16 +11,12 @@ export default function useFormattedTab(plainTab: string, transposition: number,
 
   const [inversions, setInversions] = useState<{ [key: string]: number }>({});
 
-  const [lineCutoff, setLineCutoff] = useState(40);
+  const lineCutoff = useMemo(() => Math.floor((width + 16) / (fontSize * 0.67)), [width, fontSize]);
 
   const formattedTab = useMemo(
     () => recusivelyTruncate(plainTab, lineCutoff), //.replace(/ /g, "·"),
     [plainTab, lineCutoff]
   );
-
-  useEffect(() => {
-    setLineCutoff(Math.floor((width + 16) / (fontSize * 0.67)));
-  }, [width, fontSize]);
 
   useEffect(() => {
     setInversions(() => {
