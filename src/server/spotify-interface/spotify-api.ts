@@ -43,20 +43,30 @@ export namespace SpotifyApi {
     return token;
   }
 
+  async function getAuthHeaders(): Promise<HeadersInit> {
+    const token = await getToken();
+    return { Authorization: `Bearer ${token}` };
+  }
+
+  async function spotifyFetch(url: string): Promise<any> {
+    const headers = await getAuthHeaders();
+    return fetch(url, { method: "GET", headers }).then((res) => res.json());
+  }
+
+  function mapSpotifyTrack(item: any): Track {
+    return {
+      name: item.track.name,
+      artists: item.track.artists.map((a: any) => a.name),
+      trackId: item.track.uri.split(":").at(-1),
+    };
+  }
+
   export async function getPlaylist(
     playlistId: string,
   ): Promise<IndividualPlaylist> {
-    const token = await getToken();
-    const authHeader: HeadersInit = {
-      Authorization: `Bearer ${token}`,
-    };
-    let playlistPayload = await fetch(
+    let playlistPayload = await spotifyFetch(
       `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,images,owner,description,tracks(total,items(track.name, track.artists(name), track.uri),limit,href,next)`,
-      {
-        method: "GET",
-        headers: authHeader,
-      },
-    ).then((res) => res.json());
+    );
 
     console.log(
       `Pulling playlist ${playlistId} playlistPayload`,
@@ -75,11 +85,7 @@ export namespace SpotifyApi {
     };
 
     // add first pageSize tracks
-    let tracks: Track[] = playlistPayload.tracks.items.map((i: any) => ({
-      name: i.track.name,
-      artists: i.track.artists.map((a: any) => a.name),
-      trackId: i.track.uri.split(":").at(-1),
-    }));
+    let tracks: Track[] = playlistPayload.tracks.items.map(mapSpotifyTrack);
 
     if (playlistPayload.tracks.total > 100) {
       let pages = Math.floor(playlistPayload.tracks.total / PAGESIZE);
@@ -88,22 +94,10 @@ export namespace SpotifyApi {
       );
 
       await Promise.all(
-        offsets.map((offset) => {
+        offsets.map(async (offset) => {
           let url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${PAGESIZE}&offset=${offset}`;
-          return fetch(url, {
-            method: "GET",
-            headers: authHeader,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              tracks.push(
-                ...data.items.map((i: any) => ({
-                  name: i?.track?.name,
-                  trackId: i?.track?.uri.split(":").at(-1),
-                  artists: i?.track?.artists.map((a: any) => a.name),
-                })),
-              );
-            });
+          const data = await spotifyFetch(url);
+          tracks.push(...data.items.map(mapSpotifyTrack));
         }),
       );
     }
@@ -118,19 +112,11 @@ export namespace SpotifyApi {
     pageSize: number = PLAYLISTS_PAGESIZE,
   ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
     console.log("getUserPlaylists", userId, page);
-    const token = await getToken();
-    const authHeader: HeadersInit = {
-      Authorization: `Bearer ${token}`,
-    };
-    let payload = (await fetch(
+    let payload = (await spotifyFetch(
       `https://api.spotify.com/v1/users/${userId}/playlists?limit=${pageSize}&offset=${
         (page - 1) * pageSize
       }`,
-      {
-        method: "GET",
-        headers: authHeader,
-      },
-    ).then((res) => res.json())) as SpotifyPlaylistResponse;
+    )) as SpotifyPlaylistResponse;
     // console.log(userId, page, payload);
     return {
       ...payload,
@@ -140,17 +126,9 @@ export namespace SpotifyApi {
 
   export async function getTrack(trackId: string): Promise<Track> {
     const start = new Date().getTime();
-    const token = await getToken();
-    const authHeader: HeadersInit = {
-      Authorization: `Bearer ${token}`,
-    };
-    let trackPayload = await fetch(
+    let trackPayload = await spotifyFetch(
       `https://api.spotify.com/v1/tracks/${trackId}`,
-      {
-        method: "GET",
-        headers: authHeader,
-      },
-    ).then((res) => res.json());
+    );
     // log time
     console.log("getTrack", new Date().getTime() - start);
 
