@@ -1,17 +1,11 @@
 import useSavedTabs from "@/hooks/useSavedTabs";
-import {
-  IndividualPlaylist,
-  SearchResult,
-  TabLinkDto,
-  TabType,
-  Track,
-} from "@/models/models";
+import { IndividualPlaylist, SearchResult, TabLinkDto, TabType, Track } from "@/models/models";
 import { trpc } from "@/utils/trpc";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import DialogButton from "./dialogbutton";
+import DialogButton from "../buttons/dialogbutton";
 
 function getTabLinkIfExists(results: SearchResult[]): TabLinkDto | undefined {
   results.sort((a, b) => b.rating - a.rating);
@@ -73,7 +67,7 @@ export default function ImportPlaylistDialog({
             saved: true,
             loadBest: true,
           },
-          playlist.name,
+          playlist.name
         );
       }
     };
@@ -92,21 +86,10 @@ export default function ImportPlaylistDialog({
     if (isOpen && playlist && !currentlyFinding && !alreadySearching.current) {
       getTabs(playlist).catch();
     }
-  }, [
-    addSavedTab,
-    search,
-    isOpen,
-    playlist,
-    currentlyFinding,
-    alreadySearching,
-  ]);
+  }, [addSavedTab, search, isOpen, playlist, currentlyFinding, alreadySearching]);
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className="relative z-50"
-    >
+    <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-xs rounded bg-white dark:bg-gray-800 p-4">
@@ -116,14 +99,7 @@ export default function ImportPlaylistDialog({
 
               <div className="flex gap-2 align-middle justify-between">
                 {playlist.image && (
-                  <Image
-                    src={playlist.image}
-                    alt=""
-                    width={60}
-                    height={60}
-                    title="Go to"
-                    className="rounded-md"
-                  />
+                  <Image src={playlist.image} alt="" width={60} height={60} title="Go to" className="rounded-md" />
                 )}
                 <div className="flex flex-col my-auto text-right">
                   <div className="text-sm">{playlist.tracks.length} tracks</div>
@@ -143,9 +119,7 @@ export default function ImportPlaylistDialog({
             <div
               className="bg-blue-600 h-2.5 rounded-full"
               style={{
-                width: `${Math.round(
-                  (100 * attemptCount) / playlist.tracks.length,
-                )}%`,
+                width: `${Math.round((100 * attemptCount) / playlist.tracks.length)}%`,
               }}
             ></div>
           </div>

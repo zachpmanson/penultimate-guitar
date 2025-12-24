@@ -9,9 +9,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import DialogButton from "./dialogbutton";
 import { dedupe } from "@/utils/dedupe";
-import BaseDialog from "./basedialog";
+import DialogButton from "../buttons/dialogbutton";
+import BaseDialog from "../shared/basedialog";
 
 type SaveDialogProps = {
   isOpen: boolean;

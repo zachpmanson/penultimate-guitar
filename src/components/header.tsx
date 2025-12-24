@@ -3,7 +3,7 @@ import useThemeOnMount from "@/hooks/useThemeOnMount";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import ThemeSwitcher from "./buttons/themeSwitcher";
+import ThemeSwitcher from "./buttons/themeswitcher";
 import IconShuffle from "./icons/IconShuffle";
 import SearchBox from "./search/searchbox";
 import PlainButton from "./shared/plainbutton";
@@ -28,24 +28,13 @@ export default function Header() {
         <div className="flex gap-4 items-center">
           <div className="flex gap-2 items-center">
             <PlainButton
-              href={
-                ROUTE_PREFIX.TAB +
-                "/" +
-                allSaved[Math.floor(Math.random() * allSaved.length)]
-              }
+              href={ROUTE_PREFIX.TAB + "/" + allSaved[Math.floor(Math.random() * allSaved.length)]}
               disabled={allSaved.length === 0}
               className="flex items-center justify-center w-8 h-8"
               noPadding
-              title={
-                allSaved.length === 0
-                  ? "Save some tabs to shuffle!"
-                  : "Random saved tab"
-              }
+              title={allSaved.length === 0 ? "Save some tabs to shuffle!" : "Random saved tab"}
             >
-              <IconShuffle
-                className="w-4 h-4"
-                color={theme === "dark" ? "white" : "black"}
-              />
+              <IconShuffle className="w-4 h-4" color={theme === "dark" ? "white" : "black"} />
             </PlainButton>
             <ThemeSwitcher />
           </div>
