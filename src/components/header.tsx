@@ -1,18 +1,16 @@
+import { ROUTES } from "@/constants";
 import useSavedTabs from "@/hooks/useSavedTabs";
 import useThemeOnMount from "@/hooks/useThemeOnMount";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import ThemeSwitcher from "./buttons/themeswitcher";
 import IconShuffle from "./icons/IconShuffle";
 import SearchBox from "./search/searchbox";
 import PlainButton from "./shared/plainbutton";
-import { ROUTES } from "@/constants";
 
 export default function Header() {
   const { theme } = useThemeOnMount();
 
-  const router = useRouter();
   const session = useSession();
   const { flatTabs } = useSavedTabs();
   const allSaved = flatTabs.map((t) => t.taburl);
