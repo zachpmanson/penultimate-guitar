@@ -13,7 +13,7 @@ export function Load({ isLoading, children }: { isLoading: boolean; children: Re
   if (isLoading) {
     return (
       <div className="w-full h-full justify-center items-center flex">
-        <LoadingSpinner className="h-8" />;
+        <LoadingSpinner className="h-8" />
       </div>
     );
   }
