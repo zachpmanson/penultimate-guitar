@@ -1,3 +1,4 @@
+import { ROUTES } from "@/constants";
 import { useGlobal } from "@/contexts/Global/context";
 import { IndividualPlaylist } from "@/models/models";
 import { useSearchStore } from "@/state/search";
@@ -6,7 +7,6 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import { ROUTES } from "@/constants";
 
 export default function SearchBox() {
   const router = useRouter();
@@ -88,7 +88,7 @@ export default function SearchBox() {
             type="search"
             id="default-search"
             name="url"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:text-gray-200 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 "
+            className="block w-full p-4 pl-10 text-gray-900 dark:border-gray-600 dark:text-gray-200 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 text-base"
             placeholder="Song name, Tab URL, or Spotify playlist URL..."
             required
             value={searchText}
