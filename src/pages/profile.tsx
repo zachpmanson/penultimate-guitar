@@ -97,7 +97,7 @@ export default function Profile() {
                 <PlainButton onClick={() => pullPlaylist(playlist.external_urls.spotify)} key={i}>
                   <div className="flex flex-col justify-between sm:h-32 h-fit min-w-20">
                     <div className="text-lg font-bold overflow-hidden text-left">{playlist.name}</div>
-                    <div className="flex gap-2 justify-between border-gray-200 dark:border-gray-600 w-full border-t-[1px] pt-2">
+                    <div className="flex gap-2 justify-between border-gray-200 dark:border-gray-600 w-full border-t pt-2">
                       <div className="">
                         {playlist.images?.[1] && (
                           <img src={playlist.images[1].url} alt="" className="rounded-md h-12 w-12" />

@@ -1,12 +1,10 @@
-import { useGlobal } from "@/contexts/Global/context";
+import { ROUTES } from "@/constants";
+import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
-import Link from "next/link";
+import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
-import useSavedTabs from "@/hooks/useSavedTabs";
-import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { ROUTES } from "@/constants";
 
 export default function TabLink({
   tablink,

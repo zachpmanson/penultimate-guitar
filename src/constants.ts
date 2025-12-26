@@ -1,6 +1,6 @@
 export const blacklist = ["Pro", "Video", "Official", "Power"];
 
-export const GuitaleleStyle = "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600";
+export const GuitaleleStyle = "text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-pink-600";
 
 export const ROUTES = {
   TAB: (id: string) => `/tab/${id}` as const,

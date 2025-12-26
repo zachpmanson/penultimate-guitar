@@ -62,7 +62,7 @@ export default function Search() {
       <div className="max-w-[80ch] w-full m-auto">
         <div className="flex justify-between items-center">
           <h1 className="text-lg">Search Results</h1>
-          <select className="p-2 rounded" onChange={(e) => setTabType(e.target.value as SearchTabType)}>
+          <select className="p-2 rounded-sm" onChange={(e) => setTabType(e.target.value as SearchTabType)}>
             <option value="all">All</option>
             <option value="tabs">Tabs</option>
             <option value="chords">Chords</option>
@@ -95,7 +95,7 @@ export default function Search() {
           </div>
           <div className="flex flex-col w-64 items-center justify-start">
             {hasNextPage && (
-              <PlainButton onClick={loadPage} className="flex-grow w-full flex items-center justify-center">
+              <PlainButton onClick={loadPage} className="grow w-full flex items-center justify-center">
                 {isFetching ? (
                   <LoadingSpinner className="h-8" />
                 ) : (

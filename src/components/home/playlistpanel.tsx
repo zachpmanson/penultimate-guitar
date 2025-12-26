@@ -64,7 +64,7 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
             <h2 className="text-lg">{playlist.name}</h2>
             {playlist.images?.at(-1)?.url && (
               <Link href={`https://open.spotify.com/playlist/${playlist.id}`} target="_blank" prefetch={false}>
-                <img src={playlist.images?.[0].url ?? undefined} className="w-8 h-8 rounded" alt="" />
+                <img src={playlist.images?.[0].url ?? undefined} className="w-8 h-8 rounded-sm" alt="" />
               </Link>
             )}
           </div>

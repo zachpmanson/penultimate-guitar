@@ -1,61 +1,86 @@
-/*Its a simplified version of Dracula*/
-:root {
-  --background: #282a36;
-  --gray: #44475a;
-  --white: #f8f8f2;
-  --dark-white: #f8f8f2ef;
-  --dark-blue: #6272a4;
-  --cyan: #8be9fd;
-  --green: #50fa7b;
-  --orange: #ffb86c;
-  --pink: #ff79c6;
-  --purple: #bd93f9;
-  --red: #ff5555;
-  --yellow: #f1fa8c;
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-spotify: #1db954;
+  --color-spotify-active: #1ed760;
+  --color-default-dark: #1c1b22;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-.debug * {
-  outline: 1px solid #f00 !important;
-}
+@layer base {
+  :root {
+    --background: #282a36;
+    --gray: #44475a;
+    --white: #f8f8f2;
+    --dark-white: #f8f8f2ef;
+    --dark-blue: #6272a4;
+    --cyan: #8be9fd;
+    --green: #50fa7b;
+    --orange: #ffb86c;
+    --pink: #ff79c6;
+    --purple: #bd93f9;
+    --red: #ff5555;
+    --yellow: #f1fa8c;
+  }
 
-html,
-body {
-  max-width: 100vw;
-}
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+  .debug * {
+    outline: 1px solid #f00 !important;
+  }
 
-ol {
-  list-style: decimal;
-}
+  html,
+  body {
+    max-width: 100vw;
+  }
 
-a {
-  color: dodgerblue;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: all 0.1s ease-in;
-}
+  ol {
+    list-style: decimal;
+  }
 
-a:hover {
-  text-decoration-color: dodgerblue;
-}
+  a {
+    color: dodgerblue;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    transition: all 0.1s ease-in;
+  }
 
-a:active {
-  color: rgb(29, 78, 216);
-  text-decoration-color: rgb(29, 78, 216);
-  transition: all 0s ease-in;
-}
+  a:hover {
+    text-decoration-color: dodgerblue;
+  }
 
-a.no-underline {
-  text-decoration: none;
+  a:active {
+    color: rgb(29, 78, 216);
+    text-decoration-color: rgb(29, 78, 216);
+    transition: all 0s ease-in;
+  }
+
+  a.no-underline {
+    text-decoration: none;
+  }
 }
 
 summary h1,

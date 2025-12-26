@@ -36,7 +36,7 @@ export default function SearchResults({
 
             <div className="w-full flex flex-col items-center justify-start">
               {hasNextPage && (
-                <PlainButton onClick={loadNextPage} className="flex-grow w-full flex items-center justify-center">
+                <PlainButton onClick={loadNextPage} className="grow w-full flex items-center justify-center">
                   {isFetching ? (
                     <LoadingSpinner className="h-8" />
                   ) : (

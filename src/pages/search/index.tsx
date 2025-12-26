@@ -76,7 +76,7 @@ export default function Search() {
       <div className="max-w-[80ch] w-full m-auto">
         <div className="flex justify-between items-center">
           <h1 className="text-lg">Search Results</h1>
-          <select className="p-2 rounded" onChange={(e) => setTabType(e.target.value as SearchTabType)} value={type}>
+          <select className="p-2 rounded-sm" onChange={(e) => setTabType(e.target.value as SearchTabType)} value={type}>
             <option value="all">All</option>
             <option value="tabs">Tabs</option>
             <option value="chords">Chords</option>

@@ -50,7 +50,7 @@ export default function FolderPanel({ folder }: { folder: Folder }) {
               <h2 className="text-lg">{folder.name}</h2>
               {folder.imageUrl && (
                 <Link href={`https://open.spotify.com/playlist/${folder.playlistUrl}`} target="_blank">
-                  <img src={folder.imageUrl ?? undefined} className="w-8 h-8 rounded" alt="" />
+                  <img src={folder.imageUrl ?? undefined} className="w-8 h-8 rounded-sm" alt="" />
                 </Link>
               )}
             </div>

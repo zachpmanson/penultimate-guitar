@@ -158,7 +158,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden">
           <div className="px-1 py-1 ">
             <Menu.Item>
               {({ active }) => (
@@ -273,7 +273,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
               </div>
               <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
                 <div
-                  className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-64"
+                  className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-56"
                   style={{ scrollbarWidth: "none" }}
                 >
                   <div className="flex flex-row flex-wrap lg:flex-col items-start lg:items-end max-w-full justify-between my-4 gap-2 text-sm relative min-w-96">

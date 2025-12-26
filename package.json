@@ -48,15 +48,15 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/base-64": "^1.0.2",
     "@types/jsdom": "^21.1.7",
     "@types/lodash": "^4.17.13",
     "@types/memory-cache": "^0.2.6",
     "@types/nprogress": "^0.2.3",
-    "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
     "prisma": "^5.22.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.1.18"
   }
 }

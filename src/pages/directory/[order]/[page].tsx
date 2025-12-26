@@ -68,7 +68,7 @@ export default function Directory({ allTabs, totalSongs, totalTabs }: ListProps)
       <Head>
         <title>Song Directory</title>
       </Head>
-      <div className="max-w-full w-[40rem] m-auto wrap">
+      <div className="max-w-full w-160 m-auto wrap">
         <div className="flex justify-between items-center gap-2 flex-wrap-reverse">
           <div>
             {totalSongs} songs, {totalTabs} tabs
