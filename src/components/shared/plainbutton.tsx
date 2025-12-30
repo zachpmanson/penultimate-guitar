@@ -40,7 +40,7 @@ export default function PlainButton({
       {isLoading ? <div className="invisible">{children}</div> : children}
       {isLoading && (
         <div className="absolute top-0 right-0 flex justify-center items-center h-full w-full p-2">
-          <LoadingSpinner className="max-h-8" />
+          <LoadingSpinner className="h-8" />
         </div>
       )}
     </button>
