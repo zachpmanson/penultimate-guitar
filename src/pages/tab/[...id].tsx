@@ -6,7 +6,6 @@ import { createServerSideHelpers } from "@trpc/react-query/server";
 import { GetStaticProps } from "next";
 import "react-tooltip/dist/react-tooltip.css";
 import LoadingSpinner from "src/components/loadingspinner";
-import superjson from "superjson";
 
 export default function Tab({ id }: { trpcState: any; id: string }) {
   const { data, status } = trpc.tab.getTab.useQuery(id);
@@ -42,7 +41,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
-    transformer: superjson,
   });
 
   if (params === undefined) {

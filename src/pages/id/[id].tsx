@@ -5,7 +5,6 @@ import { trpc } from "@/utils/trpc";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { GetStaticPropsContext } from "next";
 import LoadingSpinner from "src/components/loadingspinner";
-import superjson from "superjson";
 
 export default function Tab({ id }: { trpcState: any; id: number }) {
   const { data, status } = trpc.tab.getTabFromOriginalId.useQuery(Number(id));
@@ -29,7 +28,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
-    transformer: superjson,
   });
   if (params === undefined) {
     return {
