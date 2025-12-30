@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import type { NextPageWithLayout } from "./_app";
 import Playlists from "@/components/home/playlists";
 import { useSession } from "next-auth/react";
+import superjson from "superjson";
 
 const Page: NextPageWithLayout = () => {
   const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
@@ -100,6 +101,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
+    transformer: superjson,
   });
 
   await helpers.tab.getRecentTabs.prefetch(10);

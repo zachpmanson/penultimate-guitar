@@ -1,7 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "typescript.format.enable": false,
-  "typescript.experimental.useTsgo": false,
+  "typescript.experimental.useTsgo": true,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

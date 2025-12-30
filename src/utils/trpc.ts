@@ -1,6 +1,7 @@
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { httpBatchLink, httpLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import type { AppRouter } from "../server/routers/_app";
+import superjson from "superjson";
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
@@ -8,22 +9,26 @@ function getBaseUrl() {
     return "";
 
   // assume localhost
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+  return process.env.BASE_URL ?? "http://localhost:3000";
 }
 
 export const trpc = createTRPCNext<AppRouter>({
+  transformer: superjson,
+
   config(opts) {
     return {
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
+            process.env.ENVIRONMENT === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
           /**
            * If you want to use SSR, you need to use the server's full URL
            * @link https://trpc.io/docs/v11/ssr
            **/
+          transformer: superjson,
+
           url: `${getBaseUrl()}/api/trpc`,
           async headers() {
             return {

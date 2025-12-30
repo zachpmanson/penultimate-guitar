@@ -4,14 +4,14 @@ import { appRouter } from "@/server/routers/_app";
 import { trpc } from "@/utils/trpc";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { GetStaticPropsContext } from "next";
-import { useRouter } from "next/router";
+import LoadingSpinner from "src/components/loadingspinner";
+import superjson from "superjson";
 
 export default function Tab({ id }: { trpcState: any; id: number }) {
-  const router = useRouter();
   const { data, status } = trpc.tab.getTabFromOriginalId.useQuery(Number(id));
 
   if (status !== "success" || !data) {
-    return <>Loading...</>;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -29,6 +29,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
+    transformer: superjson,
   });
   if (params === undefined) {
     return {

@@ -43,6 +43,7 @@
     "react-screen-wake-lock": "^3.0.2",
     "react-string-replace": "^1.1.1",
     "react-tooltip": "^5.28.0",
+    "superjson": "^2.2.6",
     "typescript": "5.9.3",
     "zod": "^3.24.1",
     "zustand": "^4.5.5"
