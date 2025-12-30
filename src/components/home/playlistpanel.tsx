@@ -1,13 +1,11 @@
 import { Playlist } from "@/types/spotify";
 import { trpc } from "@/utils/trpc";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import ImportPlaylistDialog from "../dialog/importplaylistdialog";
-import LoadingSpinner, { Load } from "../loadingspinner";
+import { stripRemasterAnnotations } from "src/utils/title";
+import BasePanel from "../shared/basepanel";
 import PlainButton from "../shared/plainbutton";
 import PanelMenu from "./panelmenu";
-import BasePanel from "../shared/basepanel";
 
 export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
   const [hovering, setHovering] = useState(false);
@@ -100,7 +98,7 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
             className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
             prefetch={false}
           >
-            <span className="font-bold text-sm">{t.name}</span> - {t.artists.join(", ")}
+            <span className="font-bold text-sm">{stripRemasterAnnotations(t.name)}</span> - {t.artists.join(", ")}
           </PlainButton>
         ))}
       </BasePanel>

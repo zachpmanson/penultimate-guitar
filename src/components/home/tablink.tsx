@@ -3,6 +3,7 @@ import useSavedTabs from "@/hooks/useSavedTabs";
 import { TabLinkDto } from "@/models/models";
 import { BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import { stripRemasterAnnotations } from "src/utils/title";
 import SaveDialog from "../dialog/savedialog";
 import PlainButton from "../shared/plainbutton";
 
@@ -28,6 +29,8 @@ export default function TabLink({
     }
   };
 
+  const cleanName = tablink.name ? stripRemasterAnnotations(tablink.name) : tablink.name;
+
   return (
     <>
       <div className="w-full flex mx-auto justify-between gap-2" onMouseOver={(e) => e.stopPropagation()}>
@@ -36,7 +39,7 @@ export default function TabLink({
           prefetch={prefetch}
           className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
         >
-          <span className="font-bold text-sm">{tablink.name}</span> - {tablink.artist}
+          <span className="font-bold text-sm">{cleanName}</span> - {tablink.artist}
           {tablink.version && (
             <span className="font-light text-xs">
               {" "}

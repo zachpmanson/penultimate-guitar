@@ -1,6 +1,7 @@
 import { toParams } from "@/utils/url";
 import crypto from "crypto";
 import md5 from "md5";
+import { stripRemasterAnnotations } from "src/utils/title";
 import { z } from "zod";
 
 function getClientId() {
@@ -23,13 +24,6 @@ function getApiHeaders() {
     Accept: "application/json",
     "User-Agent": "UG_ANDROID/7.0.7 (Pixel; Android 11)",
   };
-}
-
-function stripRemasterAnnotations(songName: string): string {
-  return songName
-    .replace(/\s*(?:[-–]\s*Remaster(?:ed)?(?:\s+\(?\d{4}\)?)?|\(Remaster(?:ed)?(?:\s+\d{4})?\))/i, "")
-    .replace(/\s*[-–]\s*\d{4}\s+Remaster(?:ed)?/i, "")
-    .trim();
 }
 
 function stripSpecialCharacters(songName: string): string {
