@@ -2,8 +2,6 @@ import prisma from "@/server/prisma";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { Session } from "next-auth";
 import { getServerAuthSession } from "./auth";
-import { appRouter } from "./routers/_app";
-import { createServerSideHelpers } from "@trpc/react-query/server";
 
 interface CreateInnerContextOptions extends Partial<CreateNextContextOptions> {
   session: Session | null;

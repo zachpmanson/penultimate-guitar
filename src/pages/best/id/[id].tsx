@@ -4,6 +4,7 @@ import { appRouter } from "@/server/routers/_app";
 import { UGApi } from "@/server/ug-interface/ug-api";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { GetStaticPropsContext } from "next";
+import superjson from "superjson";
 
 export default function Tab() {
   return <></>;
@@ -17,6 +18,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: await createContextInner(),
+    transformer: superjson,
   });
   if (params === undefined) {
     return {

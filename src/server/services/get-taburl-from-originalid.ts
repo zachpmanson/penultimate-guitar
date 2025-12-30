@@ -62,17 +62,21 @@ export async function getTabDetailsFromOriginalId(originalId: number) {
   if (!tabApiPayload) throw new Error("Couldn't find tab");
 
   const tabDto = mapApiResultToTabDto(tabApiPayload);
-  insertData(tabApiPayload, tabDto).then();
+
+  insertData(tabApiPayload, tabDto).catch((error) => {
+    console.error("Error inserting tab data:", error);
+  });
 
   return tabDto;
 }
 
 async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
   // attempt to match originalId of alt versions to taburls
+  const versionIds = tabApiPayload.versions.map((v) => v.id);
   const taburlsFromAlts = await prisma.possibleSong.findMany({
     where: {
       originalId: {
-        in: tabApiPayload.versions.map((v) => v.id),
+        in: versionIds,
       },
     },
     select: {
@@ -80,9 +84,7 @@ async function insertData(tabApiPayload: UGApi.TabInfo, tabDto: TabDto) {
       originalId: true,
     },
   });
-  // need to ensure that the originalId column actually works and the migration can happen properly
   const idToTaburl = Object.fromEntries(taburlsFromAlts.map((t) => [t.originalId, t.taburl]));
-  console.log(taburlsFromAlts);
   await insertTab(
     {
       id: tabApiPayload.song_id,

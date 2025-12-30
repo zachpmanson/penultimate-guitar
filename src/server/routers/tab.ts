@@ -18,7 +18,7 @@ export const tabRouter = createRouter({
       const possibleTab = await getTabDetailsFromTaburl(input);
       return possibleTab;
     } catch (e) {
-      console.error(e);
+      console.error('Error in getTab endpoint:', e);
       throw new TRPCError({ code: "NOT_FOUND" });
     }
   }),
