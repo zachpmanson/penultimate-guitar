@@ -265,70 +265,68 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
 
         <hr className="my-4 no-print dark:border-gray-600" />
 
-        <div className="relative w-fit max-w-full lg:px-24 m-auto z-0">
-          {tabDetails?.tab && (
-            <>
-              <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
-                <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-hidden h-20"></div>
-              </div>
-              <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
-                <div
-                  className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-56"
-                  style={{ scrollbarWidth: "none" }}
-                >
-                  <div className="flex flex-row flex-wrap lg:flex-col items-start lg:items-end max-w-full justify-between my-4 gap-2 text-sm relative min-w-96">
-                    <div className="flex-1 flex-col text-center">
-                      <p className="text-xs whitespace-nowrap">
-                        {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}
-                        {mode === "guitalele" || tranposition === 0 || ` (${formattedTransposition()})`}
-                      </p>
-                      <div className="flex gap-1 m-auto w-fit">
-                        <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>
-                          <MinusIcon className="w-6 h-6" />
-                        </ToolbarButton>
-                        <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>
-                          <PlusIcon className="w-6 h-6" />
-                        </ToolbarButton>
-                      </div>
+        <div className="relative max-w-full lg:px-24 z-0">
+          <>
+            <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
+              <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-hidden h-20"></div>
+            </div>
+            <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
+              <div
+                className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-56"
+                style={{ scrollbarWidth: "none" }}
+              >
+                <div className="flex flex-row flex-wrap lg:flex-col items-start lg:items-end max-w-full justify-between my-4 gap-2 text-sm relative min-w-96">
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">
+                      {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}
+                      {mode === "guitalele" || tranposition === 0 || ` (${formattedTransposition()})`}
+                    </p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>
+                        <MinusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>
+                        <PlusIcon className="w-6 h-6" />
+                      </ToolbarButton>
                     </div>
+                  </div>
 
-                    <div className="flex-1 flex-col text-center">
-                      <p className="text-xs whitespace-nowrap">Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</p>
-                      <div className="flex gap-1 m-auto w-fit">
-                        <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
-                          <MinusIcon className="w-6 h-6" />
-                        </ToolbarButton>
-                        <ToolbarButton onClick={() => changeScrolling("up")}>
-                          <PlusIcon className="w-6 h-6" />
-                        </ToolbarButton>
-                      </div>
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
+                        <MinusIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      <ToolbarButton onClick={() => changeScrolling("up")}>
+                        <PlusIcon className="w-6 h-6" />
+                      </ToolbarButton>
                     </div>
-                    <div className="flex-1 flex-col text-center">
-                      <p className="text-xs whitespace-nowrap">Font size</p>
-                      <div className="flex gap-1 m-auto w-fit">
-                        <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
-                          <span className="text-xs">A</span>
-                        </ToolbarButton>
-                        <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
-                          <span className="text-2xl">A</span>
-                        </ToolbarButton>
-                      </div>
+                  </div>
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">Font size</p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
+                        <span className="text-xs">A</span>
+                      </ToolbarButton>
+                      <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
+                        <span className="text-2xl">A</span>
+                      </ToolbarButton>
                     </div>
-                    <div className="flex-1 flex-col text-center">
-                      <p className="text-xs whitespace-nowrap">Options</p>
-                      <div className="flex gap-1 m-auto w-fit">
-                        <ToolbarButton onClick={handleSave}>
-                          <BookmarkIcon className="w-6 h-6" />
-                        </ToolbarButton>
-                        {options}
-                      </div>
+                  </div>
+                  <div className="flex-1 flex-col text-center">
+                    <p className="text-xs whitespace-nowrap">Options</p>
+                    <div className="flex gap-1 m-auto w-fit">
+                      <ToolbarButton onClick={handleSave}>
+                        <BookmarkIcon className="w-6 h-6" />
+                      </ToolbarButton>
+                      {options}
                     </div>
                   </div>
                 </div>
               </div>
-            </>
-          )}
-          <div className="lg:pt-0 pt-24 z-30 relative">
+            </div>
+          </>
+          <div className="lg:pt-0 pt-24 z-30 relative w-fit m-auto">
             <TabSheet plainTab={plainTab} fontSize={fontSize} transposition={tranposition} />
           </div>
         </div>
