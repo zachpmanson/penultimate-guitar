@@ -98,8 +98,16 @@ summary h2 {
   box-shadow: 0 20px 5px rgb(255 255 255 / 0.5);
 }
 
+.lg\:top-toolbar {
+  box-shadow: none;
+}
+
 .dark\:top-toolbar:is(.dark *) {
   box-shadow: 0 20px 5px rgb(28 27 34 / 0.5);
+}
+
+.dark\:lg\:top-toolbar:is(.dark *) {
+  box-shadow: none;
 }
 
 @media print {

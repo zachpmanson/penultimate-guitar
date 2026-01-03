@@ -240,11 +240,11 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
         <div className="relative max-w-full lg:w-fit lg:mx-auto lg:px-24 z-0">
           <>
             <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
-              <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-hidden h-20"></div>
+              <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 dark:lg:bg-transparent sticky top-0 top-toolbar dark:top-toolbar lg:top-toolbar dark:lg:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-hidden h-20 pointer-events-none"></div>
             </div>
             <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
               <div
-                className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-56"
+                className="sticky top-0 dark:top-toolbar no-print z-50 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-x-scroll lg:overflow-visible h-56 pointer-events-none"
                 style={{ scrollbarWidth: "none" }}
               >
                 <div className="flex flex-row flex-wrap lg:flex-col items-start lg:items-end max-w-full justify-between my-4 gap-2 text-sm relative min-w-96">
@@ -322,7 +322,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
 
 function ButtonPair({ title, children }: { title: ReactNode; children: ReactNode }) {
   return (
-    <div className="flex-1 flex-col text-center">
+    <div className="flex-1 flex-col text-center pointer-events-auto">
       <p className="text-xs whitespace-nowrap">{title}</p>
       <div className="flex gap-1 m-auto w-fit">{children}</div>
     </div>
