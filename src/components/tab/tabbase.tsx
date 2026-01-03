@@ -7,14 +7,14 @@ import { TabDto, TabLinkDto } from "@/models/models";
 import { useConfigStore } from "@/state/config";
 import { mapTabDtoToTabLink } from "@/utils/conversion";
 import { tabCompareFn } from "@/utils/sort";
-import { Menu, Transition } from "@headlessui/react";
 import { BookmarkIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import _ from "lodash";
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useWakeLock } from "react-screen-wake-lock";
 import "react-tooltip/dist/react-tooltip.css";
+import BaseMenu from "../shared/basemenu";
 
 export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
   const {
@@ -144,72 +144,44 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
     }
   };
 
-  let options = (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button className={getToolbarButtonStyle(false)}>▼</Menu.Button>
-      </div>
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden">
-          <div className="px-1 py-1 ">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => toggleMode()}
-                  className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900 dark:text-gray-200"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  {mode === "default" ? (
-                    <span>
-                      Enable <span className={GuitaleleStyle}>Guitalele Mode</span>
-                    </span>
-                  ) : (
-                    <span>
-                      Disable <span className={GuitaleleStyle}>Guitalele Mode</span>
-                    </span>
-                  )}
-                </button>
-              )}
-            </Menu.Item>
-          </div>
-          <div className="px-1 py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <button
-                  onClick={() => print()}
-                  className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  Print
-                </button>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
-                  className={`${
-                    active ? "bg-blue-700 text-white" : "text-gray-900  dark:text-gray-200"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline hover:text-white`}
-                >
-                  View on Ultimate Guitar
-                </Link>
-              )}
-            </Menu.Item>
-          </div>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+  let overflowMenu = (
+    <>
+      <BaseMenu
+        buttonClassName={getToolbarButtonStyle(false)}
+        items={[
+          <button
+            onClick={() => toggleMode()}
+            className={
+              "hover:bg-blue-700 hover:text-white text-gray-900 dark:text-gray-200 group flex w-full items-center rounded-md px-2 py-2 text-sm"
+            }
+          >
+            {mode === "default" ? (
+              <span>
+                Enable <span className={GuitaleleStyle}>Guitalele Mode</span>
+              </span>
+            ) : (
+              <span>
+                Disable <span className={GuitaleleStyle}>Guitalele Mode</span>
+              </span>
+            )}
+          </button>,
+          <button
+            onClick={() => print()}
+            className={
+              "hover:bg-blue-700 hover:text-white text-gray-900  dark:text-gray-200 group flex w-full items-center rounded-md px-2 py-2 text-sm"
+            }
+          >
+            Print
+          </button>,
+          <Link
+            href={`https://tabs.ultimate-guitar.com/tab/${tabDetails.taburl}`}
+            className="hover:bg-blue-700 hover:text-white text-gray-900  dark:text-gray-200 group flex w-full items-center rounded-md px-2 py-2 text-sm no-underline "
+          >
+            View on Ultimate Guitar
+          </Link>,
+        ]}
+      />
+    </>
   );
 
   return (
@@ -265,7 +237,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
 
         <hr className="my-4 no-print dark:border-gray-600" />
 
-        <div className="relative max-w-full lg:px-24 z-0">
+        <div className="relative max-w-full lg:w-fit lg:mx-auto lg:px-24 z-0">
           <>
             <div className="absolute top-0 w-full h-full lg:min-w-96 lg:right-0 lg:w-fit">
               <div className="bg-white/50 lg:bg-transparent dark:bg-default-dark/50 sticky top-0 top-toolbar dark:top-toolbar no-print z-40 lg:ml-auto max-w-[min(100%, 32rem)] m-auto w-full overflow-hidden h-20"></div>
@@ -276,52 +248,44 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 style={{ scrollbarWidth: "none" }}
               >
                 <div className="flex flex-row flex-wrap lg:flex-col items-start lg:items-end max-w-full justify-between my-4 gap-2 text-sm relative min-w-96">
-                  <div className="flex-1 flex-col text-center">
-                    <p className="text-xs whitespace-nowrap">
-                      {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}
-                      {mode === "guitalele" || tranposition === 0 || ` (${formattedTransposition()})`}
-                    </p>
-                    <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>
-                        <MinusIcon className="w-6 h-6" />
-                      </ToolbarButton>
-                      <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>
-                        <PlusIcon className="w-6 h-6" />
-                      </ToolbarButton>
-                    </div>
-                  </div>
+                  <ButtonPair
+                    title={
+                      <>
+                        {mode !== "guitalele" ? "Transpose" : <span className={GuitaleleStyle}>Guitalele Mode!</span>}
+                        {mode === "guitalele" || tranposition === 0 || ` (${formattedTransposition()})`}
+                      </>
+                    }
+                  >
+                    <ToolbarButton onClick={() => setTranposition(tranposition - 1)}>
+                      <MinusIcon className="w-6 h-6" />
+                    </ToolbarButton>
+                    <ToolbarButton onClick={() => setTranposition(tranposition + 1)}>
+                      <PlusIcon className="w-6 h-6" />
+                    </ToolbarButton>
+                  </ButtonPair>
 
-                  <div className="flex-1 flex-col text-center">
-                    <p className="text-xs whitespace-nowrap">Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</p>
-                    <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
-                        <MinusIcon className="w-6 h-6" />
-                      </ToolbarButton>
-                      <ToolbarButton onClick={() => changeScrolling("up")}>
-                        <PlusIcon className="w-6 h-6" />
-                      </ToolbarButton>
-                    </div>
-                  </div>
-                  <div className="flex-1 flex-col text-center">
-                    <p className="text-xs whitespace-nowrap">Font size</p>
-                    <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
-                        <span className="text-xs">A</span>
-                      </ToolbarButton>
-                      <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
-                        <span className="text-2xl">A</span>
-                      </ToolbarButton>
-                    </div>
-                  </div>
-                  <div className="flex-1 flex-col text-center">
-                    <p className="text-xs whitespace-nowrap">Options</p>
-                    <div className="flex gap-1 m-auto w-fit">
-                      <ToolbarButton onClick={handleSave}>
-                        <BookmarkIcon className="w-6 h-6" />
-                      </ToolbarButton>
-                      {options}
-                    </div>
-                  </div>
+                  <ButtonPair title={<>Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</>}>
+                    <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
+                      <MinusIcon className="w-6 h-6" />
+                    </ToolbarButton>
+                    <ToolbarButton onClick={() => changeScrolling("up")}>
+                      <PlusIcon className="w-6 h-6" />
+                    </ToolbarButton>
+                  </ButtonPair>
+                  <ButtonPair title="Font size">
+                    <ToolbarButton onClick={() => setFontSize(fontSize - 2)} disabled={fontSize < 8}>
+                      <span className="text-xs">A</span>
+                    </ToolbarButton>
+                    <ToolbarButton onClick={() => setFontSize(fontSize + 2)}>
+                      <span className="text-2xl">A</span>
+                    </ToolbarButton>
+                  </ButtonPair>
+                  <ButtonPair title="Options">
+                    <ToolbarButton onClick={handleSave}>
+                      <BookmarkIcon className="w-6 h-6" />
+                    </ToolbarButton>
+                    {overflowMenu}
+                  </ButtonPair>
                 </div>
               </div>
             </div>
@@ -353,5 +317,14 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
         {saveDialogActive && <SaveDialog isOpen={saveDialogActive} setIsOpen={setSaveDialogActive} tab={tabLink} />}
       </div>
     </>
+  );
+}
+
+function ButtonPair({ title, children }: { title: ReactNode; children: ReactNode }) {
+  return (
+    <div className="flex-1 flex-col text-center">
+      <p className="text-xs whitespace-nowrap">{title}</p>
+      <div className="flex gap-1 m-auto w-fit">{children}</div>
+    </div>
   );
 }
