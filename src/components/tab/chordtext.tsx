@@ -36,7 +36,7 @@ export default function ChordText({
   const inputRef = useRef<HTMLElement>(null);
 
   return (
-    <span className="group w-max" ref={inputRef}>
+    <span className="group w-max" ref={inputRef} tabIndex={0} onTouchStart={() => inputRef.current?.focus()}>
       <span
         className={`bg-gray-200 dark:bg-gray-600 font-bold rounded-md chord z-10 relative ${
           chordObj && "cursor-pointer"
@@ -52,7 +52,7 @@ export default function ChordText({
             left: `50%`,
             transform: `translateX(-50%)`,
           }}
-          className="pointer-events-none absolute z-50 bg-white  opacity-0 transition-opacity group-hover:opacity-100 border-black border-2 rounded-sm"
+          className="pointer-events-none absolute z-50 bg-white  opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 border-black border-2 rounded"
         >
           <div className="text-center chord text-black">
             <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
