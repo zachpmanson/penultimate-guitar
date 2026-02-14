@@ -14,8 +14,10 @@ export default function TabSheet({
   return (
     <div className="w-fit max-w-full overflow-x-scroll">
       <pre className="whitespace-pre-wrap" style={{ fontSize: `${fontSize}px` }}>
-        {reactStringReplace(formattedTab, /\[ch\](.+?)\[\/ch\]/gm, (chord) => (
-          <span onClick={() => cycleInversion(chord)}>{chordElements.get(chord)}</span>
+        {reactStringReplace(formattedTab, /\[ch\](.+?)\[\/ch\]/gm, (chord, i) => (
+          <span key={i} onClick={() => cycleInversion(chord)}>
+            {chordElements.get(chord)}
+          </span>
         ))}
       </pre>
     </div>
