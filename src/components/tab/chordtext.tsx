@@ -1,7 +1,8 @@
 import { useConfigStore } from "@/state/config";
 import { TransposedChord } from "@/types/tab";
 import Chord from "@tombatossals/react-chords/lib/Chord";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
 
 const instrument = {
   strings: 6,
@@ -34,35 +35,73 @@ export default function ChordText({
   const size = fontSize * 12;
 
   const inputRef = useRef<HTMLElement>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupStyle, setPopupStyle] = useState<{ top: number; left: number } | null>(null);
+
+  useEffect(() => {
+    if (!showPopup) return;
+    const handleScrollOrResize = () => {
+      if (!inputRef.current) return;
+      const rect = inputRef.current.getBoundingClientRect();
+      setPopupStyle({ top: rect.top + window.scrollY - size, left: rect.left + window.scrollX + rect.width / 2 });
+    };
+
+    handleScrollOrResize();
+    window.addEventListener("scroll", handleScrollOrResize, true);
+    window.addEventListener("resize", handleScrollOrResize);
+    return () => {
+      window.removeEventListener("scroll", handleScrollOrResize, true);
+      window.removeEventListener("resize", handleScrollOrResize);
+    };
+  }, [showPopup, size]);
 
   return (
-    <span className="group w-max" ref={inputRef} tabIndex={0} onTouchStart={() => inputRef.current?.focus()}>
+    <>
       <span
-        className={`bg-gray-200 dark:bg-gray-600 font-bold rounded-md chord z-10 relative ${
-          chordObj && "cursor-pointer"
-        }`}
+        className="group w-max"
+        ref={inputRef}
+        tabIndex={0}
+        onTouchStart={() => inputRef.current?.focus()}
+        onMouseEnter={() => setShowPopup(true)}
+        onMouseLeave={() => setShowPopup(false)}
+        onFocus={() => setShowPopup(true)}
+        onBlur={() => setShowPopup(false)}
       >
-        {fullTransposedChord}
-      </span>
-      {chordObj && (
-        <div
-          style={{
-            width: size,
-            top: inputRef.current ? inputRef.current?.offsetTop - size : 0,
-            left: `50%`,
-            transform: `translateX(-50%)`,
-          }}
-          className="pointer-events-none absolute z-50 bg-white  opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 border-black border-2 rounded"
+        <span
+          className={`bg-gray-200 dark:bg-gray-600 font-bold rounded-md chord z-10 relative ${
+            chordObj && "cursor-pointer"
+          }`}
         >
-          <div className="text-center chord text-black">
-            <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
-            <span>
-              ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
-            </span>
-          </div>
-          <Chord chord={chordObj} instrument={instrument} lite={true} />
-        </div>
-      )}
-    </span>
+          {fullTransposedChord}
+        </span>
+      </span>
+
+      {chordObj && showPopup && popupStyle
+        ? ReactDOM.createPortal(
+            <div
+              style={{
+                position: "absolute",
+                width: size,
+                top: popupStyle.top,
+                // left: popupStyle.left,
+                left: "50%",
+                transform: "translateX(-50%)",
+                zIndex: 9999,
+              }}
+              className="pointer-events-none bg-white border-black border-2 rounded"
+            >
+              <div className="text-center chord text-black">
+                <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
+                <span>
+                  ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
+                </span>
+              </div>
+              <Chord chord={chordObj} instrument={instrument} lite={true} />
+            </div>,
+            // portal root must exist in _document.tsx
+            (typeof document !== "undefined" && document.getElementById("portal-root")) || document.body
+          )
+        : null}
+    </>
   );
 }
