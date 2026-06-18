@@ -5,7 +5,8 @@ let
     pname = "penultimate-guitar";
     version = "0.1.0";
     src = ../.;
-    hash = "sha256-7sB8Akikp+8omUOF5ck1otgwFiSP/60OPDH952BIgJ0=";  # run `nix build`, paste the correct hash from the error
+    hash = "sha256-7sB8Akikp+8omUOF5ck1otgwFiSP/60OPDH952BIgJ0=
+";  # run `nix build`, paste the correct hash from the error
   };
 in
 
@@ -26,10 +27,11 @@ pkgs.stdenv.mkDerivation {
   DATABASE_URL = "postgresql://localhost/dummy";
 
   buildPhase = ''
-    pnpm install --offline --ignore-scripts
+    pnpm install --offline --frozen-lockfile
     pnpm prisma generate
     pnpm next build
   '';
+
 
   # Prisma's .node engine binary is not traced by Next.js NFT — copy it manually
   postBuild = ''
