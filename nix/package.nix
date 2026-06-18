@@ -27,7 +27,6 @@ pkgs.stdenv.mkDerivation {
   DATABASE_URL = "postgresql://localhost/dummy";
 
   buildPhase = ''
-    pnpm install --offline --frozen-lockfile
     pnpm prisma generate
     pnpm next build
   '';
