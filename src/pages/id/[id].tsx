@@ -53,7 +53,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   // };
   return {
     props: {
-      trpcState: helpers.dehydrate(),
+      trpcState: helpers.dehydrate({ shouldDehydrateQuery: (q) => q.state.status === "success" }),
       id: originalId,
     },
     revalidate: 1,
