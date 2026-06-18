@@ -14,7 +14,7 @@ pkgs.stdenv.mkDerivation {
   version = "0.1.0";
   src = ../.;
 
-  nativeBuildInputs = [ pkgs.nodejs_24 pkgs.pnpm pkgs.prisma-engines ];
+  nativeBuildInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.prisma-engines ];
 
   inherit pnpmDeps;
   inherit (pkgs.pnpm) configHook;

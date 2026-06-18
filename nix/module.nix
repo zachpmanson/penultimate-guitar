@@ -60,7 +60,7 @@ in {
         Type = "oneshot";
         RemainAfterExit = true;
         EnvironmentFile = cfg.environmentFile;
-        ExecStart = "${pkgs.nodejs_24}/bin/node ${cfg.package}/node_modules/.bin/prisma migrate deploy --schema=${cfg.package}/prisma/schema.prisma";
+        ExecStart = "${pkgs.nodejs_22}/bin/node ${cfg.package}/node_modules/.bin/prisma migrate deploy --schema=${cfg.package}/prisma/schema.prisma";
         WorkingDirectory = cfg.package;
         DynamicUser = true;
         PrivateTmp = true;
@@ -84,7 +84,7 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.nodejs_24}/bin/node ${cfg.package}/server.js";
+        ExecStart = "${pkgs.nodejs_22}/bin/node ${cfg.package}/server.js";
         WorkingDirectory = cfg.package;
         EnvironmentFile = cfg.environmentFile;
         DynamicUser = true;
