@@ -1,12 +1,12 @@
 { pkgs ? import <nixpkgs> {} }:
 
 let
-  pnpmDeps = pkgs.pnpm.fetchDeps {
+  pnpmDeps = pkgs.fetchPnpmDeps {
     pname = "penultimate-guitar";
     version = "0.1.0";
     src = ../.;
     fetcherVersion = 3;
-    hash = "sha256-ftrm8C2zvrVtva7LIFmYq3WLUKyCJz19QcMcC54PGDQ=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 
@@ -15,10 +15,9 @@ pkgs.stdenv.mkDerivation {
   version = "0.1.0";
   src = ../.;
 
-  nativeBuildInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.prisma-engines ];
+  nativeBuildInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.pnpmConfigHook pkgs.prisma-engines ];
 
   inherit pnpmDeps;
-  inherit (pkgs.pnpm) configHook;
 
   PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
   PRISMA_SCHEMA_ENGINE_BINARY  = "${pkgs.prisma-engines}/bin/schema-engine";
