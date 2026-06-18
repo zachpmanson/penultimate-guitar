@@ -42,7 +42,7 @@ pkgs.stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    cp -r .next/standalone/. $out/
+    cp -rL .next/standalone/. $out/
     cp -r .next/static $out/.next/static
     cp -r public $out/public
   '';
