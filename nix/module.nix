@@ -80,7 +80,7 @@ in {
         PORT = toString cfg.port;
         HOSTNAME = cfg.hostname;
         NODE_ENV = "production";
-        PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
+        PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines_6}/lib/libquery_engine.node";
       };
 
       serviceConfig = {

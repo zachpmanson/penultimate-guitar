@@ -6,7 +6,7 @@ let
     version = "0.1.0";
     src = ../.;
     fetcherVersion = 3;
-    hash = "sha256-ftrm8C2zvrVtva7LIFmYq3WLUKyCJz19QcMcC54PGDQ=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 
@@ -15,13 +15,13 @@ pkgs.stdenv.mkDerivation {
   version = "0.1.0";
   src = ../.;
 
-  nativeBuildInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.pnpmConfigHook pkgs.prisma-engines ];
+  nativeBuildInputs = [ pkgs.nodejs_22 pkgs.pnpm pkgs.pnpmConfigHook pkgs.prisma-engines_6 ];
 
   inherit pnpmDeps;
 
-  PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
-  PRISMA_SCHEMA_ENGINE_BINARY  = "${pkgs.prisma-engines}/bin/schema-engine";
-  PRISMA_FMT_BINARY            = "${pkgs.prisma-engines}/bin/prisma-fmt";
+  PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines_6}/lib/libquery_engine.node";
+  PRISMA_SCHEMA_ENGINE_BINARY  = "${pkgs.prisma-engines_6}/bin/schema-engine";
+  PRISMA_FMT_BINARY            = "${pkgs.prisma-engines_6}/bin/prisma-fmt";
   # Avoids prisma generate crash at build time; no connection is made
   DATABASE_URL = "postgresql://localhost/dummy";
 
@@ -36,7 +36,7 @@ pkgs.stdenv.mkDerivation {
   postBuild = ''
     dest=.next/standalone/node_modules/.prisma/client
     mkdir -p "$dest"
-    cp ${pkgs.prisma-engines}/lib/libquery_engine.node \
+    cp ${pkgs.prisma-engines_6}/lib/libquery_engine.node \
        "$dest/libquery_engine-linux-musl-openssl-3.0.x.node"
   '';
 
