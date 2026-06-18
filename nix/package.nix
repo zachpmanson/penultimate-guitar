@@ -41,8 +41,9 @@ pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    find .next/standalone -xtype l -delete
     mkdir -p $out
-    cp -rL .next/standalone/. $out/
+    cp -r .next/standalone/. $out/
     cp -r .next/static $out/.next/static
     cp -r public $out/public
   '';
