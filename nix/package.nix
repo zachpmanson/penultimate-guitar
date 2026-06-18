@@ -5,7 +5,7 @@ let
     pname = "penultimate-guitar";
     version = "0.1.0";
     src = ../.;
-    fetcherVersion = 1;
+    fetcherVersion = 3;
     hash = "sha256-7sB8Akikp+8omUOF5ck1otgwFiSP/60OPDH952BIgJ0=";
   };
 in
