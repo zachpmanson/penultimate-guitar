@@ -209,8 +209,16 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                 <ul>
                   {tabDetails.song.Tab?.sort(tabCompareFn).map((t, index) => (
                     <li key={index}>
-                      {t.taburl === tabDetails.taburl || (
-                        <div className="flex justify-between">
+                      <div className="flex justify-between">
+                        {t.taburl === tabDetails.taburl ? (
+                          <span>
+                            {tabDetails.song.name}
+                            <span className="font-light text-xs">
+                              {" "}
+                              ({t.type}) (v{t.version}){" "}
+                            </span>
+                          </span>
+                        ) : (
                           <Link href={ROUTES.TAB(t.taburl)} prefetch={false}>
                             {tabDetails.song.name}
                             <span className="font-light text-xs">
@@ -218,9 +226,9 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                               ({t.type}) (v{t.version}){" "}
                             </span>
                           </Link>
-                          <div>Rating: {Math.round(t.rating * 100) / 100} / 5.00</div>
-                        </div>
-                      )}
+                        )}
+                        <div>Rating: {Math.round(t.rating * 100) / 100} / 5.00</div>
+                      </div>
                     </li>
                   ))}
                 </ul>
