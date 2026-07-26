@@ -25,8 +25,25 @@ export default function Layout({ children }: any) {
               <span className="m-auto w-fit">About</span>
             </Link>
           </div>
+          <DeployInfo />
         </footer>
       </div>
     </>
   );
+}
+
+function DeployInfo() {
+  const rev = process.env.NEXT_PUBLIC_BUILD_REV;
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+
+  if (!rev && !buildTime) return null;
+
+  let label = "";
+  if (buildTime) {
+    const date = new Date(parseInt(buildTime) * 1000);
+    label = date.toISOString().slice(0, 10);
+  }
+  if (rev) label += label ? ` @ ${rev}` : rev;
+
+  return <p className="text-xs text-center text-gray-400 mt-2">{label}</p>;
 }

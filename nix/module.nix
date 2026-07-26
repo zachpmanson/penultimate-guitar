@@ -2,13 +2,18 @@ self: { config, lib, pkgs, ... }:
 
 let
   cfg = config.services.penultimate-guitar;
+  sourceInfo = self.sourceInfo or {};
+  rev = sourceInfo.shortRev or "";
+  buildTime = toString (sourceInfo.lastModified or 0);
 in {
   options.services.penultimate-guitar = {
     enable = lib.mkEnableOption "penultimate-guitar Next.js service";
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      default = self.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+        inherit rev buildTime;
+      };
       description = "The penultimate-guitar package to use.";
     };
 

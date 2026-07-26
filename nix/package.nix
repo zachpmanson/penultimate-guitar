@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> {}, rev ? null, buildTime ? null }:
 
 let
   pnpmDeps = pkgs.fetchPnpmDeps {
@@ -26,6 +26,8 @@ pkgs.stdenv.mkDerivation {
   DATABASE_URL = "postgresql://localhost/dummy";
 
   buildPhase = ''
+    export NEXT_PUBLIC_BUILD_REV="${if rev != null then rev else ""}"
+    export NEXT_PUBLIC_BUILD_TIME="${if buildTime != null then buildTime else ""}"
     pnpm install --offline --frozen-lockfile
     pnpm prisma generate
     pnpm next build
