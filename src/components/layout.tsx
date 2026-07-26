@@ -46,8 +46,8 @@ function DeployLink() {
   }
 
   return (
-    <a href={`https://github.com/zachpmanson/penultimate-guitar/commit/${rev}`} target="_blank" rel="noreferrer" className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-      {label}
+    <a href={`https://github.com/zachpmanson/penultimate-guitar/commit/${rev}`} target="_blank" rel="noreferrer">
+      <span className="m-auto w-fit">{label}</span>
     </a>
   );
 }
