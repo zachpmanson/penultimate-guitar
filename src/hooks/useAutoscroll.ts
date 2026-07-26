@@ -31,10 +31,12 @@ export default function useAutoscroll(element: RefObject<HTMLElement>) {
 
   useEffect(() => {
     if (scrollSpeed > 0) {
+      const interval = scrollSpeed < 1 ? SCROLL_MS * 2 : SCROLL_MS;
+      const pixels = scrollSpeed < 1 ? 1 : scrollSpeed;
       scrollinterval.current = setInterval(() => {
         if (!isTouching.current) {
           window.scrollBy({
-            top: scrollSpeed,
+            top: pixels,
             left: 0,
             behavior: "smooth",
           });
@@ -45,7 +47,7 @@ export default function useAutoscroll(element: RefObject<HTMLElement>) {
           setScrollSpeed(0);
           clearInterval(scrollinterval.current);
         }
-      }, SCROLL_MS);
+      }, interval);
     }
     return () => {
       clearInterval(scrollinterval.current);
