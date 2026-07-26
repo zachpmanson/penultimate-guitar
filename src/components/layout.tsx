@@ -16,7 +16,7 @@ export default function Layout({ children }: any) {
       <div className="flex flex-col gap-4 ">
         <main>{children}</main>
         <footer>
-          <div className="flex gap-6 justify-center no-print items-center">
+          <div className="flex gap-6 justify-center no-print items-center text-xs">
             <Link prefetch={false} href="/directory/new/1">
               <span className="m-auto w-fit">Song Directory</span>
             </Link>
