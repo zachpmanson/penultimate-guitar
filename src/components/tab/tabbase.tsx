@@ -273,7 +273,7 @@ export default function TabBase({ tabDetails }: { tabDetails: TabDto }) {
                   </ButtonPair>
 
                   <ButtonPair title={<>Autoscroll {scrollSpeed > 0 && ` (${scrollSpeed})`}</>}>
-                    <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed < 1}>
+                    <ToolbarButton onClick={() => changeScrolling("down")} disabled={scrollSpeed <= 0}>
                       <MinusIcon className="w-6 h-6" />
                     </ToolbarButton>
                     <ToolbarButton onClick={() => changeScrolling("up")}>

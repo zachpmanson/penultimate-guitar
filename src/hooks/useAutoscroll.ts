@@ -10,9 +10,19 @@ export default function useAutoscroll(element: RefObject<HTMLElement>) {
   function changeScrolling(type: "up" | "down") {
     clearInterval(scrollinterval.current);
     if (type === "up") {
-      setScrollSpeed(scrollSpeed + 1);
+      if (scrollSpeed === 0) {
+        setScrollSpeed(0.5);
+      } else if (scrollSpeed === 0.5) {
+        setScrollSpeed(1);
+      } else {
+        setScrollSpeed(scrollSpeed + 1);
+      }
     } else {
-      if (scrollSpeed > 0) {
+      if (scrollSpeed === 1) {
+        setScrollSpeed(0.5);
+      } else if (scrollSpeed === 0.5) {
+        setScrollSpeed(0);
+      } else if (scrollSpeed > 0) {
         setScrollSpeed(scrollSpeed - 1);
       }
     }
