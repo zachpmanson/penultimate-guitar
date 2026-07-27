@@ -36,6 +36,8 @@ in {
         Must be readable by the service user and NOT stored in the Nix store.
         Required vars: DATABASE_URL, NEXTAUTH_SECRET, NEXTAUTH_URL,
         SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET.
+        Optional (enables "Log in with Nextcloud"): NEXTCLOUD_ISSUER,
+        NEXTCLOUD_CLIENT_ID, NEXTCLOUD_CLIENT_SECRET.
       '';
     };
 

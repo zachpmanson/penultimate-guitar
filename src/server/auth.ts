@@ -10,6 +10,36 @@ export const authOptions = {
       clientId: process.env.SPOTIFY_CLIENT_ID!,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
     }),
+    // "Log in with Nextcloud" — PoC of unified SSO via Nextcloud's OIDC
+    // Identity Provider app. Only registered when the client env vars are
+    // present, so deployments without them keep the Spotify-only flow.
+    ...(process.env.NEXTCLOUD_ISSUER && process.env.NEXTCLOUD_CLIENT_ID
+      ? [
+          {
+            id: "nextcloud",
+            name: "Nextcloud",
+            type: "oauth" as const,
+            // NextAuth reads the discovery doc for the concrete endpoints.
+            // The index.php form works regardless of Nextcloud's URL rewriting.
+            wellKnown: `${process.env.NEXTCLOUD_ISSUER}/index.php/apps/oidc/openid-configuration`,
+            authorization: { params: { scope: "openid profile email" } },
+            idToken: true,
+            // Nextcloud's oidc app supports PKCE on recent versions. If the
+            // token exchange fails on an older build, drop this to ["state"].
+            checks: ["pkce", "state"] as ("pkce" | "state")[],
+            clientId: process.env.NEXTCLOUD_CLIENT_ID!,
+            clientSecret: process.env.NEXTCLOUD_CLIENT_SECRET!,
+            profile(profile: { sub: string; name?: string; preferred_username?: string; email?: string; picture?: string }) {
+              return {
+                id: profile.sub,
+                name: profile.name ?? profile.preferred_username,
+                email: profile.email,
+                image: profile.picture,
+              };
+            },
+          },
+        ]
+      : []),
   ],
 
   callbacks: {
@@ -43,6 +73,10 @@ export const authOptions = {
   events: {
     async signIn(message) {
       console.log("signIn", JSON.stringify(message, null, 2));
+      // The user table is keyed on spotifyUserId, so only persist a row for
+      // Spotify sign-ins. Nextcloud PoC logins get a valid JWT session but no
+      // saved-tabs persistence yet — see the account model note in the PR.
+      if (message.account?.provider !== "spotify") return;
       const result = await prisma.user.upsert({
         where: {
           spotifyUserId: message.user.id,

@@ -28,10 +28,17 @@ export default function Login() {
           across multiple devices.
         </p>
         <p>This is in ALPHA. Currently Spotify login is only available for certain accounts.</p>
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-2">
           <SpotifyButton onClick={() => signIn("spotify")} disabled={session.status === "loading"}>
             Sign in with Spotify
           </SpotifyButton>
+          <button
+            onClick={() => signIn("nextcloud")}
+            disabled={session.status === "loading"}
+            className="text-white bg-[#0082c9] hover:bg-[#0069a3] focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+          >
+            Sign in with Nextcloud
+          </button>
         </div>
       </div>
     </>
