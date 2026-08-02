@@ -4,6 +4,7 @@ const nextConfig = {
   reactStrictMode: false,
   experimental: {
     scrollRestoration: true,
+    isrFlushToDisk: false,
   },
   images: {
     unoptimized: true,
