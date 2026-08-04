@@ -15,5 +15,5 @@ clean:
 format:
 	pnpm lint
 
-deploy: build
-	rsync -r --delete .next/ penultimate-guitar:/
+deploy:
+	ssh penultimate-guitar
