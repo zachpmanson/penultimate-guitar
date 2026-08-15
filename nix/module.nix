@@ -86,6 +86,10 @@ in {
         HOSTNAME = cfg.hostname;
         NODE_ENV = "production";
         PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines_6}/lib/libquery_engine.node";
+        # Writable root for the ISR prerender cache (custom cache handler).
+        # systemd StateDirectory (below) provisions /var/lib/penultimate-guitar
+        # as a persistent, DynamicUser-owned dir that survives restarts.
+        NEXT_ISR_CACHE_DIR = "/var/lib/penultimate-guitar";
       };
 
       serviceConfig = {
@@ -93,6 +97,8 @@ in {
         WorkingDirectory = cfg.package;
         EnvironmentFile = cfg.environmentFile;
         DynamicUser = true;
+        # Persistent, auto-owned directory for the ISR cache.
+        StateDirectory = "penultimate-guitar";
         PrivateTmp = true;
         ProtectSystem = "strict";
         NoNewPrivileges = true;

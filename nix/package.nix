@@ -40,6 +40,12 @@ pkgs.stdenv.mkDerivation {
     mkdir -p "$dest"
     cp ${pkgs.prisma-engines_6}/lib/libquery_engine.node \
        "$dest/libquery_engine-linux-musl-openssl-3.0.x.node"
+
+    # Bundle the custom ISR cache handler into the standalone runtime. Next
+    # resolves cacheHandler relative to distDir (./.next -> ../cache-handlers),
+    # so it lives at the standalone root next to .next.
+    mkdir -p .next/standalone/cache-handlers
+    cp cache-handlers/writable.js .next/standalone/cache-handlers/writable.js
   '';
 
   installPhase = ''
