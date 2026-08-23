@@ -26,14 +26,20 @@ export default function useFormattedTab(plainTab: string, transposition: number,
     });
   }, [chords, transposition]);
 
+  const incrementInversion = (chord: string) => {
+    setInversions((old) => {
+      let value = { ...old };
+      value[chord] += 1;
+      return value;
+    });
+  };
+
+  // Desktop: hovering shows the diagram and clicking the chord cycles the
+  // inversion. Mobile has no hover, so tapping must only reveal the diagram;
+  // cycling there happens via the popup's cycle button (see ChordText), which
+  // calls incrementInversion directly.
   const cycleInversion = (chord: string) => {
-    if (!isMobile) {
-      setInversions((old) => {
-        let value = { ...old };
-        value[chord] += 1;
-        return value;
-      });
-    }
+    if (!isMobile) incrementInversion(chord);
   };
 
   let chordElements: Map<string, JSX.Element> = new Map();
@@ -42,7 +48,13 @@ export default function useFormattedTab(plainTab: string, transposition: number,
     if (transposedChords[chord]) {
       chordElements.set(
         chord,
-        <ChordText transposedChord={transposedChords[chord]} fontSize={fontSize} inversion={inversions[chord] ?? 0} />
+        <ChordText
+          transposedChord={transposedChords[chord]}
+          fontSize={fontSize}
+          inversion={inversions[chord] ?? 0}
+          isMobile={isMobile}
+          onCycle={() => incrementInversion(chord)}
+        />
       );
     }
   }
