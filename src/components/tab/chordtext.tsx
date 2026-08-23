@@ -18,10 +18,14 @@ export default function ChordText({
   transposedChord,
   fontSize,
   inversion,
+  isMobile,
+  onCycle,
 }: {
   transposedChord: TransposedChord;
   fontSize: number;
   inversion: number;
+  isMobile: boolean;
+  onCycle?: () => void;
 }) {
   const { guitarChords: chordsDB } = useConfigStore();
 
@@ -90,11 +94,27 @@ export default function ChordText({
               }}
               className="pointer-events-none bg-white border-black border-2 rounded"
             >
-              <div className="text-center chord text-black">
-                <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
-                <span>
-                  ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="text-center chord text-black">
+                  <span className="font-bold mr-2">{`${transposedChord.key}${transposedChord.simpleSuffix}`}</span>
+                  <span>
+                    ({(inversion % (positions?.length ?? 0)) + 1}/{positions?.length})
+                  </span>
+                </div>
+                {isMobile && onCycle && (positions?.length ?? 0) > 1 ? (
+                  <button
+                    type="button"
+                    aria-label="Cycle to the next chord inversion"
+                    className="pointer-events-auto rounded-full bg-gray-200 text-black hover:bg-gray-300 px-2 py-1 text-sm font-bold leading-none select-none"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onCycle();
+                    }}
+                  >
+                    ⟳
+                  </button>
+                ) : null}
               </div>
               <Chord chord={chordObj} instrument={instrument} lite={true} />
             </div>,
