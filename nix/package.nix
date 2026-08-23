@@ -28,7 +28,7 @@ pkgs.stdenv.mkDerivation {
   buildPhase = ''
     export NEXT_PUBLIC_BUILD_REV="${if rev != null then rev else ""}"
     export NEXT_PUBLIC_BUILD_TIME="${if buildTime != null then buildTime else ""}"
-    export NEXT_BASE_PATH="${basePath}"
+    export NEXT_PUBLIC_BASE_PATH="${basePath}"
     pnpm install --offline --frozen-lockfile
     pnpm prisma generate
     pnpm next build

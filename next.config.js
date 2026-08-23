@@ -3,9 +3,9 @@ let nextConfig = {
   output: 'standalone',
   reactStrictMode: false,
   // Empty on the primary build; '/staging' on the sub-route staging instance
-  // (see nix/package.nix — NEXT_BASE_PATH is baked in at build time). Next
-  // then mounts every route and asset under that prefix.
-  ...(process.env.NEXT_BASE_PATH ? { basePath: process.env.NEXT_BASE_PATH } : {}),
+  // (see nix/package.nix — NEXT_PUBLIC_BASE_PATH is baked in at build time, so
+  // it is inlined into both server and client code).
+  ...(process.env.NEXT_PUBLIC_BASE_PATH ? { basePath: process.env.NEXT_PUBLIC_BASE_PATH } : {}),
   // Writes the ISR prerender cache via a custom handler to a writable state
   // dir (NEXT_ISR_CACHE_DIR) instead of the read-only Nix store. See
   // cache-handlers/writable.js — keeps the cache across restarts & rebuilds.
