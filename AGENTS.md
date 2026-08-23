@@ -33,13 +33,17 @@ A sub-route staging instance (PR previews) can be mounted at
 `pg.zachmanson.com/staging`. It runs a second build of the app compiled with
 `basePath="/staging"`, on its own port, own env file, own ISR cache dir.
 
-- **App-side support (in `main`):** build-time `NEXT_PUBLIC_BASE_PATH` is
-  threaded through `next.config.js` (sets `basePath` when non-empty),
-  `nix/package.nix` (exports the env at build), and `src/utils/basePath.ts`
-  (client-inlined constant). Any root-relative client URL must go through it:
-  tRPC `getBaseUrl()` (`src/utils/trpc.ts`), the chords fetch
-  (`src/contexts/Global/index.tsx`), icons/favicon (`_app.tsx`,
-  `IconGuitar.tsx`). With the env unset the build is identical to prod.
+- **App-side support (NOT in main — on the retained branch):** the build-time
+  `NEXT_PUBLIC_BASE_PATH` support (threaded through `next.config.js` setting
+  `basePath` when non-empty, `nix/package.nix` exporting the env at build, and
+  `src/utils/basePath.ts` as the client-inlined constant) lives only on the
+  `slippy/staging-166` branch, alongside the staging build of PR #167. Any
+  root-relative client URL must go through it: tRPC `getBaseUrl()`
+  (`src/utils/trpc.ts`), the chords fetch (`src/contexts/Global/index.tsx`),
+  icons/favicon (`_app.tsx`, `IconGuitar.tsx`). With the env unset the build
+  is identical to prod. To re-enable staging, base the pinned branch on
+  `slippy/staging-166` (or cherry-pick those commits onto your preview
+  branch).
 - **Infra (zpm/nix):** a `penultimate-guitar-staging` flake input pinned to a
   branch, a host-side module defining the `penultimate-guitar-staging` unit
   (port 3010, env `/etc/penultimate-guitar.staging.env`), and a caddy
