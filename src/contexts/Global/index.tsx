@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 import { useSavedTabsStore } from "@/state/savedTabs";
+import { basePath } from "@/utils/basePath";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [playlists, setPlaylists] = useState<PlaylistCollection>({});
@@ -34,7 +35,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!guitarChords) {
-      fetch("/chords/guitar.json", {
+      fetch(`${basePath}/chords/guitar.json`, {
         method: "GET",
       })
         .then((res) => res.json())

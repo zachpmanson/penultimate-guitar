@@ -9,6 +9,7 @@ import Head from "next/head";
 import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/pages";
 import { ReactElement, ReactNode } from "react";
+import { basePath } from "../utils/basePath";
 import { trpc } from "../utils/trpc";
 import useRouteProgress from "@/hooks/useRouteProgress";
 import "../styles/nprogress.css";
@@ -30,10 +31,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="Find the cheapest drinks, per standard" />
-        <link rel="icon" href="/icons/guitar-icon.svg" type="image/svg+xml" />
+        <link rel="icon" href={`${basePath}/icons/guitar-icon.svg`} type="image/svg+xml" />
 
         <meta name="msapplication-TileColor" content="#603cba" />
-        <meta name="msapplication-config" content="/icons/browserconfig.xml" />
+        <meta name="msapplication-config" content={`${basePath}/icons/browserconfig.xml`} />
         <meta name="theme-color" content="#282A36" />
         <meta name="description" content="An alternate frontend for Ultimate Guitar" />
       </Head>
