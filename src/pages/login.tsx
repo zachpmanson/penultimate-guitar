@@ -1,21 +1,33 @@
-import SpotifyButton from "@/components/buttons/spotifybutton";
-import useSavedTabs from "@/hooks/useSavedTabs";
-import { signIn, useSession } from "next-auth/react";
+import useUser from "@/hooks/useUser";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
+// /login is edge-gated by Caddy for HTTP Basic auth. Reaching this page means
+// the browser sent valid credentials (Caddy 401'd the navigation and the
+// browser presented its native prompt on success), so the user is already
+// signed in — send them back to where they were. Keep it a plain <a>/full-page
+// nav from the header so the Basic-auth dialog actually appears on the 401.
 export default function Login() {
-  const session = useSession();
+  const { user, isLoading } = useUser();
   const router = useRouter();
-  const { flatTabs } = useSavedTabs();
 
-  if (session.status === "authenticated") {
-    if (flatTabs.length === 0) {
-      router.push("/profile");
-    } else {
-      router.push("/");
+  useEffect(() => {
+    if (isLoading) return;
+    if (!user) {
+      // Still anonymous: a full-page reload of /login is what makes Caddy issue
+      // the credential prompt, so hard-navigate rather than client-side push.
+      window.location.href = "/login";
+      return;
     }
-  }
+    const { origin } = window.location;
+    const referrer = document.referrer;
+    if (referrer && referrer.startsWith(origin)) {
+      router.replace(referrer);
+    } else {
+      router.replace("/");
+    }
+  }, [user, isLoading, router]);
 
   return (
     <>
@@ -23,16 +35,7 @@ export default function Login() {
         <title>Login</title>
       </Head>
       <div className="max-w-lg mx-auto my-4 flex flex-col gap-4">
-        <p>
-          You don&apos;t need to log in to save songs or import playlists, but you will need log in to sync saved songs
-          across multiple devices.
-        </p>
-        <p>This is in ALPHA. Currently Spotify login is only available for certain accounts.</p>
-        <div className="flex justify-center">
-          <SpotifyButton onClick={() => signIn("spotify")} disabled={session.status === "loading"}>
-            Sign in with Spotify
-          </SpotifyButton>
-        </div>
+        <p>Signing you in…</p>
       </div>
     </>
   );

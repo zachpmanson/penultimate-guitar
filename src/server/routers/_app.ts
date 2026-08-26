@@ -10,6 +10,11 @@ export const appRouter = createRouter({
       greeting: `Hello ${input.text}`,
     };
   }),
+  // Identity: tells the client who the edge authenticated for the current
+  // request (or that it's anonymous). Feeds the sign-in badge / login affordances.
+  auth: createRouter({
+    whoami: publicProcedure.query(({ ctx }) => ({ user: ctx.user })),
+  }),
   user: userRouter,
   tab: tabRouter,
   spotify: spotifyRouter,

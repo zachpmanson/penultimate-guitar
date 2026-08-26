@@ -4,6 +4,7 @@ import SavedTabs from "@/components/home/savedtabs";
 import TablinkList from "@/components/home/tablinklist";
 import { GuitaleleStyle } from "@/constants";
 import useSavedTabs from "@/hooks/useSavedTabs";
+import useUser from "@/hooks/useUser";
 import { createContextInner } from "@/server/context";
 import { appRouter } from "@/server/routers/_app";
 import { useConfigStore } from "@/state/config";
@@ -15,11 +16,10 @@ import Head from "next/head";
 import { useEffect } from "react";
 import type { NextPageWithLayout } from "./_app";
 import Playlists from "@/components/home/playlists";
-import { useSession } from "next-auth/react";
 
 const Page: NextPageWithLayout = () => {
   const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
-  const session = useSession();
+  const { user } = useUser();
 
   const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
@@ -62,7 +62,7 @@ const Page: NextPageWithLayout = () => {
                 <SavedTabs />
               </div>
 
-              {session.status === "authenticated" && (
+              {user && (
                 <div className="min-w-80 flex-1">
                   <Playlists />
                 </div>

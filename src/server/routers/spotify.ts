@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SpotifyApi } from "../spotify-interface/spotify-api";
+import { getOrCreateAccountByUsername } from "../account";
 import { createRouter, publicProcedure } from "../trpc";
 
 export const spotifyRouter = createRouter({
@@ -13,12 +14,16 @@ export const spotifyRouter = createRouter({
     .query(async ({ ctx, input }) => {
       console.log(input);
       const playlist = await SpotifyApi.getPlaylist(input.playlistId);
-      if (ctx.session?.user?.id && input.save) {
+      // Persisting an imported playlist as a folder is only possible when we
+      // know who's signed in; anonymous users get the public playlist back
+      // without a saved folder.
+      if (input.save && ctx.user) {
+        const account = await getOrCreateAccountByUsername(ctx.user);
         ctx.prisma.folder
           .upsert({
             create: {
               name: playlist.name,
-              spotifyUserId: ctx.session.user.id,
+              userId: account.id,
               playlistUrl: input.playlistId,
               imageUrl: playlist.image,
             },
@@ -27,9 +32,9 @@ export const spotifyRouter = createRouter({
               imageUrl: playlist.image,
             },
             where: {
-              name_spotifyUserId: {
+              name_userId: {
                 name: playlist.name,
-                spotifyUserId: ctx.session.user.id,
+                userId: account.id,
               },
             },
           })
@@ -45,12 +50,13 @@ export const spotifyRouter = createRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const playlist = await SpotifyApi.getPlaylist(input.playlistId);
-      if (ctx.session?.user?.id) {
+      if (ctx.user) {
+        const account = await getOrCreateAccountByUsername(ctx.user);
         ctx.prisma.folder
           .upsert({
             create: {
               name: playlist.name,
-              spotifyUserId: ctx.session.user.id,
+              userId: account.id,
               playlistUrl: input.playlistId,
               imageUrl: playlist.image,
             },
@@ -59,9 +65,9 @@ export const spotifyRouter = createRouter({
               imageUrl: playlist.image,
             },
             where: {
-              name_spotifyUserId: {
+              name_userId: {
                 name: playlist.name,
-                spotifyUserId: ctx.session.user.id,
+                userId: account.id,
               },
             },
           })
