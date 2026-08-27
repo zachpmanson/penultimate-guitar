@@ -10,6 +10,20 @@ export const userRouter = createRouter({
     spotifyUserId: ctx.account.spotifyUserId,
   })),
 
+  // Unlink the Spotify account. Clears the linked spotify id and the stored
+  // refresh token so the app stops acting on the user's behalf; the edge
+  // (basic) identity is untouched, so they can reconnect later via Connect.
+  disconnectSpotify: authProcedure.mutation(async ({ ctx }) => {
+    await ctx.prisma.user.update({
+      where: { id: ctx.account.id },
+      data: {
+        spotifyUserId: null,
+        spotifyRefreshToken: null,
+      },
+    });
+    return { ok: true };
+  }),
+
   getTabLinks: authProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.folder.findMany({
       where: {

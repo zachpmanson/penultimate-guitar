@@ -78,6 +78,10 @@ export default function Profile() {
 
   const linked = !!account.data?.spotifyUserId;
 
+  const disconnectSpotify = trpc.user.disconnectSpotify.useMutation({
+    onSuccess: () => account.refetch(),
+  });
+
   return (
     <>
       <Head>
@@ -88,7 +92,15 @@ export default function Profile() {
           <div className="font-medium text-2xl">signed in as {user}</div>
           <div className="flex gap-2">
             {linked ? (
-              <span className="my-auto text-sm">Spotify connected</span>
+              <div className="flex gap-2 items-center">
+                <span className="my-auto text-sm">Spotify connected</span>
+                <PlainButton
+                  onClick={() => disconnectSpotify.mutate()}
+                  disabled={disconnectSpotify.isPending}
+                >
+                  {disconnectSpotify.isPending ? "…" : "Disconnect"}
+                </PlainButton>
+              </div>
             ) : (
               <SpotifyButton onClick={() => startConnectSpotify().catch(console.error)}>
                 Connect your Spotify account
