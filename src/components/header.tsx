@@ -42,9 +42,9 @@ export default function Header() {
               <span className="m-auto w-fit">{user}</span>
             </Link>
           ) : (
-            <Link prefetch={false} href="/login">
+            <a href="/login">
               <span className="m-auto w-fit">Login</span>
-            </Link>
+            </a>
           )}
         </div>
       </div>

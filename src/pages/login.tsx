@@ -15,14 +15,13 @@ export default function Login() {
   useEffect(() => {
     if (isLoading) return;
     if (!user) {
-      // Not signed in (either truly anonymous or the reserved `guest` account,
-      // which the server reports as anonymous — see src/server/auth.ts). On
-      // /login the only way to actually prompt for credentials is a full-page
-      // navigation that Caddy 401s. Navigate with deliberately invalid
-      // credentials so it always re-challenges (a plain reload of /login would
-      // be served anonymously for `guest` and loop forever).
-      const { protocol, host } = window.location;
-      window.location.href = `${protocol}//invalid:invalid@${host}/login`;
+      // Not authenticated. This shouldn't normally happen (Caddy hard-gates
+      // /login and only real accounts reach this page), but if we end up here
+      // just go to /login — Caddy 401s it and the browser shows the native
+      // credential prompt. Do NOT embed credentials in the URL / force a 401
+      // with a fake pair: that overwrites the browser's cached Basic credentials
+      // and can cause a login loop.
+      window.location.href = "/login";
       return;
     }
     const { origin } = window.location;
