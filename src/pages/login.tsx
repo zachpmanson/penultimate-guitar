@@ -22,11 +22,22 @@ export default function Login() {
     }
     const { origin } = window.location;
     const referrer = document.referrer;
+    // Avoid a self-loop: after the sign-in reload the previous document is
+    // still /login, so document.referrer is /login and blindly redirecting
+    // there would cycle forever. Only honour a referrer that is a *different*
+    // page; otherwise land on the home page.
+    let target = "/";
     if (referrer && referrer.startsWith(origin)) {
-      router.replace(referrer);
-    } else {
-      router.replace("/");
+      try {
+        const refPath = new URL(referrer).pathname;
+        if (refPath && refPath !== "/login") {
+          target = refPath;
+        }
+      } catch {
+        // fall through to "/"
+      }
     }
+    router.replace(target);
   }, [user, isLoading, router]);
 
   return (
