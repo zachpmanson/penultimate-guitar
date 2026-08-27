@@ -83,13 +83,14 @@ export default function Profile() {
   });
 
   // Edge logout. Identity is HTTP Basic auth stamped by Caddy, so there is no
-  // server session to destroy — the browser holds the credential. Navigate
-  // with deliberately invalid credentials: Caddy 401s, the browser overwrites
-  // its cached Basic pair for this origin, and the next visit (or this reload)
-  // re-prompts. Kept as a full-page nav so the 401/​credential flow actually runs.
+  // server session to destroy. Caddy accepts a reserved `guest` account (see
+  // src/server/auth.ts) and the app treats it as anonymous — so signing in as
+  // guest SILENTLY signs out (no 401/popup). Land on / (anonymous-readable),
+  // not /login, so guest is served without tripping the login gate.
   const edgeLogout = () => {
     const { protocol, host } = window.location;
-    window.location.href = `${protocol}//invalid:invalid@${host}/login`;
+    // username:password = guest:guest
+    window.location.href = `${protocol}//guest:guest@${host}/`;
   };
 
   return (
