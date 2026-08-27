@@ -57,6 +57,23 @@ export namespace SpotifyApi {
     };
   }
 
+  export async function getPlaylistTracks(
+    playlistId: string,
+    page: number = 0,
+    pageSize: number = PAGESIZE
+  ): Promise<{ items: Track[]; total: number; nextCursor?: number }> {
+    const offset = page * pageSize;
+    const data = await spotifyFetch(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${pageSize}&offset=${offset}`
+    );
+    const items = data.items.map(mapSpotifyTrack);
+    return {
+      items,
+      total: data.total,
+      nextCursor: offset + pageSize < data.total ? page + 1 : undefined,
+    };
+  }
+
   export async function getPlaylist(playlistId: string): Promise<IndividualPlaylist> {
     let playlistPayload = await spotifyFetch(
       `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,images,owner,description,tracks(total,items(track.name, track.artists(name), track.uri),limit,href,next)`

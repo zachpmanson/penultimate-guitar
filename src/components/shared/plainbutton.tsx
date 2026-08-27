@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler, PointerEventHandler, ReactNode } from "react";
 import LoadingSpinner from "../loadingspinner";
 
 export default function PlainButton({
@@ -13,6 +13,9 @@ export default function PlainButton({
   prefetch,
   isLoading,
   onContextMenu,
+  onPointerDown,
+  onPointerUp,
+  onPointerLeave,
 }: {
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLElement>;
@@ -24,6 +27,9 @@ export default function PlainButton({
   prefetch?: boolean;
   isLoading?: boolean;
   onContextMenu?: MouseEventHandler<HTMLElement>;
+  onPointerDown?: PointerEventHandler<HTMLElement>;
+  onPointerUp?: PointerEventHandler<HTMLElement>;
+  onPointerLeave?: PointerEventHandler<HTMLElement>;
 }) {
   const clsname =
     "relative border-gray-200 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border rounded-xl transition duration-75 dark:border-gray-600 " +
@@ -36,7 +42,15 @@ export default function PlainButton({
       {children}
     </Link>
   ) : (
-    <button className={clsname} onContextMenu={onContextMenu} onClick={disabled ? undefined : onClick} title={title}>
+    <button
+      className={clsname}
+      onContextMenu={onContextMenu}
+      onClick={disabled ? undefined : onClick}
+      title={title}
+      onPointerDown={disabled ? undefined : onPointerDown}
+      onPointerUp={disabled ? undefined : onPointerUp}
+      onPointerLeave={disabled ? undefined : onPointerLeave}
+    >
       {isLoading ? <div className="invisible">{children}</div> : children}
       {isLoading && (
         <div className="absolute top-0 right-0 flex justify-center items-center h-full w-full p-2">
