@@ -1,56 +1,94 @@
+import { Track } from "@/models/models";
 import { Playlist } from "@/types/spotify";
 import { trpc } from "@/utils/trpc";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { stripRemasterAnnotations } from "src/utils/title";
 import BasePanel from "../shared/basepanel";
 import PlainButton from "../shared/plainbutton";
 import PanelMenu from "./panelmenu";
 
-export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
-  const [hovering, setHovering] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+const TRACKS_PAGE_SIZE = 100;
+const LONG_PRESS_MS = 600;
 
-  const divRef = useRef<HTMLDivElement>(null);
+export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const [isImportOpen, setIsImportOpen] = useState(false);
   const getPlaylist = trpc.spotify.getPlaylistLazy.useMutation();
+
+  const playlistId = playlist.uri.split(":").at(-1) ?? "";
+  const { data, isLoading, isFetching, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    trpc.spotify.getPlaylistTracks.useInfiniteQuery(
+      { playlistId, pageSize: TRACKS_PAGE_SIZE },
+      {
+        enabled: isOpen,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      }
+    );
+
+  const tracks = data?.pages.flatMap((p) => p.items) ?? [];
+  const total = data?.pages[0]?.total ?? playlist.tracks.total;
+
+  const [loadingAll, setLoadingAll] = useState(false);
   const [pulling, setPulling] = useState<string | null>(null);
-  // const _d = trpc.spotify.getPlaylist.useInfiniteQuery(
-  //   { playlistId: playlist.playlistId ?? "", save: true },
-  //   {
-  //     enabled: isImportOpen,
-  //     getNextPageParam: (lastPage) => lastPage.nextCursor,
-  //     initialCursor: 0,
-  //   }
-  // );
+  const hasNextPageRef = useRef(hasNextPage);
+  const pullTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pullFired = useRef(false);
+
+  useEffect(() => {
+    hasNextPageRef.current = hasNextPage;
+  }, [hasNextPage]);
 
   const importPlaylist = async () => {
-    await getPlaylist.mutateAsync({
-      playlistId: playlist.id,
-    });
-
+    await getPlaylist.mutateAsync({ playlistId });
     setIsImportOpen(true);
   };
 
-  const scrapeAll = async () => {
-    if (!data) return;
-
-    for (let track of data.tracks) {
-      setPulling(track.name);
-      await fetch(`/track/${track.trackId.split(":").at(-1)}`).catch(() => console.log("Couldn't find track", track));
-      await new Promise((r) => setTimeout(r, 2000));
+  // Load every remaining page, returning the flattened list.
+  const loadAll = async (): Promise<Track[]> => {
+    setLoadingAll(true);
+    try {
+      let guard = 0;
+      let lastRes;
+      while (hasNextPageRef.current && guard < 10000) {
+        guard++;
+        lastRes = await fetchNextPage();
+        hasNextPageRef.current = lastRes.hasNextPage;
+      }
+      if (!lastRes || !lastRes.data) return tracks;
+      return lastRes.data.pages.flatMap((p: any) => p.items);
+    } finally {
+      setLoadingAll(false);
     }
-
-    setPulling(null);
   };
 
-  const { data, isLoading } = trpc.spotify.getPlaylist.useQuery(
-    { playlistId: playlist.uri.split(":").at(-1) ?? "", save: false },
-    {
-      enabled: isOpen,
+  const onLoadMorePress = () => {
+    if (pullTimer.current) clearTimeout(pullTimer.current);
+    pullFired.current = false;
+    pullTimer.current = setTimeout(() => {
+      pullFired.current = true;
+      loadAll();
+    }, LONG_PRESS_MS);
+  };
+  const onLoadMoreRelease = async () => {
+    if (pullTimer.current) {
+      clearTimeout(pullTimer.current);
+      pullTimer.current = null;
+      if (!pullFired.current) fetchNextPage();
     }
-  );
+  };
+
+  const scrapeAll = async () => {
+    if (!total) return;
+    const all = await loadAll();
+    for (let track of all) {
+      setPulling(track.name);
+      await fetch(`/track/${track.trackId}`).catch(() => console.log("Couldn't find track", track));
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+    setPulling(null);
+  };
 
   return (
     <>
@@ -69,7 +107,7 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
         }
         footer={
           <>
-            <div className="ml-2">{playlist.tracks.total} items</div>
+            <div className="ml-2">{total} items</div>
             <PanelMenu
               menuItems={[
                 {
@@ -89,11 +127,11 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
           </>
         }
         id={`playlist-${playlist.id}`}
-        isLoading={isLoading}
+        isLoading={isLoading || loadingAll}
       >
-        {data?.tracks.map((t, j) => (
+        {tracks.map((t, j) => (
           <PlainButton
-            href={`/track/${t.trackId?.split(":").at(-1)}`}
+            href={`/track/${t.trackId}`}
             key={j}
             className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white"
             prefetch={false}
@@ -101,6 +139,27 @@ export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
             <span className="font-bold text-sm">{stripRemasterAnnotations(t.name)}</span> - {t.artists.join(", ")}
           </PlainButton>
         ))}
+        {hasNextPage && !loadingAll && (
+          <PlainButton
+            className="w-full text-black dark:text-gray-200 no-underline hover:no-underline active:text-black dark:active:text-white flex justify-center items-center h-12"
+            onPointerDown={onLoadMorePress}
+            onPointerUp={onLoadMoreRelease}
+            onPointerLeave={() => {
+              if (pullTimer.current) {
+                clearTimeout(pullTimer.current);
+                pullTimer.current = null;
+              }
+            }}
+            isLoading={isFetching || isFetchingNextPage}
+          >
+            {isFetching || isFetchingNextPage ? "Loading…" : "Load more"}
+          </PlainButton>
+        )}
+        {pulling && (
+          <div className="flex justify-center items-center h-12 text-sm text-gray-500 dark:text-gray-400">
+            Pulling {pulling}…
+          </div>
+        )}
       </BasePanel>
     </>
   );
