@@ -82,6 +82,16 @@ export default function Profile() {
     onSuccess: () => account.refetch(),
   });
 
+  // Edge logout. Identity is HTTP Basic auth stamped by Caddy, so there is no
+  // server session to destroy — the browser holds the credential. Navigate
+  // with deliberately invalid credentials: Caddy 401s, the browser overwrites
+  // its cached Basic pair for this origin, and the next visit (or this reload)
+  // re-prompts. Kept as a full-page nav so the 401/​credential flow actually runs.
+  const edgeLogout = () => {
+    const { protocol, host } = window.location;
+    window.location.href = `${protocol}//invalid:invalid@${host}/login`;
+  };
+
   return (
     <>
       <Head>
@@ -106,6 +116,7 @@ export default function Profile() {
                 Connect your Spotify account
               </SpotifyButton>
             )}
+            <PlainButton onClick={edgeLogout}>Log out</PlainButton>
           </div>
         </div>
 
