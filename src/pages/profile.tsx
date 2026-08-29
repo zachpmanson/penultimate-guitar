@@ -101,14 +101,12 @@ export default function Profile() {
       <div className="max-w-[100ch] mx-auto my-4 flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="font-medium text-2xl">signed in as {user}</div>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 items-end">
+            <PlainButton onClick={edgeLogout}>Log out</PlainButton>
             {linked ? (
               <div className="flex gap-2 items-center">
                 <span className="my-auto text-sm">Spotify connected</span>
-                <PlainButton
-                  onClick={() => disconnectSpotify.mutate()}
-                  disabled={disconnectSpotify.isPending}
-                >
+                <PlainButton onClick={() => disconnectSpotify.mutate()} disabled={disconnectSpotify.isPending}>
                   {disconnectSpotify.isPending ? "…" : "Disconnect"}
                 </PlainButton>
               </div>
@@ -117,7 +115,6 @@ export default function Profile() {
                 Connect your Spotify account
               </SpotifyButton>
             )}
-            <PlainButton onClick={edgeLogout}>Log out</PlainButton>
           </div>
         </div>
 
