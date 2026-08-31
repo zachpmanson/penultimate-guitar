@@ -5,9 +5,13 @@ import { authProcedure, createRouter } from "../trpc";
 
 export const userRouter = createRouter({
   // Current account's Spotify link state, for the Connect-Spotify affordance.
+  // `spotifyLinked` reflects a *working* link (refresh token persisted) — a
+  // leftover spotifyUserId with no token (e.g. pre-migration accounts) is NOT
+  // a usable link and should drive the Connect prompt, not playlist loading.
   me: authProcedure.query(async ({ ctx }) => ({
     username: ctx.account.username,
     spotifyUserId: ctx.account.spotifyUserId,
+    spotifyLinked: !!ctx.account.spotifyRefreshToken,
   })),
 
   // Unlink the Spotify account. Clears the linked spotify id and the stored

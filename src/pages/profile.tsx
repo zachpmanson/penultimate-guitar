@@ -28,6 +28,16 @@ export default function Profile() {
   // Whether this user has a linked Spotify account (drives the connect prompt).
   const account = trpc.user.me.useQuery(undefined, { enabled: !!user });
 
+  // Unlink the Spotify account. Declared up top alongside every other hook:
+  // React enforces a stable number of hooks per render, and this must stay
+  // unconditional even though the signed-out path returns early below (an
+  // early-return before this hook previously caused React error #310 on the
+  // authed render — the signed-out shell rendered 9 hooks, then the signed-in
+  // render tried for 10).
+  const disconnectSpotify = trpc.user.disconnectSpotify.useMutation({
+    onSuccess: () => account.refetch(),
+  });
+
   const {
     data,
     isFetching,
@@ -39,7 +49,7 @@ export default function Profile() {
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       initialCursor: 1,
-      enabled: !!user && !!account.data?.spotifyUserId,
+      enabled: !!user && !!account.data?.spotifyLinked,
     }
   );
 
@@ -76,11 +86,7 @@ export default function Profile() {
     return <LoadingSpinner className="h-8" />;
   }
 
-  const linked = !!account.data?.spotifyUserId;
-
-  const disconnectSpotify = trpc.user.disconnectSpotify.useMutation({
-    onSuccess: () => account.refetch(),
-  });
+  const linked = !!account.data?.spotifyLinked;
 
   // Edge logout. Identity is HTTP Basic auth stamped by Caddy, so there is no
   // server session to destroy. Caddy accepts a reserved `guest` account (see
