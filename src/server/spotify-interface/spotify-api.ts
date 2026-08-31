@@ -3,7 +3,34 @@ import memoryCache from "memory-cache";
 import { IndividualPlaylist, Track } from "@/models/models";
 import _ from "lodash";
 import { SpotifyPlaylistResponse } from "@/types/spotify";
+import { TRPCError } from "@trpc/server";
+import { refreshUserAccessToken } from "./spotify-auth";
+
+export interface LinkedAccount {
+  id: string;
+  username: string;
+  spotifyUserId: string | null;
+  spotifyRefreshToken: string | null;
+}
+
 export namespace SpotifyApi {
+  // Short-lived user access token for an account's linked Spotify, minted from
+  // the stored refresh token and cached until near expiry (keyed by username).
+  async function getUserToken(account: LinkedAccount): Promise<string> {
+    const cacheKey = `spotify-user-token:${account.username}`;
+    const cached: string | undefined = memoryCache.get(cacheKey);
+    if (cached) return cached;
+    if (!account.spotifyRefreshToken) {
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "No linked Spotify account — connect one to list your playlists.",
+      });
+    }
+    const token = await refreshUserAccessToken(account.spotifyRefreshToken);
+    memoryCache.put(cacheKey, token.access_token, token.expires_in - 100);
+    return token.access_token;
+  }
+
   async function getToken(): Promise<string> {
     let token = memoryCache.get("spotify-token");
     if (!token) {
@@ -112,16 +139,27 @@ export namespace SpotifyApi {
     return playlist;
   }
 
+  // Lists a user's OWN playlists. Requires the linked Spotify credential: we
+  // mint a user-scoped access token from the stored refresh token so their
+  // private playlists are visible (the app-level token only sees public ones).
   export async function getUserPlaylists(
-    userId: string,
+    account: LinkedAccount,
     page: number,
     pageSize: number = PLAYLISTS_PAGESIZE
   ): Promise<SpotifyPlaylistResponse & { nextCursor?: number }> {
-    console.log("getUserPlaylists", userId, page);
-    let payload = (await spotifyFetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${pageSize}&offset=${(page - 1) * pageSize}`
-    )) as SpotifyPlaylistResponse;
-    // console.log(userId, page, payload);
+    console.log("getUserPlaylists", account.username, page);
+    if (!account.spotifyUserId) {
+      throw new TRPCError({
+        code: "PRECONDITION_FAILED",
+        message: "No linked Spotify account — connect one to list your playlists.",
+      });
+    }
+    const token = await getUserToken(account);
+    let payload = (await fetch(
+      `https://api.spotify.com/v1/users/${account.spotifyUserId}/playlists?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    ).then((res) => res.json())) as SpotifyPlaylistResponse;
+    // console.log(account.username, page, payload);
     return {
       ...payload,
       nextCursor: payload.total > pageSize * page ? page + 1 : undefined,

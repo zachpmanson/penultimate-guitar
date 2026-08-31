@@ -1,11 +1,11 @@
 import { AltVersion, TabLinkDto } from "@/models/models";
 import { useSavedTabsStore } from "@/state/savedTabs";
 import { trpc } from "@/utils/trpc";
-import { useSession } from "next-auth/react";
+import useUser from "@/hooks/useUser";
 import { useCallback, useEffect, useMemo } from "react";
 
 export default function useSavedTabs() {
-  const session = useSession();
+  const { user } = useUser();
   const {
     savedTabs,
     addTabLink: addTabLinkLocal,
@@ -17,7 +17,7 @@ export default function useSavedTabs() {
     setFolderOpen: setFolderOpenLocal,
   } = useSavedTabsStore();
 
-  const userId = session?.data?.user?.id;
+  const userId = user;
   const userKey = userId ?? "@localStorage";
 
   const {
@@ -41,8 +41,6 @@ export default function useSavedTabs() {
 
   const setTabFolders = useCallback(
     (tablink: TabLinkDto, folders: string[]) => {
-      const userId = session?.data?.user?.id;
-
       // unpack here because empty slots somehow end up in the folders array without
 
       if (userId) {
@@ -59,7 +57,7 @@ export default function useSavedTabs() {
         setTabFoldersLocal(tablink, [...folders], userKey);
       }
     },
-    [session, userKey, refetchTabs, setTabFoldersLocal, setTabLinksApi]
+    [user, userKey, refetchTabs, setTabFoldersLocal, setTabLinksApi]
   );
 
   const addSavedTab = useCallback(
@@ -98,7 +96,7 @@ export default function useSavedTabs() {
       if (userId) {
         removeFolderApi.mutateAsync({ folderName: folder }).then(() => refetchTabs());
       } else {
-        removeFolderLocal(folder, userId);
+        removeFolderLocal(folder, userId ?? undefined);
       }
     },
     [userId, removeFolderApi, refetchTabs, removeFolderLocal]

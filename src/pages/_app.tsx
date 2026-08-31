@@ -2,7 +2,6 @@ import Layout from "@/components/layout";
 import GlobalProvider from "@/contexts/Global";
 import "@/styles/globals.css";
 import type { NextPage } from "next";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -50,13 +49,11 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     </Layout>
   );
   return (
-    <SessionProvider session={pageProps.session}>
-      <GlobalProvider>
-        <ThemeProvider defaultTheme="light" attribute="class">
-          <NuqsAdapter>{layout}</NuqsAdapter>
-        </ThemeProvider>
-      </GlobalProvider>
-    </SessionProvider>
+    <GlobalProvider>
+      <ThemeProvider defaultTheme="light" attribute="class">
+        <NuqsAdapter>{layout}</NuqsAdapter>
+      </ThemeProvider>
+    </GlobalProvider>
   );
 }
 

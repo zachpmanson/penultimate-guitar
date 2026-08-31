@@ -2,7 +2,7 @@ import { ChordDB } from "@/models/chorddb.models";
 import { PlaylistCollection, SavedUserTabLinks } from "@/models/models";
 import { useAuthStore } from "@/state/auth";
 import { useConfigStore } from "@/state/config";
-import { useSession } from "next-auth/react";
+import useUser from "@/hooks/useUser";
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { GlobalContextProps, GlobalContextProvider } from "./context";
 import { useSavedTabsStore } from "@/state/savedTabs";
@@ -12,8 +12,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const { guitarChords, setGuitarChords } = useConfigStore();
   const { setUserAllFolders: setUserAllTabLinks } = useSavedTabsStore();
 
-  const session = useSession();
-  const userId = session?.data?.user?.id;
+  const { user: userId } = useUser();
   const { setUserId } = useAuthStore();
 
   useEffect(() => {

@@ -30,7 +30,7 @@ model Tab {
 }
 
 model Song {
-  id            Int            @id @default(autoincrement()) // autoincrement is dangerous here since we are using original song IDs
+  id            Int            @id @default(autoincrement()) // this is dangerous here since we are using original song IDs
   name          String
   artist        String
   Tab           Tab[]
@@ -69,13 +69,20 @@ model TrackTab {
   @@unique([spotifyTrackId])
 }
 
+// Identity is the edge-authenticated username (Basic auth, stamped by Caddy as
+// X-Auth-User) — see src/server/auth.ts. Spotify is now an OPTIONAL linked
+// account on that user, not the identity itself. This is what stops the
+// Spotify dev-mode account cap from limiting who can log in: we own as many
+// basic accounts as we want, and only link Spotify when needed (Connect flow).
 model User {
-  id            String @id @default(cuid())
-  spotifyUserId String @unique
+  id                   String  @id @default(cuid())
+  username             String  @unique // the edge identity (basicauth username)
+  spotifyUserId        String? @unique // optional linked Spotify account id
+  spotifyRefreshToken  String? // persisted so the server can act as the user
 
   folders Folder[]
 
-  @@index([spotifyUserId])
+  @@index([username])
 }
 
 model UserTablink {
@@ -95,14 +102,14 @@ model UserTablink {
 }
 
 model Folder {
-  id            Int     @id @default(autoincrement())
-  name          String
-  spotifyUserId String
-  playlistUrl   String? // only present if playlist was used to create folder
-  imageUrl      String?
+  id          Int     @id @default(autoincrement())
+  name        String
+  userId      String
+  playlistUrl String? // only present if playlist was used to create folder
+  imageUrl    String?
 
-  user User          @relation(fields: [spotifyUserId], references: [spotifyUserId])
+  user User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   tabs UserTablink[]
 
-  @@unique([name, spotifyUserId])
+  @@unique([name, userId])
 }

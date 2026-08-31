@@ -4,10 +4,30 @@ import { z } from "zod";
 import { authProcedure, createRouter } from "../trpc";
 
 export const userRouter = createRouter({
+  // Current account's Spotify link state, for the Connect-Spotify affordance.
+  me: authProcedure.query(async ({ ctx }) => ({
+    username: ctx.account.username,
+    spotifyUserId: ctx.account.spotifyUserId,
+  })),
+
+  // Unlink the Spotify account. Clears the linked spotify id and the stored
+  // refresh token so the app stops acting on the user's behalf; the edge
+  // (basic) identity is untouched, so they can reconnect later via Connect.
+  disconnectSpotify: authProcedure.mutation(async ({ ctx }) => {
+    await ctx.prisma.user.update({
+      where: { id: ctx.account.id },
+      data: {
+        spotifyUserId: null,
+        spotifyRefreshToken: null,
+      },
+    });
+    return { ok: true };
+  }),
+
   getTabLinks: authProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.folder.findMany({
       where: {
-        spotifyUserId: ctx.session.user.id,
+        userId: ctx.account.id,
       },
       include: {
         tabs: true,
@@ -25,20 +45,19 @@ export const userRouter = createRouter({
     const folderRow = await ctx.prisma.folder.upsert({
       create: {
         name: folderName,
-        spotifyUserId: ctx.session.user.id,
+        userId: ctx.account.id,
       },
       update: {},
       where: {
-        name_spotifyUserId: {
+        name_userId: {
           name: folderName,
-          spotifyUserId: ctx.session.user.id,
+          userId: ctx.account.id,
         },
       },
     });
 
     const result = await ctx.prisma.userTablink.upsert({
       create: {
-        // spotifyUserId: ctx.session.user.id,
         taburl,
         folderId: folderRow.id,
         name,
@@ -48,7 +67,6 @@ export const userRouter = createRouter({
         loadBest,
       },
       update: {
-        // spotifyUserId: ctx.session.user.id,
         taburl,
         folderId: folderRow.id,
         name,
@@ -58,7 +76,6 @@ export const userRouter = createRouter({
         loadBest,
       },
       where: {
-        // spotifyUserId: ctx.session.user.id,
         taburl_folderId: {
           taburl,
           folderId: folderRow.id,
@@ -77,7 +94,7 @@ export const userRouter = createRouter({
         taburl,
         folder: {
           name: folderName,
-          spotifyUserId: ctx.session.user.id,
+          userId: ctx.account.id,
         },
       },
     });
@@ -88,9 +105,9 @@ export const userRouter = createRouter({
     const { folderName } = input;
     const result = await ctx.prisma.folder.delete({
       where: {
-        name_spotifyUserId: {
+        name_userId: {
           name: folderName,
-          spotifyUserId: ctx.session.user.id,
+          userId: ctx.account.id,
         },
       },
     });
@@ -109,18 +126,9 @@ export const userRouter = createRouter({
         const existingFolders = await tx.folder.findMany({
           where: {
             name: { in: input.folders },
-            spotifyUserId: ctx.session.user.id,
+            userId: ctx.account.id,
           },
         });
-
-        // Only works in Node v22
-        // const missingFolders: Set<string> = (
-        //   new Set(
-        //     existingFolders.map((folder) => folder.name)
-        //   ) as Set<string> & {
-        //     symmetricDifference: (s: Set<string>) => Set<string>; // hopefully can remove this
-        //   }
-        // ).symmetricDifference(new Set([...input.folders]));
 
         let a = new Set(existingFolders.map((folder) => folder.name));
         let b = new Set(input.folders);
@@ -140,7 +148,7 @@ export const userRouter = createRouter({
         await tx.folder.createMany({
           data: [...missingFolders].map((folder) => ({
             name: folder,
-            spotifyUserId: ctx.session.user.id,
+            userId: ctx.account.id,
           })),
           skipDuplicates: true,
         });
@@ -150,7 +158,7 @@ export const userRouter = createRouter({
           where: {
             taburl: input.tab.taburl,
             folder: {
-              spotifyUserId: ctx.session.user.id,
+              userId: ctx.account.id,
               NOT: {
                 name: { in: input.folders },
               },
@@ -161,7 +169,7 @@ export const userRouter = createRouter({
         const allFolders = await tx.folder.findMany({
           where: {
             name: { in: input.folders },
-            spotifyUserId: ctx.session.user.id,
+            userId: ctx.account.id,
           },
         });
         console.log({ allFolders });
@@ -182,8 +190,8 @@ export const userRouter = createRouter({
       return count;
     }),
 
-  // Currently this uses the client input to set the best tab
-  // Because of this, only update where usertablink belongs to authed user
+  // Currently this uses the client input to set the best tab.
+  // Because of this, only update where usertablink belongs to authed user.
   setBestTab: authProcedure
     .input(
       z.object({
@@ -200,7 +208,7 @@ export const userRouter = createRouter({
         where: {
           loadBest: true,
           taburl: input.oldTaburl,
-          folder: { spotifyUserId: ctx.session.user.id },
+          folder: { userId: ctx.account.id },
         },
         data: {
           loadBest: false,
@@ -220,7 +228,10 @@ export const userRouter = createRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await SpotifyApi.getUserPlaylists(ctx.session.user.id, input.cursor, input.pageSize);
+      // Per-user playlists need a linked Spotify account + a user-scoped token.
+      // Without a linked account there is nothing to list — surfaced to the UI
+      // as a "connect Spotify" affordance rather than an empty list.
+      return await SpotifyApi.getUserPlaylists(ctx.account, input.cursor, input.pageSize);
     }),
 });
 

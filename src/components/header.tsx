@@ -1,7 +1,7 @@
 import { ROUTES } from "@/constants";
 import useSavedTabs from "@/hooks/useSavedTabs";
 import useThemeOnMount from "@/hooks/useThemeOnMount";
-import { useSession } from "next-auth/react";
+import useUser from "@/hooks/useUser";
 import Link from "next/link";
 import ThemeSwitcher from "./buttons/themeswitcher";
 import IconShuffle from "./icons/IconShuffle";
@@ -11,7 +11,7 @@ import PlainButton from "./shared/plainbutton";
 export default function Header() {
   const { theme } = useThemeOnMount();
 
-  const session = useSession();
+  const { user } = useUser();
   const { flatTabs } = useSavedTabs();
   const allSaved = flatTabs.map((t) => t.taburl);
 
@@ -37,14 +37,14 @@ export default function Header() {
             <ThemeSwitcher />
           </div>
 
-          {session.status === "authenticated" ? (
+          {user ? (
             <Link prefetch={false} href="/profile">
-              <span className="m-auto w-fit">{session.data.user?.name}</span>
+              <span className="m-auto w-fit">{user}</span>
             </Link>
           ) : (
-            <Link prefetch={false} href="/login">
+            <a href="/login">
               <span className="m-auto w-fit">Login</span>
-            </Link>
+            </a>
           )}
         </div>
       </div>

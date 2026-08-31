@@ -34,7 +34,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
             n.savedTabs[userId].push({
               name: folderName,
               id: 0,
-              spotifyUserId: userId,
+              userId,
               tabs: [
                 {
                   taburl: tab.taburl,
@@ -134,7 +134,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
             n.savedTabs[userId].push({
               name: folder,
               id: 0,
-              spotifyUserId: userId,
+              userId,
               tabs: [
                 {
                   taburl: tab.taburl,
@@ -245,7 +245,7 @@ export const useSavedTabsStore = create<SavedTabsState & SavedTabsActions>()(
               folders[tablink.folder ?? "Favourites"] = {
                 name: tablink.folder ?? "Favourites",
                 id: -1, // does this matter in local?
-                spotifyUserId: tablink.spotifyUserId ?? "@localStorage",
+                userId: tablink.spotifyUserId ?? "@localStorage",
                 imageUrl: null,
                 playlistUrl: null,
                 tabs: [],
