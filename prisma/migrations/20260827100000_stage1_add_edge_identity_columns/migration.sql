@@ -39,7 +39,8 @@ ALTER TABLE "Folder" ADD COLUMN "userId" TEXT;
 -- fallback right below so their data survives either way. Eyeball the result
 -- with the INSPECTION query at the bottom before cutover.
 -- =====================================================================
--- (mapping UPDATEs go here, one per line)
+UPDATE "User" SET "username" = 'zach' WHERE "spotifyUserId" = 'zachthe1337';
+UPDATE "User" SET "username" = 'john' WHERE "spotifyUserId" = 'freehold6';
 
 -- Fallback: deterministic username for any unmapped user, so no data is lost.
 UPDATE "User" SET "username" = 'spotify:' || "spotifyUserId" WHERE "username" IS NULL;
