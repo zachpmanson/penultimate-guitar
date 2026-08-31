@@ -8,7 +8,7 @@ import BasePanel from "../shared/basepanel";
 import PlainButton from "../shared/plainbutton";
 import PanelMenu from "./panelmenu";
 
-const TRACKS_PAGE_SIZE = 100;
+const TRACKS_PAGE_SIZE = 50;
 const LONG_PRESS_MS = 600;
 
 export default function PlaylistPanel({ playlist }: { playlist: Playlist }) {
