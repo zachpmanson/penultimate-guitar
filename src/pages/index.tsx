@@ -20,11 +20,11 @@ import Playlists from "@/components/home/playlists";
 const Page: NextPageWithLayout = () => {
   const { data: recentTabs } = trpc.tab.getRecentTabs.useQuery(10);
   const { user } = useUser();
-  // Only surface Playlists to users with a *working* Spotify link (a persisted
-  // refresh token). A leftover spotifyUserId with no token — e.g. pre-migration
-  // accounts — would otherwise render the panel and error every load.
-  const { data: account } = trpc.user.me.useQuery(undefined, { enabled: !!user });
-  const spotifyLinked = !!account?.spotifyLinked;
+  // Mount Playlists for any signed-in user and let the panel itself handle the
+  // no-Spotify-link case (the server refuses with PRECONDITION_FAILED and the
+  // panel shows a Connect prompt). Firing the query straight away — instead of
+  // waiting on a separate `me` round trip to learn spotifyLinked — is what keeps
+  // playlists from loading noticeably later than everything else on the page.
 
   const { searchText } = useSearchStore();
   const { mode } = useConfigStore();
@@ -67,7 +67,7 @@ const Page: NextPageWithLayout = () => {
                 <SavedTabs />
               </div>
 
-              {user && spotifyLinked && (
+              {user && (
                 <div className="min-w-80 flex-1">
                   <Playlists />
                 </div>
